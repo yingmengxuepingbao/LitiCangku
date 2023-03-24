@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>定时作业执行汇总管理</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="../../css/bootstrap.css" type="text/css">
+    <link rel="stylesheet" href="../../css/font-awesome.min.css">
+    <link rel="stylesheet" href="../../css/zdialog.css">
+    <link rel="stylesheet" href="../../css/zTreeStyleOutLook.css" />
+    <link rel="stylesheet" href="../../css/layout.css" type="text/css">
+    <link rel="stylesheet" href="../../css/jedate.css" />
+    <link rel="stylesheet" href="../../css/chosen.css">
+    <link rel="stylesheet" href="css/device.css" />
+    <style type="text/css">
+        a{text-decoration: none !important;}
+        .category .form-control{width: 180px}
+        .category-con:after{display:block;clear:both;content:"";visibility:hidden;height:0}
+        #baseEquipmentList:after{display:block;clear:both;content:"";visibility:hidden;height:0}
+        .pagination-con{overflow: inherit;}
+        .pagination-con:after{display:block;clear:both;content:"";visibility:hidden;height:0}
+        .search-title{overflow:inherit;}
+        .search-title:after{display:block;clear:both;content:"";visibility:hidden;height:0}
+        .btn-blue{ background:#1DBBF4 ;border: 1px solid #fff; color: #fff}
+        .btn-blue:hover{
+            background:#1DBBF4 ;border: 1px solid #fff; color: #fff
+        }
+        .file-border{
+            border: 1px solid #eee;
+            padding: 15px;
+        }
+    </style>
+</head>
+<body>
+<div class="wrap" style="min-width: 1154px">
+    <ol class="breadcrumb">
+        <li><a href="#" class="link">定时作业执行汇总管理</a></li>
+        <li class="active">定时作业执行汇总列表</li>
+    </ol>
+    <div class="content" style="min-height: 500px">
+        <div class="form-inline search-title">
+<!--            <div class="title fl">EdgeBox列表</div>-->
+        </div>
+        <div class="margin320 category">
+            <div class="form-inline search-title" style="border-bottom:none">
+                <div class="form-inline rt icon-search">
+                    <input type="text" class="form-control search-border-reset" id="jobName_search"
+                           placeholder="请输入作业名称" onkeyup="this.value=this.value.replace(/[=\\=&? ？ *%]/,'')">
+                    <img src="../../images/common/search_icon_grey.png">
+                </div>
+            </div>
+            <div class="bt-and-search">
+                <div class="btn-lists lf">
+<!--                    <button type="button" class="btn btn-default multiDelete">出库</button>-->
+<!--                    <button type="button" class="btn btn-default multiDelete1">合并出库</button>-->
+                    <!--<button type="button" class="btn btn-default" id="exportBtn">导出</button>
+                    <button type="button" class="btn btn-default" id="importBtn">导入</button>-->
+<!--                    <button id="addEquipment" type="button" class="btn btn-default btn-add">新增 <i class="fa fa-plus"></i></button>-->
+                </div>
+                <div class="hide-search rt" id="more-search-condition">
+                    <button id="resetSearchConditions" type="button" class="btn btn-default rt">重置</button>
+                    <button id="topSearchInfoList" type="button" class="btn btn-default rt ">搜索</button>
+                </div>
+            </div>
+
+            <div class="category-con">
+                <table class="table-hover table col-xs-12 col-sm-12 " id="edgeBoxList">
+                    <thead class="head-sort">
+                    <tr>
+<!--                        <th style="width: 50px">-->
+<!--                            <div class="checkbox-custom checkbox-default">-->
+<!--                                <input type="checkbox" id="check-all">-->
+<!--                                <label></label>-->
+<!--                            </div>-->
+<!--                        </th>-->
+                        <th data-sort="job_name" >作业名称<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="summary_hour" >统计时间<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="job_interval" >执行间隔<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="total_count" >总次数<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="error_count" >错误次数<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="total_elapsed_time" >总执行时间<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="gmt_create" >平均执行时间</th>
+                        <th data-sort="max_elapsed_time" >最长时间<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="min_elapsed_time" >最短时间<i class="fa fa-sort-amount-asc"></i></th>
+                    </tr>
+                    </thead>
+                    <tbody class="tbody-load">
+                    </tbody>
+                </table>
+                <div class="pagination-con" style="display: block">
+                    <p class="listNumber rt">
+                        <button class="btn btn-default btn-xs previousPage"><i class="fa fa-caret-left fa-lg"></i></button>
+                        <span class="currentPage">1</span>/<span class="pageNumber">1</span>
+                        <button class="btn btn-default btn-xs nextPage"><i class="fa fa-caret-right fa-lg"></i></button>
+                        <input class="currentPageBtn" value="1" type="text"  onkeyup="this.value=this.value.replace(/[^0-9]+/g, '');"/>
+                        <button type="button" id="pageJump"  data-loading-text="请求数据中..." class="btn btn-default pageJump" autocomplete="off">跳转</button>
+                        每页<span class="pageOneNumber">15</span>条，共<span class="dataNumber">30</span>条记录
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--新增-->
+    <div class="modal" id="formModel" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document" style="width: 700px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="moTitle">移库信息</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" id="formInfo">
+                        <div class="form-group">
+                            <input type="hidden" id="errId">
+                        </div>
+                        <div class="form-group" id="moveNodiv">
+                            <label class="control-label col-sm-3"><i class="fa fa-asterisk"></i>故障码:</label>
+                            <div class="col-sm-8">
+                                <input id="errCode" type="text" class="form-control" placeholder="请输入故障码"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3"><i class="fa fa-asterisk"></i>描述:</label>
+                            <div class="col-sm-8">
+                                <input id="description" type="text" class="form-control" placeholder="请输入描述"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3"><i class="fa fa-asterisk"></i>设备类型:</label>
+                            <div class="col-sm-8">
+                                <select id="deviceType" class="form-control" placeholder=" 请选择设备类型">
+                                    <option value="">请选择设备类型</option>
+                                </select>
+                                </select>
+                            </div>
+                        </div>
+<!--                        <div class="form-group">-->
+<!--                            <label class="control-label col-sm-3"><i class="fa fa-asterisk"></i>库区:</label>-->
+<!--                            <div class="col-sm-8">-->
+<!--                                <select id="areaCode" class="form-control" placeholder=" 请选择库区">-->
+<!--                                    <option value="">请选择库区</option>-->
+<!--                                </select>-->
+<!--                                </select>-->
+<!--                            </div>-->
+<!--                        </div>-->
+                    </form>
+                    <i class="fa fa-exclamation-circle fa-deviceInfoPop"></i>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="modalCancelButton" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" id="modalSaveButton" class="btn" data-dismiss="modal">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="../../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../js/bootstrap.min.js" ></script>
+    <script type="text/javascript" src="../../js/jquery.jedate.js"></script>
+    <script type="text/javascript" src="../../js/zdialog.js"></script>
+    <script type="text/javascript" src="../../js/jquery.ztree.all.min.js"></script>
+    <script type="text/javascript" src="../../js/chosen.jquery.js"></script>
+    <script type="text/javascript" src="../../js/common.js"></script>
+    <script type="text/javascript" src="js/wcsJobExecutionSummaryList.js"></script>
+    <script type="text/javascript">
+
+        var config = {
+
+            '.chosen-select'           : {},
+
+            '.chosen-select-deselect'  : {allow_single_deselect:true},
+
+            '.chosen-select-no-single' : {disable_search_threshold:10},
+
+            '.chosen-select-no-results': {no_results_text:'Oops, nothing found!'},
+
+            '.chosen-select-width'     : {width:"95%"}
+
+        }
+
+        for (var selector in config) {
+
+            $(selector).chosen(config[selector]);
+
+        }
+
+    </script>
+</div>
+</body>
+</html>

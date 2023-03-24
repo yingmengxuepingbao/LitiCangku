@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>新建盘库单据</title>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<link rel="stylesheet" href="../../css/bootstrap.css" type="text/css" />
+	<link rel="stylesheet" href="../../css/zdialog.css"  type="text/css" />
+	<link rel="stylesheet" href="../../css/chosen.css"  type="text/css" />
+<!--	<link rel="stylesheet" href="../../js/chosen-1.8.7/chosen.min.css"  type="text/css" />-->
+	<link rel="stylesheet" href="../../css/font-awesome.min.css"  type="text/css" />
+	<link rel="stylesheet" href="../../css/layout.css"  type="text/css" />
+	<link rel="stylesheet" href="../../css/skin/jedateNew.css"  type="text/css"/>
+	<link rel="stylesheet" href="css/order.css" type="text/css" />
+	<style type="text/css">
+		a{text-decoration: none !important;}
+		.chzn-container-single .chzn-single {
+			height: 33px;
+			line-height: 26px;
+			padding: 3px 0 3px 8px;
+		}
+		.chzn-container-single .chzn-single div b {
+			background-position: 2px 6px;
+		}
+		.chzn-container .chzn-drop {
+			background: #fff;
+			border : 1px solid #aaa;
+			border-top : 1px solid #aaa;
+		}
+		.chzn-container-active .chzn-single-with-drop div b {
+			background-position: -16px 5px;
+		}
+		.chzn-drop{width: 348px !important;}
+		.chzn-search input{width: 338px !important; border-radius: 4px; padding: 5px}
+		.relative{
+			position: relative;
+			margin: 50px 15px 15px 15px;
+			background: #fff;
+		}
+		.breadcrumb{top:-40px;
+			position: relative;
+			height: 0;
+			left: -15px
+		}
+		.wrap{padding-top: 0}
+		.absolute-bottom-btn{
+			position: relative;
+			width: 100%;
+			padding: 26px  0 15px 0;
+		}
+		.absolute-bottom-btn .rt-bt-btn{
+
+			position: relative;
+			right: 0;
+		}
+		.absolute-bottom-btn .rt-bt-btn button{
+			float: right;
+		}
+		.order-content{
+
+		}
+		.order-content .title:before{
+			content: "";
+			display: block;
+			height: 0;
+			visibility: hidden;
+			clear: both;
+		}
+		.order-content .title{
+			color:#1DBBF4 ;
+			font-size: 16px;
+			font-weight:600;
+			padding: 10px;
+		}
+		.order-content .form-control{
+			width: 250px;
+		}
+		hr{
+			width: 100%;
+			height: 1px;
+			margin-bottom: 10px;
+		}
+		.table-title{
+			margin-top: 10px;
+			margin-bottom: 0;
+		}
+		.btn-add,.saveDeviceBtn{background:#1DBBF4;color:#fff;border:1px solid #fff}
+		.btn-add:hover{background:#1DBBF4;color:#fff}
+		.device-tb-list{width: 100%;height: 200px;overflow-y: auto}
+		.rt-bt-btn .btn:hover{
+			background:#1DBBF4;color:#fff;border:1px solid #fff
+		}
+		.device-tb-list .table tr td{
+			padding: 9px 0;
+			border-top: 1px solid #ECF0F1;
+		}
+		.hide-num-img{display: block;position: relative}
+		.hide-num-img img{
+			position: absolute;
+			top: -216px;
+			left: 50%;
+			margin-left: -129px;
+		}
+		.hide-num-img p{text-align: center;color: #999}
+		.totalDeviceCount{
+			text-align: right;
+		}
+		.remark-bottom p{
+			height: 10px;
+			font-size: 12px;
+			color: #999;
+		}
+		.order-content .title {
+			padding:0;
+		}
+		.fa-exclamation-circle {
+			margin-bottom: 10px;
+		}
+		.order-content .small-form-control{
+			width:80px !important;
+			display: inline;
+		}
+		.order-content .middle-form-control{
+			width:170px !important;
+			display: inline;
+		}
+		.datainp{
+			background-color: #fff !important;
+		}
+
+	</style>
+</head>
+<body>
+<div class="relative" style="min-width: 1030px">
+	<div class="wrap">
+		<ol class="breadcrumb">
+			<li><a href="#" class="link">库内管理</a></li>
+			<li><a href="wmsNHOrderCheckNewList.html" class="link">盘点单据</a></li>
+			<li class="active">新建盘点单据</li>
+		</ol>
+		<div  class="order-content">
+			<div class="title">基本信息</div>
+			<div class="minWidth-line">
+				<div class="form-my-horizontal " style="margin-top: 20px;">
+					<div class="hide-area-noclass">
+						<div class="form-my-group">
+							<label class="col-label control-label">单据编号</label>
+							<div class="col-form-text">
+								<input type="text" class="form-control" id="orderNo" disabled placeholder="请输入单据编号"/>
+							</div>
+						</div>
+					</div>
+					<div class="form-my-group">
+						<label  class="col-label control-label"><i class="fa fa-asterisk"></i>出货口</label>
+						<div class="col-form-text">
+							<select class="form-control" id="outAddress">
+							</select>
+						</div>
+					</div>
+					<div class="form-my-group">
+						<label class="col-label control-label">备注</label>
+						<div class="col-form-text">
+							<textarea id="remark" class="form-control" rows="3" placeholder="请输入备注"
+									  maxlength="100" onkeyup="this.value=this.value.replace(/[=\\=&? ？ *%]/,'')"></textarea>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="title">商品列表</div>
+			<hr/>
+			<div class="form-inline">
+				<button id="deleteTasksBtn" type="button" class="btn btn-default" style="margin-right:6px">删除</button>
+				<button id="addTaskBtn" type="button" class="btn btn-default btn-add " >新增 <i class="fa fa-plus"></i></button>
+			</div>
+			<table class="table table-title" >
+				<thead>
+				<tr>
+					<th style="width: 50px">
+						<div class="checkbox-custom checkbox-default">
+							<input type="checkbox" id="check-all">
+							<label></label>
+						</div>
+					</th>
+					<!--						<th style="width: 15%">出库单号</th>-->
+					<th style="width: 20%">商品名称</th>
+					<th style="width: 20%">商品编号</th>
+					<th style="width: 10%">批次号</th>
+					<th style="width: 10%">计划重量</th>
+					<th style="width: 10%">实际重量</th>
+					<th style="width: 10%">计划托盘数</th>
+					<th style="width: 10%">实际托盘数</th>
+					<!--					<th style="width: 10%">是否自动审核</th>-->
+					<!--					<th style="width: 10%">审核人员</th>-->
+					<!--					<th style="width: 10%">是否自动派工</th>-->
+					<!--					<th style="width: 10%">入库人员</th>-->
+					<th >操作</th>
+				</tr>
+				</thead>
+			</table>
+			<div class=" device-tb-list">
+				<table  class="table-hover table" id="taskDeviceList">
+				</table>
+			</div>
+			<div class="hide-num-img">
+				<!--<img src="../../images/common/not-num-tip.png">-->
+				<p>您还没有添加任何商品</p>
+			</div>
+			<hr/>
+			<!--			<div class="totalDeviceCount">共<span></span>台关联商品</div>-->
+			<!--			<div class="remark-bottom">-->
+			<!--				<p>填写说明：</p>-->
+			<!--				<p>1.单据执行周期：从“开始执行日期”开始，每隔一个周期进行一次入库，到“单据终止日期”结束。</p>-->
+			<!--				<p>2.工单完成期限：每个单据周期生成的入库工单，要求的最长完成时间，如果未在完成期限内执行完工单，则系统工单颜色变红提醒！</p>-->
+			<!--			</div>-->
+			<hr/>
+			<div class="absolute-bottom-btn">
+				<div class="rt-bt-btn">
+					<button type="button" id="submitAll" class="btn btn-default submitAll">保存</button>
+					<button type="button" class="btn btn-default return">返回</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--新增商品-->
+<div class="modal" id="addDevicePop" data-backdrop="false" tabindex="-1" role="dialog" aria-labelledby="moTitle">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content" >
+			<div class="modal-header">
+				<button type="button" class="close" aria-label="Close" data-dismiss="modal"><span aria-hidden="true" id="pop-device-close">&times;</span></button>
+				<h4 class="modal-title" id="moTitle">商品信息</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-horizontal">
+					<div class="form-group" id="add-chosen">
+						<label class="col-sm-3 control-label"><i class="fa fa-asterisk"></i>商品编码</label>
+						<div class="col-sm-9">
+							<select id="goodsCodePop" class="chosen-select" data-placeholder="请选择商品" style="width: 252px;">
+							</select>
+						</div>
+					</div>
+					<div class="form-group" id="edit-input">
+						<label class="col-sm-3 control-label"><i class="fa fa-asterisk"></i>商品编码</label>
+						<div class="col-sm-9">
+							<input type="text" class="form-control" id="deviceCodeInputPop" disabled />
+						</div>
+					</div>
+					<div class="form-group" id="batchNo">
+						<label class="control-label col-sm-3">批次号:</label>
+						<div class="col-sm-9">
+							<select id="batchNoPop" class="chosen-select" data-placeholder="请选择批次号" style="width: 252px;">
+							</select>
+						</div>
+					</div>
+					<div class="form-group" id="grossWeight1">
+						<label class="control-label col-sm-3"><i class="fa fa-asterisk"></i>可用重量:</label>
+						<div class="col-sm-9">
+							<div class="row">
+								<div class="col-sm-4">
+									<input id="useAbleAmount" type="text" disabled value="0" class="form-control" placeholder=""/>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="form-group" id="grossWeight">
+						<label class="control-label col-sm-3"><i class="fa fa-asterisk"></i>计划重量:</label>
+						<div class="col-sm-9">
+							<div class="row">
+								<div class="col-sm-4">
+									<input id="planAmount" type="number" value="1" min="1" class="form-control" placeholder="" onchange="checkStockNumber(this)" />
+								</div>
+							</div>
+						</div>
+					</div>
+					<!--					<div class="form-group">-->
+					<!--						<label class="col-sm-3 control-label"></label>-->
+					<!--						<div class="col-sm-9">-->
+					<!--							<div class="checkbox-custom checkbox-default">-->
+					<!--								<input type="checkbox" checked="checked" id="need-person-check" >-->
+					<!--								<label style="margin-left: 26px" >自动审核工单</label>-->
+					<!--							</div>-->
+					<!--						</div>-->
+					<!--					</div>-->
+					<!--					<div class="form-group">-->
+					<!--						<label  class="col-sm-3 control-label"><i class="fa fa-asterisk"></i> 审核人</label>-->
+					<!--						<div class="col-sm-9">-->
+					<!--							<select class="form-control" disabled="disabled" id="assessorIdPop">-->
+					<!--							</select>-->
+					<!--						</div>-->
+					<!--					</div>-->
+					<!--					<div class="form-group">-->
+					<!--						<label class="col-sm-3 control-label"></label>-->
+					<!--						<div class="col-sm-9">-->
+					<!--							<div class="checkbox-custom checkbox-default">-->
+					<!--								<input type="checkbox" checked="checked" id="need-person-distribute">-->
+					<!--								<label style="margin-left: 26px">自动派发工单</label>-->
+					<!--							</div>-->
+					<!--						</div>-->
+					<!--					</div>-->
+					<!--					<div class="form-group">-->
+					<!--						<label  class="col-sm-3 control-label"><i class="fa fa-asterisk"></i> 入库人</label>-->
+					<!--						<div class="col-sm-9">-->
+					<!--							<select class="form-control" id="distributeIdPop" data-name="">-->
+					<!--							</select>-->
+					<!--						</div>-->
+					<!--					</div>-->
+				</div>
+				<i class="fa fa-exclamation-circle fa-deviceInfoPop"></i>
+				<!--				<div class="remark-bottom">-->
+				<!--					<p>填写说明： </p>-->
+				<!--					<p>工单自动审核：如果自动审核，不需要设置审核人员；如果不是自动审核，必须指定审核人员。默认自动审核，不需要设置审核人员</p><br>-->
+				<!--					<p>工单自动派发：如果自动派发，需要设置接收入库单的人员；如果不是自动派发，不需要设置接收入库单的人员。默认自动派发，需要设置接收入库单的人员</p>-->
+				<!--				</div>-->
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default clearDeviceBtn" id="closeDevice" data-dismiss="modal">取消</button>
+				<button type="button" class="btn btn-modal saveDeviceBtn" id="saveDevice">保存</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!--新增商品参数-->
+<div class="modal" id="addDeviceParamPop" data-backdrop="false" tabindex="-1" role="dialog" aria-labelledby="moTitle1">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content" >
+			<div class="modal-header">
+				<button type="button" class="close" aria-label="Close" data-dismiss="modal"><span aria-hidden="true" id="pop-deviceParam-close">&times;</span></button>
+				<h4 class="modal-title" id="moTitle1">入库项设定</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form-horizontal">
+					<input type="hidden" id="deviceId" value="">
+					<table class="table table-title">
+						<tr>
+							<th style="width: 10%">
+								<div class="checkbox-custom checkbox-default">
+									<input type="checkbox" id="check-allParam">
+									<label></label>
+								</div>
+							</th>
+							<th style="width: 20%">入库项</th>
+							<th style="width: 20%">入库方法</th>
+							<th style="width: 35%">入库标准</th>
+							<th style="width: 25%">关联备件</th>
+						</tr>
+					</table>
+					<div class=" device-tb-list">
+						<table  class="table-hover table" id="paramList">
+						</table>
+					</div>
+				</div>
+				<i class="fa fa-exclamation-circle fa-deviceInfoPop"></i>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default clearDeviceBtn" id="closeParam" data-dismiss="modal">取消</button>
+				<button type="button" class="btn btn-modal saveDeviceBtn" id="saveParam">保存</button>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript" src="../../js/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="../../js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../js/zdialog.js"></script>
+<script type="text/javascript" src="../../js/chosen.jquery.js"></script>
+<!--<script type="text/javascript" src="../../js/chosen-1.8.7/chosen.jquery.min.js"></script>-->
+<script type="text/javascript" src="../../js/jedate.js"></script>
+<script type="text/javascript" src="../../js/common.js"></script>
+<script type="text/javascript" src="js/addNHMoveStereoscopic.js"></script>
+</body>
+</html>

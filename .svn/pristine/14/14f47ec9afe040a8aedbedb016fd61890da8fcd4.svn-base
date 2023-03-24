@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>绑定日志查询</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="../../css/bootstrap.css" type="text/css">
+    <link rel="stylesheet" href="../../css/font-awesome.min.css">
+    <link rel="stylesheet" href="../../css/zdialog.css">
+    <link rel="stylesheet" href="../../css/zTreeStyleOutLook.css" />
+    <link rel="stylesheet" href="../../css/layout.css" type="text/css">
+    <link rel="stylesheet" href="../../css/jedate.css" />
+    <link rel="stylesheet" href="../../css/chosen.css">
+    <link rel="stylesheet" href="css/device.css" />
+    <style type="text/css">
+        a{text-decoration: none !important;}
+        .category .form-control{width: 180px}
+        .category-con:after{display:block;clear:both;content:"";visibility:hidden;height:0}
+        #baseEquipmentList:after{display:block;clear:both;content:"";visibility:hidden;height:0}
+        .pagination-con{overflow: inherit;}
+        .pagination-con:after{display:block;clear:both;content:"";visibility:hidden;height:0}
+        .search-title{overflow:inherit;}
+        .search-title:after{display:block;clear:both;content:"";visibility:hidden;height:0}
+        .btn-blue{ background:#1DBBF4 ;border: 1px solid #fff; color: #fff}
+        .btn-blue:hover{
+            background:#1DBBF4 ;border: 1px solid #fff; color: #fff
+        }
+        .file-border{
+            border: 1px solid #eee;
+            padding: 15px;
+        }
+    </style>
+</head>
+<body>
+<div class="wrap" style="min-width: 1154px">
+    <ol class="breadcrumb">
+        <li><a href="#" class="link">绑定日志查询</a></li>
+        <li class="active">绑定日志列表</li>
+    </ol>
+    <div class="content" style="min-height: 500px">
+        <div class="form-inline search-title">
+        </div>
+        <div class="margin320 category">
+            <div class="form-inline search-title" style="border-bottom:none">
+                <div class="form-inline rt icon-search">
+                    <input type="text" class="form-control search-border-reset" id="goodsCode_search"
+                           placeholder="请输入商品编码" onkeyup="this.value=this.value.replace(/[=\\=&? ？ *%]/,'')">
+                    <img src="../../images/common/search_icon_grey.png">
+                </div>
+                <div class="form-inline rt icon-search">
+                    <input type="text" class="form-control search-border-reset" id="palletCode_search"
+                           placeholder="请输入托盘编码" onkeyup="this.value=this.value.replace(/[=\\=&? ？ *%]/,'')">
+                    <img src="../../images/common/search_icon_grey.png">
+                </div>
+            </div>
+            <div class="bt-and-search">
+                <div class="btn-lists lf">
+                </div>
+                <div class="hide-search rt" id="more-search-condition">
+                    <button id="resetSearchConditions" type="button" class="btn btn-default rt">重置</button>
+                    <button id="topSearchInfoList" type="button" class="btn btn-default rt ">搜索</button>
+                </div>
+            </div>
+
+            <div class="category-con">
+                <table class="table-hover table col-xs-12 col-sm-12 " id="edgeBoxList"  style="table-layout:fixed;">
+                    <thead class="head-sort">
+                    <tr>
+<!--                        <th data-sort="palletizer_id" >码垛机ID<i class="fa fa-sort-amount-asc"></i></th>-->
+                        <th data-sort="address_id" >下线线体编码<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="pallet_code" >托盘编码<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="goods_code" >商品编码<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="amount" >数量<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="batch_no" >批次号<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="report_wms" >是否上传<i class="fa fa-sort-amount-asc"></i></th>
+<!--                        <th data-sort="recommended_location" >推荐库位<i class="fa fa-sort-amount-asc"></i></th>-->
+<!--                        <th data-sort="is_cross" >是否越库<i class="fa fa-sort-amount-asc"></i></th>-->
+                        <th data-sort="error_msg" style="width: 20%">错误信息<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="create_by" >创建人<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="gmt_create" >创建时间<i class="fa fa-sort-amount-asc"></i></th>
+                    </tr>
+                    </thead>
+                    <tbody class="tbody-load">
+                    </tbody>
+                </table>
+                <div class="pagination-con" style="display: block">
+                    <p class="listNumber rt">
+                        <button class="btn btn-default btn-xs previousPage"><i class="fa fa-caret-left fa-lg"></i></button>
+                        <span class="currentPage">1</span>/<span class="pageNumber">1</span>
+                        <button class="btn btn-default btn-xs nextPage"><i class="fa fa-caret-right fa-lg"></i></button>
+                        <input class="currentPageBtn" value="1" type="text"  onkeyup="this.value=this.value.replace(/[^0-9]+/g, '');"/>
+                        <button type="button" id="pageJump"  data-loading-text="请求数据中..." class="btn btn-default pageJump" autocomplete="off">跳转</button>
+                        每页<span class="pageOneNumber">15</span>条，共<span class="dataNumber">30</span>条记录
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script type="text/javascript" src="../../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../js/bootstrap.min.js" ></script>
+    <script type="text/javascript" src="../../js/jquery.jedate.js"></script>
+    <script type="text/javascript" src="../../js/zdialog.js"></script>
+    <script type="text/javascript" src="../../js/jquery.ztree.all.min.js"></script>
+    <script type="text/javascript" src="../../js/chosen.jquery.js"></script>
+    <script type="text/javascript" src="../../js/common.js"></script>
+    <script type="text/javascript" src="js/wcsBindingInfoLogList.js"></script>
+    <script type="text/javascript">
+
+        var config = {
+
+            '.chosen-select'           : {},
+
+            '.chosen-select-deselect'  : {allow_single_deselect:true},
+
+            '.chosen-select-no-single' : {disable_search_threshold:10},
+
+            '.chosen-select-no-results': {no_results_text:'Oops, nothing found!'},
+
+            '.chosen-select-width'     : {width:"95%"}
+
+        }
+
+        for (var selector in config) {
+
+            $(selector).chosen(config[selector]);
+
+        }
+
+    </script>
+</div>
+</body>
+</html>

@@ -1,0 +1,75 @@
+package com.penghaisoft.wms.nuohua.service;
+
+import com.alibaba.fastjson.JSONObject;
+import com.penghaisoft.framework.entity.ResponseResult;
+import com.penghaisoft.wms.expose.WcsTransOb;
+import com.penghaisoft.wms.storagemanagement.model.entity.WmsTaskExecutionLog;
+import org.springframework.web.bind.annotation.RequestBody;
+
+/**
+ * @Description
+ * @Author zhangxin
+ * @Date 2022-07-14
+ **/
+public interface InterfaceForNHService {
+
+    /**
+     *功能描述: 入库推荐-生成推荐库位（一个）
+     * @author zhangxin
+     * @date 2022/7/14
+     * @params
+     * @return java.lang.String
+     */
+    ResponseResult queryLocationCode_HB(WcsTransOb wcsTransOb);
+    /**
+     *功能描述: 生产入库
+     * @author zhangxin
+     * @date 2022/7/14
+     * @params
+     * @return java.lang.String
+     */
+    ResponseResult reportInStereoscopicTask_HB(WcsTransOb wcsTransOb);
+    /**
+     *功能描述: 普通移库
+     * @author zhangxin
+     * @date 2022/7/14
+     * @params
+     * @return java.lang.String
+     */
+    ResponseResult reportNormalYkTask_HB(WcsTransOb wcsTransOb);
+    /**
+     *功能描述: 出库（库内）移库
+     * @author zhangxin
+     * @date 2022/7/14
+     * @params
+     * @return java.lang.String
+     */
+    ResponseResult reportOutwarehouseYkTask_HB(WcsTransOb wcsTransOb);
+    /**
+     *功能描述: 直发出库
+     * @author zhangxin
+     * @date 2022/7/14
+     * @params
+     * @return java.lang.String
+     */
+    ResponseResult reportOutStraightTask_HB(WcsTransOb wcsTransOb);
+    /**
+     *功能描述: 接收出库任务状态-盘点口
+     * @params
+     * @return com.penghaisoft.framework.entity.ResponseResult
+     */
+     ResponseResult reportOutCheckTask_HB(@RequestBody WcsTransOb wcsTransOb);
+    /**
+     *功能描述: 确认对账 - 修改任务的状态
+     * @params
+     * @return com.penghaisoft.framework.entity.ResponseResult
+     */
+     ResponseResult taskStatusUpdate(@RequestBody WmsTaskExecutionLog wmsTaskExecutionLog);
+
+    /**
+     *功能描述: AGV /PDA 请求出库 -业务处理
+     * @params
+     * @return com.alibaba.fastjson.JSONObject
+     */
+     JSONObject requestDelivery(@RequestBody JSONObject jsonObject);
+}

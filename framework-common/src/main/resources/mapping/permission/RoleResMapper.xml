@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.penghaisoft.framework.permissionmanagement.model.dao.RoleResMapper">
+    <resultMap id="BaseResultMap" type="com.penghaisoft.framework.permissionmanagement.model.entity.RoleResKey">
+        <id column="role_id" property="roleId" jdbcType="INTEGER"/>
+        <id column="res_id" property="resId" jdbcType="INTEGER"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey"
+            parameterType="com.penghaisoft.framework.permissionmanagement.model.entity.RoleResKey">
+    delete from role_res
+    where role_id = #{roleId,jdbcType=INTEGER}
+      and res_id = #{resId,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.penghaisoft.framework.permissionmanagement.model.entity.RoleResKey">
+    insert into role_res (role_id, res_id)
+    values (#{roleId,jdbcType=INTEGER}, #{resId,jdbcType=INTEGER})
+  </insert>
+    <insert id="insertSelective" parameterType="com.penghaisoft.framework.permissionmanagement.model.entity.RoleResKey">
+        insert into role_res
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="roleId != null">
+                role_id,
+            </if>
+            <if test="resId != null">
+                res_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="roleId != null">
+                #{roleId,jdbcType=INTEGER},
+            </if>
+            <if test="resId != null">
+                #{resId,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+
+    <!-- 按照角色删除角色资源关系-->
+    <delete id="deleteByRoleIdOrResourceId" parameterType="int">
+        delete from role_res
+        where
+        <if test="roleId != null">
+            role_id = #{roleId,jdbcType=INTEGER}
+        </if>
+        <if test="resourceId != null">
+            res_id = #{resourceId,jdbcType=INTEGER}
+        </if>
+    </delete>
+
+    <!-- 批量添加角色和资源关系 -->
+    <insert id="insertRoleResourceList" parameterType="java.util.List">
+        INSERT INTO
+        role_res
+        (
+        role_id,
+        res_id
+        )
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.roleId},
+            #{item.resId}
+            )
+        </foreach>
+    </insert>
+
+</mapper>

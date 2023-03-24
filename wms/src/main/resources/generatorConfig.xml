@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+
+    <!-- classPathEntry:数据库的 JDBC驱动的jar 包地址
+     这里需要一个mysql的驱动包,去随便找一个驱动包就可以,指定路径
+     -->
+    <!--<classPathEntry location="D:\\programFiles\\mysql_jar\\mysql-connector-java-8.0.23.jar" />-->
+
+    <!-- classPathEntry:数据库的 JDBC驱动的jar 包地址
+     这里需要一个sqlserver的驱动包,去随便找一个驱动包就可以,指定路径
+     -->
+    <classPathEntry location="D:\\programFiles\\mysql_jar\\sqljdbc4-4.0.jar" />
+
+    <context id="caigouTables" targetRuntime="MyBatis3">
+        <commentGenerator>
+            <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+            <!-- 这里选择的是去掉注释,因为mybatis生成的注释非常繁琐 -->
+            <property name="suppressAllComments" value="true" />
+        </commentGenerator>
+        <!--数据库连接的信息：驱动类、连接地址、用户名、密码 -->
+
+        <jdbcConnection driverClass="com.microsoft.sqlserver.jdbc.SQLServerDriver"
+                        connectionURL="jdbc:sqlserver://localhost:1433;DatabaseName=nh_wms"
+                        userId="sa"
+                        password="B@ojia56127">
+        </jdbcConnection>
+        <!-- orcal数据库 注意这里使用orcal数据库 上面驱动包也必须指定为 orcal的驱动-->
+
+        <!-- <jdbcConnection driverClass="oracle.jdbc.OracleDriver"
+        connectionURL="jdbc:oracle:thin:@127.0.0.1:1521:yycg"
+        userId="yycg"
+        password="yycg">
+        </jdbcConnection> -->
+
+        <!-- 默认 false，把 JDBC DECIMAL 和 NUMERIC 类型解析为 Integer true，把 JDBC DECIMAL 和
+        NUMERIC 类型解析为java.math.BigDecimal -->
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false" />
+        </javaTypeResolver>
+
+        <!-- targetProject:生成 POJO 类的位置 com.penghaisoft.wcs.corn.entity  手動添加@Data-->
+        <javaModelGenerator targetPackage="com.penghaisoft.wms.nuohua.model.entity"	targetProject="src/main/java">
+            <!-- enableSubPackages:是否让schema 作为包的后缀 -->
+            <property name="enableSubPackages" value="false" />
+            <!-- 从数据库返回的值被清理前后的空格 -->
+            <property name="trimStrings" value="true" />
+        </javaModelGenerator>
+
+
+        <!-- 生成 XML文件  ./src/main/resources/mapping.wcs.mappers -->
+        <sqlMapGenerator targetPackage="mapping.wms.mappers"  	 targetProject="./src/main/resources">
+            <property name="enableSubPackages" value="false" />
+        </sqlMapGenerator>
+
+        <!--生成接口 手添加@Repository-->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.penghaisoft.wms.nuohua.model.dao" targetProject="./src/main/java">
+            <property name="enableSubPackages" value="false" />
+        </javaClientGenerator>
+
+        <!-- 你要生成逆向工程的表名,这里必须和数据库中的表名保持一致  <table tableName="tb_user"></table>-->
+        <!--<table tableName="wcs_nuohua_cron"></table>-->
+        <!-- 列出要生成代码的所有表，这里配置的是不生成Example文件 -->
+        <table tableName="wms_in_out_tactics" domainObjectName="WmsInOutTactics"
+               enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" selectByExampleQueryId="false" >
+            <property name="wmsInOutTactics" value="false"/>
+        </table>
+
+    </context>
+</generatorConfiguration>

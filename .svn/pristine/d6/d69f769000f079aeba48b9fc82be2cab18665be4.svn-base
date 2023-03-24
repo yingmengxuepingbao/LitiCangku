@@ -1,0 +1,35 @@
+package com.penghaisoft.wms.nuohua.service.impl;
+
+
+import com.alibaba.fastjson.JSONObject;
+import com.penghaisoft.wms.nuohua.service.WmsNHAgvService;
+import com.penghaisoft.wms.util.PostResponseUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+/**
+ * AGV-接口实现
+ */
+@Service("wmsNHAgvService")
+public class WmsNHAgvServiceImpl implements WmsNHAgvService {
+    //AGV接口地址
+
+    /*@Value(value = "${AGV.AGV-url}")
+    private String AGV_URL;*/
+    private String AGV_URL="http://{IP:Port}/Api";
+
+    @Autowired
+    public PostResponseUtil postResponseUtil;
+
+    @Override
+    public JSONObject noVerifyBucketMove(JSONObject map) {
+        //任务接收接口-路径
+        String url = AGV_URL + "/Equipment/Quicktron/RobotJob/NoVerifyBucketMove";
+        String data = postResponseUtil.postJson(url, map);
+        System.out.println("返回数据：" + data);
+        JSONObject jSONObject = JSONObject.parseObject(data);
+        return jSONObject;
+    }
+
+
+}

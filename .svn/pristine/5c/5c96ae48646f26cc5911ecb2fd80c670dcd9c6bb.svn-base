@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>盘点任务</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="../../css/bootstrap.css" type="text/css">
+    <link rel="stylesheet" href="../../css/font-awesome.min.css">
+    <link rel="stylesheet" href="../../css/zdialog.css">
+    <link rel="stylesheet" href="../../css/zTreeStyleOutLook.css" />
+    <link rel="stylesheet" href="../../css/layout.css" type="text/css">
+    <link rel="stylesheet" href="../../css/jedate.css" />
+    <link rel="stylesheet" href="../../css/chosen.css">
+    <link rel="stylesheet" href="css/device.css" />
+    <link rel="stylesheet" href="../../js/chosen-1.8.7/chosen.min.css"  type="text/css" />
+    <style type="text/css">
+        a{text-decoration: none !important;}
+        .category .form-control{width: 180px}
+        .category-con:after{display:block;clear:both;content:"";visibility:hidden;height:0}
+        #baseEquipmentList:after{display:block;clear:both;content:"";visibility:hidden;height:0}
+        .pagination-con{overflow: inherit;}
+        .pagination-con:after{display:block;clear:both;content:"";visibility:hidden;height:0}
+        .search-title{overflow:inherit;}
+        .search-title:after{display:block;clear:both;content:"";visibility:hidden;height:0}
+        .btn-blue{ background:#1DBBF4 ;border: 1px solid #fff; color: #fff}
+        .btn-blue:hover{
+            background:#1DBBF4 ;border: 1px solid #fff; color: #fff
+        }
+        .file-border{
+            border: 1px solid #eee;
+            padding: 15px;
+        }
+    </style>
+</head>
+<body>
+<div class="wrap" style="min-width: 1154px">
+    <ol class="breadcrumb">
+        <li><a href="#" class="link">库内管理</a></li>
+        <li><a href="wmsOrderCheckList.html" class="link">盘点任务</a></li>
+        <li class="active">盘点差异托盘明细</li>
+    </ol>
+    <div class="content" style="min-height: 500px">
+        <div class="form-inline search-title">
+<!--            <div class="title fl">EdgeBox列表</div>-->
+        </div>
+        <div class="margin320 category">
+            <div class="form-inline search-title" style="border-bottom:none">
+                <div class="form-inline rt icon-search">
+                    <input type="text" class="form-control search-border-reset" id="palletCode_search"
+                           placeholder="请输入托盘码" onkeyup="this.value=this.value.replace(/[=\\=&? ？ *%]/,'')">
+                    <img src="../../images/common/search_icon_grey.png">
+                </div>
+                <div class="form-inline rt icon-search">
+                    <select class="form-control search-border-reset" id="goodsCodeSelect">
+                    </select>
+                </div>
+                <div class="form-inline rt icon-search">
+                    <select class="form-control search-border-reset" id="diffFlagSelect">&nbsp;
+                        <option value="">请选择是否有差异</option>
+                        <option value="1">是</option>
+                        <option value="2">否</option>
+                    </select>
+                </div>
+            </div>
+            <div class="bt-and-search">
+                <div class="btn-lists lf">
+<!--                    <button type="button" class="btn btn-default multiDelete1">合并出库</button>-->
+                    <!--<button type="button" class="btn btn-default" id="exportBtn">导出</button>
+                    <button type="button" class="btn btn-default" id="importBtn">导入</button>-->
+<!--                    <button id="addByLocation" type="button" class="btn btn-default btn-add">按库位制单<i class="fa fa-plus"></i></button>-->
+<!--                    <button id="addByGoods" type="button" class="btn btn-default btn-add">按商品制单<i class="fa fa-plus"></i></button>-->
+<!--                    <button type="button" class="btn btn-default multiDelete">删除</button>-->
+                </div>
+                <div class="hide-search rt" id="more-search-condition">
+                    <button id="resetSearchConditions" type="button" class="btn btn-default rt">重置</button>
+                    <button id="topSearchInfoList" type="button" class="btn btn-default rt ">搜索</button>
+                </div>
+            </div>
+
+            <div class="category-con">
+                <table class="table-hover table col-xs-12 col-sm-12 " id="edgeBoxList">
+                    <thead class="head-sort">
+                    <tr>
+                        <th style="width: 50px">
+                            <div class="checkbox-custom checkbox-default">
+                                <input type="checkbox" id="check-all">
+                                <label></label>
+                            </div>
+                        </th>
+                        <th data-sort="order_no" >盘点单号<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="pallet_code" >托盘编码<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="goods_code" >商品编码<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="goods_name" >商品名称<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="batch_no" >批次号<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="location_code" >库位<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="amount" >库存重量<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="real_amount" >实际重量<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="user_defined1" >是否扫码<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="diff_flag" >是否有差异<i class="fa fa-sort-amount-asc"></i></th>
+                        <th>详情</th>
+                    </tr>
+                    </thead>
+                    <tbody class="tbody-load">
+                    </tbody>
+                </table>
+                <div class="pagination-con" style="display: block">
+                    <p class="listNumber rt">
+                        <button class="btn btn-default btn-xs previousPage"><i class="fa fa-caret-left fa-lg"></i></button>
+                        <span class="currentPage">1</span>/<span class="pageNumber">1</span>
+                        <button class="btn btn-default btn-xs nextPage"><i class="fa fa-caret-right fa-lg"></i></button>
+                        <input class="currentPageBtn" value="1" type="text"  onkeyup="this.value=this.value.replace(/[^0-9]+/g, '');"/>
+                        <button type="button" id="pageJump"  data-loading-text="请求数据中..." class="btn btn-default pageJump" autocomplete="off">跳转</button>
+                        每页<span class="pageOneNumber">15</span>条，共<span class="dataNumber">30</span>条记录
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="absolute-bottom-btn">
+            <div class="rt-bt-btn">
+                <button id="back" type="button" class="btn btn-default return">返回</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="../../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../js/bootstrap.min.js" ></script>
+    <script type="text/javascript" src="../../js/jquery.jedate.js"></script>
+    <script type="text/javascript" src="../../js/zdialog.js"></script>
+    <script type="text/javascript" src="../../js/jquery.ztree.all.min.js"></script>
+    <script type="text/javascript" src="../../js/chosen-1.8.7/chosen.jquery.min.js"></script>
+    <script type="text/javascript" src="../../js/common.js"></script>
+    <script type="text/javascript" src="js/wmsNHOrderCheckPalletList.js"></script>
+    <script type="text/javascript">
+
+        var config = {
+
+            '.chosen-select'           : {},
+
+            '.chosen-select-deselect'  : {allow_single_deselect:true},
+
+            '.chosen-select-no-single' : {disable_search_threshold:10},
+
+            '.chosen-select-no-results': {no_results_text:'Oops, nothing found!'},
+
+            '.chosen-select-width'     : {width:"95%"}
+
+        }
+
+        for (var selector in config) {
+
+            $(selector).chosen(config[selector]);
+
+        }
+
+    </script>
+</div>
+</body>
+</html>

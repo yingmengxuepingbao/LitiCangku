@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.penghaisoft.pda.storage.dao.WmsCombineLogMapper" >
+  <resultMap id="BaseResultMap" type="com.penghaisoft.pda.storage.model.WmsCombineLog" >
+    <id column="combine_log_id" property="combineLogId" jdbcType="VARCHAR" />
+    <result column="combine_task_id" property="combineTaskId" jdbcType="VARCHAR" />
+    <result column="from_pallet_code" property="fromPalletCode" jdbcType="VARCHAR" />
+    <result column="to_pallet_code" property="toPalletCode" jdbcType="VARCHAR" />
+    <result column="goods_code" property="goodsCode" jdbcType="VARCHAR" />
+    <result column="from_amount" property="fromAmount" jdbcType="INTEGER" />
+    <result column="batch_no" property="batchNo" jdbcType="VARCHAR" />
+    <result column="warehouse_code" property="warehouseCode" jdbcType="VARCHAR" />
+    <result column="area_code" property="areaCode" jdbcType="VARCHAR" />
+    <result column="from_location_code" property="fromLocationCode" jdbcType="VARCHAR" />
+    <result column="to_location_code" property="toLocationCode" jdbcType="VARCHAR" />
+    <result column="move_result" property="moveResult" jdbcType="CHAR" />
+    <result column="error_msg" property="errorMsg" jdbcType="VARCHAR" />
+    <result column="user_defined1" property="userDefined1" jdbcType="VARCHAR" />
+    <result column="user_defined2" property="userDefined2" jdbcType="VARCHAR" />
+    <result column="user_defined3" property="userDefined3" jdbcType="VARCHAR" />
+    <result column="user_defined4" property="userDefined4" jdbcType="VARCHAR" />
+    <result column="user_defined5" property="userDefined5" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="last_modified_by" property="lastModifiedBy" jdbcType="VARCHAR" />
+    <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+    <result column="active_flag" property="activeFlag" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    combine_log_id, combine_task_id, from_pallet_code, to_pallet_code, goods_code, from_amount, 
+    batch_no, warehouse_code, area_code, from_location_code, to_location_code, move_result, 
+    error_msg, user_defined1, user_defined2, user_defined3, user_defined4, user_defined5, 
+    create_by, gmt_create, last_modified_by, gmt_modified, active_flag
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from wms_combine_log
+    where combine_log_id = #{combineLogId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from wms_combine_log
+    where combine_log_id = #{combineLogId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.penghaisoft.pda.storage.model.WmsCombineLog" >
+    insert into wms_combine_log (combine_log_id, combine_task_id, from_pallet_code, 
+      to_pallet_code, goods_code, from_amount, 
+      batch_no, warehouse_code, area_code, 
+      from_location_code, to_location_code, move_result, 
+      error_msg, user_defined1, user_defined2, 
+      user_defined3, user_defined4, user_defined5, 
+      create_by, gmt_create, last_modified_by, 
+      gmt_modified, active_flag)
+    values (#{combineLogId,jdbcType=VARCHAR}, #{combineTaskId,jdbcType=VARCHAR}, #{fromPalletCode,jdbcType=VARCHAR}, 
+      #{toPalletCode,jdbcType=VARCHAR}, #{goodsCode,jdbcType=VARCHAR}, #{fromAmount,jdbcType=INTEGER}, 
+      #{batchNo,jdbcType=VARCHAR}, #{warehouseCode,jdbcType=VARCHAR}, #{areaCode,jdbcType=VARCHAR}, 
+      #{fromLocationCode,jdbcType=VARCHAR}, #{toLocationCode,jdbcType=VARCHAR}, #{moveResult,jdbcType=CHAR}, 
+      #{errorMsg,jdbcType=VARCHAR}, #{userDefined1,jdbcType=VARCHAR}, #{userDefined2,jdbcType=VARCHAR}, 
+      #{userDefined3,jdbcType=VARCHAR}, #{userDefined4,jdbcType=VARCHAR}, #{userDefined5,jdbcType=VARCHAR}, 
+      #{createBy,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, #{lastModifiedBy,jdbcType=VARCHAR}, 
+      #{gmtModified,jdbcType=TIMESTAMP}, #{activeFlag,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.penghaisoft.pda.storage.model.WmsCombineLog" >
+    insert into wms_combine_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="combineLogId != null" >
+        combine_log_id,
+      </if>
+      <if test="combineTaskId != null" >
+        combine_task_id,
+      </if>
+      <if test="fromPalletCode != null" >
+        from_pallet_code,
+      </if>
+      <if test="toPalletCode != null" >
+        to_pallet_code,
+      </if>
+      <if test="goodsCode != null" >
+        goods_code,
+      </if>
+      <if test="fromAmount != null" >
+        from_amount,
+      </if>
+      <if test="batchNo != null" >
+        batch_no,
+      </if>
+      <if test="warehouseCode != null" >
+        warehouse_code,
+      </if>
+      <if test="areaCode != null" >
+        area_code,
+      </if>
+      <if test="fromLocationCode != null" >
+        from_location_code,
+      </if>
+      <if test="toLocationCode != null" >
+        to_location_code,
+      </if>
+      <if test="moveResult != null" >
+        move_result,
+      </if>
+      <if test="errorMsg != null" >
+        error_msg,
+      </if>
+      <if test="userDefined1 != null" >
+        user_defined1,
+      </if>
+      <if test="userDefined2 != null" >
+        user_defined2,
+      </if>
+      <if test="userDefined3 != null" >
+        user_defined3,
+      </if>
+      <if test="userDefined4 != null" >
+        user_defined4,
+      </if>
+      <if test="userDefined5 != null" >
+        user_defined5,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create,
+      </if>
+      <if test="lastModifiedBy != null" >
+        last_modified_by,
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified,
+      </if>
+      <if test="activeFlag != null" >
+        active_flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="combineLogId != null" >
+        #{combineLogId,jdbcType=VARCHAR},
+      </if>
+      <if test="combineTaskId != null" >
+        #{combineTaskId,jdbcType=VARCHAR},
+      </if>
+      <if test="fromPalletCode != null" >
+        #{fromPalletCode,jdbcType=VARCHAR},
+      </if>
+      <if test="toPalletCode != null" >
+        #{toPalletCode,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsCode != null" >
+        #{goodsCode,jdbcType=VARCHAR},
+      </if>
+      <if test="fromAmount != null" >
+        #{fromAmount,jdbcType=INTEGER},
+      </if>
+      <if test="batchNo != null" >
+        #{batchNo,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseCode != null" >
+        #{warehouseCode,jdbcType=VARCHAR},
+      </if>
+      <if test="areaCode != null" >
+        #{areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="fromLocationCode != null" >
+        #{fromLocationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="toLocationCode != null" >
+        #{toLocationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="moveResult != null" >
+        #{moveResult,jdbcType=CHAR},
+      </if>
+      <if test="errorMsg != null" >
+        #{errorMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined1 != null" >
+        #{userDefined1,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined2 != null" >
+        #{userDefined2,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined3 != null" >
+        #{userDefined3,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined4 != null" >
+        #{userDefined4,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined5 != null" >
+        #{userDefined5,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifiedBy != null" >
+        #{lastModifiedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtModified != null" >
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activeFlag != null" >
+        #{activeFlag,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.penghaisoft.pda.storage.model.WmsCombineLog" >
+    update wms_combine_log
+    <set >
+      <if test="combineTaskId != null" >
+        combine_task_id = #{combineTaskId,jdbcType=VARCHAR},
+      </if>
+      <if test="fromPalletCode != null" >
+        from_pallet_code = #{fromPalletCode,jdbcType=VARCHAR},
+      </if>
+      <if test="toPalletCode != null" >
+        to_pallet_code = #{toPalletCode,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsCode != null" >
+        goods_code = #{goodsCode,jdbcType=VARCHAR},
+      </if>
+      <if test="fromAmount != null" >
+        from_amount = #{fromAmount,jdbcType=INTEGER},
+      </if>
+      <if test="batchNo != null" >
+        batch_no = #{batchNo,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseCode != null" >
+        warehouse_code = #{warehouseCode,jdbcType=VARCHAR},
+      </if>
+      <if test="areaCode != null" >
+        area_code = #{areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="fromLocationCode != null" >
+        from_location_code = #{fromLocationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="toLocationCode != null" >
+        to_location_code = #{toLocationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="moveResult != null" >
+        move_result = #{moveResult,jdbcType=CHAR},
+      </if>
+      <if test="errorMsg != null" >
+        error_msg = #{errorMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined1 != null" >
+        user_defined1 = #{userDefined1,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined2 != null" >
+        user_defined2 = #{userDefined2,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined3 != null" >
+        user_defined3 = #{userDefined3,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined4 != null" >
+        user_defined4 = #{userDefined4,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined5 != null" >
+        user_defined5 = #{userDefined5,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifiedBy != null" >
+        last_modified_by = #{lastModifiedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activeFlag != null" >
+        active_flag = #{activeFlag,jdbcType=CHAR},
+      </if>
+    </set>
+    where combine_log_id = #{combineLogId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.penghaisoft.pda.storage.model.WmsCombineLog" >
+    update wms_combine_log
+    set combine_task_id = #{combineTaskId,jdbcType=VARCHAR},
+      from_pallet_code = #{fromPalletCode,jdbcType=VARCHAR},
+      to_pallet_code = #{toPalletCode,jdbcType=VARCHAR},
+      goods_code = #{goodsCode,jdbcType=VARCHAR},
+      from_amount = #{fromAmount,jdbcType=INTEGER},
+      batch_no = #{batchNo,jdbcType=VARCHAR},
+      warehouse_code = #{warehouseCode,jdbcType=VARCHAR},
+      area_code = #{areaCode,jdbcType=VARCHAR},
+      from_location_code = #{fromLocationCode,jdbcType=VARCHAR},
+      to_location_code = #{toLocationCode,jdbcType=VARCHAR},
+      move_result = #{moveResult,jdbcType=CHAR},
+      error_msg = #{errorMsg,jdbcType=VARCHAR},
+      user_defined1 = #{userDefined1,jdbcType=VARCHAR},
+      user_defined2 = #{userDefined2,jdbcType=VARCHAR},
+      user_defined3 = #{userDefined3,jdbcType=VARCHAR},
+      user_defined4 = #{userDefined4,jdbcType=VARCHAR},
+      user_defined5 = #{userDefined5,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      last_modified_by = #{lastModifiedBy,jdbcType=VARCHAR},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      active_flag = #{activeFlag,jdbcType=CHAR}
+    where combine_log_id = #{combineLogId,jdbcType=VARCHAR}
+  </update>
+</mapper>

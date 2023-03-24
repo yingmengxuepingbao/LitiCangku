@@ -1,0 +1,19 @@
+package com.penghaisoft.wms.nuohua.service;
+
+import com.alibaba.fastjson.JSONObject;
+import com.penghaisoft.framework.entity.ResponseResult;
+import com.penghaisoft.framework.util.Resp;
+import com.penghaisoft.wms.storagemanagement.model.entity.WmsMoveStereoscopic;
+
+import java.util.LinkedList;
+
+/**
+ * AGV 请求出库后状态上报
+ **/
+public interface WmsNHAgvService {
+
+    /**
+     * 任务接收接口
+     */
+    public JSONObject noVerifyBucketMove(JSONObject content);
+}

@@ -1,0 +1,133 @@
+*{
+	margin: 0;
+	padding: 0;
+}
+html,body{
+	height: 100%;
+	/*background: transparent;*/
+	background: lightyellow;
+}
+.container-fluid{
+	background-image: url(../images/default/stageloginbackground.jpg);
+	background-size: 100%;
+	position: relative;
+	width: 100%;
+	height: 100%;
+}
+
+@media only screen and (max-width : 980px){
+	#myCarousel{
+		display: none;
+	}
+	body .userform{
+		margin: auto;
+		top:0;
+		bottom: 0;
+		left: 0;
+		right: 0px;
+		/*width: 200px;*/
+		/*height: 300px;*/
+	}
+}
+
+.userform{
+	padding: 30px;
+	border: 1px solid #55BCF9;
+	border: 1px solid white;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 10%;
+	margin: auto;
+	width: 25%;
+	height: 450px;
+	min-width: 300px;
+	max-width: 400px;
+	background: rgba(43,86,164,0.5);
+	color: white;
+}
+.grayline{
+	position: absolute;
+	display: inline-block;
+	background: white;
+	height: 1px;
+	width: 30%;
+}
+.conleft{
+	
+}
+#topcon{
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 60px;
+	border-bottom: 1px solid gray;
+	background: white;
+}
+#topcon .leftcon{
+	float: left;
+	height: 100%;
+	vertical-align: middle;
+	padding-left: 2%;
+}
+#topcon .leftcon img{
+	height: 60%;
+	margin-top: 10px;
+	/*width: 200px;*/
+}
+#topcon .leftcon span{
+	line-height: 60px;
+}
+.container-fluid .mainleftcon{
+	position: absolute;
+	top: 30%;
+	left: 20%;
+	height: 60%;
+}
+.tp img{
+	width: 30px;
+	height: 30px;
+	margin: 10px;
+}
+.container-fluid .container{
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+#particles-js{
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	min-width:1000px ;
+	height: 100%;
+	min-height: 2000px;
+}
+#particles-js{
+	height: 100%;
+}
+#particles-js canvas{
+	height: 100%;
+}
+.carousel-inner .item {
+	text-align: center;
+	vertical-align: middle;
+}
+.carousel-inner .item span{
+	line-height: 260px;
+	font-size: 72px;
+    color:#fefefe;
+    text-shadow:
+    0px 1px 0px #c0c0c0,
+    0px 2px 0px #b0b0b0,
+    0px 3px 0px #a0a0a0,
+    0px 4px 0px #909090,
+    0px 5px 10px rgba(0, 0, 0, 0.6);
+}
+#login{
+	width: 80px;
+}

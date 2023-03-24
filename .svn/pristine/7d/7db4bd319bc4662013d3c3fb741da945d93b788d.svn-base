@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.penghaisoft.framework.log.model.dao.ILoginLogDao" >
+  
+  <resultMap id="BaseResultMap" type="com.penghaisoft.framework.log.model.entity.LoginLog" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="user_account" property="userAccount" jdbcType="VARCHAR" />
+    <result column="uaer_name" property="name" jdbcType="VARCHAR" />
+    <result column="login_time" property="loginTime" jdbcType="VARCHAR" />
+    <result column="login_ip" property="loginIp" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="selectInfo">
+  		ll.id,
+		ll.user_id userId,
+		ll.login_time loginTime,
+		ll.login_ip loginIp,
+		u.account userAccount,
+		u.nickname name 
+  </sql>
+  <sql id="selectCondition">
+  	<if test="startTime != null and startTime != '' and startTime != 'null'">
+		AND ll.login_time &gt; #{startTime,jdbcType=DATE}
+	</if>
+	<if test="endTime != null and endTime != '' and endTime != 'null'">
+		AND ll.login_time &lt; #{endTime,jdbcType=DATE} 
+	</if>
+	<if test="userAccount != null and userAccount != '' and userAccount != 'null'">
+		AND ll.user_id = #{userId,jdbcType=DATE} 
+	</if>
+	<if test="userName != null and userName != '' and userName != 'null'">
+		AND u.nickname LIKE CONCAT('%',#{userName},'%')
+	</if>
+  </sql>
+  <sql id="selectLimit">
+  	<if test="startNumber != null and numberOnePage != null and numberOnePage != 0" >
+	   LIMIT
+		#{startNumber},#{numberOnePage}
+  	</if>
+  </sql>
+  
+  <select id="getLoginLogList" resultType="com.penghaisoft.framework.log.model.entity.LoginLog" parameterType="com.penghaisoft.framework.log.model.entity.LogSelectCondition">
+    SELECT
+    	<include refid="selectInfo" />
+	FROM
+		login_log ll left join user u on ll.user_id = u.id 
+	WHERE
+		1 = 1 
+		<include refid="selectCondition" />
+	ORDER BY
+		ll.login_time DESC 
+		<include refid="selectLimit" />
+  </select>
+  
+  <select id="getLoginLogTotalCount" resultType="int"  parameterType="com.penghaisoft.framework.log.model.entity.LogSelectCondition">
+  	SELECT
+		count(0)
+	FROM
+		login_log ll left join user u on ll.user_id = u.id 
+	WHERE
+		1 = 1
+		<include refid="selectCondition" />
+  </select>
+  
+  <insert id="insert" parameterType="com.penghaisoft.framework.log.model.entity.LoginLog" >
+  	insert into login_log
+  	<trim prefix="(" suffix=")" suffixOverrides="," >
+  		<if test="userId != null" >
+  			user_id,
+  		</if>
+  		<if test="loginTime != null and loginTime != ''" >
+	  		login_time,
+  		</if>
+  		<if test="loginIp != null and loginIp != ''" >
+	  		login_ip,
+  		</if>
+  	</trim>
+  	<trim prefix="values (" suffix=")" suffixOverrides="," >
+  		<if test="userId != null" >
+	  		#{userId,jdbcType=INTEGER},
+  		</if>
+  		<if test="loginTime != null and loginTime != ''" >
+	  		#{loginTime,jdbcType=TIMESTAMP},
+  		</if>
+  		<if test="loginIp != null and loginIp != ''" >
+	  		#{loginIp,jdbcType=VARCHAR},
+  		</if>
+  	</trim>
+  </insert>
+</mapper>

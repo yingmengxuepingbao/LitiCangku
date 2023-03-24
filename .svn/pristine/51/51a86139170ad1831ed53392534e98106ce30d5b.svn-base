@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.penghaisoft.wms.nuohua.model.dao.WcsInterfaceCallLogMapper">
+  <resultMap id="BaseResultMap" type="com.penghaisoft.wms.nuohua.model.entity.WcsInterfaceCallLog">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="interface_name" jdbcType="VARCHAR" property="interfaceName" />
+    <result column="status" jdbcType="CHAR" property="status" />
+    <result column="error_msg" jdbcType="VARCHAR" property="errorMsg" />
+    <result column="elapsed_time" jdbcType="INTEGER" property="elapsedTime" />
+    <result column="user_defined1" jdbcType="VARCHAR" property="userDefined1" />
+    <result column="user_defined2" jdbcType="VARCHAR" property="userDefined2" />
+    <result column="user_defined3" jdbcType="VARCHAR" property="userDefined3" />
+    <result column="user_defined4" jdbcType="VARCHAR" property="userDefined4" />
+    <result column="user_defined5" jdbcType="VARCHAR" property="userDefined5" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_end" jdbcType="TIMESTAMP" property="gmtEnd" />
+  </resultMap>
+  <!--字段-->
+  <sql id="Base_Column_List">
+    id, interface_name, status, error_msg, elapsed_time, user_defined1, user_defined2, 
+    user_defined3, user_defined4, user_defined5, gmt_create, gmt_end
+  </sql>
+  <!--where条件 like-->
+  <sql id="where_fragement">
+    where 1=1
+    <if test="entity!=null">
+
+      <if test="entity.interfaceName != null  and entity.interfaceName !=''">
+        <![CDATA[ and interface_name LIKE CONCAT('%',#{entity.interfaceName},'%')]]>
+      </if>
+      <if test="entity.status != null  and entity.status !=''">
+        <![CDATA[ and status  LIKE CONCAT('%',#{entity.status},'%')]]>
+      </if>
+      <if test="entity.errorMsg != null  and entity.errorMsg !=''">
+        <![CDATA[ and error_msg  LIKE CONCAT('%',#{entity.errorMsg},'%')]]>
+      </if>
+      <if test="entity.elapsedTime != null  and entity.elapsedTime !=''">
+        <![CDATA[ and elapsed_time  LIKE CONCAT('%',#{entity.elapsedTime},'%')]]>
+      </if>
+      <if test="entity.gmtCreate != null  and entity.gmtCreate !=''">
+        <![CDATA[ and gmt_create  LIKE CONCAT('%',#{entity.gmtCreate},'%')]]>
+      </if>
+      <if test="entity.gmtEnd != null  and entity.gmtEnd !=''">
+        <![CDATA[ and gmt_end  LIKE CONCAT('%',#{entity.gmtEnd},'%')]]>
+      </if>
+    </if>
+  </sql>
+  <!--where条件：等于-->
+  <sql id="where_any">
+    where 1=1
+    <if test="entity!=null">
+      <if test="entity.interfaceName != null  and entity.interfaceName !=''">
+        <![CDATA[ and interface_name  = #{entity.interfaceName}]]>
+      </if>
+      <if test="entity.status != null  and entity.status !=''">
+        <![CDATA[ and status   = #{entity.status}]]>
+      </if>
+      <if test="entity.errorMsg != null  and entity.errorMsg !=''">
+        <![CDATA[ and error_msg   = #{entity.errorMsg}]]>
+      </if>
+      <if test="entity.elapsedTime != null  and entity.elapsedTime !=''">
+        <![CDATA[ and elapsed_time   = #{entity.elapsedTime}]]>
+      </if>
+      <if test="entity.gmtCreate != null  and entity.gmtCreate !=''">
+        <![CDATA[ and gmt_create   = #{entity.gmtCreate}]]>
+      </if>
+      <if test="entity.gmtEnd != null  and entity.gmtEnd !=''">
+        <![CDATA[ and gmt_end   = #{entity.gmtEnd}]]>
+      </if>
+    </if>
+  </sql>
+  <!--分页-->
+  <sql id="pagination_tail">
+    top ((#{page.pageOffset} +1)* #{page.rows})
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from wms_interface_call_log
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from wms_interface_call_log
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.penghaisoft.wms.nuohua.model.entity.WcsInterfaceCallLog">
+    insert into wms_interface_call_log (id, interface_name, status,
+      error_msg, elapsed_time, user_defined1,
+      user_defined2, user_defined3, user_defined4,
+      user_defined5, gmt_create, gmt_end
+      )
+    values (#{id,jdbcType=INTEGER}, #{interfaceName,jdbcType=VARCHAR}, #{status,jdbcType=CHAR},
+      #{errorMsg,jdbcType=VARCHAR}, #{elapsedTime,jdbcType=INTEGER}, #{userDefined1,jdbcType=VARCHAR},
+      #{userDefined2,jdbcType=VARCHAR}, #{userDefined3,jdbcType=VARCHAR}, #{userDefined4,jdbcType=VARCHAR},
+      #{userDefined5,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtEnd,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.penghaisoft.wms.nuohua.model.entity.WcsInterfaceCallLog">
+    insert into wms_interface_call_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="interfaceName != null">
+        interface_name,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="errorMsg != null">
+        error_msg,
+      </if>
+      <if test="elapsedTime != null">
+        elapsed_time,
+      </if>
+      <if test="userDefined1 != null">
+        user_defined1,
+      </if>
+      <if test="userDefined2 != null">
+        user_defined2,
+      </if>
+      <if test="userDefined3 != null">
+        user_defined3,
+      </if>
+      <if test="userDefined4 != null">
+        user_defined4,
+      </if>
+      <if test="userDefined5 != null">
+        user_defined5,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtEnd != null">
+        gmt_end,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="interfaceName != null">
+        #{interfaceName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="errorMsg != null">
+        #{errorMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="elapsedTime != null">
+        #{elapsedTime,jdbcType=INTEGER},
+      </if>
+      <if test="userDefined1 != null">
+        #{userDefined1,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined2 != null">
+        #{userDefined2,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined3 != null">
+        #{userDefined3,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined4 != null">
+        #{userDefined4,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined5 != null">
+        #{userDefined5,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtEnd != null">
+        #{gmtEnd,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.penghaisoft.wms.nuohua.model.entity.WcsInterfaceCallLog">
+    update wms_interface_call_log
+    <set>
+      <if test="interfaceName != null">
+        interface_name = #{interfaceName,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="errorMsg != null">
+        error_msg = #{errorMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="elapsedTime != null">
+        elapsed_time = #{elapsedTime,jdbcType=INTEGER},
+      </if>
+      <if test="userDefined1 != null">
+        user_defined1 = #{userDefined1,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined2 != null">
+        user_defined2 = #{userDefined2,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined3 != null">
+        user_defined3 = #{userDefined3,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined4 != null">
+        user_defined4 = #{userDefined4,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined5 != null">
+        user_defined5 = #{userDefined5,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtEnd != null">
+        gmt_end = #{gmtEnd,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.penghaisoft.wms.nuohua.model.entity.WcsInterfaceCallLog">
+    update wms_interface_call_log
+    set interface_name = #{interfaceName,jdbcType=VARCHAR},
+      status = #{status,jdbcType=CHAR},
+      error_msg = #{errorMsg,jdbcType=VARCHAR},
+      elapsed_time = #{elapsedTime,jdbcType=INTEGER},
+      user_defined1 = #{userDefined1,jdbcType=VARCHAR},
+      user_defined2 = #{userDefined2,jdbcType=VARCHAR},
+      user_defined3 = #{userDefined3,jdbcType=VARCHAR},
+      user_defined4 = #{userDefined4,jdbcType=VARCHAR},
+      user_defined5 = #{userDefined5,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_end = #{gmtEnd,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <!-- 分页查询 -->
+  <select id="queryList" resultMap="BaseResultMap" >
+    select
+    <if test="page!=null">
+      <include refid="pagination_tail" />  <!--查询条数-->
+    </if>
+    <include refid="Base_Column_List" />
+    from wms_interface_call_log
+    <include refid="where_fragement" />
+    <if test="entity.orderBy != null">
+      order by ${entity.orderBy}
+    </if>
+
+  </select>
+  <!--查询条数-->
+  <select id="queryCount" resultType="long">
+    select count(1) from wms_interface_call_log
+    <include refid="where_fragement" />
+  </select>
+</mapper>

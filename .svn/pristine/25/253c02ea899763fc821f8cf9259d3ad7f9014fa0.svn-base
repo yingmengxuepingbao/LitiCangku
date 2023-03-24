@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+	<head>
+  	 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta charset="UTF-8">
+    	<meta http-equiv="X-UA-Compatible">
+    	<meta  http-equiv="X-UA-Compatible" name="renderer" content="webkit|ie-comp|ie-stand|ie-11|ie-edge">
+   		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<title id="title">宝佳WMCS后台管理系统</title>
+		<!--[if lt IE]>
+		  <script src="./js/html5shiv.min.js"></script>
+		<![endif]-->
+		<!--<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css"-->
+			  <!--integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">-->
+		<link rel="stylesheet" href="./css/font-awesome.min.css">
+		<link rel="shortcut icon" href="./img/icon.ico" type="image/x-icon"/>
+		<link rel="stylesheet" href="./css/iconfont.css" />
+		<link rel="stylesheet" href="./css/bootstrap.min.css" />
+		<link rel="stylesheet" href="./css/managementSystemFramework.css" />
+		<link rel="stylesheet" href="./css/chat.css" />
+		<link rel="stylesheet" href="./css/index.css" />
+	</head>
+	<body>
+		<div class="container-fluid">
+			<!--中心框架-->
+			<div id="leftframe" class="menu-md"><!--左侧菜单-->
+				<div id="menucontainer">
+					<div class="logo">
+						<div class="imgContainer">
+							<img class="logoImg" src="images/default/public-logo.png" style="" />
+							<!--<img class="logoImg" src="images/default/public-logo-ph.png" style="" />-->
+						</div>
+					</div>
+					<div id="userinfomation">
+						<img class="userimage" src="images/default/defaulthead.png" />
+						<span>
+							<p>Welcome</p>
+							<p class="username"></p>
+						</span>
+					</div>
+					<div onselectstart="return false" id="menu">
+						<!--左侧菜单-->
+					</div>
+					<div id="control_bar" class="control_bar"><!--左侧底部菜单-->
+						<button type="button" class="btn btn-default glyphicon glyphicon-wrench" data-toggle="tooltip" data-placement="top" title="设置"></button>
+						<button type="button" class="btn btn-default glyphicon glyphicon-resize-full" data-toggle="tooltip" data-placement="top"  id="fullscream" title="全屏"></button>
+						<button type="button" class="btn btn-default glyphicon glyphicon-off" data-toggle="tooltip" data-placement="top" title="待定"></button>
+						<button type="button" class="btn btn-default glyphicon glyphicon-off" data-toggle="tooltip" data-placement="top" title="重新登录" onclick="logout()"></button>
+					</div>
+
+				</div>
+			</div>
+			<div  id="rightframe"  class="mainbody">
+				<nav class="topnav"  onselectstart="return false" >
+					<span id="menustyle" class="changestyle iconfont icon-caidan"></span><!--点击切换左侧菜单样式-->
+					<div id="custommenu">
+
+					</div>
+					<!--添加session选项 -->
+					<div id="sessionMenu" style="width: 170px; float: left; margin: 18px;">
+						<span>session时长：</span>
+						<select style="background: #eee;border:0px;" name="sessionSelect">
+							<option value="5">5分钟</option>
+							<option value="10">10分钟</option>
+							<option value="20" selected="selected">20分钟</option>
+							<option value="30">30分钟</option>
+							<option value="40">40分钟</option>
+							<option value="50">50分钟</option>
+							<option value="60">一小时</option>
+						</select>
+					</div>
+
+					<div id="userinfo">
+					<!--用户信息按钮-->
+						<div class="dropdown">
+						  <div  id="dropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+						  	<img class="userimage" src="images/default/defaulthead.png" /><span class="username"></span> 
+						  	<span class="iconfont icon-jiantou9"></span>
+						  </div>
+						  <ul class="dropdown-menu dropdown-menu2" aria-labelledby="dropdownMenu2">
+						    <li><a onclick="createNewTag('00001','修改个人信息','./module/accountManagement/modifyPersonalInformation.html')" href="#">修改个人信息</a></li>
+						    <li><a onclick="createNewTag('00002','修改密码','./module/accountManagement/modifyPersonalPassword.html')" href="#">修改密码</a></li>
+						    <li><a href="#" onclick="logout()">退出登录<span class="iconfont icon-tuichu setright2"></span></a></li>
+						  </ul>
+						</div>
+					</div>
+				</nav>
+				<!--<section id="mainconbox" class="maincontainer">-->
+				<div id="maincontainer" class="maincontainer">
+					<nav class="tabmenu">
+						<!--tag选择菜单  左右移动和中间的tag框体-->
+						<div class="leftarrow iconfont icon-fanyezuojiantou"></div>
+						<div onselectstart="return false" class="centercontainer"><ul></ul></div>
+						<div class="rightarrow iconfont icon-fanyeyoujiantou"></div>
+					</nav>
+					<div id="loaderdiv"><!--加载iframe窗体-->
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript" src="./js/jquery.min.js" ></script>
+		<script type="text/javascript" src="./js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="./js/doAjax.js" ></script>
+		<script type="text/javascript" src="./js/perfect-scrollbar.jquery.min.js"></script>
+		<script type="text/javascript" src="./js/common.js" ></script>
+		<script type="text/javascript" src="./js/chat.js" ></script>
+		<script type="text/javascript" src="./js/managementSystemFramework.js"></script>
+		<script type="text/javascript" src="./js/index.js"></script>
+		<script type="text/javascript" src="./js/confirm.js" ></script>
+		<script type="text/javascript" src="./js/zdialog.js"></script>
+		<script type="text/javascript" src="./js/echarts.min.js" ></script>
+	</body>
+</html>

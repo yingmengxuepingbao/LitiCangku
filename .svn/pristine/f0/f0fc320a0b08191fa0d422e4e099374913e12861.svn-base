@@ -1,0 +1,256 @@
+//
+// Source code recreated from a .class file by IntelliJ IDEA
+// (powered by Fernflower decompiler)
+//
+
+package com.penghaisoft.wms.storagemanagement.model.business.impl;
+
+import com.penghaisoft.framework.constant.Constant.RESULT;
+import com.penghaisoft.framework.constant.Constant.TaskType;
+import com.penghaisoft.framework.util.BaseService;
+import com.penghaisoft.framework.util.CommonUtils;
+import com.penghaisoft.framework.util.Pager;
+import com.penghaisoft.framework.util.Resp;
+import com.penghaisoft.wms.basicmanagement.model.dao.WmsLocationStereoscopicMapper;
+import com.penghaisoft.wms.basicmanagement.model.entity.WmsLocationStereoscopic;
+import com.penghaisoft.wms.logmanagement.model.dao.WmsMoveLogMapper;
+import com.penghaisoft.wms.logmanagement.model.entity.WmsMoveLog;
+import com.penghaisoft.wms.storagemanagement.model.business.IWmsMoveStereoscopicService;
+import com.penghaisoft.wms.storagemanagement.model.dao.WmsMoveStereoscopicMapper;
+import com.penghaisoft.wms.storagemanagement.model.dao.WmsPalletMapper;
+import com.penghaisoft.wms.storagemanagement.model.dao.WmsTaskExecutionLogMapper;
+import com.penghaisoft.wms.storagemanagement.model.entity.WmsMoveStereoscopic;
+import com.penghaisoft.wms.storagemanagement.model.entity.WmsPallet;
+import com.penghaisoft.wms.storagemanagement.model.entity.WmsTaskExecutionLog;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import javax.annotation.Resource;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service("wmsMoveStereoscopicService")
+public class WmsMoveStereoscopicServiceImpl extends BaseService implements IWmsMoveStereoscopicService {
+    @Resource
+    private WmsMoveStereoscopicMapper wmsMoveStereoscopicMapper;
+    @Resource
+    private WmsLocationStereoscopicMapper wmsLocationStereoscopicMapper;
+    @Resource
+    private WmsPalletMapper wmsPalletMapper;
+    @Resource
+    private WmsMoveLogMapper wmsMoveLogMapper;
+    @Resource
+    private WmsTaskExecutionLogMapper wmsTaskExecutionLogMapper;
+
+    public WmsMoveStereoscopicServiceImpl() {
+    }
+
+    public Resp create(WmsMoveStereoscopic wmsMoveStereoscopic) {
+        this.wmsMoveStereoscopicMapper.create(wmsMoveStereoscopic);
+        return this.success();
+    }
+
+    public Resp delete(WmsMoveStereoscopic wmsMoveStereoscopic) {
+        this.wmsMoveStereoscopicMapper.delete(wmsMoveStereoscopic);
+        return this.success();
+    }
+
+    public Pager<WmsMoveStereoscopic> findListByCondition(int page, int rows, WmsMoveStereoscopic condition) {
+        Pager<WmsMoveStereoscopic> pager = new Pager();
+        pager.setPage(page);
+        pager.setRows(rows);
+        long size = this.wmsMoveStereoscopicMapper.queryCount(condition);
+        List<WmsMoveStereoscopic> records = new ArrayList();
+        if (size > 0L) {
+            records = this.wmsMoveStereoscopicMapper.queryList(pager, condition);
+        }
+
+        pager.setRecords((List)records);
+        pager.setTotalCount(size);
+        return pager;
+    }
+
+    public WmsMoveStereoscopic findById(String id) {
+        return (WmsMoveStereoscopic)this.wmsMoveStereoscopicMapper.queryById(id);
+    }
+
+    public Resp update(WmsMoveStereoscopic wmsMoveStereoscopic) {
+        this.wmsMoveStereoscopicMapper.updateBySelect(wmsMoveStereoscopic);
+        return this.success();
+    }
+
+    public List<WmsMoveStereoscopic> queryByAny(WmsMoveStereoscopic condition) {
+        return this.wmsMoveStereoscopicMapper.queryByAny(condition);
+    }
+
+    @Transactional
+    public Resp reportNormalYkTask(WmsTaskExecutionLog condition) {
+        Date now = new Date();
+        WmsMoveStereoscopic serachOb = new WmsMoveStereoscopic();
+        serachOb.setMoveNo(condition.getOrderNo());
+        serachOb.setActiveFlag("1");
+        List<WmsMoveStereoscopic> wmsMoveStereoscopicList = this.wmsMoveStereoscopicMapper.queryByAny(serachOb);
+        if (wmsMoveStereoscopicList != null && !wmsMoveStereoscopicList.isEmpty()) {
+            WmsMoveStereoscopic tmp = (WmsMoveStereoscopic)wmsMoveStereoscopicList.get(0);
+            List<String> locationCodeList = new ArrayList();
+            if (tmp.getFromLocationCode() != null && !"".equals(tmp.getFromLocationCode())) {
+                locationCodeList.add(tmp.getFromLocationCode());
+            }
+
+            if (tmp.getOutChannelLocationCode() != null && !"".equals(tmp.getOutChannelLocationCode())) {
+                locationCodeList.add(tmp.getOutChannelLocationCode());
+            }
+
+            if (tmp.getInChannelLocationCode() != null && !"".equals(tmp.getInChannelLocationCode())) {
+                locationCodeList.add(tmp.getInChannelLocationCode());
+            }
+
+            if ("3".equals(condition.getTaskStatus())) {
+                WmsLocationStereoscopic updateOb = new WmsLocationStereoscopic();
+                updateOb.setLocationCodeList(locationCodeList);
+                updateOb.setUseStatus("0");
+                updateOb.setLastModifiedBy("wsc");
+                updateOb.setGmtModified(now);
+                this.wmsLocationStereoscopicMapper.updateByLocationCodeBatch(updateOb);
+                if (tmp.getFromLocationCode() != null && !"".equals(tmp.getFromLocationCode())) {
+                    updateOb = new WmsLocationStereoscopic();
+                    updateOb.setLocationCode(tmp.getFromLocationCode());
+                    updateOb.setPalletCodeNull("null");
+                    updateOb.setLastModifiedBy("wsc");
+                    updateOb.setGmtModified(now);
+                    this.wmsLocationStereoscopicMapper.updateByLocationCode(updateOb);
+                }
+
+                if (tmp.getToLocationCode() != null && !"".equals(tmp.getToLocationCode())) {
+                    updateOb = new WmsLocationStereoscopic();
+                    updateOb.setLocationCode(tmp.getToLocationCode());
+                    updateOb.setUseStatus("3");
+                    updateOb.setPalletCode(tmp.getPalletCode());
+                    updateOb.setLastModifiedBy("wsc");
+                    updateOb.setGmtModified(now);
+                    this.wmsLocationStereoscopicMapper.updateByLocationCode(updateOb);
+                }
+
+                WmsPallet wmsPalletOb = new WmsPallet();
+                wmsPalletOb.setPalletCode(tmp.getPalletCode());
+                wmsPalletOb.setLockByNull("null");
+                wmsPalletOb.setChannelLocationNull("null");
+                wmsPalletOb.setLocationCode(tmp.getToLocationCode());
+                wmsPalletOb.setLastModifiedBy("wsc");
+                wmsPalletOb.setGmtModified(now);
+                this.wmsPalletMapper.updateByPalletCode(wmsPalletOb);
+                WmsMoveLog wmsMoveLog = new WmsMoveLog();
+                wmsMoveLog.setMoveLogId(CommonUtils.getUUID());
+                wmsMoveLog.setPalletCode(tmp.getPalletCode());
+                wmsMoveLog.setAreaCode(tmp.getAreaCode());
+                wmsMoveLog.setFromLocationCode(tmp.getFromLocationCode());
+                wmsMoveLog.setToLocationCode(tmp.getToLocationCode());
+                wmsMoveLog.setMoveResult("1");
+                wmsMoveLog.setAmount(tmp.getAmount());
+                wmsMoveLog.setBatchNo(tmp.getBatchNo());
+                wmsMoveLog.setGoodsCode(tmp.getGoodsCode());
+                wmsMoveLog.setCreateBy("wcs");
+                wmsMoveLog.setGmtCreate(now);
+                wmsMoveLog.setActiveFlag("1");
+                this.wmsMoveLogMapper.create(wmsMoveLog);
+                WmsMoveStereoscopic wmsMoveStereoscopicUpdate = new WmsMoveStereoscopic();
+                wmsMoveStereoscopicUpdate.setMoveId(tmp.getMoveId());
+                wmsMoveStereoscopicUpdate.setMoveStatus("3");
+                wmsMoveStereoscopicUpdate.setLastModifiedBy("wcs");
+                wmsMoveStereoscopicUpdate.setGmtModified(now);
+                this.wmsMoveStereoscopicMapper.updateBySelect(wmsMoveStereoscopicUpdate);
+                this.wmsTaskExecutionLogMapper.updateByTaskId(condition);
+            } else if ("4".equals(condition.getTaskStatus())) {
+                WmsMoveStereoscopic wmsMoveStereoscopicUpdate = new WmsMoveStereoscopic();
+                wmsMoveStereoscopicUpdate.setMoveId(tmp.getMoveId());
+                wmsMoveStereoscopicUpdate.setMoveStatus("4");
+                wmsMoveStereoscopicUpdate.setLastModifiedBy("wcs");
+                wmsMoveStereoscopicUpdate.setGmtModified(now);
+                this.wmsMoveStereoscopicMapper.updateBySelect(wmsMoveStereoscopicUpdate);
+                if (tmp.getToLocationCode() != null && !"".equals(tmp.getToLocationCode())) {
+                    locationCodeList.add(tmp.getToLocationCode());
+                }
+
+                WmsMoveLog wmsMoveLog = new WmsMoveLog();
+                wmsMoveLog.setMoveLogId(CommonUtils.getUUID());
+                wmsMoveLog.setPalletCode(tmp.getPalletCode());
+                wmsMoveLog.setAmount(tmp.getAmount());
+                wmsMoveLog.setBatchNo(tmp.getBatchNo());
+                wmsMoveLog.setAreaCode(tmp.getAreaCode());
+                wmsMoveLog.setFromLocationCode(tmp.getFromLocationCode());
+                wmsMoveLog.setToLocationCode(tmp.getToLocationCode());
+                wmsMoveLog.setMoveResult("0");
+                wmsMoveLog.setErrorMsg(condition.getMsg());
+                wmsMoveLog.setCreateBy("wcs");
+                wmsMoveLog.setGmtCreate(now);
+                wmsMoveLog.setActiveFlag("1");
+                this.wmsMoveLogMapper.create(wmsMoveLog);
+                WmsLocationStereoscopic updateOb = new WmsLocationStereoscopic();
+                updateOb.setLocationCodeList(locationCodeList);
+                updateOb.setUseStatus("4");
+                updateOb.setLastModifiedBy("wsc");
+                updateOb.setGmtModified(now);
+                this.wmsLocationStereoscopicMapper.updateByLocationCodeBatch(updateOb);
+                this.wmsTaskExecutionLogMapper.updateByTaskId(condition);
+            }
+        }
+
+        return this.success();
+    }
+
+    /**
+     *功能描述:  开始移库任务
+     * @params
+     * @return com.penghaisoft.framework.util.Resp
+     */
+    @Transactional
+    public Resp startYkTask(WmsMoveStereoscopic wmsMoveStereoscopic) {
+        Date now = new Date();
+        Resp resp = new Resp();
+        WmsPallet t = new WmsPallet();
+        t.setPalletCode(wmsMoveStereoscopic.getPalletCode());
+        t.setLockBy(wmsMoveStereoscopic.getMoveNo());
+        t.setLastModifiedBy(wmsMoveStereoscopic.getCreateBy());
+        t.setGmtModified(now);
+        this.wmsPalletMapper.updateByPalletCode(t);
+        WmsMoveStereoscopic wmsMoveStereoscopicUpdatOb = new WmsMoveStereoscopic();
+        wmsMoveStereoscopicUpdatOb.setMoveId(wmsMoveStereoscopic.getMoveId());
+        wmsMoveStereoscopicUpdatOb.setMoveStatus("2");
+        wmsMoveStereoscopicUpdatOb.setLastModifiedBy(wmsMoveStereoscopic.getCreateBy());
+        wmsMoveStereoscopicUpdatOb.setGmtModified(now);
+        wmsMoveStereoscopicUpdatOb.setActiveFlag("1");
+        this.wmsMoveStereoscopicMapper.updateBySelect(wmsMoveStereoscopicUpdatOb);
+        WmsMoveLog wmsMoveLog = new WmsMoveLog();
+        wmsMoveLog.setMoveLogId(CommonUtils.getUUID());
+        wmsMoveLog.setPalletCode(wmsMoveStereoscopic.getPalletCode());
+        wmsMoveLog.setAreaCode(wmsMoveStereoscopic.getAreaCode());
+        wmsMoveLog.setFromLocationCode(wmsMoveStereoscopic.getFromLocationCode());
+        wmsMoveLog.setToLocationCode(wmsMoveStereoscopic.getToLocationCode());
+        wmsMoveLog.setMoveResult("0");
+        wmsMoveLog.setCreateBy(wmsMoveStereoscopic.getCreateBy());
+        wmsMoveLog.setGmtCreate(now);
+        wmsMoveLog.setActiveFlag("1");
+        wmsMoveLog.setGoodsCode(wmsMoveStereoscopic.getGoodsCode());
+        wmsMoveLog.setBatchNo(wmsMoveStereoscopic.getBatchNo());
+        wmsMoveLog.setAmount(wmsMoveStereoscopic.getAmount());
+        this.wmsMoveLogMapper.create(wmsMoveLog);
+        WmsTaskExecutionLog wmsTaskExecutionLog = new WmsTaskExecutionLog();
+        wmsTaskExecutionLog.setAreaCode(wmsMoveStereoscopic.getAreaCode());
+        wmsTaskExecutionLog.setTaskId(wmsMoveStereoscopic.getTaskId());
+        wmsTaskExecutionLog.setOrderNo(wmsMoveStereoscopic.getMoveNo());
+        wmsTaskExecutionLog.setTaskType(String.valueOf(TaskType.NORMAL_MOVE.getTaskType()));
+        wmsTaskExecutionLog.setPalletCode(wmsMoveStereoscopic.getPalletCode());
+        wmsTaskExecutionLog.setTaskStatus("2");
+        wmsTaskExecutionLog.setInAddress(wmsMoveStereoscopic.getToLocationCode());
+        wmsTaskExecutionLog.setOutAddress(wmsMoveStereoscopic.getFromLocationCode());
+        wmsTaskExecutionLog.setLocationCode(wmsMoveStereoscopic.getToLocationCode());
+        wmsTaskExecutionLog.setGoodsCode(wmsMoveStereoscopic.getGoodsCode());
+        wmsTaskExecutionLog.setBatchNo(wmsMoveStereoscopic.getBatchNo());
+        wmsTaskExecutionLog.setCreateBy(wmsMoveStereoscopic.getCreateBy());
+        wmsTaskExecutionLog.setGmtCreate(now);
+        wmsTaskExecutionLog.setActiveFlag("1");
+        this.wmsTaskExecutionLogMapper.create(wmsTaskExecutionLog);
+        resp.setCode(RESULT.SUCCESS.code);
+        return resp;
+    }
+}

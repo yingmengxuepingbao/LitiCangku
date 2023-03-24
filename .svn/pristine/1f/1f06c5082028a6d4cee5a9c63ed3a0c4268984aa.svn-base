@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.penghaisoft.pda.basic.dao.BaseDictItemMapper" >
+  <resultMap id="BaseResultMap" type="com.penghaisoft.pda.basic.model.BaseDictItem" >
+    <id column="dict_item_id" property="dictItemId" jdbcType="VARCHAR" />
+    <result column="dic_type_code" property="dicTypeCode" jdbcType="VARCHAR" />
+    <result column="dic_item_name" property="dicItemName" jdbcType="VARCHAR" />
+    <result column="dic_item_code" property="dicItemCode" jdbcType="VARCHAR" />
+    <result column="sequence_number" property="sequenceNumber" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="user_defined1" property="userDefined1" jdbcType="VARCHAR" />
+    <result column="user_defined2" property="userDefined2" jdbcType="VARCHAR" />
+    <result column="user_defined3" property="userDefined3" jdbcType="VARCHAR" />
+    <result column="user_defined4" property="userDefined4" jdbcType="VARCHAR" />
+    <result column="user_defined5" property="userDefined5" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="last_modified_by" property="lastModifiedBy" jdbcType="VARCHAR" />
+    <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+    <result column="active_flag" property="activeFlag" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    dict_item_id, dic_type_code, dic_item_name, dic_item_code, sequence_number, remark, 
+    user_defined1, user_defined2, user_defined3, user_defined4, user_defined5, create_by, 
+    gmt_create, last_modified_by, gmt_modified, active_flag
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from base_dict_item
+    where dict_item_id = #{dictItemId,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectByDicTypeCode" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from base_dict_item
+    where dic_type_code = #{dicTypeCode,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from base_dict_item
+    where dict_item_id = #{dictItemId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.penghaisoft.pda.basic.model.BaseDictItem" >
+    insert into base_dict_item (dict_item_id, dic_type_code, dic_item_name, 
+      dic_item_code, sequence_number, remark, 
+      user_defined1, user_defined2, user_defined3, 
+      user_defined4, user_defined5, create_by, 
+      gmt_create, last_modified_by, gmt_modified, 
+      active_flag)
+    values (#{dictItemId,jdbcType=VARCHAR}, #{dicTypeCode,jdbcType=VARCHAR}, #{dicItemName,jdbcType=VARCHAR}, 
+      #{dicItemCode,jdbcType=VARCHAR}, #{sequenceNumber,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
+      #{userDefined1,jdbcType=VARCHAR}, #{userDefined2,jdbcType=VARCHAR}, #{userDefined3,jdbcType=VARCHAR}, 
+      #{userDefined4,jdbcType=VARCHAR}, #{userDefined5,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{lastModifiedBy,jdbcType=VARCHAR}, #{gmtModified,jdbcType=TIMESTAMP}, 
+      #{activeFlag,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.penghaisoft.pda.basic.model.BaseDictItem" >
+    insert into base_dict_item
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="dictItemId != null" >
+        dict_item_id,
+      </if>
+      <if test="dicTypeCode != null" >
+        dic_type_code,
+      </if>
+      <if test="dicItemName != null" >
+        dic_item_name,
+      </if>
+      <if test="dicItemCode != null" >
+        dic_item_code,
+      </if>
+      <if test="sequenceNumber != null" >
+        sequence_number,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="userDefined1 != null" >
+        user_defined1,
+      </if>
+      <if test="userDefined2 != null" >
+        user_defined2,
+      </if>
+      <if test="userDefined3 != null" >
+        user_defined3,
+      </if>
+      <if test="userDefined4 != null" >
+        user_defined4,
+      </if>
+      <if test="userDefined5 != null" >
+        user_defined5,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create,
+      </if>
+      <if test="lastModifiedBy != null" >
+        last_modified_by,
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified,
+      </if>
+      <if test="activeFlag != null" >
+        active_flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="dictItemId != null" >
+        #{dictItemId,jdbcType=VARCHAR},
+      </if>
+      <if test="dicTypeCode != null" >
+        #{dicTypeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="dicItemName != null" >
+        #{dicItemName,jdbcType=VARCHAR},
+      </if>
+      <if test="dicItemCode != null" >
+        #{dicItemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sequenceNumber != null" >
+        #{sequenceNumber,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined1 != null" >
+        #{userDefined1,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined2 != null" >
+        #{userDefined2,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined3 != null" >
+        #{userDefined3,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined4 != null" >
+        #{userDefined4,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined5 != null" >
+        #{userDefined5,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifiedBy != null" >
+        #{lastModifiedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtModified != null" >
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activeFlag != null" >
+        #{activeFlag,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.penghaisoft.pda.basic.model.BaseDictItem" >
+    update base_dict_item
+    <set >
+      <if test="dicTypeCode != null" >
+        dic_type_code = #{dicTypeCode,jdbcType=VARCHAR},
+      </if>
+      <if test="dicItemName != null" >
+        dic_item_name = #{dicItemName,jdbcType=VARCHAR},
+      </if>
+      <if test="dicItemCode != null" >
+        dic_item_code = #{dicItemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sequenceNumber != null" >
+        sequence_number = #{sequenceNumber,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined1 != null" >
+        user_defined1 = #{userDefined1,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined2 != null" >
+        user_defined2 = #{userDefined2,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined3 != null" >
+        user_defined3 = #{userDefined3,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined4 != null" >
+        user_defined4 = #{userDefined4,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined5 != null" >
+        user_defined5 = #{userDefined5,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifiedBy != null" >
+        last_modified_by = #{lastModifiedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activeFlag != null" >
+        active_flag = #{activeFlag,jdbcType=CHAR},
+      </if>
+    </set>
+    where dict_item_id = #{dictItemId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.penghaisoft.pda.basic.model.BaseDictItem" >
+    update base_dict_item
+    set dic_type_code = #{dicTypeCode,jdbcType=VARCHAR},
+      dic_item_name = #{dicItemName,jdbcType=VARCHAR},
+      dic_item_code = #{dicItemCode,jdbcType=VARCHAR},
+      sequence_number = #{sequenceNumber,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      user_defined1 = #{userDefined1,jdbcType=VARCHAR},
+      user_defined2 = #{userDefined2,jdbcType=VARCHAR},
+      user_defined3 = #{userDefined3,jdbcType=VARCHAR},
+      user_defined4 = #{userDefined4,jdbcType=VARCHAR},
+      user_defined5 = #{userDefined5,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      last_modified_by = #{lastModifiedBy,jdbcType=VARCHAR},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      active_flag = #{activeFlag,jdbcType=CHAR}
+    where dict_item_id = #{dictItemId,jdbcType=VARCHAR}
+  </update>
+</mapper>

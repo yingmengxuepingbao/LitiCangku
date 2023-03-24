@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible">
+    	<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<title>用户列表</title>
+		<!--[if lt IE]>
+			<script src="../../../js/html5shiv.min.js"></script>
+		<![endif]-->
+		<link rel="stylesheet" href="../../css/bootstrap.min.css" />
+		<link rel="stylesheet" href="../../css/pace-theme-barber-shop.css" />
+		<link rel="stylesheet" href="../../css/gTableCSS.min.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/jquery.dataTables.min.css">
+		<style>
+			html,body{
+				height: 100%;
+				width: 100%;
+			}
+			#condition{
+				margin-left: 20px;
+				margin-top: 30px;
+			}
+			#logs{
+				text-align: center;
+			}
+			/*#logs thead th{
+				color: white;
+				background: rgba(51,122,183,0.9);
+			}*/
+			#condition input{
+				width: 100px;
+			}
+			table{
+				/*width: 100%;*/
+				/*min-width: 710px;*/
+			}
+			.table>tbody>tr>td{
+			    vertical-align: middle
+			}
+			th{
+				text-align: left;
+			}
+			td{
+				text-align: left;
+			}
+			th:nth-of-type(6){
+				text-align: center;
+			}
+			td:nth-of-type(6){
+				text-align: center;
+			}
+			/*#logs table{  
+				width: 100%;
+			    font-family: verdana,arial,sans-serif;  
+			    font-size:11px;  
+			    color:#333333;  
+			    border-collapse: collapse;  
+		    	-moz-box-shadow:0px 0px 5px #333333; 
+				-webkit-box-shadow:0px 0px 5px #333333; 
+				box-shadow:0px 0px 5px #333333;
+				border-radius: 5px;
+				border: 1px solid #333333;
+			}  
+			#logs th{  
+				text-align: center;
+			    padding: 8px;  
+				border: 1px solid #dddddd;
+			}  
+			#logs td{ 
+				cursor: pointer; 
+			    padding: 8px;  
+				border: 1px solid #dddddd;
+			}  */
+			#addUserWindows{
+				border-radius: 5px;
+				-moz-box-shadow:0px 0px 5px #333333;
+				-webkit-box-shadow:0px 0px 5px #333333; 
+				box-shadow:0px 0px 5px #333333;
+				background-color: #DEDEDE;
+				display: none;
+				position: fixed;
+				z-index: 100;
+				margin: auto;
+				top: 0;
+				bottom: 0;
+				left: 0;
+				right: 0;
+				width: 360px;
+				height: 360px;
+			}
+			#closeWindows{
+				cursor: pointer;
+				position: absolute;
+				top: 10px;
+				right: 10px;
+				color: red;
+			}
+			.require{
+				color: red;
+			}
+			.title{
+				text-indent: 20px;
+				margin-top: 40px;
+				margin-bottom: 20px;
+				text-align: center;
+				font-size: 30px;
+			}
+			.inputSpan{
+				margin-left: 50px;
+				display: inline-block;
+				width: 80px;
+			}
+			.submitButton{
+				margin: 20px 0;
+				text-align: center;
+			}
+			#addUser{
+				text-align: left;
+			}
+			#addUser button{
+				/*margin-left:10px ;*/
+			}
+			#addUserWindows #showPassword{
+				position: absolute;
+			}
+			.listinfo{
+				margin-top: 20px;
+			}
+			.listinfo input{
+				text-align: center;
+				width: 40px;
+			}
+			#addUserWindows .glyphicon{
+				font-size: 12px;
+			}
+			#logs button{
+				margin: 5px;
+			}
+			#userTable{
+				/*width: 1000px;*/
+			}
+			/*#userTable tbody tr:hover td{
+				background: rgba(0,204,255,0.1);
+			}
+			#userTable tbody tr:nth-child(2n){
+				background-color: #F9F9F9;
+			}*/
+			
+			#refrechDiv{
+				position: relative;
+				/*width: 900px;*/
+				text-align: center;
+				border-radius: 5px;
+				margin-bottom: 10px;
+				text-align: center;
+			}
+			#refrechDiv input{
+				width: 175px;
+			}
+			#refrechDiv span{
+				display: inline-block;
+				text-align: right;
+				margin-right: 5px;
+				width: 60px;
+			}
+			#refrechDiv label{
+				height: 24px;
+				width: 280px;
+			}
+			#refrechDiv button{
+				float: right;
+				margin: 0;
+			}			
+		</style>
+	</head>
+	<body>
+		<div style="display: none; z-index: 99; position: fixed; background: rgba(51,51,51,0.5); top: 0;left: 0; right: 0;bottom: 0; width: 100%;height: 100%;" class="mask"></div>
+		<div style=" width: 100%;height: 100%;position: absolute; min-width: 710px; ">
+			<div style=" position: absolute;top: 10px;left: 0px; right: 0px; margin: auto; padding: 20px; ">
+				<div id="addUser">
+					<button type="button" class="btn btn-primary btn-sm" onclick="addUser()" value="添加账户">添加账户</button>
+					<p style="height: 12px;"><span style="font-size: 12px; color: grey; display: none;" id="loading">正在加载...</span></p>
+				</div>
+				<div id="refrechDiv">
+					<div style="display: inline-block; width: 900px;position: relative;">
+						<label><span>账号:</span><input id="searchAccount" type="text" /></label>
+						<label><span>用户名:</span><input id="searchNickName" type="text" /></label>
+						<label><span>邮箱:</span><input id="searchEmail" type="text" /></label>
+						<label><span>手机号:</span><input id="searchPhone" type="text" /></label>
+						<label><span>状态:</span><select style="display: inline-block;" id="searchState">
+								<option value="-1"></option>
+								<option value="0">正常</option>
+								<option value="1">停用</option>
+						</select>
+						</label>
+						<label style="position: relative;"><span></span>
+							<div style=" margin: 0;padding: 0; display: inline-block; width: 175px; position: absolute; right: 0px; ">
+								<button style="padding: 5px 15px; float: right; position: relative; right: 20px; " type="button"
+										id="refrechTop" data-loading-text="请求数据中..."
+										class="btn btn-primary btn-sm" autocomplete="off">搜&nbsp;&nbsp;&nbsp;&nbsp;索</button>
+							</div>
+						</label>
+
+						<!--<label style="overflow: hidden;"></label>-->
+							<!--<button type="button" id="refrechTop" data-loading-text="请求数据中..." class="btn btn-primary btn-sm" autocomplete="off">搜索</button>-->
+							
+					</div>
+				</div>
+				<div id="logs">
+					<table id="userTable" class="table table-striped jambo_table bulk_action">
+						<thead>
+							<tr><th>帐号</th><th>用户名</th><th>邮箱</th><th>手机号</th><th>状态</th><th>操作</th></tr>
+						</thead>
+						<tbody>
+						</tbody>
+						<span></span>
+					</table>
+					<!--列表信息-->
+					<div class="listinfo" style="">
+						<p class="listNumber">共 <span class="dataNumber"></span> 条数据，每页显示 
+							20 条数据，当前为第
+							<button class="previousPage"><</button>
+								<input class="currentPage" value="1" type="text"/>
+								<button class="nextPage">></button> 页,共 
+								<span class="pageNumber"></span> 页数据 
+								<button type="button" id="refrech" data-loading-text="请求数据中..." class="btn btn-primary btn-sm" autocomplete="off">跳转</button>
+						</p>
+					</div>
+					<!--错误信息-->
+					<div id="errorMessage">
+						<span class="message"></span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--添加用户窗口-->
+
+		<div id="addUserWindows">
+			<span id="closeWindows" class="glyphicon glyphicon-remove"></span>
+			<p class="title"><span>添加账户</span></p>
+			<p>
+				<span class="inputSpan">帐号：</span>
+				<input id="account" placeholder="3-20位账户名" maxlength="20" type="text"/>
+				<span class="require glyphicon">*</span>
+				<span class="userNameWarning"></span>
+				<span class="userNameMessage"></span>
+			</p>
+			<p>
+				<span class="inputSpan">初始密码：</span>
+				<input id="password" placeholder="8-18位密码" maxlength="18" type="password"/>
+				<span class="require glyphicon">*</span>
+				<span id="showPassword" class="glyphicon glyphicon-eye-close" style="color: black;position: relative;left: -40px;"></span>
+				<span class="userNameWarning"></span>
+			</p>
+			<p>
+				<span class="inputSpan">用户名：</span>
+				<input id="nickname" placeholder="2-16位用户名" max="16" type="text"/>
+				<span class="require glyphicon">*</span>
+				<span class="userNameWarning"></span>
+			</p>
+			<p>
+				<span class="inputSpan">邮箱：</span>
+				<input id="email" placeholder="例如haier@haier.com" maxlength="50" type="text"/>
+				<span class="require glyphicon">*</span>
+				<span class="userNameWarning"></span>
+			</p>
+			<p>
+				<span class="inputSpan">手机号：</span>
+				<input id="phone" placeholder="11位手机号" maxlength="11" type="text"/>
+				<span class="require glyphicon">*</span>
+				<span class="userNameWarning"></span>
+			</p>
+			
+			<p class="submitButton">
+				<button class="submit btn btn-primary" type="button" data-loading-text="提交更改中..."  autocomplete="off">确认</button>
+				<span class="message" style="display: block; font-size: 12px; color: gray;"></span>
+				<p></p>
+			</p>
+		</div>
+		<!--提示窗口-->
+		<div id="warningDiv" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+		  <div class="modal-dialog modal-sm" role="document">
+		    <div class="modal-content">
+		  	<div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		        <h4 class="modal-title" id="myModalLabel">提示信息</h4>
+		    </div>
+		      <div class="modal-body">
+		        <span>服务器运行异常！</span>
+		      </div>
+		    <div class="modal-footer">
+		        <button type="button" class="btn btn-primary" data-dismiss="modal">确认</button>
+		     </div>
+		    </div>
+		  </div>
+		</div>
+		<script type="text/javascript" src="../../js/jquery.min.js" ></script>
+		<script type="text/javascript" src="../../js/jquery-ui.min.js" ></script>
+		<script type="text/javascript" src="../../js/pace.min.js" ></script>
+		<script type="text/javascript" src="../../js/common.js" ></script>
+		<script type="text/javascript" src="../../js/jquery.dataTables.min.js"></script>
+		<script type="text/javascript" src="../../js/bootstrap.min.js" ></script>
+		<script type="text/javascript" src="../../js/confirm.js" ></script>
+		<script type="text/javascript" src="./js/userInfoList.js"></script>
+	</body>
+</html>

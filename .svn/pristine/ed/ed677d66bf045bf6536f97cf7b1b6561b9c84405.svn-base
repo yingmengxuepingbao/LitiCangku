@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.penghaisoft.framework.permissionmanagement.model.dao.ResourcesMapper">
+    <resultMap id="BaseResultMap" type="com.penghaisoft.framework.permissionmanagement.model.entity.Resources">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="parent_id" property="parentId" jdbcType="INTEGER"/>
+        <result column="level" property="level" jdbcType="INTEGER"/>
+        <result column="sequence" property="sequence" jdbcType="INTEGER"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="res_code" property="resCode" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="icon" property="icon" jdbcType="VARCHAR"/>
+        <result column="is_modifiable" property="isModifiable" jdbcType="TINYINT"/>
+        <result column="res_type" property="resType" jdbcType="CHAR"/>
+        <result column="url" property="url" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, parent_id, level, sequence, title, res_code, description, icon, is_modifiable, 
+    res_type, url
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from resources
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="selectUserResources" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from resources WHERE id in(
+        SELECT res_id from role_res WHERE role_id in (
+        SELECT role_id from user_role WHERE user_id=#{userId}
+        )
+        ) ORDER BY res_type
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from resources
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+    <insert id="insertSelective" parameterType="com.penghaisoft.framework.permissionmanagement.model.entity.Resources">
+        insert into resources
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="parentId != null">
+                parent_id,
+            </if>
+            <if test="level != null">
+                level,
+            </if>
+            <if test="sequence != null">
+                sequence,
+            </if>
+            <if test="title != null">
+                title,
+            </if>
+            <if test="resCode != null">
+                res_code,
+            </if>
+            <if test="description != null">
+                description,
+            </if>
+            <if test="icon != null">
+                icon,
+            </if>
+            <if test="isModifiable != null">
+                is_modifiable,
+            </if>
+            <if test="resType != null">
+                res_type,
+            </if>
+            <if test="url != null">
+                url,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="parentId != null">
+                #{parentId,jdbcType=INTEGER},
+            </if>
+            <if test="level != null">
+                #{level,jdbcType=INTEGER},
+            </if>
+            <if test="sequence != null">
+                #{sequence,jdbcType=INTEGER},
+            </if>
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="resCode != null">
+                #{resCode,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="icon != null">
+                #{icon,jdbcType=VARCHAR},
+            </if>
+            <if test="isModifiable != null">
+                #{isModifiable,jdbcType=TINYINT},
+            </if>
+            <if test="resType != null">
+                #{resType,jdbcType=CHAR},
+            </if>
+            <if test="url != null">
+                #{url,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective"
+            parameterType="com.penghaisoft.framework.permissionmanagement.model.entity.Resources">
+        update resources
+        <set>
+            <if test="parentId != null">
+                parent_id = #{parentId,jdbcType=INTEGER},
+            </if>
+            <if test="level != null">
+                level = #{level,jdbcType=INTEGER},
+            </if>
+            <if test="sequence != null">
+                sequence = #{sequence,jdbcType=INTEGER},
+            </if>
+            <if test="title != null">
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="resCode != null">
+                res_code = #{resCode,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                description = #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="icon != null">
+                icon = #{icon,jdbcType=VARCHAR},
+            </if>
+            <if test="isModifiable != null">
+                is_modifiable = #{isModifiable,jdbcType=TINYINT},
+            </if>
+            <if test="resType != null">
+                res_type = #{resType,jdbcType=CHAR},
+            </if>
+            <if test="url != null">
+                url = #{url,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey"
+            parameterType="com.penghaisoft.framework.permissionmanagement.model.entity.Resources">
+    update resources
+    set parent_id = #{parentId,jdbcType=INTEGER},
+      level = #{level,jdbcType=INTEGER},
+      sequence = #{sequence,jdbcType=INTEGER},
+      title = #{title,jdbcType=VARCHAR},
+      res_code = #{resCode,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      icon = #{icon,jdbcType=VARCHAR},
+      is_modifiable = #{isModifiable,jdbcType=TINYINT},
+      res_type = #{resType,jdbcType=CHAR},
+      url = #{url,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+    <!--插入资源-->
+    <insert id="insertResource" parameterType="com.penghaisoft.framework.permissionmanagement.model.entity.Resources"
+            useGeneratedKeys="true" keyProperty="id">
+    insert into
+    resources ( parent_id, level, sequence, title, res_code, description, icon, is_modifiable,
+    res_type, url)
+    values
+   (
+      #{parentId},
+      #{level},
+      #{sequence},
+      #{title},
+      #{resCode},
+      #{description},
+      #{icon},
+      #{isModifiable},
+      #{resType},
+      #{url}
+      )
+
+  </insert>
+
+    <!--全部删除菜单-->
+    <delete id="deleteAll">
+  	delete from resources
+  </delete>
+
+    <!--查询所有资源-->
+    <select id="selectAllResources" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from resources ORDER BY res_type
+    </select>
+
+    <!--查询所有资源-->
+    <select id="selectAllResourcesBySequence" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from resources
+        order by sequence asc
+    </select>
+
+
+</mapper>

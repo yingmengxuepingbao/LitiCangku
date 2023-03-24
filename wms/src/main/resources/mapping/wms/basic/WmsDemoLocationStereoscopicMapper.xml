@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.penghaisoft.wms.basicmanagement.model.dao.WmsDemoLocationStereoscopicMapper">
+	
+	<!-- =========================================================== -->
+    <!-- 定义resultMap                                                                                                                                                                             -->
+    <!-- =========================================================== -->
+	<resultMap id="wmsLocationStereoscopicMap" type="com.penghaisoft.wms.basicmanagement.model.entity.WmsLocationStereoscopic">
+		<result property="locationId" column="location_id"/>
+		<result property="warehouseCode" column="warehouse_code"/>
+		<result property="areaCode" column="area_code"/>
+		<result property="locationCode" column="location_code"/>
+		<result property="locationAttr" column="location_attr"/>
+		<result property="locationDesc" column="location_desc"/>
+		<result property="palletCode" column="pallet_code"/>
+		<result property="inSeq" column="in_seq"/>
+		<result property="outSeq" column="out_seq"/>
+		<result property="shelvesNumber" column="shelves_number"/>
+		<result property="layerNumber" column="layer_number"/>
+		<result property="columnNumber" column="column_number"/>
+		<result property="useStatus" column="use_status"/>
+		<result property="allowMix" column="allow_mix"/>
+		<result property="userDefined1" column="user_defined1"/>
+		<result property="userDefined2" column="user_defined2"/>
+		<result property="userDefined3" column="user_defined3"/>
+		<result property="userDefined4" column="user_defined4"/>
+		<result property="userDefined5" column="user_defined5"/>
+		<result property="createBy" column="create_by"/>
+		<result property="gmtCreate" column="gmt_create"/>
+		<result property="lastModifiedBy" column="last_modified_by"/>
+		<result property="gmtModified" column="gmt_modified"/>
+		<result property="activeFlag" column="active_flag"/>
+		<result property="stacker" column="stacker"/>
+		<result property="stackerRunTaskAmount" column="stackerRunTaskAmount"/>
+		<result property="goodsCode" column="goods_code"/>
+		<result property="goodsName" column="goods_name"/>
+		<result property="batchNo" column="batch_no"/>
+		<result property="amount" column="amount"/>
+		<result property="useAbleAmount" column="useAbleAmount"/>
+	</resultMap>
+	
+	<sql id="allColumns">
+		location_id,warehouse_code,area_code,location_code,location_attr,location_desc,pallet_code,
+		in_seq,
+		out_seq,shelves_number,layer_number,column_number,use_status,allow_mix,user_defined1,
+		user_defined2,user_defined3,user_defined4,user_defined5,create_by,gmt_create,last_modified_by,
+		gmt_modified,active_flag
+		/*wms_pallet_.amount,wms_pallet_.goods_code,wms_goods_.goods_name,wms_pallet_.batch_no,*/
+	</sql>
+
+	<select id="getSimpleEmptyLocation" resultMap="wmsLocationStereoscopicMap">
+		SELECT top 1 <include refid="allColumns" /> FROM wms_location_stereoscopic
+		WHERE active_flag='1' AND use_status='0' ORDER BY column_number,location_code
+	</select>
+	<select id="queryBaoboOutLocationCode" resultMap="wmsLocationStereoscopicMap">
+		SELECT
+		t.location_code,
+		t.pallet_code,
+		s.goods_code,
+		s.batch_no,
+		s.amount FROM wms_location_stereoscopic t,wms_pallet s
+		WHERE t.pallet_code=s.pallet_code
+		AND t.active_flag = '1'
+		AND s.active_flag = '1'
+		AND
+		s.goods_code = #{entity.goodsCode}
+		<if test="entity.batchNo != null and entity.batchNo !=''">
+			<![CDATA[ AND s.batch_no = #{entity.batchNo}]]>
+		</if>
+		AND t.use_status = '3'
+		ORDER BY
+		t.column_number ASC,
+		t.layer_number DESC,
+		t.shelves_number ASC
+	</select>
+</mapper>

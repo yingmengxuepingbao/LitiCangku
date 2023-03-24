@@ -1,0 +1,99 @@
+package com.penghaisoft.wms.basicmanagement.model.dao;
+
+import com.penghaisoft.wms.basicmanagement.model.entity.WmsLocationStereoscopic;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+/**
+ *功能描述: 项目-业务数据层
+ * @params
+ * @return
+ */
+public interface WmsHBLocationStereoscopicMapper {
+    /**
+     *功能描述:  根据指定层查找可用库位 编号小的
+     * @params
+     * @return java.util.List<com.penghaisoft.wms.basicmanagement.model.entity.WmsLocationStereoscopic>
+     */
+    List<WmsLocationStereoscopic> getLocationInfoByFloor(@Param("entity") WmsLocationStereoscopic seachOb);
+    /**
+     *功能描述:  根据指定层查找可用库位 编号大的
+     * @params
+     * @return java.util.List<com.penghaisoft.wms.basicmanagement.model.entity.WmsLocationStereoscopic>
+     */
+    List<WmsLocationStereoscopic> getLocationInfoByFloorMax(@Param("entity") WmsLocationStereoscopic seachOb);
+    /**
+     *功能描述:  查找所有可用库位
+     * @params
+     * @return java.util.List<com.penghaisoft.wms.basicmanagement.model.entity.WmsLocationStereoscopic>
+     */
+    List<WmsLocationStereoscopic> getLocationInfoBylocationCodeList(@Param("entity") WmsLocationStereoscopic seachOb);
+    /**
+     *功能描述: 根据商品编码，批次号，查询同层的，同批次的，可用货位的 状态 0：可用
+     * @params
+     * @return java.util.List<com.penghaisoft.wms.basicmanagement.model.entity.WmsLocationStereoscopic>
+     */
+    List<WmsLocationStereoscopic> getLocationCodeByUseStatus(@Param("entity") WmsLocationStereoscopic seachOb);
+    /**
+     *功能描述: 查询空巷道的可用库位
+     * @params
+     * @return java.util.List<com.penghaisoft.wms.basicmanagement.model.entity.WmsLocationStereoscopic>
+     */
+    List<WmsLocationStereoscopic> getKongLocation(@Param("entity") WmsLocationStereoscopic seachOb);
+
+    List<WmsLocationStereoscopic> getRightRecommendLocation(@Param("entity") WmsLocationStereoscopic seachOb);
+
+    List<WmsLocationStereoscopic> getLeftRecommendLocation(@Param("entity") WmsLocationStereoscopic seachOb);
+
+    List<WmsLocationStereoscopic> getMixRightRecommendLocation(@Param("entity") WmsLocationStereoscopic seachOb);
+
+    List<WmsLocationStereoscopic> getMixLeftRecommendLocation(@Param("entity") WmsLocationStereoscopic seachOb);
+
+    List<WmsLocationStereoscopic> getEmptyRecommendLocation();
+
+    List<WmsLocationStereoscopic> getTotalRowLocation(@Param("entity") WmsLocationStereoscopic seachOb);
+    /**
+     *功能描述: 移库-根据库位编码，查询信息
+     * @params
+     * @return java.util.List<com.penghaisoft.wms.basicmanagement.model.entity.WmsLocationStereoscopic>
+     */
+    List<WmsLocationStereoscopic> getHBTotalRowLocation(@Param("entity") WmsLocationStereoscopic seachOb);
+    /**
+     *功能描述:  - 根据 z层,x行，y列，查找是否有货位阻碍通道
+     * @params
+     * @return java.util.List<com.penghaisoft.wms.basicmanagement.model.entity.WmsLocationStereoscopic>
+     */
+    List<WmsLocationStereoscopic> getLocationPass(@Param("entity") WmsLocationStereoscopic seachOb);
+    /**
+     *功能描述:  - 根据 z层,x行，y列，查找 向道库位是否被锁
+     * @params
+     * @return java.util.List<com.penghaisoft.wms.basicmanagement.model.entity.WmsLocationStereoscopic>
+     */
+    List<WmsLocationStereoscopic> getLocationorlockBy(@Param("entity") WmsLocationStereoscopic seachOb);
+    /**
+     *功能描述:  -根据商品编码，批次号，查找同一批次,都放在哪些向道里 状态 3：占用
+     * @params
+     * @return java.util.List<com.penghaisoft.wms.basicmanagement.model.entity.WmsLocationStereoscopic>
+     */
+    List<WmsLocationStereoscopic> getLayerByGoodsAndBatch(@Param("entity") WmsLocationStereoscopic seachOb);
+    /**
+     *功能描述:  -查询备用库位的可用库位
+     * @params
+     * @return java.util.List<com.penghaisoft.wms.basicmanagement.model.entity.WmsLocationStereoscopic>
+     */
+    List<WmsLocationStereoscopic> getBeiYongLocation(@Param("entity") WmsLocationStereoscopic seachOb);
+
+    Long queryUseableGoodsAmount(@Param("entity") WmsLocationStereoscopic t);
+
+    Long queryUseablePalletAmount(@Param("entity") WmsLocationStereoscopic t);
+
+    List<WmsLocationStereoscopic> getOutRihtLocation(@Param("entity") WmsLocationStereoscopic seachOb);
+
+    List<WmsLocationStereoscopic> getOutLeftLocation(@Param("entity") WmsLocationStereoscopic seachOb);
+
+    List<WmsLocationStereoscopic> getOutRihtSimpleLocation(@Param("entity") WmsLocationStereoscopic seachOb);
+
+    List<WmsLocationStereoscopic> getOutLeftSimpleLocation(@Param("entity") WmsLocationStereoscopic seachOb);
+
+    List<WmsLocationStereoscopic> getAllLocationInfo();
+}

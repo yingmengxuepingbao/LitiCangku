@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.penghaisoft.framework.basics.model.dao.IDepartmentDao">
+
+    <select id="getDepartments" parameterType="com.penghaisoft.framework.basics.model.entity.Department" resultType="com.penghaisoft.framework.basics.model.entity.Department">
+        SELECT
+          d.id AS departmentId,
+          d.name AS departmentName,
+          d.code AS departmentCode,
+          d.parent_id AS parentId,
+          d.type_id AS departmentType,
+          d.description AS departmentDescription,
+          dt.name AS departmentTypeName
+        FROM department d
+        LEFT JOIN department_type dt
+        ON d.type_id = dt.id
+        WHERE 1 = 1
+        <if test=" parentId != null ">
+            AND d.parent_id = #{parentId}
+        </if>
+        <if test="departmentType != 0 and departmentType != null">
+            AND d.type_id = #{departmentType}
+        </if>
+          ORDER BY d.sequence
+    </select>
+
+    <select id="getAllDepartments" resultType="com.penghaisoft.framework.basics.model.entity.Department">
+        SELECT
+          id AS departmentId,
+          'name' AS departmentName
+        FROM department
+    </select>
+    
+    <select id="getDepartmentInfo" parameterType="int" resultType="com.penghaisoft.framework.basics.model.entity.Department">
+        SELECT
+          d.name AS departmentName,
+          d.code AS departmentCode,
+          d.parent_id AS parentId,
+          d.type_id AS departmentType,
+          d.description AS departmentDescription
+        FROM department d 
+        WHERE d.id = #{departmentId}
+    </select>
+
+    <select id="checkDepartmentCodeAvailable" parameterType="com.penghaisoft.framework.basics.model.entity.Department" resultType="boolean">
+        SELECT COUNT(0)
+        FROM department d
+        WHERE d.code = #{departmentCode}
+          AND d.id &lt;&gt; #{departmentId}
+    </select>
+
+    <insert id="addDepartment" parameterType="com.penghaisoft.framework.basics.model.entity.Department">
+        INSERT INTO department (
+        [name]
+        , [code]
+        , [parent_id]
+        , [type_id]
+        , [sequence]
+        , [description]
+        ) VALUES (
+          #{departmentName},
+          #{departmentCode},
+          #{parentId},
+          #{departmentType},
+          #{sequence},
+          #{departmentDescription}
+        )
+    </insert>
+
+    <update id="editDepartment" parameterType="com.penghaisoft.framework.basics.model.entity.Department">
+        UPDATE department
+        SET
+          name = #{departmentName},
+          code = #{departmentCode},
+          parent_id = #{parentId},
+          type_id = #{departmentType},
+          description = #{departmentDescription}
+        WHERE id = #{departmentId}
+    </update>
+
+    <update id="updateSequence" parameterType="com.penghaisoft.framework.basics.model.entity.Department">
+        UPDATE department d
+        SET d.sequence = #{sequence}
+        WHERE d.id = #{departmentId}
+    </update>
+
+    <delete id="deleteDepartment" parameterType="int">
+        DELETE FROM department
+        WHERE id = #{departmentId}
+    </delete>
+
+    <select id="checkDepartmentHasChildren" parameterType="int" resultType="boolean">
+        SELECT COUNT(0)
+        FROM department d
+        WHERE parent_id = #{departmentId}
+    </select>
+
+    <select id="checkDepartmentPost" parameterType="int" resultType="boolean">
+        SELECT COUNT(0)
+        FROM department_post dp
+        WHERE dp.department_id = #{departmentId}
+    </select>
+</mapper>

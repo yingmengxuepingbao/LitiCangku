@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.penghaisoft.wms.storagemanagement.model.dao.WmsOutTemporaryBoxBarcodeMapper">
+	
+	<!-- =========================================================== -->
+    <!-- 定义resultMap                                                                                                                                                                             -->
+    <!-- =========================================================== -->
+	<resultMap id="wmsOutTemporaryBoxBarcodeMap" type="com.penghaisoft.wms.storagemanagement.model.entity.WmsOutTemporaryBoxBarcode">
+		<result property="id" column="id"/>
+		<result property="orderNo" column="order_no"/>
+		<result property="sendNo" column="send_no"/>
+		<result property="goodsName" column="goods_name"/>
+		<result property="goodsCode" column="goods_code"/>
+		<result property="batchNo" column="batch_no"/>
+		<result property="boxBarcode" column="box_barcode"/>
+		<result property="userDefined1" column="user_defined1"/>
+		<result property="userDefined2" column="user_defined2"/>
+		<result property="userDefined3" column="user_defined3"/>
+		<result property="userDefined4" column="user_defined4"/>
+		<result property="userDefined5" column="user_defined5"/>
+		<result property="createBy" column="create_by"/>
+		<result property="gmtCreate" column="gmt_create"/>
+		<result property="lastModifiedBy" column="last_modified_by"/>
+		<result property="gmtModified" column="gmt_modified"/>
+		<result property="activeFlag" column="active_flag"/>
+	</resultMap>
+	
+	<!-- =========================================================== -->
+    <!-- 一些公共变量设置                                                                                                                                                                             -->
+    <!-- =========================================================== -->
+	<!-- mysql 分页 -->
+	<sql id="pagination_tail">
+		top ((#{page.pageOffset} +1)* #{page.rows})
+	</sql>
+	<!-- mysql 查询总数 -->
+	<sql id="count_Tail">
+		select count(1) from 
+	</sql>
+	
+	<sql id="selectAllColumns">
+		<![CDATA[
+ 			id
+ 			,order_no
+ 			,send_no
+ 			,goods_name
+ 			,goods_code
+ 			,batch_no
+ 			,box_barcode
+ 			,user_defined1
+ 			,user_defined2
+ 			,user_defined3
+ 			,user_defined4
+ 			,user_defined5
+ 			,create_by
+ 			,gmt_create
+ 			,last_modified_by
+ 			,gmt_modified
+ 			,active_flag
+		FROM 
+		wms_out_temporary_box_barcode wms_out_temporary_box_barcode_
+		]]>
+	</sql>
+	
+	<sql id="where_fragement">
+		where 1=1
+		<if test="entity!=null">
+			<if test="entity.id != null and entity.id !=''">
+				<![CDATA[ and wms_out_temporary_box_barcode_.id LIKE CONCAT('%',#{entity.id},'%')]]>
+			</if>
+			<if test="entity.orderNo != null and entity.orderNo !=''">
+				<![CDATA[ and wms_out_temporary_box_barcode_.order_no LIKE CONCAT('%',#{entity.orderNo},'%')]]>
+			</if>
+			<if test="entity.sendNo != null and entity.sendNo !=''">
+				<![CDATA[ and wms_out_temporary_box_barcode_.send_no LIKE CONCAT('%',#{entity.sendNo},'%')]]>
+			</if>
+			<if test="entity.goodsName != null and entity.goodsName !=''">
+				<![CDATA[ and wms_out_temporary_box_barcode_.goods_name LIKE CONCAT('%',#{entity.goodsName},'%')]]>
+			</if>
+			<if test="entity.goodsCode != null and entity.goodsCode !=''">
+				<![CDATA[ and wms_out_temporary_box_barcode_.goods_code LIKE CONCAT('%',#{entity.goodsCode},'%')]]>
+			</if>
+			<if test="entity.batchNo != null and entity.batchNo !=''">
+				<![CDATA[ and wms_out_temporary_box_barcode_.batch_no LIKE CONCAT('%',#{entity.batchNo},'%')]]>
+			</if>
+			<if test="entity.boxBarcode != null and entity.boxBarcode !=''">
+				<![CDATA[ and wms_out_temporary_box_barcode_.box_barcode LIKE CONCAT('%',#{entity.boxBarcode},'%')]]>
+			</if>
+			<if test="entity.userDefined1 != null and entity.userDefined1 !=''">
+				<![CDATA[ and wms_out_temporary_box_barcode_.user_defined1 LIKE CONCAT('%',#{entity.userDefined1},'%')]]>
+			</if>
+			<if test="entity.userDefined2 != null and entity.userDefined2 !=''">
+				<![CDATA[ and wms_out_temporary_box_barcode_.user_defined2 LIKE CONCAT('%',#{entity.userDefined2},'%')]]>
+			</if>
+			<if test="entity.userDefined3 != null and entity.userDefined3 !=''">
+				<![CDATA[ and wms_out_temporary_box_barcode_.user_defined3 LIKE CONCAT('%',#{entity.userDefined3},'%')]]>
+			</if>
+			<if test="entity.userDefined4 != null and entity.userDefined4 !=''">
+				<![CDATA[ and wms_out_temporary_box_barcode_.user_defined4 LIKE CONCAT('%',#{entity.userDefined4},'%')]]>
+			</if>
+			<if test="entity.userDefined5 != null and entity.userDefined5 !=''">
+				<![CDATA[ and wms_out_temporary_box_barcode_.user_defined5 LIKE CONCAT('%',#{entity.userDefined5},'%')]]>
+			</if>
+			<if test="entity.createBy != null and entity.createBy !=''">
+				<![CDATA[ and wms_out_temporary_box_barcode_.create_by LIKE CONCAT('%',#{entity.createBy},'%')]]>
+			</if>
+			<if test="entity.gmtCreate != null">
+				<![CDATA[ and wms_out_temporary_box_barcode_.gmt_create LIKE CONCAT('%',#{entity.gmtCreate},'%')]]>
+			</if>
+			<if test="entity.lastModifiedBy != null and entity.lastModifiedBy !=''">
+				<![CDATA[ and wms_out_temporary_box_barcode_.last_modified_by LIKE CONCAT('%',#{entity.lastModifiedBy},'%')]]>
+			</if>
+			<if test="entity.gmtModified != null">
+				<![CDATA[ and wms_out_temporary_box_barcode_.gmt_modified LIKE CONCAT('%',#{entity.gmtModified},'%')]]>
+			</if>
+			<if test="entity.activeFlag != null and entity.activeFlag !=''">
+				<![CDATA[ and wms_out_temporary_box_barcode_.active_flag LIKE CONCAT('%',#{entity.activeFlag},'%')]]>
+			</if>
+		</if>
+	</sql>
+	
+	<sql id="where_any">
+		where 1=1
+		<if test="entity!=null">
+			<if test="entity.id != null and entity.id !=''">
+				<![CDATA[ and wms_out_temporary_box_barcode_.id = #{entity.id}]]>
+			</if>
+			<if test="entity.orderNo != null and entity.orderNo !=''">
+				<![CDATA[ and wms_out_temporary_box_barcode_.order_no = #{entity.orderNo}]]>
+			</if>
+			<if test="entity.sendNo != null and entity.sendNo !=''">
+				<![CDATA[ and wms_out_temporary_box_barcode_.send_no = #{entity.sendNo}]]>
+			</if>
+			<if test="entity.goodsName != null and entity.goodsName !=''">
+				<![CDATA[ and wms_out_temporary_box_barcode_.goods_name = #{entity.goodsName}]]>
+			</if>
+			<if test="entity.goodsCode != null and entity.goodsCode !=''">
+				<![CDATA[ and wms_out_temporary_box_barcode_.goods_code = #{entity.goodsCode}]]>
+			</if>
+			<if test="entity.batchNo != null and entity.batchNo !=''">
+				<![CDATA[ and wms_out_temporary_box_barcode_.batch_no = #{entity.batchNo}]]>
+			</if>
+			<if test="entity.boxBarcode != null and entity.boxBarcode !=''">
+				<![CDATA[ and wms_out_temporary_box_barcode_.box_barcode = #{entity.boxBarcode}]]>
+			</if>
+			<if test="entity.userDefined1 != null and entity.userDefined1 !=''">
+				<![CDATA[ and wms_out_temporary_box_barcode_.user_defined1 = #{entity.userDefined1}]]>
+			</if>
+			<if test="entity.userDefined2 != null and entity.userDefined2 !=''">
+				<![CDATA[ and wms_out_temporary_box_barcode_.user_defined2 = #{entity.userDefined2}]]>
+			</if>
+			<if test="entity.userDefined3 != null and entity.userDefined3 !=''">
+				<![CDATA[ and wms_out_temporary_box_barcode_.user_defined3 = #{entity.userDefined3}]]>
+			</if>
+			<if test="entity.userDefined4 != null and entity.userDefined4 !=''">
+				<![CDATA[ and wms_out_temporary_box_barcode_.user_defined4 = #{entity.userDefined4}]]>
+			</if>
+			<if test="entity.userDefined5 != null and entity.userDefined5 !=''">
+				<![CDATA[ and wms_out_temporary_box_barcode_.user_defined5 = #{entity.userDefined5}]]>
+			</if>
+			<if test="entity.createBy != null and entity.createBy !=''">
+				<![CDATA[ and wms_out_temporary_box_barcode_.create_by = #{entity.createBy}]]>
+			</if>
+			<if test="entity.gmtCreate != null">
+				<![CDATA[ and wms_out_temporary_box_barcode_.gmt_create = #{entity.gmtCreate}]]>
+			</if>
+			<if test="entity.lastModifiedBy != null and entity.lastModifiedBy !=''">
+				<![CDATA[ and wms_out_temporary_box_barcode_.last_modified_by = #{entity.lastModifiedBy}]]>
+			</if>
+			<if test="entity.gmtModified != null">
+				<![CDATA[ and wms_out_temporary_box_barcode_.gmt_modified = #{entity.gmtModified}]]>
+			</if>
+			<if test="entity.activeFlag != null and entity.activeFlag !=''">
+				<![CDATA[ and wms_out_temporary_box_barcode_.active_flag = #{entity.activeFlag}]]>
+			</if>
+		</if>
+	</sql>
+	
+	<!-- =========================================================== -->
+    <!-- DAO方法中的基本增删改查方法                                                                                                                                                           -->
+    <!-- =========================================================== -->
+   <!-- 根据id查询 -->
+	<select id="queryById" resultMap="wmsOutTemporaryBoxBarcodeMap" parameterType="java.lang.String">
+		select
+		<include refid="selectAllColumns" />
+		<![CDATA[
+		where wms_out_temporary_box_barcode_.id = #{id}
+		]]>
+	</select>
+	
+	<!-- 分页查询 -->
+	<select id="queryList" resultMap="wmsOutTemporaryBoxBarcodeMap" >
+		select
+		<if test="page!=null">
+			<include refid="pagination_tail" />
+		</if>
+		<include refid="selectAllColumns"/>
+		<include refid="where_fragement" />
+
+	</select>
+	
+	<select id="queryCount" resultType="long">
+		<include refid="count_Tail" />
+		wms_out_temporary_box_barcode wms_out_temporary_box_barcode_
+		<include refid="where_fragement" />
+	</select>
+	
+	<!-- 插入记录 -->
+	<insert id="create" parameterType="com.penghaisoft.wms.storagemanagement.model.entity.WmsOutTemporaryBoxBarcode">
+		<![CDATA[
+		insert into wms_out_temporary_box_barcode (
+		    	 id
+		    	 ,order_no
+		    	 ,send_no
+		    	 ,goods_name
+		    	 ,goods_code
+		    	 ,batch_no
+		    	 ,box_barcode
+		    	 ,user_defined1
+		    	 ,user_defined2
+		    	 ,user_defined3
+		    	 ,user_defined4
+		    	 ,user_defined5
+		    	 ,create_by
+		    	 ,gmt_create
+		    	 ,last_modified_by
+		    	 ,gmt_modified
+		    	 ,active_flag
+		   )values(
+		    	#{id}
+		    	,#{orderNo}
+		    	,#{sendNo}
+		    	,#{goodsName}
+		    	,#{goodsCode}
+		    	,#{batchNo}
+		    	,#{boxBarcode}
+		    	,#{userDefined1}
+		    	,#{userDefined2}
+		    	,#{userDefined3}
+		    	,#{userDefined4}
+		    	,#{userDefined5}
+		    	,#{createBy}
+		    	,#{gmtCreate}
+		    	,#{lastModifiedBy}
+		    	,#{gmtModified}
+		    	,#{activeFlag}
+		   )
+	    ]]>	
+	</insert>
+	
+	<!-- 批量插入记录 -->
+	<insert id="batchInsert" parameterType="java.util.List">
+		insert into wms_out_temporary_box_barcode (
+		    	 id
+		    	 ,order_no
+		    	 ,send_no
+		    	 ,goods_name
+		    	 ,goods_code
+		    	 ,batch_no
+		    	 ,box_barcode
+		    	 ,user_defined1
+		    	 ,user_defined2
+		    	 ,user_defined3
+		    	 ,user_defined4
+		    	 ,user_defined5
+		    	 ,create_by
+		    	 ,gmt_create
+		    	 ,last_modified_by
+		    	 ,gmt_modified
+		    	 ,active_flag
+		   )
+		   values
+		   <foreach collection="list" item="item" index="index" separator="," >
+		   (
+		    	#{item.id}
+		    	,#{item.orderNo}
+		    	,#{item.sendNo}
+		    	,#{item.goodsName}
+		    	,#{item.goodsCode}
+		    	,#{item.batchNo}
+		    	,#{item.boxBarcode}
+		    	,#{item.userDefined1}
+		    	,#{item.userDefined2}
+		    	,#{item.userDefined3}
+		    	,#{item.userDefined4}
+		    	,#{item.userDefined5}
+		    	,#{item.createBy}
+		    	,#{item.gmtCreate}
+		    	,#{item.lastModifiedBy}
+		    	,#{item.gmtModified}
+		    	,#{item.activeFlag}
+		   )
+		   </foreach>	
+	</insert>
+	
+	<!-- 根据id，修改记录 -->
+	<update id="update" parameterType="com.penghaisoft.wms.storagemanagement.model.entity.WmsOutTemporaryBoxBarcode">
+		<![CDATA[
+		update wms_out_temporary_box_barcode set
+   			
+   			order_no = #{orderNo}
+   			,send_no = #{sendNo}
+   			,goods_name = #{goodsName}
+   			,goods_code = #{goodsCode}
+   			,batch_no = #{batchNo}
+   			,box_barcode = #{boxBarcode}
+   			,user_defined1 = #{userDefined1}
+   			,user_defined2 = #{userDefined2}
+   			,user_defined3 = #{userDefined3}
+   			,user_defined4 = #{userDefined4}
+   			,user_defined5 = #{userDefined5}
+   			,create_by = #{createBy}
+   			,gmt_create = #{gmtCreate}
+   			,last_modified_by = #{lastModifiedBy}
+   			,gmt_modified = #{gmtModified}
+   			,active_flag = #{activeFlag}
+		 where id = #{id}
+		]]>
+	</update>
+	
+	<!--  -->
+	<update id="updateBySelect" parameterType="com.penghaisoft.wms.storagemanagement.model.entity.WmsOutTemporaryBoxBarcode">
+		update wms_out_temporary_box_barcode <set>
+		<if test="entity!=null">
+				<if test="entity.id != null and entity.id !=''">
+					
+				</if>
+				<if test="entity.orderNo != null and entity.orderNo !=''">
+					<![CDATA[ order_no = #{entity.orderNo}, ]]>
+				</if>
+				<if test="entity.sendNo != null and entity.sendNo !=''">
+					<![CDATA[ send_no = #{entity.sendNo}, ]]>
+				</if>
+				<if test="entity.goodsName != null and entity.goodsName !=''">
+					<![CDATA[ goods_name = #{entity.goodsName}, ]]>
+				</if>
+				<if test="entity.goodsCode != null and entity.goodsCode !=''">
+					<![CDATA[ goods_code = #{entity.goodsCode}, ]]>
+				</if>
+				<if test="entity.batchNo != null and entity.batchNo !=''">
+					<![CDATA[ batch_no = #{entity.batchNo}, ]]>
+				</if>
+				<if test="entity.boxBarcode != null and entity.boxBarcode !=''">
+					<![CDATA[ box_barcode = #{entity.boxBarcode}, ]]>
+				</if>
+				<if test="entity.userDefined1 != null and entity.userDefined1 !=''">
+					<![CDATA[ user_defined1 = #{entity.userDefined1}, ]]>
+				</if>
+				<if test="entity.userDefined2 != null and entity.userDefined2 !=''">
+					<![CDATA[ user_defined2 = #{entity.userDefined2}, ]]>
+				</if>
+				<if test="entity.userDefined3 != null and entity.userDefined3 !=''">
+					<![CDATA[ user_defined3 = #{entity.userDefined3}, ]]>
+				</if>
+				<if test="entity.userDefined4 != null and entity.userDefined4 !=''">
+					<![CDATA[ user_defined4 = #{entity.userDefined4}, ]]>
+				</if>
+				<if test="entity.userDefined5 != null and entity.userDefined5 !=''">
+					<![CDATA[ user_defined5 = #{entity.userDefined5}, ]]>
+				</if>
+				<if test="entity.createBy != null and entity.createBy !=''">
+					<![CDATA[ create_by = #{entity.createBy}, ]]>
+				</if>
+				<if test="entity.gmtCreate != null">
+					<![CDATA[ gmt_create = #{entity.gmtCreate}, ]]>
+				</if>
+				<if test="entity.lastModifiedBy != null and entity.lastModifiedBy !=''">
+					<![CDATA[ last_modified_by = #{entity.lastModifiedBy}, ]]>
+				</if>
+				<if test="entity.gmtModified != null">
+					<![CDATA[ gmt_modified = #{entity.gmtModified}, ]]>
+				</if>
+				<if test="entity.activeFlag != null and entity.activeFlag !=''">
+					<![CDATA[ active_flag = #{entity.activeFlag}, ]]>
+				</if>
+		</if>
+		</set>
+		 where id = #{entity.id}
+	</update>
+
+	   <!-- 逻辑删除,根据主键设置active_flag ='0' -->
+	  <update id="delete" parameterType="com.penghaisoft.wms.storagemanagement.model.entity.WmsOutTemporaryBoxBarcode">
+	    UPDATE wms_out_temporary_box_barcode
+	    SET active_flag = "0"
+	    ,last_modified_by = #{entity.lastModifiedBy}
+	    ,gmt_modified = #{entity.gmtModified}
+	     where id = #{entity.id}
+	  </update>
+	  
+	  <update id="batchDelete" parameterType="com.penghaisoft.wms.storagemanagement.model.entity.WmsOutTemporaryBoxBarcode">
+	    DELETE FROM wms_out_temporary_box_barcode
+	    where id in 
+	    <foreach collection="entity.idList" index="index" item="item" open="(" separator="," close=")">
+	      #{item}
+	    </foreach>
+	  </update>
+
+	<!-- 任意字段全匹配 -->
+	<select id="queryByAny" resultMap="wmsOutTemporaryBoxBarcodeMap" >
+		select
+		<include refid="selectAllColumns"/>
+		<include refid="where_any" />
+	</select>
+	
+	<select id="queryByAnyCount" resultType="long">
+		<include refid="count_Tail" />
+		wms_out_temporary_box_barcode wms_out_temporary_box_barcode_
+		<include refid="where_any" />
+	</select>
+</mapper>

@@ -1,0 +1,45 @@
+body {
+    padding-top: 10px;
+}
+
+.theadThTop {
+    background: #DFE9F5;
+}
+
+.headbox {
+    margin-bottom: 10px;
+    overflow: hidden;
+    transition: all 1s;
+    -webkit-transition: all 1s;
+}
+
+.headbox.smal {
+    height: 36px;
+    transition: all 1s;
+    -webkit-transition: all 1s;
+}
+
+.headbtnbox {
+
+}
+
+.pull-right-btn {
+    float: right;
+    padding-top: 8px;
+    padding-right: 10px;
+    color: #1777cc;
+    cursor: pointer;
+}
+
+.headbtnbox .fa.fa-angle-left.down {
+    transform: rotateZ(-90deg);
+    transition: all .5s;
+}
+.middle-span-h {
+    margin: 5px 0 5px 0;
+    display: inline-block;
+    font-weight: bold;
+    width: 100%;
+    background: #f5f5f5;
+    padding: 2px 1px
+}

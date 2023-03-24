@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.penghaisoft.wcs.operation.model.dao.WcsBindingInfoPlaneMapper" >
+  <resultMap id="BaseResultMap" type="com.penghaisoft.wcs.operation.model.WcsBindingInfoPlane" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="palletizer_id" property="palletizerId" jdbcType="INTEGER" />
+    <result column="address_id" property="addressId" jdbcType="INTEGER" />
+    <result column="pallet_code" property="palletCode" jdbcType="VARCHAR" />
+    <result column="goods_code" property="goodsCode" jdbcType="VARCHAR" />
+    <result column="amount" property="amount" jdbcType="INTEGER" />
+    <result column="batch_no" property="batchNo" jdbcType="VARCHAR" />
+    <result column="user_defined1" property="userDefined1" jdbcType="VARCHAR" />
+    <result column="user_defined2" property="userDefined2" jdbcType="VARCHAR" />
+    <result column="user_defined3" property="userDefined3" jdbcType="VARCHAR" />
+    <result column="user_defined4" property="userDefined4" jdbcType="VARCHAR" />
+    <result column="user_defined5" property="userDefined5" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, palletizer_id, address_id, pallet_code, goods_code, amount, batch_no, user_defined1, user_defined2, user_defined3,
+    user_defined4, user_defined5, create_by, gmt_create
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from wcs_binding_info_plane
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from wcs_binding_info_plane
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByPalletCode" parameterType="java.lang.String" >
+    delete from wcs_binding_info_plane
+    where pallet_code = #{palletCode,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.penghaisoft.wcs.operation.model.WcsBindingInfoPlane" >
+    insert into wcs_binding_info_plane (id, palletizer_id, address_id, 
+      pallet_code, goods_code, amount, batch_no, user_defined1, user_defined2,
+      user_defined3, user_defined4, user_defined5, 
+      create_by, gmt_create)
+    values (#{id,jdbcType=INTEGER}, #{palletizerId,jdbcType=INTEGER}, #{addressId,jdbcType=INTEGER}, 
+      #{palletCode,jdbcType=VARCHAR}, #{goodsCode,jdbcType=VARCHAR}, #{amount,jdbcType=INTEGER},
+      #{batchNo,jdbcType=VARCHAR}, #{userDefined1,jdbcType=VARCHAR}, #{userDefined2,jdbcType=VARCHAR},
+      #{userDefined3,jdbcType=VARCHAR}, #{userDefined4,jdbcType=VARCHAR}, #{userDefined5,jdbcType=VARCHAR}, 
+      #{createBy,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.penghaisoft.wcs.operation.model.WcsBindingInfoPlane" >
+    insert into wcs_binding_info_plane
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="palletizerId != null" >
+        palletizer_id,
+      </if>
+      <if test="addressId != null" >
+        address_id,
+      </if>
+      <if test="palletCode != null" >
+        pallet_code,
+      </if>
+      <if test="goodsCode != null" >
+        goods_code,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="batchNo != null" >
+        batch_no,
+      </if>
+      <if test="userDefined1 != null" >
+        user_defined1,
+      </if>
+      <if test="userDefined2 != null" >
+        user_defined2,
+      </if>
+      <if test="userDefined3 != null" >
+        user_defined3,
+      </if>
+      <if test="userDefined4 != null" >
+        user_defined4,
+      </if>
+      <if test="userDefined5 != null" >
+        user_defined5,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="palletizerId != null" >
+        #{palletizerId,jdbcType=INTEGER},
+      </if>
+      <if test="addressId != null" >
+        #{addressId,jdbcType=INTEGER},
+      </if>
+      <if test="palletCode != null" >
+        #{palletCode,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsCode != null" >
+        #{goodsCode,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=INTEGER},
+      </if>
+      <if test="batchNo != null" >
+        #{batchNo,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined1 != null" >
+        #{userDefined1,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined2 != null" >
+        #{userDefined2,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined3 != null" >
+        #{userDefined3,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined4 != null" >
+        #{userDefined4,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined5 != null" >
+        #{userDefined5,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.penghaisoft.wcs.operation.model.WcsBindingInfoPlane" >
+    update wcs_binding_info_plane
+    <set >
+      <if test="palletizerId != null" >
+        palletizer_id = #{palletizerId,jdbcType=INTEGER},
+      </if>
+      <if test="addressId != null" >
+        address_id = #{addressId,jdbcType=INTEGER},
+      </if>
+      <if test="palletCode != null" >
+        pallet_code = #{palletCode,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsCode != null" >
+        goods_code = #{goodsCode,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=INTEGER},
+      </if>
+      <if test="batchNo != null" >
+        batch_no = #{batchNo,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined1 != null" >
+        user_defined1 = #{userDefined1,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined2 != null" >
+        user_defined2 = #{userDefined2,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined3 != null" >
+        user_defined3 = #{userDefined3,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined4 != null" >
+        user_defined4 = #{userDefined4,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined5 != null" >
+        user_defined5 = #{userDefined5,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.penghaisoft.wcs.operation.model.WcsBindingInfoPlane" >
+    update wcs_binding_info_plane
+    set palletizer_id = #{palletizerId,jdbcType=INTEGER},
+      address_id = #{addressId,jdbcType=INTEGER},
+      pallet_code = #{palletCode,jdbcType=VARCHAR},
+      goods_code = #{goodsCode,jdbcType=VARCHAR},
+      amount = #{amount,jdbcType=INTEGER},
+      batch_no = #{batchNo,jdbcType=VARCHAR},
+      user_defined1 = #{userDefined1,jdbcType=VARCHAR},
+      user_defined2 = #{userDefined2,jdbcType=VARCHAR},
+      user_defined3 = #{userDefined3,jdbcType=VARCHAR},
+      user_defined4 = #{userDefined4,jdbcType=VARCHAR},
+      user_defined5 = #{userDefined5,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="queryAll" resultMap="BaseResultMap">
+    select  <include refid="Base_Column_List" />
+    from wcs_binding_info_plane
+  </select>
+</mapper>

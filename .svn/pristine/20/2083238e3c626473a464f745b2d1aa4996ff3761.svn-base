@@ -1,0 +1,704 @@
+package com.penghaisoft.wms.nuohua.service.impl;
+
+import com.alibaba.fastjson.JSONObject;
+import com.penghaisoft.framework.constant.Constant;
+import com.penghaisoft.framework.entity.ResponseResult;
+import com.penghaisoft.framework.util.Resp;
+import com.penghaisoft.wms.basicmanagement.model.dao.WmsHBLocationStereoscopicMapper;
+import com.penghaisoft.wms.basicmanagement.model.entity.WmsLocationStereoscopic;
+import com.penghaisoft.wms.expose.WcsTransOb;
+import com.penghaisoft.wms.nuohua.service.*;
+import com.penghaisoft.wms.storagemanagement.model.business.IWmsMoveStereoscopicService;
+import com.penghaisoft.wms.storagemanagement.model.business.IWmsPalletService;
+import com.penghaisoft.wms.storagemanagement.model.business.IWmsSendLedDataService;
+import com.penghaisoft.wms.storagemanagement.model.business.IWmsTaskExecutionLogService;
+import com.penghaisoft.wms.storagemanagement.model.dao.WmsPalletMapper;
+import com.penghaisoft.wms.storagemanagement.model.dao.WmsTaskExecutionLogMapper;
+import com.penghaisoft.wms.storagemanagement.model.entity.WmsPallet;
+import com.penghaisoft.wms.storagemanagement.model.entity.WmsTaskExecutionLog;
+import com.penghaisoft.wms.util.ConstantUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
+
+/**
+ * @Description
+ * @Author zhangxin
+ * @Date 2022-07-14
+ **/
+@Slf4j
+@Service("interfaceForHBService")
+public class InterfaceForNHServiceImpl implements InterfaceForNHService {
+
+    @Resource
+    private WmsPalletMapper wmsPalletMapper;
+    @Resource
+    private WmsTaskExecutionLogMapper wmsTaskExecutionLogMapper;
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
+    @Autowired
+    private IWmsMoveStereoscopicService wmsMoveStereoscopicService;
+    @Autowired
+    private IWmsPalletService wmsPalletService;
+    @Autowired
+    private IWmsTaskExecutionLogService wmsTaskExecutionLogService;
+    @Autowired
+    private IWmsSendLedDataService sendLedDataService;
+    @Autowired
+    private DifferentBusinessNHFactory differentBusinessNHFactory;
+    @Autowired
+    private SLWCSService sLWCSService;
+    @Autowired
+    private WmsNHAgvService wmsNHAgvService;
+    @Resource
+    private WmsHBLocationStereoscopicMapper wmsHBLocationStereoscopicMapper;
+    @Value("${applyfactory}")
+    private String applyfactory;
+
+
+    /**
+     *功能描述: 入库推荐-生成推荐库位（一个）
+     * @params WcsTransOb
+     * 【 taskId：任务号 】
+     * 【 taskType：任务类型 】
+     * 【 palletCode：托盘码 】
+     * 【 inAddress：入库口地址 】
+     * 【 materialCode	物料编码 】
+     * 【 bacth	批次号 】
+     * @return ResponseResult
+     */
+    @Override
+    public ResponseResult queryLocationCode_HB(WcsTransOb wcsTransOb){
+        long taskId = 0L;
+        taskId = wcsTransOb.getTaskId();
+        ResponseResult responseResult;
+        //任务号
+        if (wcsTransOb.getTaskId() == 0L) {
+            responseResult = new ResponseResult(Constant.RESULT.FAILED.code, "任务号:TaskId为空！", (Object)null);
+            return responseResult;
+        } //任务类型
+        else if (wcsTransOb.getTaskType() != null && !"".equals(wcsTransOb.getTaskType())) {
+            //托盘码
+            if (wcsTransOb.getPalletCode() != null && !"".equals(wcsTransOb.getPalletCode())) {
+                //入库口地址
+                if (wcsTransOb.getInAddress() != null && !"".equals(wcsTransOb.getInAddress())) {
+                    Date now = new Date();
+                    String isCross = "0";
+                    String locationCode = "";
+                    //托盘信息-实体类
+                    WmsPallet wmsPalletOb = new WmsPallet();
+                    //托盘编码
+                    wmsPalletOb.setPalletCode(wcsTransOb.getPalletCode());
+                    //激活标记 1是 0否
+                    wmsPalletOb.setActiveFlag("1");
+                    //根据托盘编码、激活标记 1是 0否 查询数据。
+                    List<WmsPallet> wmsPalletList = wmsPalletMapper.queryByAny(wmsPalletOb);
+                    //判断激活的托盘码是否存在。
+                    if (wmsPalletList != null && !wmsPalletList.isEmpty()) {
+                        WmsPallet wmsPallet = (WmsPallet)wmsPalletList.get(0);
+                        //TODO 判断托盘是否绑定，未绑定，绑定数据
+                        if((wmsPallet.getGoodsCode()==null && wmsPallet.getGoodsCode().isEmpty()) ){
+                            wmsPallet.setGoodsCode(wcsTransOb.getMaterialCode());
+                            wmsPallet.setBatchNo(wcsTransOb.getBatch());
+                            wmsPallet.setAmount(Integer.parseInt(wcsTransOb.getWeight()));
+                            //更新托盘绑定商品数据
+                            wmsPalletMapper.updateBySelect(wmsPallet);
+                        }else{
+                            if(!wmsPallet.getGoodsCode().equals(wcsTransOb.getMaterialCode())){
+                                responseResult = new ResponseResult(Constant.RESULT.FAILED.code, "该托盘码绑定的商品不一致！", (Object)null);
+                                return responseResult;
+                            }
+                            if(!wmsPallet.getBatchNo().equals(wcsTransOb.getBatch())){
+                                responseResult = new ResponseResult(Constant.RESULT.FAILED.code, "该托盘码绑定商品的批次号不一致！", (Object)null);
+                                return responseResult;
+                            }
+                            if(wmsPallet.getAmount()!=Integer.parseInt(wcsTransOb.getWeight())){
+                                responseResult = new ResponseResult(Constant.RESULT.FAILED.code, "该托盘码绑定商品的数量不一致！", (Object)null);
+                                return responseResult;
+                            }
+                        }
+                        //任务是否被锁定
+                        if (wmsPallet.getLockBy() != null && !"".equals(wmsPallet.getLockBy())) {
+                            //任务锁定，是否是当前任务。是当前任务，则已经存在库位信息，直接返回。
+                            if (Long.valueOf(wmsPallet.getLockBy()) == taskId) {
+                                Map<String, Object> rtnMap = new HashMap();
+                                rtnMap.put("taskId", wmsPallet.getLockBy());
+                                rtnMap.put("isCross", "0");
+                                rtnMap.put("locationCode", wmsPallet.getLocationCode());
+                                responseResult = new ResponseResult(Constant.RESULT.SUCCESS.code, Constant.RESULT.SUCCESS.message, rtnMap);
+                                return responseResult;
+                            } else {
+                                responseResult = new ResponseResult(Constant.RESULT.FAILED.code, "该托盘码被锁定！", (Object)null);
+                                return responseResult;
+                            }
+                        } else {//任务未被锁定
+                            //执行日志-实体类
+                            WmsTaskExecutionLog wmsTaskExecutionLog = new WmsTaskExecutionLog();
+                            wmsTaskExecutionLog.setAreaCode(wcsTransOb.getAreaCode());
+                            wmsTaskExecutionLog.setTaskType(wcsTransOb.getTaskType());
+                            wmsTaskExecutionLog.setPalletCode(wcsTransOb.getPalletCode());
+                            wmsTaskExecutionLog.setInAddress(wcsTransOb.getInAddress());
+                            wmsTaskExecutionLog.setCreateBy("wcs");
+                            wmsTaskExecutionLog.setGmtCreate(now);
+                            wmsTaskExecutionLog.setActiveFlag("1");
+                            wmsTaskExecutionLog.setGoodsCode(wmsPallet.getGoodsCode());
+                            wmsTaskExecutionLog.setBatchNo(wmsPallet.getBatchNo());
+                            wmsTaskExecutionLog.setUserDefined1(wmsPallet.getAmount().toString());
+                            wmsTaskExecutionLog.setTaskId(taskId);
+                            //是否审核 1未审核，0审核
+                            wmsTaskExecutionLog.setUserDefined3("1");
+                            if ("0".equals(isCross)) {
+                                long t1 = System.currentTimeMillis();
+                                log.info("##################推荐库位算法#############################");
+                                DifferentBusinessNHService differentBusinessNHService = this.differentBusinessNHFactory.getDifferentBusinessNHService(Constant.RecommendLocationEnum.getServiceNameByCode(this.applyfactory));
+                                //查询推荐货位
+                                // 参数：商品编码、批次号、所属库区
+                                Resp resp = differentBusinessNHService.queryRecommendLocationCodeHB(wmsTaskExecutionLog, wcsTransOb.getAreaCode());
+                                long t2 = System.currentTimeMillis();
+                                log.info("##################推荐库位算法整体耗时：" + (t2 - t1) + "ms！#########################");
+                                try {
+                                    if (resp.getCode() != null && Constant.RESULT.FAILED.code.equals(resp.getCode())) {
+                                        responseResult = new ResponseResult(Constant.RESULT.FAILED.code, resp.getMsg(), (Object)null);
+                                        return responseResult;
+                                    }
+                                    locationCode = resp.getData().toString();
+                                    log.info("##################推荐库位是：" + locationCode + "#########################");
+                                    wmsTaskExecutionLog.setTaskStatus("1");
+                                    wmsTaskExecutionLog.setTaskId(taskId);
+                                    //库位编码，目标库位
+                                    wmsTaskExecutionLog.setLocationCode(locationCode);
+                                    //任务执行日志表创建信息，修改立库库位信息表，修改托盘信息表
+                                    this.wmsTaskExecutionLogService.inStereoscopicTaskCreate(wmsTaskExecutionLog);
+
+                                } catch (Exception var20) {
+                                    log.info("获取推荐库位成功，插入入库任务、更新托盘状态失败");
+                                    //修改立库信息表，库位可用
+                                    differentBusinessNHService.revertLocationStatus0(locationCode);
+                                    long t3 = System.currentTimeMillis();
+                                    log.info("##################获取推荐库位成功，插入入库任务、更新托盘状态失耗时：" + (t3 - t2) + "ms！#########################");
+                                    responseResult = new ResponseResult(Constant.RESULT.FAILED.code, "获取推荐库位失败", (Object)null);
+                                    return responseResult;
+                                }
+                            }
+
+                            Map<String, Object> rtnMap = new HashMap();
+                            rtnMap.put("taskId", taskId);
+                            rtnMap.put("locationCode", locationCode);
+                            responseResult = new ResponseResult(Constant.RESULT.SUCCESS.code, Constant.RESULT.SUCCESS.message, rtnMap);
+                            return responseResult;
+                        }
+                    } else {
+                        //激活的托盘条码不存在
+                        responseResult = new ResponseResult(Constant.RESULT.FAILED.code, Constant.RESULT.PALLET_CODE_ERROR.message, (Object)null);
+                        return responseResult;
+                    }
+                } else {
+                    responseResult = new ResponseResult(Constant.RESULT.FAILED.code, "入库口地址为空！", (Object)null);
+                    return responseResult;
+                }
+            } else {
+                responseResult = new ResponseResult(Constant.RESULT.FAILED.code, "托盘码为空！", (Object)null);
+                return responseResult;
+            }
+        } else {
+            responseResult = new ResponseResult(Constant.RESULT.FAILED.code, "任务类型为空！", (Object)null);
+            return responseResult;
+        }
+    }
+    /**
+     *功能描述: 生产入库 - 接收入库任务状态
+     * @params
+     * @return com.penghaisoft.framework.entity.ResponseResult
+     */
+    @Override
+    public ResponseResult reportInStereoscopicTask_HB(@RequestBody WcsTransOb wcsTransOb) {
+        Resp checkResp = this.wmsTaskExecutionLogService.checkWcsParamCommon(wcsTransOb);
+        if (Constant.RESULT.FAILED.code.equals(checkResp.getCode())) {
+            ResponseResult responseResult = new ResponseResult(checkResp.getCode(), checkResp.getMsg(), (Object)null);
+            return responseResult;
+        } else {
+            WmsTaskExecutionLog wmsTaskExecutionLog = (WmsTaskExecutionLog)checkResp.getData();
+            //因为速锐不区分成品，原材料，故加此查询
+            //-----查询开始
+            WmsTaskExecutionLog wmsTask = wmsTaskExecutionLogService.queryByTask(wmsTaskExecutionLog);
+            wmsTaskExecutionLog.setTaskType(wmsTask.getTaskType());
+            //----查询结束
+            List<Long> allowType = new ArrayList();
+            allowType.add(Constant.TaskType.NH_PRODUCT_IN.getTaskType());
+            allowType.add(Constant.TaskType.NH_PRODUCT_IN_YCL.getTaskType());
+            allowType.add(Constant.TaskType.SORT_IN.getTaskType());
+            allowType.add(Constant.TaskType.CHECK_IN.getTaskType());
+            allowType.add(Constant.TaskType.HAND_IN.getTaskType());
+            allowType.add(Constant.TaskType.PACKING_IN.getTaskType());
+            allowType.add(Constant.TaskType.VIRTUAL_PALLET_IN.getTaskType());
+            if (!allowType.contains(Long.valueOf(wmsTaskExecutionLog.getTaskType()))) {
+                ResponseResult responseResult = new ResponseResult(Constant.RESULT.FAILED.code, "接口【WMS接收WCS上报入库任务状态】不支持【" + Constant.TaskType.getTaskTypeDesc(Long.valueOf(wmsTaskExecutionLog.getTaskType())) + "】任务！", (Object)null);
+                return responseResult;
+            } else {
+                //保存的key名
+                String key = "wms:interface:pallet:" + wcsTransOb.getPalletCode();
+                ResponseResult responseResult;
+                if (this.stringRedisTemplate.hasKey(key)) { //缓存中存在，从缓存中获取并转换为自己需要的对象
+                    responseResult = new ResponseResult(Constant.RESULT.FAILED.code, "当前托盘码正在处理中！", (Object)null);
+                    return responseResult;
+                } else {//缓存中不存在，先从数据库中获取，然后保存到缓存中
+                    //保存到缓存中，并设置过期时间
+                    this.stringRedisTemplate.opsForValue().set(key, "1", 1L, TimeUnit.MINUTES);
+                    //任务状态1创建2执行3完成4异常5取消6创建失败
+                    if (wcsTransOb.getTaskStatus() == null || !"3".equals(wcsTransOb.getTaskStatus()) && !"4".equals(wcsTransOb.getTaskStatus())) {
+                        this.wmsTaskExecutionLogService.create(wmsTaskExecutionLog);
+                    } else {
+                        Resp resp = this.wmsTaskExecutionLogService.reportInStereoscopicTask(wmsTaskExecutionLog);
+                        if (Constant.RESULT.FAILED.code.equals(resp.getCode())) {
+                            this.stringRedisTemplate.delete(key);
+                            responseResult = new ResponseResult(resp.getCode(), resp.getMsg(), (Object)null);
+                            return responseResult;
+                        }
+                    }
+
+                    this.stringRedisTemplate.delete(key);
+                    responseResult = new ResponseResult(Constant.RESULT.SUCCESS.code, Constant.RESULT.SUCCESS.message, (Object)null);
+                    return responseResult;
+                }
+            }
+        }
+    }
+    /**
+     *功能描述: 普通移库
+     * @params
+     * areaCode    是	String	当前立库库区编码，一个WMS可能会对应多个立库，要能区分出来
+     * taskId	是	String	任务号，
+     * taskType	是	String	30 普通移库
+     * palletCode	是	String	托盘号码
+     * status	是	String	3完成4异常
+     * msg	否	String	如果异常要记录信息
+     * @return com.penghaisoft.framework.entity.ResponseResult
+     */
+    @Override
+    public ResponseResult reportNormalYkTask_HB(@RequestBody WcsTransOb wcsTransOb) {
+        Resp checkResp = this.wmsTaskExecutionLogService.checkWcsParamCommon_YK(wcsTransOb);
+        if (Constant.RESULT.FAILED.code.equals(checkResp.getCode())) {
+            ResponseResult responseResult = new ResponseResult(checkResp.getCode(), checkResp.getMsg(), (Object)null);
+            return responseResult;
+        } else {
+            WmsTaskExecutionLog wmsTaskExecutionLog = (WmsTaskExecutionLog)checkResp.getData();
+            //因为速锐不区分成品，原材料，故加此查询
+            //-----查询开始
+            WmsTaskExecutionLog wmsTask = wmsTaskExecutionLogService.queryByTask(wmsTaskExecutionLog);
+            wmsTaskExecutionLog.setTaskType(wmsTask.getTaskType());
+            //----查询结束
+            List<Long> allowType = new ArrayList();
+            allowType.add(Constant.TaskType.NORMAL_MOVE.getTaskType());
+
+            if (!allowType.contains(Long.valueOf(wmsTaskExecutionLog.getTaskType()))) {
+                ResponseResult responseResult = new ResponseResult(Constant.RESULT.FAILED.code, "接口【WMS接收WCS接收普通移库任务状态】不支持【" + Constant.TaskType.getTaskTypeDesc(Long.valueOf(wmsTaskExecutionLog.getTaskType())) + "】任务！", (Object)null);
+                return responseResult;
+            } else {
+                String key = "wms:interface:pallet:" + wcsTransOb.getPalletCode();
+                if (this.stringRedisTemplate.hasKey(key)) {
+                    ResponseResult responseResult = new ResponseResult(Constant.RESULT.FAILED.code, "当前托盘码正在处理中！", (Object)null);
+                    return responseResult;
+                } else {
+                    this.stringRedisTemplate.opsForValue().set(key, "1", 1L, TimeUnit.MINUTES);
+                    Resp resp = this.wmsMoveStereoscopicService.reportNormalYkTask(wmsTaskExecutionLog);
+                    ResponseResult responseResult;
+                    if (Constant.RESULT.FAILED.code.equals(resp.getCode())) {
+                        this.stringRedisTemplate.delete(key);
+                        responseResult = new ResponseResult(resp.getCode(), resp.getMsg(), (Object)null);
+                        return responseResult;
+                    } else {
+                        this.stringRedisTemplate.delete(key);
+                        responseResult = new ResponseResult(Constant.RESULT.SUCCESS.code, Constant.RESULT.SUCCESS.message, (Object)null);
+                        return responseResult;
+                    }
+                }
+            }
+        }
+    }
+    /**
+     *功能描述: 出库（库内）移库
+     * @params
+     * areaCode    是	String	当前立库库区编码，一个WMS可能会对应多个立库，要能区分出来
+     * orderNo	是	String	订单号，
+     * taskType	是	String	 31出库移库
+     * palletCode	是	String	托盘号码
+     * status	是	String	3完成4异常
+     * msg	否	String	如果异常要记录信息
+     * @return com.penghaisoft.framework.entity.ResponseResult
+     */
+    @Override
+    public ResponseResult reportOutwarehouseYkTask_HB(WcsTransOb wcsTransOb){
+        Resp checkResp = this.wmsTaskExecutionLogService.checkWcsParamCommon(wcsTransOb);
+        if (Constant.RESULT.FAILED.code.equals(checkResp.getCode())) {
+            ResponseResult responseResult = new ResponseResult(checkResp.getCode(), checkResp.getMsg(), (Object)null);
+            return responseResult;
+        } else {
+            WmsTaskExecutionLog wmsTaskExecutionLog = (WmsTaskExecutionLog)checkResp.getData();
+            //因为速锐不区分成品，原材料，故加此查询
+            //-----查询开始
+            WmsTaskExecutionLog wmsTask = wmsTaskExecutionLogService.queryByTask(wmsTaskExecutionLog);
+            wmsTaskExecutionLog.setTaskType(wmsTask.getTaskType());
+            //----查询结束
+            List<Long> allowType = new ArrayList();
+            allowType.add(Constant.TaskType.NORMAL_MOVE.getTaskType());
+            if (!allowType.contains(Long.valueOf(wmsTaskExecutionLog.getTaskType()))) {
+                ResponseResult responseResult = new ResponseResult(Constant.RESULT.FAILED.code, "接口【WMS接收WCS接收普通移库任务状态】不支持【" + Constant.TaskType.getTaskTypeDesc(Long.valueOf(wmsTaskExecutionLog.getTaskType())) + "】任务！", (Object)null);
+                return responseResult;
+            } else {
+                String key = "wms:interface:pallet:" + wcsTransOb.getPalletCode();
+                if (this.stringRedisTemplate.hasKey(key)) {
+                    ResponseResult responseResult = new ResponseResult(Constant.RESULT.FAILED.code, "当前托盘码正在处理中！", (Object)null);
+                    return responseResult;
+                } else {
+                    this.stringRedisTemplate.opsForValue().set(key, "1", 1L, TimeUnit.MINUTES);
+                    Resp resp = this.wmsMoveStereoscopicService.reportNormalYkTask(wmsTaskExecutionLog);
+                    ResponseResult responseResult;
+                    if (Constant.RESULT.FAILED.code.equals(resp.getCode())) {
+                        this.stringRedisTemplate.delete(key);
+                        responseResult = new ResponseResult(resp.getCode(), resp.getMsg(), (Object)null);
+                        return responseResult;
+                    } else {
+                        this.stringRedisTemplate.delete(key);
+                        responseResult = new ResponseResult(Constant.RESULT.SUCCESS.code, Constant.RESULT.SUCCESS.message, (Object)null);
+                        return responseResult;
+                    }
+                }
+            }
+        }
+    }
+    /**
+     *功能描述: 直发出库 -接受出库任务状态
+     * areaCode	当前立库库区编码	String	是
+     * taskId	任务号	Integer	是
+     * taskType	20 直发出库	String	是
+     * palletCode	托盘号码	String	是
+     * taskStatus	2执行3完成4异常	String	是
+     * msg	信息	String	否
+     *
+     * @params
+     * @return com.penghaisoft.framework.entity.ResponseResult
+     */
+    @Override
+    public ResponseResult reportOutStraightTask_HB(@RequestBody WcsTransOb wcsTransOb) {
+        //先查看，此任务是否已经完成
+        if(wcsTransOb!=null &&wcsTransOb.getTaskId()!=0L){
+            WmsTaskExecutionLog  taskExecutionLog = new WmsTaskExecutionLog();
+            taskExecutionLog.setTaskId(wcsTransOb.getTaskId());
+            taskExecutionLog.setTaskType(wcsTransOb.getTaskType());
+            //查询任务表，查看任务是否已经完成
+            List<WmsTaskExecutionLog> wmsTaskExecutionLogList = wmsTaskExecutionLogMapper.queryByAny(taskExecutionLog);
+            if(wmsTaskExecutionLogList!=null &&wmsTaskExecutionLogList.size()>0){
+                for(WmsTaskExecutionLog  wmsTaskExecutionLog1 :wmsTaskExecutionLogList){
+                    //根据任务号 判断状态，是否存在 已完成状态   任务状态1创建2执行3完成4异常5取消6创建失败
+                    if("3".equals(wmsTaskExecutionLog1.getTaskStatus())){
+                        ResponseResult responseResult = new ResponseResult("1", "此任务:"+wmsTaskExecutionLog1.getTaskId()+"，状态已完成！", (Object)null);
+                        return responseResult;
+                    }
+                }
+            }
+        }else{
+            ResponseResult responseResult = new ResponseResult("1", "信息不全，订单号为空！", (Object)null);
+            return responseResult;
+        }
+
+        //检查传入的字段是否匹配wmsTaskExecutionLog
+        Resp checkResp = this.wmsTaskExecutionLogService.checkWcsParamCommon(wcsTransOb);
+        if (Constant.RESULT.FAILED.code.equals(checkResp.getCode())) {
+            ResponseResult responseResult = new ResponseResult(checkResp.getCode(), checkResp.getMsg(), (Object)null);
+            return responseResult;
+        } else {
+            WmsTaskExecutionLog wmsTaskExecutionLog = (WmsTaskExecutionLog)checkResp.getData();
+            //因为速锐不区分成品，原材料，故加此查询
+            //-----查询开始
+            WmsTaskExecutionLog wmsTask = wmsTaskExecutionLogService.queryByTask(wmsTaskExecutionLog);
+            wmsTaskExecutionLog.setTaskType(wmsTask.getTaskType());
+            //----查询结束
+            List<Long> allowType = new ArrayList();
+            //直发出库
+            allowType.add(Constant.TaskType.STRAIGHT_OUT.getTaskType());
+            //人工出库
+            allowType.add(Constant.TaskType.HAND_OUT.getTaskType());
+            if (!allowType.contains(Long.valueOf(wmsTaskExecutionLog.getTaskType()))) {
+                log.info("出库任务类型 ：不是直发出库20，也不是人工出库26");
+                ResponseResult responseResult = new ResponseResult(Constant.RESULT.FAILED.code, "接口【WMS接收WCS出库任务状态-直发口】不支持【" + Constant.TaskType.getTaskTypeDesc(Long.valueOf(wmsTaskExecutionLog.getTaskType())) + "】任务！", (Object)null);
+                return responseResult;
+            } else {
+                String key = "wms:interface:pallet:" + wcsTransOb.getPalletCode();
+                if (this.stringRedisTemplate.hasKey(key)) {
+                    ResponseResult responseResult = new ResponseResult(Constant.RESULT.FAILED.code, "当前托盘码正在处理中！", (Object)null);
+                    return responseResult;
+                } else {
+                    /* this.stringRedisTemplate.opsForValue().set(key, "1", 1L, TimeUnit.MINUTES);
+                    WmsPallet wmsPalletOb = new WmsPallet();
+                    wmsPalletOb.setPalletCode(wcsTransOb.getPalletCode());
+                    wmsPalletOb.setActiveFlag("1");
+                    List<WmsPallet> wmsPalletList = this.wmsPalletService.queryByAny(wmsPalletOb);
+                    Integer boxAmount = 0;
+                    if (wmsPalletList != null && !wmsPalletList.isEmpty()) {
+                        boxAmount = ((WmsPallet)wmsPalletList.get(0)).getAmount();
+                    }*/
+                    //wcs任务上报，更新任务表。
+                    Resp resp = this.wmsTaskExecutionLogService.reportUpOutStraightTask(wmsTaskExecutionLog);
+                    ResponseResult responseResult;
+                    if (Constant.RESULT.FAILED.code.equals(resp.getCode())) {
+                        this.stringRedisTemplate.delete(key);
+                        responseResult = new ResponseResult(resp.getCode(), resp.getMsg(), (Object)null);
+                        return responseResult;
+                    } else {
+                        if(wmsTaskExecutionLog.getUserDefined5()!=null && !"".equals(wmsTaskExecutionLog.getUserDefined5())){
+                            //TODO 下发AGV
+                            JSONObject agvJsonObject =new JSONObject();
+                            agvJsonObject.put("robotJobId",wmsTaskExecutionLog.getUserDefined4());
+                            agvJsonObject.put("startPoint",wmsTaskExecutionLog.getLocationCode());
+                            agvJsonObject.put("endPoint",Constant.StereoscopicInfo.FLOOR_ONE_OUT_ADDRESS);
+
+                            JSONObject returnAgvJSONObject = wmsNHAgvService.noVerifyBucketMove(agvJsonObject);
+                            if(returnAgvJSONObject.getInteger("")==0){
+                                responseResult = new ResponseResult(Constant.RESULT.SUCCESS.code, Constant.RESULT.SUCCESS.message, (Object) null);
+                                return responseResult;
+                            }else {
+                                responseResult = new ResponseResult(returnAgvJSONObject.getString(""), returnAgvJSONObject.getString(""), (Object) null);
+                                return responseResult;
+                            }
+                        }else {
+
+                        /*log.info("------------------上报完成时调LED显示开始----------------------");
+                        this.sendLedDataService.sendLEDOut(wcsTransOb.getTaskId(), wcsTransOb.getPalletCode(), "8", boxAmount);
+                        log.info("------------------上报完成时调LED显示结束----------------------");
+                        this.stringRedisTemplate.delete(key);*/
+                            responseResult = new ResponseResult(Constant.RESULT.SUCCESS.code, Constant.RESULT.SUCCESS.message, (Object) null);
+                            return responseResult;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    /**
+     *功能描述: 接收出库任务状态-盘点口
+     * @params
+     * areaCode    是	String	当前立库库区编码，一个WMS可能会对应多个立库，要能区分出来
+     * orderNo	是	String	盘点单号
+     * taskType	是	String	4 出库
+     * palletCode	是	String	托盘号码
+     * status	是	String	3完成4异常
+     * msg	否	String	如果异常要记录信息
+     * @return com.penghaisoft.framework.entity.ResponseResult
+     */
+    @Override
+    public ResponseResult reportOutCheckTask_HB(@RequestBody WcsTransOb wcsTransOb) {
+        Resp checkResp = this.wmsTaskExecutionLogService.checkWcsParamCommon(wcsTransOb);
+        if (Constant.RESULT.FAILED.code.equals(checkResp.getCode())) {
+            ResponseResult responseResult = new ResponseResult(checkResp.getCode(), checkResp.getMsg(), (Object)null);
+            return responseResult;
+        } else {
+            WmsTaskExecutionLog wmsTaskExecutionLog = (WmsTaskExecutionLog)checkResp.getData();
+            //因为速锐不区分成品，原材料，故加此查询
+            //-----查询开始
+            WmsTaskExecutionLog wmsTask = wmsTaskExecutionLogService.queryByTask(wmsTaskExecutionLog);
+            wmsTaskExecutionLog.setTaskType(wmsTask.getTaskType());
+            //----查询结束
+            List<Long> allowType = new ArrayList();
+            allowType.add(Constant.TaskType.CHECK_OUT.getTaskType());
+            if (!allowType.contains(Long.valueOf(wmsTaskExecutionLog.getTaskType()))) {
+                ResponseResult responseResult = new ResponseResult(Constant.RESULT.FAILED.code, "接口【WMS接收WCS出库任务状态-盘点口】不支持【" + Constant.TaskType.getTaskTypeDesc(Long.valueOf(wmsTaskExecutionLog.getTaskType())) + "】任务！", (Object)null);
+                return responseResult;
+            } else {
+                String key = "wms:interface:pallet:" + wcsTransOb.getPalletCode();
+                if (this.stringRedisTemplate.hasKey(key)) {
+                    ResponseResult responseResult = new ResponseResult(Constant.RESULT.FAILED.code, "当前托盘码正在处理中！", (Object)null);
+                    return responseResult;
+                } else {
+                    this.stringRedisTemplate.opsForValue().set(key, "1", 1L, TimeUnit.MINUTES);
+                    Resp resp = this.wmsTaskExecutionLogService.reportOutCheckTask(wmsTaskExecutionLog);
+                    ResponseResult responseResult;
+                    if (Constant.RESULT.FAILED.code.equals(resp.getCode())) {
+                        this.stringRedisTemplate.delete(key);
+                        responseResult = new ResponseResult(resp.getCode(), resp.getMsg(), (Object)null);
+                        return responseResult;
+                    } else {
+                        this.stringRedisTemplate.delete(key);
+                        responseResult = new ResponseResult(Constant.RESULT.SUCCESS.code, Constant.RESULT.SUCCESS.message, (Object)null);
+                        return responseResult;
+                    }
+                }
+            }
+        }
+    }
+    /**
+     *功能描述: 确认对账 - 修改任务的状态
+     * @params
+     * @return com.penghaisoft.framework.entity.ResponseResult
+     */
+    @Override
+    public ResponseResult taskStatusUpdate(@RequestBody WmsTaskExecutionLog wmsTaskExecutionLog){
+        log.info("修改任务的状态:"+wmsTaskExecutionLog.getUserDefined3());
+        wmsTaskExecutionLogMapper.updateByTaskId(wmsTaskExecutionLog);
+        log.info("修改任务的状态:"+wmsTaskExecutionLog.getUserDefined3()+"完成！");
+        ResponseResult responseResult = new ResponseResult(Constant.RESULT.SUCCESS.code, Constant.RESULT.SUCCESS.message, (Object)null);
+        return responseResult;
+    }
+
+    /**
+     *功能描述: AGV /PDA 请求出库 -业务处理
+     *
+     * applyTime	请求时间	String
+     * outboundID	出库任务号	String
+     * outboundType	出库任务类型	String
+     * endLocation	终点位置	String
+     * batchCode	批次号	String
+     * materialsCode	物料编码	String
+     * Weight	数量	String
+     * userDefined1	自定义1	String
+     * userDefined2	自定义2	String
+     * userDefined3	自定义3	String
+     * @params
+     * @return com.alibaba.fastjson.JSONObject
+     */
+    @Override
+    public JSONObject requestDelivery(@RequestBody JSONObject jsonObject){
+        log.info("请求出库,转化后的json串:"+jsonObject);
+        log.info("AGV /PDA 请求出库 - 请求时间:"+jsonObject.getString("applyTime"));
+        WmsTaskExecutionLog wmsTaskExecutionLog =new WmsTaskExecutionLog();
+        //类型：出库
+        wmsTaskExecutionLog.setTaskType("20");
+        //成品还是原材料
+        wmsTaskExecutionLog.setUserDefined2(jsonObject.getString("outboundType"));
+        //物料编码
+        String goodsCode = jsonObject.getString("materialsCode");
+        wmsTaskExecutionLog.setGoodsCode(goodsCode);
+        //批次号
+        wmsTaskExecutionLog.setBatchNo(jsonObject.getString("batchCode"));
+        //审核通过：0 未审核：1
+        wmsTaskExecutionLog.setUserDefined3("0");
+        JSONObject jsonObjectNew =new JSONObject();
+        //根据物料号，批次号，审核通过 查询数据。
+        List<WmsTaskExecutionLog> wmsTaskExecutionLogList = wmsTaskExecutionLogMapper.queryByAny(wmsTaskExecutionLog);
+        if(wmsTaskExecutionLogList!=null && wmsTaskExecutionLogList.size()>0){
+           //将要出库的数据
+            List<WmsTaskExecutionLog> list = new ArrayList<>();
+            int number=0;
+            for(int i=0;i<wmsTaskExecutionLogList.size();i++){
+                if(wmsTaskExecutionLogList.get(i).getUserDefined1()!=null) {
+                    number = number + Integer.parseInt(wmsTaskExecutionLogList.get(i).getUserDefined1());
+                }
+                list.add(wmsTaskExecutionLogList.get(i));
+                if(number >= Integer.parseInt(jsonObject.getString("Weight"))){
+                    break;
+                }
+            }
+            if(number < Integer.parseInt(jsonObject.getString("Weight"))){
+                return getReturnJsonObject("1","可出的数量，小于请求的数量！");
+            }
+            //TODO 业务上是否已经判断了 向道问题？
+            //判断是否可出货
+            for(int i=0;i<list.size();i++ ){
+                WmsLocationStereoscopic wmsLocationStereoscopic =new WmsLocationStereoscopic();
+                wmsLocationStereoscopic.setGoodsCode(list.get(i).getGoodsCode());
+                wmsLocationStereoscopic.setBatchNo(list.get(i).getBatchNo());
+                List floorNumberList=new ArrayList();
+                int num =  Integer.parseInt(list.get(i).getLocationCode().substring(list.get(i).getLocationCode().length()-2,list.get(i).getLocationCode().length()));
+                floorNumberList.add(num);
+                wmsLocationStereoscopic.setFloorNumberList(floorNumberList);
+                //库位的行
+                Integer hang  =Integer.parseInt(list.get(i).getLocationCode().substring(0,2));
+                //库位的列
+                Integer lie =Integer.parseInt(list.get(i).getLocationCode().substring(2,4));
+                wmsLocationStereoscopic.setColumnNumber(lie);
+                //查询此列是否被锁，此列如果被锁, (再以15为界限，判断)
+                List<WmsLocationStereoscopic> logkList = this.wmsHBLocationStereoscopicMapper.getLocationorlockBy(wmsLocationStereoscopic);
+                if(logkList!=null && logkList.size()>0){
+                    for(int n=0 ;n<logkList.size();n++){
+                        if(logkList.get(n).getColumnNumber()<15 && hang < logkList.get(n).getColumnNumber()){
+                            log.info("此库位："+list.get(i).getLocationCode()+"小于15的向道，前面有库位被锁：被锁库位："+logkList.get(n).getColumnNumber());
+                            list.remove(i);
+                        }
+                        if(logkList.get(n).getColumnNumber()>15 && hang > logkList.get(n).getColumnNumber()){
+                            log.info("此库位："+list.get(i).getLocationCode()+"大于15的向道，前面有库位被锁：被锁库位："+logkList.get(n).getColumnNumber());
+                            list.remove(i);
+                        }
+                    }
+                }
+                //判断list中是否还有数据，有则下发wcs，出库
+                if(list!=null &&list.size()>0){
+                    JSONObject jsonObject1 =new JSONObject();
+                    //出库任务号 - 组号
+                    String outboundID = jsonObject.getString("outboundID");
+                    jsonObject1.put("groupId", outboundID);
+                    jsonObject1.put("msgTime", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                    jsonObject1.put("priorityCode","");
+                    jsonObject1.put("warehouse","L-NH01");
+                    List list1 =new ArrayList();
+                    //拼接调速锐的【任务下发】接口
+                    for(int j=0;j<list.size();j++){
+                        Map map =new HashMap();
+                        map.put("taskId",list.get(i).getTaskId().toString());
+                        //任务类型，1：出库
+                        map.put("taskType",1);
+                        //任务起点 库位
+                        map.put("startNode",list.get(i).getLocationCode());
+                        //任务终点 //TODO 待确认终点
+                        map.put("endNode",Constant.StereoscopicInfo.FLOOR_ONE_OUT_TO_ADDRESS);
+                        //托盘码
+                        map.put("barCode",list.get(i).getPalletCode());
+                        map.put("order",i);
+                        list1.add(map);
+                        WmsTaskExecutionLog wmsTaskExecutionLogUP =list.get(i);
+                        //将传入的testID存入UserDefined4
+                        wmsTaskExecutionLogUP.setUserDefined4(outboundID);
+                        if(jsonObject.getString("endLocation")!=null && !jsonObject.getString("endLocation").isEmpty()) {
+                            wmsTaskExecutionLogUP.setUserDefined5(jsonObject.getString("endLocation"));
+                        }
+                        //更新数据,将传入的数据保存一下，为的是，任务完成后可追溯
+                        wmsTaskExecutionLogService.updateByTaskId(wmsTaskExecutionLogUP);
+                    }
+                    jsonObject1.put("tasks",list1);
+                    try {
+                        //调WCS出库任务
+                        log.info("---------------出库，调用wcs的任务接收接口 : " + jsonObject1.toString());
+                        JSONObject returnJsonObject = sLWCSService.taskReceive(jsonObject1);
+                        log.info("---------------出库，调用wcs的任务接收接口 -结束: " + returnJsonObject.toString());
+                        //接收成功
+                        if (returnJsonObject.getInteger("returnStatus")==0) {
+                            return getReturnJsonObject("0", "出库任务:" + outboundID + "请求成功！");
+                        } else {
+                            return getReturnJsonObject("1", "出库任务:" + outboundID + "请求失败！" + returnJsonObject.getString("returnInfo"));
+                        }
+                    }catch (Exception e){
+                        return getReturnJsonObject("1", "出库任务:" + outboundID + "请求wcs异常！" );
+                    }
+                }else {
+                    return getReturnJsonObject("1","物料编码："+ goodsCode +"批次号:"+ jsonObject.getString("batchCode")+"向道被锁，无法正常出库！");
+                }
+            }
+        }else{
+            return getReturnJsonObject("1","未查到 物料编码："+ goodsCode +"批次号:"+ jsonObject.getString("batchCode")+"存在审核通过的数据！");
+        }
+        return jsonObjectNew;
+    }
+
+    /**
+     *功能描述: 请求-返回的数据
+     * @params code 状态码  0成功，1失败
+     * @param  msg 信息
+     * @return com.alibaba.fastjson.JSONObject
+     */
+    private JSONObject getReturnJsonObject(String code,String msg) {
+        JSONObject jsonObject =new JSONObject();
+        jsonObject.put("tresStat",code);
+        jsonObject.put("resOutbound",msg);
+        jsonObject.put("resTime",new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+        jsonObject.put("userDefined1","");
+        jsonObject.put("userDefined2","");
+        jsonObject.put("userDefined3","");
+        return jsonObject;
+    }
+}

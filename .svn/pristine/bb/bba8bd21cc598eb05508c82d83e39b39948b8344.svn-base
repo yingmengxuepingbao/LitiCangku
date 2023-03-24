@@ -1,0 +1,665 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.penghaisoft.wcs.taskmanagement.model.dao.WcsFourwaycarTaskMapper" >
+  <resultMap id="BaseResultMap" type="com.penghaisoft.wcs.taskmanagement.model.entity.WcsFourwaycarTask" >
+    <id column="fourwaycar_task_id" property="fourwaycarTaskId" jdbcType="INTEGER" />
+    <result column="task_no" property="taskNo" jdbcType="INTEGER" />
+    <result column="fourwaycar_id" property="fourwaycarId" jdbcType="INTEGER" />
+    <result column="task_id" property="taskId" jdbcType="BIGINT" />
+    <result column="rely_fourwaycar_task_id" property="relyFourwaycarTaskId" jdbcType="INTEGER" />
+    <result column="fourwaycar_task_type" property="fourwaycarTaskType" jdbcType="CHAR" />
+    <result column="action_type" property="actionType" jdbcType="CHAR" />
+    <result column="task_status" property="taskStatus" jdbcType="CHAR" />
+    <result column="pallet_code" property="palletCode" jdbcType="VARCHAR" />
+    <result column="location_id" property="locationId" jdbcType="INTEGER" />
+    <result column="location_x" property="locationX" jdbcType="INTEGER" />
+    <result column="location_y" property="locationY" jdbcType="INTEGER" />
+    <result column="location_z" property="locationZ" jdbcType="INTEGER" />
+    <result column="location_direction" property="locationDirection" jdbcType="CHAR" />
+    <result column="priority" property="priority" jdbcType="INTEGER" />
+    <result column="error_msg" property="errorMsg" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="user_defined1" property="userDefined1" jdbcType="VARCHAR" />
+    <result column="user_defined2" property="userDefined2" jdbcType="VARCHAR" />
+    <result column="user_defined3" property="userDefined3" jdbcType="VARCHAR" />
+    <result column="user_defined4" property="userDefined4" jdbcType="VARCHAR" />
+    <result column="user_defined5" property="userDefined5" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="gmt_start" property="gmtStart" jdbcType="TIMESTAMP" />
+    <result column="last_modified_by" property="lastModifiedBy" jdbcType="VARCHAR" />
+    <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+    <result column="gmt_end" property="gmtEnd" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    fourwaycar_task_id, task_no, fourwaycar_id, task_id, rely_fourwaycar_task_id, fourwaycar_task_type, 
+    action_type, task_status, pallet_code, location_id, location_x, location_y, location_z, 
+    location_direction, priority, error_msg, remark, user_defined1, user_defined2, user_defined3, 
+    user_defined4, user_defined5, create_by, gmt_create, gmt_start, last_modified_by, 
+    gmt_modified, gmt_end
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from wcs_fourwaycar_task
+    where fourwaycar_task_id = #{fourwaycarTaskId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from wcs_fourwaycar_task
+    where fourwaycar_task_id = #{fourwaycarTaskId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.penghaisoft.wcs.taskmanagement.model.entity.WcsFourwaycarTask" >
+    insert into wcs_fourwaycar_task (fourwaycar_task_id, task_no, fourwaycar_id, 
+      task_id, rely_fourwaycar_task_id, fourwaycar_task_type, 
+      action_type, task_status, pallet_code, 
+      location_id, location_x, location_y, 
+      location_z, location_direction, priority, 
+      error_msg, remark, user_defined1, 
+      user_defined2, user_defined3, user_defined4, 
+      user_defined5, create_by, gmt_create, 
+      gmt_start, last_modified_by, gmt_modified, 
+      gmt_end)
+    values (#{fourwaycarTaskId,jdbcType=INTEGER}, #{taskNo,jdbcType=INTEGER}, #{fourwaycarId,jdbcType=INTEGER}, 
+      #{taskId,jdbcType=BIGINT}, #{relyFourwaycarTaskId,jdbcType=INTEGER}, #{fourwaycarTaskType,jdbcType=CHAR}, 
+      #{actionType,jdbcType=CHAR}, #{taskStatus,jdbcType=CHAR}, #{palletCode,jdbcType=VARCHAR}, 
+      #{locationId,jdbcType=INTEGER}, #{locationX,jdbcType=INTEGER}, #{locationY,jdbcType=INTEGER}, 
+      #{locationZ,jdbcType=INTEGER}, #{locationDirection,jdbcType=CHAR}, #{priority,jdbcType=INTEGER}, 
+      #{errorMsg,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{userDefined1,jdbcType=VARCHAR}, 
+      #{userDefined2,jdbcType=VARCHAR}, #{userDefined3,jdbcType=VARCHAR}, #{userDefined4,jdbcType=VARCHAR}, 
+      #{userDefined5,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, 
+      #{gmtStart,jdbcType=TIMESTAMP}, #{lastModifiedBy,jdbcType=VARCHAR}, #{gmtModified,jdbcType=TIMESTAMP}, 
+      #{gmtEnd,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.penghaisoft.wcs.taskmanagement.model.entity.WcsFourwaycarTask" useGeneratedKeys="true" keyProperty="fourwaycarTaskId" keyColumn="fourwaycar_task_id">
+    insert into wcs_fourwaycar_task
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="fourwaycarTaskId != null" >
+        fourwaycar_task_id,
+      </if>
+      <if test="taskNo != null" >
+        task_no,
+      </if>
+      <if test="fourwaycarId != null" >
+        fourwaycar_id,
+      </if>
+      <if test="taskId != null" >
+        task_id,
+      </if>
+      <if test="relyFourwaycarTaskId != null" >
+        rely_fourwaycar_task_id,
+      </if>
+      <if test="fourwaycarTaskType != null" >
+        fourwaycar_task_type,
+      </if>
+      <if test="actionType != null" >
+        action_type,
+      </if>
+      <if test="taskStatus != null" >
+        task_status,
+      </if>
+      <if test="palletCode != null" >
+        pallet_code,
+      </if>
+      <if test="locationId != null" >
+        location_id,
+      </if>
+      <if test="locationX != null" >
+        location_x,
+      </if>
+      <if test="locationY != null" >
+        location_y,
+      </if>
+      <if test="locationZ != null" >
+        location_z,
+      </if>
+      <if test="locationDirection != null" >
+        location_direction,
+      </if>
+      <if test="priority != null" >
+        priority,
+      </if>
+      <if test="errorMsg != null" >
+        error_msg,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="userDefined1 != null" >
+        user_defined1,
+      </if>
+      <if test="userDefined2 != null" >
+        user_defined2,
+      </if>
+      <if test="userDefined3 != null" >
+        user_defined3,
+      </if>
+      <if test="userDefined4 != null" >
+        user_defined4,
+      </if>
+      <if test="userDefined5 != null" >
+        user_defined5,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create,
+      </if>
+      <if test="gmtStart != null" >
+        gmt_start,
+      </if>
+      <if test="lastModifiedBy != null" >
+        last_modified_by,
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified,
+      </if>
+      <if test="gmtEnd != null" >
+        gmt_end,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="fourwaycarTaskId != null" >
+        #{fourwaycarTaskId,jdbcType=INTEGER},
+      </if>
+      <if test="taskNo != null" >
+        #{taskNo,jdbcType=INTEGER},
+      </if>
+      <if test="fourwaycarId != null" >
+        #{fourwaycarId,jdbcType=INTEGER},
+      </if>
+      <if test="taskId != null" >
+        #{taskId,jdbcType=BIGINT},
+      </if>
+      <if test="relyFourwaycarTaskId != null" >
+        #{relyFourwaycarTaskId,jdbcType=INTEGER},
+      </if>
+      <if test="fourwaycarTaskType != null" >
+        #{fourwaycarTaskType,jdbcType=CHAR},
+      </if>
+      <if test="actionType != null" >
+        #{actionType,jdbcType=CHAR},
+      </if>
+      <if test="taskStatus != null" >
+        #{taskStatus,jdbcType=CHAR},
+      </if>
+      <if test="palletCode != null" >
+        #{palletCode,jdbcType=VARCHAR},
+      </if>
+      <if test="locationId != null" >
+        #{locationId,jdbcType=INTEGER},
+      </if>
+      <if test="locationX != null" >
+        #{locationX,jdbcType=INTEGER},
+      </if>
+      <if test="locationY != null" >
+        #{locationY,jdbcType=INTEGER},
+      </if>
+      <if test="locationZ != null" >
+        #{locationZ,jdbcType=INTEGER},
+      </if>
+      <if test="locationDirection != null" >
+        #{locationDirection,jdbcType=CHAR},
+      </if>
+      <if test="priority != null" >
+        #{priority,jdbcType=INTEGER},
+      </if>
+      <if test="errorMsg != null" >
+        #{errorMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined1 != null" >
+        #{userDefined1,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined2 != null" >
+        #{userDefined2,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined3 != null" >
+        #{userDefined3,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined4 != null" >
+        #{userDefined4,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined5 != null" >
+        #{userDefined5,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtStart != null" >
+        #{gmtStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifiedBy != null" >
+        #{lastModifiedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtModified != null" >
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtEnd != null" >
+        #{gmtEnd,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.penghaisoft.wcs.taskmanagement.model.entity.WcsFourwaycarTask" >
+    update wcs_fourwaycar_task
+    <set >
+      <if test="taskNo != null" >
+        task_no = #{taskNo,jdbcType=INTEGER},
+      </if>
+      <if test="fourwaycarId != null" >
+        fourwaycar_id = #{fourwaycarId,jdbcType=INTEGER},
+      </if>
+      <if test="taskId != null" >
+        task_id = #{taskId,jdbcType=BIGINT},
+      </if>
+      <if test="relyFourwaycarTaskId != null" >
+        rely_fourwaycar_task_id = #{relyFourwaycarTaskId,jdbcType=INTEGER},
+      </if>
+      <if test="fourwaycarTaskType != null" >
+        fourwaycar_task_type = #{fourwaycarTaskType,jdbcType=CHAR},
+      </if>
+      <if test="actionType != null" >
+        action_type = #{actionType,jdbcType=CHAR},
+      </if>
+      <if test="taskStatus != null" >
+        task_status = #{taskStatus,jdbcType=CHAR},
+      </if>
+      <if test="palletCode != null" >
+        pallet_code = #{palletCode,jdbcType=VARCHAR},
+      </if>
+      <if test="locationId != null" >
+        location_id = #{locationId,jdbcType=INTEGER},
+      </if>
+      <if test="locationX != null" >
+        location_x = #{locationX,jdbcType=INTEGER},
+      </if>
+      <if test="locationY != null" >
+        location_y = #{locationY,jdbcType=INTEGER},
+      </if>
+      <if test="locationZ != null" >
+        location_z = #{locationZ,jdbcType=INTEGER},
+      </if>
+      <if test="locationDirection != null" >
+        location_direction = #{locationDirection,jdbcType=CHAR},
+      </if>
+      <if test="priority != null" >
+        priority = #{priority,jdbcType=INTEGER},
+      </if>
+      <if test="errorMsg != null" >
+        error_msg = #{errorMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined1 != null" >
+        user_defined1 = #{userDefined1,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined2 != null" >
+        user_defined2 = #{userDefined2,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined3 != null" >
+        user_defined3 = #{userDefined3,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined4 != null" >
+        user_defined4 = #{userDefined4,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined5 != null" >
+        user_defined5 = #{userDefined5,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtStart != null" >
+        gmt_start = #{gmtStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifiedBy != null" >
+        last_modified_by = #{lastModifiedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtEnd != null" >
+        gmt_end = #{gmtEnd,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where fourwaycar_task_id = #{fourwaycarTaskId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.penghaisoft.wcs.taskmanagement.model.entity.WcsFourwaycarTask" >
+    update wcs_fourwaycar_task
+    set task_no = #{taskNo,jdbcType=INTEGER},
+      fourwaycar_id = #{fourwaycarId,jdbcType=INTEGER},
+      task_id = #{taskId,jdbcType=BIGINT},
+      rely_fourwaycar_task_id = #{relyFourwaycarTaskId,jdbcType=INTEGER},
+      fourwaycar_task_type = #{fourwaycarTaskType,jdbcType=CHAR},
+      action_type = #{actionType,jdbcType=CHAR},
+      task_status = #{taskStatus,jdbcType=CHAR},
+      pallet_code = #{palletCode,jdbcType=VARCHAR},
+      location_id = #{locationId,jdbcType=INTEGER},
+      location_x = #{locationX,jdbcType=INTEGER},
+      location_y = #{locationY,jdbcType=INTEGER},
+      location_z = #{locationZ,jdbcType=INTEGER},
+      location_direction = #{locationDirection,jdbcType=CHAR},
+      priority = #{priority,jdbcType=INTEGER},
+      error_msg = #{errorMsg,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      user_defined1 = #{userDefined1,jdbcType=VARCHAR},
+      user_defined2 = #{userDefined2,jdbcType=VARCHAR},
+      user_defined3 = #{userDefined3,jdbcType=VARCHAR},
+      user_defined4 = #{userDefined4,jdbcType=VARCHAR},
+      user_defined5 = #{userDefined5,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_start = #{gmtStart,jdbcType=TIMESTAMP},
+      last_modified_by = #{lastModifiedBy,jdbcType=VARCHAR},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      gmt_end = #{gmtEnd,jdbcType=TIMESTAMP}
+    where fourwaycar_task_id = #{fourwaycarTaskId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByTaskIdSelective" parameterType="com.penghaisoft.wcs.taskmanagement.model.entity.WcsFourwaycarTask">
+    update wcs_fourwaycar_task
+    <set >
+      <if test="taskNo != null" >
+        task_no = #{taskNo,jdbcType=INTEGER},
+      </if>
+      <if test="fourwaycarId != null" >
+        fourwaycar_id = #{fourwaycarId,jdbcType=INTEGER},
+      </if>
+      <if test="relyFourwaycarTaskId != null" >
+        rely_fourwaycar_task_id = #{relyFourwaycarTaskId,jdbcType=INTEGER},
+      </if>
+      <if test="fourwaycarTaskType != null" >
+        fourwaycar_task_type = #{fourwaycarTaskType,jdbcType=CHAR},
+      </if>
+      <if test="actionType != null" >
+        action_type = #{actionType,jdbcType=CHAR},
+      </if>
+      <if test="taskStatus != null" >
+        task_status = #{taskStatus,jdbcType=CHAR},
+      </if>
+      <if test="palletCode != null" >
+        pallet_code = #{palletCode,jdbcType=VARCHAR},
+      </if>
+      <if test="locationId != null" >
+        location_id = #{locationId,jdbcType=INTEGER},
+      </if>
+      <if test="locationX != null" >
+        location_x = #{locationX,jdbcType=INTEGER},
+      </if>
+      <if test="locationY != null" >
+        location_y = #{locationY,jdbcType=INTEGER},
+      </if>
+      <if test="locationZ != null" >
+        location_z = #{locationZ,jdbcType=INTEGER},
+      </if>
+      <if test="locationDirection != null" >
+        location_direction = #{locationDirection,jdbcType=CHAR},
+      </if>
+      <if test="priority != null" >
+        priority = #{priority,jdbcType=INTEGER},
+      </if>
+      <if test="errorMsg != null" >
+        error_msg = #{errorMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined1 != null" >
+        user_defined1 = #{userDefined1,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined2 != null" >
+        user_defined2 = #{userDefined2,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined3 != null" >
+        user_defined3 = #{userDefined3,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined4 != null" >
+        user_defined4 = #{userDefined4,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined5 != null" >
+        user_defined5 = #{userDefined5,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtStart != null" >
+        gmt_start = #{gmtStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifiedBy != null" >
+        last_modified_by = #{lastModifiedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtEnd != null" >
+        gmt_end = #{gmtEnd,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where task_id = #{taskId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByTaskNoSelective" parameterType="com.penghaisoft.wcs.taskmanagement.model.entity.WcsFourwaycarTask">
+    update wcs_fourwaycar_task
+    <set >
+      <if test="fourwaycarId != null" >
+        fourwaycar_id = #{fourwaycarId,jdbcType=INTEGER},
+      </if>
+      <if test="relyFourwaycarTaskId != null" >
+        rely_fourwaycar_task_id = #{relyFourwaycarTaskId,jdbcType=INTEGER},
+      </if>
+      <if test="fourwaycarTaskType != null" >
+        fourwaycar_task_type = #{fourwaycarTaskType,jdbcType=CHAR},
+      </if>
+      <if test="actionType != null" >
+        action_type = #{actionType,jdbcType=CHAR},
+      </if>
+      <if test="taskStatus != null" >
+        task_status = #{taskStatus,jdbcType=CHAR},
+      </if>
+      <if test="palletCode != null" >
+        pallet_code = #{palletCode,jdbcType=VARCHAR},
+      </if>
+      <if test="locationId != null" >
+        location_id = #{locationId,jdbcType=INTEGER},
+      </if>
+      <if test="locationX != null" >
+        location_x = #{locationX,jdbcType=INTEGER},
+      </if>
+      <if test="locationY != null" >
+        location_y = #{locationY,jdbcType=INTEGER},
+      </if>
+      <if test="locationZ != null" >
+        location_z = #{locationZ,jdbcType=INTEGER},
+      </if>
+      <if test="locationDirection != null" >
+        location_direction = #{locationDirection,jdbcType=CHAR},
+      </if>
+      <if test="priority != null" >
+        priority = #{priority,jdbcType=INTEGER},
+      </if>
+      <if test="errorMsg != null" >
+        error_msg = #{errorMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined1 != null" >
+        user_defined1 = #{userDefined1,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined2 != null" >
+        user_defined2 = #{userDefined2,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined3 != null" >
+        user_defined3 = #{userDefined3,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined4 != null" >
+        user_defined4 = #{userDefined4,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined5 != null" >
+        user_defined5 = #{userDefined5,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtStart != null" >
+        gmt_start = #{gmtStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifiedBy != null" >
+        last_modified_by = #{lastModifiedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtEnd != null" >
+        gmt_end = #{gmtEnd,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where task_no = #{taskNo,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyList" parameterType="com.penghaisoft.wcs.taskmanagement.model.entity.WcsFourwaycarTask">
+    update wcs_fourwaycar_task
+    <set >
+      <if test="taskNo != null" >
+        task_no = #{taskNo,jdbcType=INTEGER},
+      </if>
+      <if test="fourwaycarId != null" >
+        fourwaycar_id = #{fourwaycarId,jdbcType=INTEGER},
+      </if>
+      <if test="taskId != null" >
+        task_id = #{taskId,jdbcType=BIGINT},
+      </if>
+      <if test="relyFourwaycarTaskId != null" >
+        rely_fourwaycar_task_id = #{relyFourwaycarTaskId,jdbcType=INTEGER},
+      </if>
+      <if test="fourwaycarTaskType != null" >
+        fourwaycar_task_type = #{fourwaycarTaskType,jdbcType=CHAR},
+      </if>
+      <if test="actionType != null" >
+        action_type = #{actionType,jdbcType=CHAR},
+      </if>
+      <if test="taskStatus != null" >
+        task_status = #{taskStatus,jdbcType=CHAR},
+      </if>
+      <if test="palletCode != null" >
+        pallet_code = #{palletCode,jdbcType=VARCHAR},
+      </if>
+      <if test="locationId != null" >
+        location_id = #{locationId,jdbcType=INTEGER},
+      </if>
+      <if test="locationX != null" >
+        location_x = #{locationX,jdbcType=INTEGER},
+      </if>
+      <if test="locationY != null" >
+        location_y = #{locationY,jdbcType=INTEGER},
+      </if>
+      <if test="locationZ != null" >
+        location_z = #{locationZ,jdbcType=INTEGER},
+      </if>
+      <if test="locationDirection != null" >
+        location_direction = #{locationDirection,jdbcType=CHAR},
+      </if>
+      <if test="priority != null" >
+        priority = #{priority,jdbcType=INTEGER},
+      </if>
+      <if test="errorMsg != null" >
+        error_msg = #{errorMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined1 != null" >
+        user_defined1 = #{userDefined1,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined2 != null" >
+        user_defined2 = #{userDefined2,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined3 != null" >
+        user_defined3 = #{userDefined3,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined4 != null" >
+        user_defined4 = #{userDefined4,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined5 != null" >
+        user_defined5 = #{userDefined5,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtStart != null" >
+        gmt_start = #{gmtStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifiedBy != null" >
+        last_modified_by = #{lastModifiedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtEnd != null" >
+        gmt_end = #{gmtEnd,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where fourwaycar_task_id in
+    <foreach collection="idList" index="index" item="id" open="(" separator="," close=")">
+      #{id,jdbcType=INTEGER}
+    </foreach>
+  </update>
+  <select id="selectByTaskId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from wcs_fourwaycar_task
+    where task_id =#{taskId,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectFourwaycarTaskById" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from wcs_fourwaycar_task
+    where task_id in
+    <foreach collection="taskIdList" index="index" item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </select>
+  <delete id="deleteFourwaycarTaskByIdList" parameterType="java.lang.Long" >
+    delete from wcs_fourwaycar_task
+    where task_id in
+    <foreach collection="taskIdList" index="index" item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+
+  <select id="queryAnyByKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select
+    <include refid="Base_Column_List" />
+    from wcs_fourwaycar_task
+    where task_id = #{taskId,jdbcType=BIGINT}
+  </select>
+  <select id="selectByTaskNo" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from wcs_fourwaycar_task
+    where task_no = #{taskNo,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByTaskStatus" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from wcs_fourwaycar_task
+    where task_status in
+    <foreach collection="taskStatusList" index="index" item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </select>
+</mapper>

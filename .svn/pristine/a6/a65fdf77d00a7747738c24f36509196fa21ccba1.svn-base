@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>盘点任务</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="../../css/bootstrap.css" type="text/css">
+    <link rel="stylesheet" href="../../css/font-awesome.min.css">
+    <link rel="stylesheet" href="../../css/zdialog.css">
+    <link rel="stylesheet" href="../../css/zTreeStyleOutLook.css" />
+    <link rel="stylesheet" href="../../css/layout.css" type="text/css">
+    <link rel="stylesheet" href="../../css/jedate.css" />
+    <link rel="stylesheet" href="../../css/chosen.css">
+    <link rel="stylesheet" href="css/device.css" />
+    <link rel="stylesheet" href="../../js/chosen-1.8.7/chosen.min.css"  type="text/css" />
+    <style type="text/css">
+        a{text-decoration: none !important;}
+        .category .form-control{width: 180px}
+        .category-con:after{display:block;clear:both;content:"";visibility:hidden;height:0}
+        #baseEquipmentList:after{display:block;clear:both;content:"";visibility:hidden;height:0}
+        .pagination-con{overflow: inherit;}
+        .pagination-con:after{display:block;clear:both;content:"";visibility:hidden;height:0}
+        .search-title{overflow:inherit;}
+        .search-title:after{display:block;clear:both;content:"";visibility:hidden;height:0}
+        .btn-blue{ background:#1DBBF4 ;border: 1px solid #fff; color: #fff}
+        .btn-blue:hover{
+            background:#1DBBF4 ;border: 1px solid #fff; color: #fff
+        }
+        .file-border{
+            border: 1px solid #eee;
+            padding: 15px;
+        }
+    </style>
+</head>
+<body>
+<div class="wrap" style="height: 100%;overflow: auto;min-width: 1154px">
+    <ol class="breadcrumb">
+        <li><a href="#" class="link">库内管理</a></li>
+        <li class="active">盘点任务</li>
+    </ol>
+    <div class="content" style="min-height: 500px">
+        <div class="form-inline search-title">
+<!--            <div class="title fl">EdgeBox列表</div>-->
+        </div>
+        <div class="margin320 category">
+            <div class="form-inline search-title" style="border-bottom:none">
+                <div class="form-inline rt icon-search">
+                    <select class="form-control search-border-reset" id="orderTypeSelect">&nbsp;
+                        <option value="">请选择类型</option>
+                        <option value="1">按库位</option>
+                        <option value="2">按商品</option>
+                    </select>
+                </div>
+                <div class="form-inline rt icon-search">
+                    <select class="form-control search-border-reset" id="orderStatusSelect">&nbsp;
+                        <option value="">请选择状态</option>
+                        <option value="1">创建</option>
+                        <option value="2">盘点中</option>
+                        <option value="3">完成</option>
+                        <option value="4">异常</option>
+                    </select>
+                </div>
+                <div class="form-inline rt icon-search">
+                    <input type="text" class="form-control search-border-reset" id="orderNo_search"
+                           placeholder="请输入盘点单号" onkeyup="this.value=this.value.replace(/[=\\=&? ？ *%]/,'')">
+                    <img src="../../images/common/search_icon_grey.png">
+                </div>
+            </div>
+            <div class="bt-and-search">
+                <div class="btn-lists lf">
+<!--                    <button type="button" class="btn btn-default multiDelete1">合并出库</button>-->
+                    <!--<button type="button" class="btn btn-default" id="exportBtn">导出</button>
+                    <button type="button" class="btn btn-default" id="importBtn">导入</button>-->
+                    <button id="addByLocation" type="button" class="btn btn-default btn-add">按库位制单<i class="fa fa-plus"></i></button>
+                    <button id="addByGoods" type="button" class="btn btn-default btn-add">按商品制单<i class="fa fa-plus"></i></button>
+                    <button type="button" class="btn btn-default btn-add multiDelete">删除<i class="fa fa-minus"></i></button>
+                    <button id="startOut" type="button" class="btn btn-default btn-add">立库启动出库<i class="fa fa-circle-o"></i></button>
+                    <button id="showDiff" type="button" class="btn btn-default btn-add">显示差异<i class="fa fa-list"></i></button>
+                </div>
+                <div class="hide-search rt" id="more-search-condition">
+                    <button id="resetSearchConditions" type="button" class="btn btn-default rt">重置</button>
+                    <button id="topSearchInfoList" type="button" class="btn btn-default rt ">搜索</button>
+                </div>
+            </div>
+
+            <div class="category-con">
+                <table class="table-hover table col-xs-12 col-sm-12 " id="edgeBoxList">
+                    <thead class="head-sort">
+                    <tr>
+                        <th style="width: 50px">
+                            <div class="checkbox-custom checkbox-default">
+                                <input type="checkbox" id="check-all">
+                                <label></label>
+                            </div>
+                        </th>
+                        <th data-sort="order_no" >盘点单号<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="order_type" >类型<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="order_status" >状态<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="area_code" >库区<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="goods_name" >商品名称<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="goods_code" >商品编码<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="location_code" >库位<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="location_code" >计划托盘数<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="location_code" >盘点托盘数<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="location_code" >统计数<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="location_code" >实际数<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="diff_flag" >差异<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="user_defined2" >盘点方式<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="gmt_create" >创建时间<i class="fa fa-sort-amount-asc"></i></th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody class="tbody-load">
+                    </tbody>
+                </table>
+                <div class="pagination-con" style="display: block">
+                    <p class="listNumber rt">
+                        <button class="btn btn-default btn-xs previousPage"><i class="fa fa-caret-left fa-lg"></i></button>
+                        <span class="currentPage">1</span>/<span class="pageNumber">1</span>
+                        <button class="btn btn-default btn-xs nextPage"><i class="fa fa-caret-right fa-lg"></i></button>
+                        <input class="currentPageBtn" value="1" type="text"  onkeyup="this.value=this.value.replace(/[^0-9]+/g, '');"/>
+                        <button type="button" id="pageJump"  data-loading-text="请求数据中..." class="btn btn-default pageJump" autocomplete="off">跳转</button>
+                        每页<span class="pageOneNumber">15</span>条，共<span class="dataNumber">30</span>条记录
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--新增按库位-->
+    <div class="modal" id="formModel" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document" style="width: 700px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="moTitle">按库位制单</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" id="formInfo">
+<!--                        <div class="form-group">-->
+<!--                            <input type="hidden" id="type">-->
+<!--                            <input type="hidden" id="orderOutId">-->
+<!--                        </div>-->
+<!--                        <div class="form-group" id="moveNodiv">-->
+<!--                            <label class="control-label col-sm-3">移库单号:</label>-->
+<!--                            <div class="col-sm-8">-->
+<!--                                <input id="moveNo" type="text" disabled class="form-control" placeholder="请输入移库单号"/>-->
+<!--                            </div>-->
+<!--                        </div>-->
+                        <div class="form-group">
+                            <label class="control-label col-sm-3"><i class="fa fa-asterisk"></i>库区:</label>
+                            <div class="col-sm-8">
+                                <select id="areaCode" class="form-control" placeholder=" 请选择库区">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">库位:</label>
+                            <div class="col-sm-8">
+                                <select id="locationCode" class="form-control" multiple>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">时间:</label>
+                            <div class="col-sm-8">
+                                <select id="time" class="form-control" placeholder=" 请选择时间">
+                                    <option value="">请选择时间</option>
+                                    <option value="1">最近1个月</option>
+                                    <option value="2">最近2个月</option>
+                                    <option value="3">最近3个月</option>
+                                    <option value="6">最近6个月</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3"><i class="fa fa-asterisk"></i>盘点方式:</label>
+                            <div class="col-sm-8">
+                                <select id="stocktakingMode" class="form-control" placeholder="请选择盘点方式">
+                                    <option value="">请选择盘点方式</option>
+                                   <!-- <option value="1">线上</option>-->
+                                    <option value="2">线下</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">备注:</label>
+                            <div class="col-sm-8">
+                                <input id="remark" type="text"  class="form-control" placeholder="请输入备注"/>
+                            </div>
+                        </div>
+                    </form>
+                    <i class="fa fa-exclamation-circle fa-deviceInfoPop"></i>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="modalCancelButton" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" id="modalSaveButton" class="btn btn-modal" data-dismiss="modal">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--新增按商品-->
+    <div class="modal" id="formModel1" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document" style="width: 700px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="moTitle1">按商品制单</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" id="formInfo1">
+<!--                        <div class="form-group">-->
+<!--                            <input type="hidden" id="type">-->
+<!--                            <input type="hidden" id="orderOutId">-->
+<!--                        </div>-->
+                        <!--                        <div class="form-group" id="moveNodiv">-->
+                        <!--                            <label class="control-label col-sm-3">移库单号:</label>-->
+                        <!--                            <div class="col-sm-8">-->
+                        <!--                                <input id="moveNo" type="text" disabled class="form-control" placeholder="请输入移库单号"/>-->
+                        <!--                            </div>-->
+                        <!--                        </div>-->
+                        <div class="form-group">
+                            <label class="control-label col-sm-3"><i class="fa fa-asterisk"></i>库区:</label>
+                            <div class="col-sm-8">
+                                <select id="areaCode1" class="form-control" placeholder=" 请选择库区">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">商品:</label>
+                            <div class="col-sm-8">
+                                <select id="goodsCode" class="form-control" multiple>
+                            </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">时间:</label>
+                            <div class="col-sm-8">
+                                <select id="time1" class="form-control" placeholder=" 请选择时间">
+                                    <option value="">请选择时间</option>
+                                    <option value="1">最近1个月</option>
+                                    <option value="2">最近2个月</option>
+                                    <option value="3">最近3个月</option>
+                                    <option value="6">最近6个月</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3"><i class="fa fa-asterisk"></i>盘点方式:</label>
+                            <div class="col-sm-8">
+                                <select id="stocktakingMode1" class="form-control" placeholder="请选择盘点方式">
+                                    <option value="">请选择盘点方式</option>
+                                    <!--<option value="1">线上</option>-->
+                                    <option value="2">线下</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">备注:</label>
+                            <div class="col-sm-8">
+                                <input id="remark1" type="text"  class="form-control" placeholder="请输入备注"/>
+                            </div>
+                        </div>
+                    </form>
+                    <i class="fa fa-exclamation-circle fa-deviceInfoPop1"></i>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="modalCancelButton1" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" id="modalSaveButton1" class="btn btn-modal" data-dismiss="modal">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--启动立库出库-->
+    <div class="modal" id="formModel2" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document" style="width: 700px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">立库启动出库</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <input type="hidden" id="orderNo">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3"><i class="fa fa-asterisk"></i>出货口:</label>
+                            <div class="col-sm-8">
+                                <select id="outAddress" class="form-control" placeholder=" 请选择出货口">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">备注:</label>
+                            <div class="col-sm-8">
+                                <input id="remark2" type="text"  class="form-control" placeholder="请输入备注"/>
+                            </div>
+                        </div>
+                    </form>
+                    <i class="fa fa-exclamation-circle fa-deviceInfoPop2"></i>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="modalCancelButton2" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" id="modalSaveButton2" class="btn" data-dismiss="modal">启动</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="../../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../js/bootstrap.min.js" ></script>
+    <script type="text/javascript" src="../../js/jquery.jedate.js"></script>
+    <script type="text/javascript" src="../../js/zdialog.js"></script>
+    <script type="text/javascript" src="../../js/jquery.ztree.all.min.js"></script>
+    <script type="text/javascript" src="../../js/chosen-1.8.7/chosen.jquery.min.js"></script>
+    <script type="text/javascript" src="../../js/common.js"></script>
+    <script type="text/javascript" src="js/wmsNHOrderCheckList.js"></script>
+    <script type="text/javascript">
+
+        var config = {
+
+            '.chosen-select'           : {},
+
+            '.chosen-select-deselect'  : {allow_single_deselect:true},
+
+            '.chosen-select-no-single' : {disable_search_threshold:10},
+
+            '.chosen-select-no-results': {no_results_text:'Oops, nothing found!'},
+
+            '.chosen-select-width'     : {width:"95%"}
+
+        }
+
+        for (var selector in config) {
+
+            $(selector).chosen(config[selector]);
+
+        }
+
+    </script>
+</div>
+</body>
+</html>

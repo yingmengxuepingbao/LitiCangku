@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.penghaisoft.framework.basics.model.dao.IDepartmentRoleMapper" >
+  <resultMap id="BaseResultMap" type="com.penghaisoft.framework.basics.model.entity.DepartmentRoleKey" >
+    <id column="department_id" property="departmentId" jdbcType="INTEGER" />
+    <id column="role_id" property="roleId" jdbcType="INTEGER" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="com.penghaisoft.framework.basics.model.entity.DepartmentRoleKey" >
+    delete from department_role
+    where department_id = #{departmentId,jdbcType=INTEGER}
+      and role_id = #{roleId,jdbcType=INTEGER}
+  </delete>
+  <select id="selectRolesUnderDepartment"
+          resultType="com.penghaisoft.framework.permissionmanagement.model.entity.Role">
+    SELECT
+        id,
+        name,
+        description
+    FROM
+        role
+    WHERE
+        id IN (
+          SELECT role_id FROM department_role WHERE department_id = #{departmentId,jdbcType=INTEGER}
+        )
+  </select>
+  <insert id="insert" parameterType="com.penghaisoft.framework.basics.model.entity.DepartmentRoleKey" >
+    insert into department_role (department_id, role_id)
+    values (#{departmentId,jdbcType=INTEGER}, #{roleId,jdbcType=INTEGER})
+  </insert>
+</mapper>

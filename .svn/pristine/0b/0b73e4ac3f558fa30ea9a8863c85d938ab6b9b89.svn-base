@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>物理库位基础</title>
+    <link rel="stylesheet" href="../../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../../css/font-awesome.min.css">
+    <link rel="stylesheet" href="../../css/zdialog.css">
+    <link rel="stylesheet" href="../../css/jedate.css" />
+    <link rel="stylesheet" href="../../css/detail.css" type="text/css">
+    <link rel="stylesheet" href="../../css/layout.css" type="text/css">
+    <link rel="stylesheet" href="../../js/chosen-1.8.7/chosen.min.css"  type="text/css" />
+    <style>
+        html,body{
+            height: 100%;
+            background: #F1F4F4;;
+        }
+        .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+            padding: 10px 0;
+            line-height: 1.42857143;
+            vertical-align: top;
+            border-top: 1px solid #ECF0F1 ;
+        }
+        .table > thead > tr > th {
+            vertical-align: bottom;
+            border-bottom: none;
+        }
+        .tit-search{margin-left: 15px}
+        .search-inline{
+            display: inline-block;
+            margin-right:10px;
+            margin-top: 15px;
+        }
+        .search-inline .btn{background: #1DBBF4;color:#fff}
+        /*.btn{background: #1DBBF4;color:#fff}*/
+        .form-horizontal .form-control{
+            width: 85%;
+        }
+        .fa-asterisk {
+            font-size: 9px;
+            color: #EF4836;
+        }
+        .modal-title{color: #444;
+            font-weight: 600;
+            font-size: 15px;
+        }
+        .modal-footer .btn+.btn {
+            background: #1DBBF4;
+            color: #fff;
+            border: 1px solid #fff;
+        }
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <ol class="breadcrumb">
+        <li><a href="#" class="link">物理库位管理</a></li>
+        <li class="active">物理库位基础</li>
+    </ol>
+    <div class="content">
+        <div class="tit-search">
+
+            <div class="search-inline">
+                <div class="form-group form-inline">
+                    <label for="locationIdPoP">物理库位ID:</label>
+                    <input type="text" id="locationIdPoP" placeholder="物理库位ID(数字)"  class="form-control" onkeyup="this.value=this.value.replace(/\D/g,'')" />
+                </div>
+            </div>
+            <div class="search-inline">
+                <div class="form-group form-inline">
+                    <label for="shelfIdPoP">所属货架ID:</label>
+                    <input type="text" id="shelfIdPoP" placeholder="货架ID(数字)"  class="form-control" onkeyup="this.value=this.value.replace(/\D/g,'')" />
+                </div>
+            </div>
+        </div>
+            <div class="search-inline">
+
+                <button type="button" id="refrechTop" class="btn">搜&nbsp;&nbsp;索</button>
+            </div>
+            <div class="search-inline rt">
+                <button type="button" id="reset" class="btn">重置</button>
+                <button type="button" id="addButton" class="btn">新增物理库位</button>
+            </div>
+        </div>
+        <table id="formTable"  class="table table-hover table-striped" style="margin-left: 15px">
+            <thead class="head-sort">
+<!--            <th>所属库区</th>-->
+            <th>物理库位ID</th>
+          <!--  <th>X坐标</th>
+            <th>Y坐标</th>
+            <th>Z坐标</th>-->
+            <th>层数</th>
+      <!--      <th>所属堆垛机ID</th>
+            <th>方向</th>-->
+            <th>行数</th>
+            <th>列数</th>
+<!--            <th>深度</th>-->
+            <th>操作</th>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <div class="pagination-con" style="display: block;margin: 15px">
+            <p class="listNumber rt">
+                <button class="btn btn-default btn-xs previousPage"><i class="fa fa-caret-left fa-lg"></i></button>
+                <span class="currentPage">1</span>/<span class="pageNumber">1</span>
+                <button class="btn btn-default btn-xs nextPage"><i class="fa fa-caret-right fa-lg"></i></button>
+                <input class="currentPageBtn" value="1" type="text"  onkeyup="this.value=this.value.replace(/[^0-9]+/g, '');"/>
+                <button type="button" id="pageJump"  data-loading-text="请求数据中..." class="btn btn-default pageJump" autocomplete="off">跳转</button>
+                每页<span class="pageOneNumber">20</span>条，共<span class="dataNumber">30</span>条记录
+            </p>
+        </div>
+    </div>
+</div>
+
+
+<!--物理库位模态框-->
+<div class="modal" id="formModel" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document" style="width: 700px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel"></h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="formInfo">
+                    <div class="form-group">
+                        <input type="hidden" id="type">
+                        <input type="hidden" id="updateId">
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">所属库区:</label>
+                        <div class="col-sm-9">
+                            <select id="areaCode" class="form-control" placeholder=" 请选择所属库区">
+                                <option value="">请选择所属库区</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3"><i class="fa fa-asterisk"></i>物理库位ID:</label>
+                        <div class="col-sm-9">
+                            <input id="locationId" type="text" oninput = "value=value.replace(/[^\d]/g,'')"  class="form-control" placeholder="请输入物理库位ID（数字）"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3"><i class="fa fa-asterisk"></i>X坐标:</label>
+                        <div class="col-sm-9">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <input id="x" type="number" value="" min="0" class="form-control" placeholder="" onchange="checkStockNumber(this)" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3"><i class="fa fa-asterisk"></i>Y坐标:</label>
+                        <div class="col-sm-9">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <input id="y" type="number" value="" min="0" class="form-control" placeholder="" onchange="checkStockNumber(this)" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3"><i class="fa fa-asterisk"></i>Z坐标:</label>
+                        <div class="col-sm-9">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <input id="z" type="number" value="" min="0" class="form-control" placeholder="" onchange="checkStockNumber(this)" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3"><i class="fa fa-asterisk"></i>所属货架id:</label>
+                        <div class="col-sm-9">
+                            <select id="shelfId" class="form-control" placeholder=" 请选择所属货架id">
+                                <option value=""></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3"><i class="fa fa-asterisk"></i>方向:</label>
+                        <div class="col-sm-9">
+                            <select id="direction" class="form-control" placeholder=" 请选择方向">
+                                <option value=""></option>
+                                <option value="1">左</option>
+                                <option value="0">右</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3"><i class="fa fa-asterisk"></i>行数:</label>
+                        <div class="col-sm-9">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <input id="row" type="number" value="" min="1" class="form-control" placeholder="" onchange="checkStockNumber(this)" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3"><i class="fa fa-asterisk"></i>列数:</label>
+                        <div class="col-sm-9">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <input id="col" type="number" value="" min="1" class="form-control" placeholder="" onchange="checkStockNumber(this)" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+<!--                    <div class="form-group">-->
+<!--                        <label class="control-label col-sm-3">深度:</label>-->
+<!--                        <div class="col-sm-9">-->
+<!--                            <div class="row">-->
+<!--                                <div class="col-sm-4">-->
+<!--                                    <input id="deep" type="number" value="" min="1" class="form-control" placeholder="" onchange="checkStockNumber(this)" />-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" id="saveButton" class="btn" data-dismiss="modal">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="../../js/jquery.min.js" ></script>
+<script type="text/javascript" src="../../js/bootstrap.min.js" ></script>
+<script type="text/javascript" src="../../js/zdialog.js"></script>
+<script type="text/javascript" src="../../js/common.js"></script>
+<script type="text/javascript" src="../../js/jquery.jedate.js" ></script>
+<script type="text/javascript" src="../../js/chosen-1.8.7/chosen.jquery.min.js"></script>
+<script type="text/javascript" src="js/wcsLocationRealList.js"></script>
+</body>
+</html>

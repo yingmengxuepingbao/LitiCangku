@@ -1,0 +1,112 @@
+
+/* �и�   Ӧ����bootstrap���и߻����������� */
+body {
+    line-height: 1.6;
+}
+/* ����ȫ�ֵ����壬�ֺţ�������ɫ   */
+body, th, td, button, input, select, textarea{
+    font-family: "Microsoft Yahei","Hiragino Sans GB","Helvetica Neue",Helvetica,tahoma,arial,Verdana,sans-serif,"WenQuanYi Micro Hei","\5B8B\4F53";
+    font-size: 12px;
+    color: #333;
+}
+/*  �������б�ǩ�ı߾���ʽ   */
+html, body, h1, h2, h3, h4, h5, h6, hr, p, iframe, dl, dt, dd, ul, ol, li, pre, form, button, input, textarea, th, td, fieldset {
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+}
+/* a��ǩhoverʱ�ײ��»��� ��ʽ  */
+a:hover {
+    text-decoration: underline;
+}
+/* �������������  ����Ӵ֣��ֺ�14 ����ʱ��һ���ã�����������������*/
+.dark-font{
+    font-size: 14px;
+    font-weight:bold;
+}
+/* �����  */
+.view-text-size{
+    width: 138px;
+    height: 28px;
+    border-width: 1px;
+    border-radius: 5px;
+}
+/*  ��������ʽ   */
+.view-select-size{
+    width: 140px;
+    height: 30px;
+}
+/*  ��ͨ��ť��ʽ��ť��ʽ  */
+/* .view-edit-size{
+    width:96px;
+    height:32px;
+} */
+/*��ѯ����հ�ť����ʽ*/
+.view-button-size{
+    width:80px;
+    height:30px;
+    background-color:#5aabf7;
+    border-width: 0px;
+    color: white;
+    border-radius: 5px;
+}
+.form-button-size{
+    width:80px;
+    height:30px;
+    background-color:#5aabf7;
+}
+.form-input-size{
+    width:180px;
+    height:30px;
+}
+.form-mark-size{
+    width:415px;
+    height:76px;
+}
+.secondform-big-size{
+    width:180px;
+    height:30px;
+}
+.secondform-small-size{
+    width:60px;
+    height:30px;
+}
+.foot-mark{
+    width:400px;
+    height:100px;
+    margin-left: 5px;
+}
+/*��ťȥ��bootstrap��ťԲ��*/
+.btnl{
+	width:96px;
+    height:32px;
+	border-radius: 0px; /* css 3��׼ */  
+	-moz-border-radius: 0px;  /* mozilla */  
+	-webkit-border-radius: 0px;  /* webkit */  
+}
+
+/*�ָ�����ʽ*/
+.imes-hr{
+	background:#CCC;
+	height:1px;
+	width:100%;
+	margin-top:5px;
+	margin-bottom:5px;
+}
+/* ȥ��a��ǩ���Ӻ��ѷ��ʵ���ʽ*/
+a:link {
+	text-decoration: none;
+}
+a:visited {
+	text-decoration: none;
+}
+/*�����������a��ǩʱ���С�ֵ���ʽ*/
+a:hover {
+	text-decoration: none;
+	cursor:pointer;
+}

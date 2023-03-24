@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>立库移库任务</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="../../css/bootstrap.css" type="text/css">
+    <link rel="stylesheet" href="../../css/font-awesome.min.css">
+    <link rel="stylesheet" href="../../css/zdialog.css">
+    <link rel="stylesheet" href="../../css/zTreeStyleOutLook.css" />
+    <link rel="stylesheet" href="../../css/layout.css" type="text/css">
+    <link rel="stylesheet" href="../../css/jedate.css" />
+    <link rel="stylesheet" href="../../css/chosen.css">
+    <link rel="stylesheet" href="css/device.css" />
+    <style type="text/css">
+        a{text-decoration: none !important;}
+        .category .form-control{width: 180px}
+        .category-con:after{display:block;clear:both;content:"";visibility:hidden;height:0}
+        #baseEquipmentList:after{display:block;clear:both;content:"";visibility:hidden;height:0}
+        .pagination-con{overflow: inherit;}
+        .pagination-con:after{display:block;clear:both;content:"";visibility:hidden;height:0}
+        .search-title{overflow:inherit;}
+        .search-title:after{display:block;clear:both;content:"";visibility:hidden;height:0}
+        .btn-blue{ background:#1DBBF4 ;border: 1px solid #fff; color: #fff}
+        .btn-blue:hover{
+            background:#1DBBF4 ;border: 1px solid #fff; color: #fff
+        }
+        .file-border{
+            border: 1px solid #eee;
+            padding: 15px;
+        }
+    </style>
+</head>
+<body>
+<div class="wrap" style="min-width: 1154px;height: 100%">
+    <ol class="breadcrumb">
+        <li><a href="#" class="link">库内管理</a></li>
+        <li class="active">立库移库任务</li>
+    </ol>
+    <div class="content" style="min-height: 500px">
+        <div class="form-inline search-title">
+<!--            <div class="title fl">EdgeBox列表</div>-->
+        </div>
+        <div class="margin320 category">
+            <div class="form-inline search-title" style="border-bottom:none">
+                <div class="form-inline rt icon-search">
+                    <input type="text" class="form-control search-border-reset" id="palletCode_search"
+                           placeholder="请输入托盘号" onkeyup="this.value=this.value.replace(/[=\\=&? ？ *%]/,'')">
+                    <img src="../../images/common/search_icon_grey.png">
+                </div>
+                <div class="form-inline rt icon-search">
+                    <input type="text" class="form-control search-border-reset" id="goodsCode_search"
+                           placeholder="请输入商品编号" onkeyup="this.value=this.value.replace(/[=\\=&? ？ *%]/,'')">
+                    <img src="../../images/common/search_icon_grey.png">
+                </div>
+                <div class="form-inline rt icon-search">
+                    <input type="text" class="form-control search-border-reset" id="toLocationCode_search"
+                           placeholder="请输入目标库位" onkeyup="this.value=this.value.replace(/[=\\=&? ？ *%]/,'')">
+                    <img src="../../images/common/search_icon_grey.png">
+                </div>
+                <div class="form-inline rt icon-search">
+                    <input type="text" class="form-control search-border-reset" id="fromLocationCode_search"
+                           placeholder="请输入源库位" onkeyup="this.value=this.value.replace(/[=\\=&? ？ *%]/,'')">
+                    <img src="../../images/common/search_icon_grey.png">
+                </div>
+                <div class="form-inline rt icon-search">
+                    <select class="form-control search-border-reset" id="moveStatusSelect">&nbsp;
+                        <option value="">请选择状态</option>
+                        <option value="1">创建</option>
+                        <option value="2">移库中</option>
+                        <option value="3">完成</option>
+                        <option value="4">异常</option>
+                    </select>
+                </div>
+                <div class="form-inline rt icon-search">
+                    <input type="text" class="form-control search-border-reset" id="moveNo_search"
+                           placeholder="请输入移库单号" onkeyup="this.value=this.value.replace(/[=\\=&? ？ *%]/,'')">
+                    <img src="../../images/common/search_icon_grey.png">
+                </div>
+            </div>
+            <div class="bt-and-search">
+                <div class="btn-lists lf">
+<!--                    <button type="button" class="btn btn-default multiDelete">出库</button>-->
+<!--                    <button type="button" class="btn btn-default multiDelete1">合并出库</button>-->
+                    <!--<button type="button" class="btn btn-default" id="exportBtn">导出</button>
+                    <button type="button" class="btn btn-default" id="importBtn">导入</button>-->
+                    <button id="addEquipment" type="button" class="btn btn-default btn-add">新增 <i class="fa fa-plus"></i></button>
+                    <button id="addTaskBtn" type="button" class="btn btn-default btn-add">自动理库 <i class="fa fa-plus"></i></button>
+                </div>
+                <div class="hide-search rt" id="more-search-condition">
+                    <button id="resetSearchConditions" type="button" class="btn btn-default rt">重置</button>
+                    <button id="topSearchInfoList" type="button" class="btn btn-default rt ">搜索</button>
+                </div>
+            </div>
+
+            <div class="category-con">
+                <table class="table-hover table col-xs-12 col-sm-12 " id="edgeBoxList">
+                    <thead class="head-sort">
+                    <tr>
+                        <th style="width: 50px">
+                            <div class="checkbox-custom checkbox-default">
+                                <input type="checkbox" id="check-all">
+                                <label></label>
+                            </div>
+                        </th>
+                        <th data-sort="move_no" >移库单号<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="move_status" >状态<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="area_code" >库区<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="pallet_code" >托盘码<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="goods_code" >商品编码<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="goods_name" >商品名称<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="batch_no" >批次<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="amount" >数量<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="from_location_code" >源库位<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="to_location_code" >目标库位<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="gmt_create" >创建时间<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="user_defined1" >备注<i class="fa fa-sort-amount-asc"></i></th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody class="tbody-load">
+                    </tbody>
+                </table>
+                <div class="pagination-con" style="display: block">
+                    <p class="listNumber rt">
+                        <button class="btn btn-default btn-xs previousPage"><i class="fa fa-caret-left fa-lg"></i></button>
+                        <span class="currentPage">1</span>/<span class="pageNumber">1</span>
+                        <button class="btn btn-default btn-xs nextPage"><i class="fa fa-caret-right fa-lg"></i></button>
+                        <input class="currentPageBtn" value="1" type="text"  onkeyup="this.value=this.value.replace(/[^0-9]+/g, '');"/>
+                        <button type="button" id="pageJump"  data-loading-text="请求数据中..." class="btn btn-default pageJump" autocomplete="off">跳转</button>
+                        每页<span class="pageOneNumber">15</span>条，共<span class="dataNumber">30</span>条记录
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--新增修改移库-->
+    <div class="modal" id="formModel" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document" style="width: 700px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="moTitle">移库信息</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" id="formInfo">
+                        <div class="form-group">
+                            <input type="hidden" id="type">
+                            <input type="hidden" id="orderOutId">
+                        </div>
+                        <div class="form-group" id="moveNodiv">
+                            <label class="control-label col-sm-3">移库单号:</label>
+                            <div class="col-sm-8">
+                                <input id="moveNo" type="text" disabled class="form-control" placeholder="请输入移库单号"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3"><i class="fa fa-asterisk"></i>源库位:</label>
+                            <div class="col-sm-4">
+                                <select id="fromLocationCode" class="chosen-select" data-placeholder="请选择源库位" style="width: 375px;">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">托盘码:</label>
+                            <div class="col-sm-8">
+                                <input id="palletCode" type="text" disabled class="form-control" placeholder="请输入托盘码"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">商品名称:</label>
+                            <div class="col-sm-8">
+                                <input id="goodsName" type="text" disabled class="form-control" placeholder="请输入商品名称"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">商品编码:</label>
+                            <div class="col-sm-8">
+                                <input id="goodsCode" type="text" disabled class="form-control" placeholder="请输入商品编码"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">批次:</label>
+                            <div class="col-sm-8">
+                                <input id="batchNo" type="text" disabled class="form-control" placeholder="请输入批次"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3"><i class="fa fa-asterisk"></i>目标库位:</label>
+                            <div class="col-sm-4">
+                                <select id="toLocationCode" class="chosen-select" data-placeholder="请选择目标库位" style="width: 375px;">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">备注:</label>
+                            <div class="col-sm-8">
+                                <input id="remark" type="text"  class="form-control" placeholder="请输入备注"/>
+                            </div>
+                        </div>
+                    </form>
+                    <i class="fa fa-exclamation-circle fa-deviceInfoPop"></i>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="modalCancelButton" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" id="modalSaveButton" class="btn btn-modal" data-dismiss="modal">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--新增批量移库-->
+    <div class="modal" id="addDevicePop" data-backdrop="false" tabindex="-1" role="dialog" aria-labelledby="moTitle">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" >
+                <div class="modal-header">
+                    <button type="button" class="close" aria-label="Close" data-dismiss="modal"><span aria-hidden="true" id="pop-device-close">&times;</span></button>
+                    <h4 class="modal-title" id="moTitle_one">自动理库</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        <div class="form-group" id="add-chosen">
+                            <label class="col-sm-3 control-label"><i class="fa fa-asterisk"></i>商品编码</label>
+                            <div class="col-sm-9">
+                                <select id="goodsCodePop" class="chosen-select" data-placeholder="请选择商品" style="width: 252px;">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group" id="edit-input">
+                            <label class="col-sm-3 control-label"><i class="fa fa-asterisk"></i>商品编码</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="deviceCodeInputPop" disabled />
+                            </div>
+                        </div>
+                        <div class="form-group" id="batchNo_one">
+                            <label class="control-label col-sm-3">批次号:</label>
+                            <div class="col-sm-9">
+                                <select id="batchNoPop" class="chosen-select" data-placeholder="请选择批次号" style="width: 252px;">
+                                </select>
+                            </div>
+                        </div>
+                        <!--<div class="form-group" id="grossWeight1">
+                            <label class="control-label col-sm-3"><i class="fa fa-asterisk"></i>可用重量:</label>
+                            <div class="col-sm-9">
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <input id="useAbleAmount" type="text" disabled value="0" class="form-control" placeholder=""/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>-->
+                    </div>
+                    <i class="fa fa-exclamation-circle fa-deviceInfoPop"></i>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default clearDeviceBtn" id="closeDevice" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-modal saveDeviceBtn" id="saveDevice">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="../../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../js/bootstrap.min.js" ></script>
+    <script type="text/javascript" src="../../js/jquery.jedate.js"></script>
+    <script type="text/javascript" src="../../js/zdialog.js"></script>
+    <script type="text/javascript" src="../../js/jquery.ztree.all.min.js"></script>
+    <script type="text/javascript" src="../../js/chosen.jquery.js"></script>
+    <script type="text/javascript" src="../../js/common.js"></script>
+    <script type="text/javascript" src="js/wmsNHMoveStereoscopicList.js"></script>
+    <script type="text/javascript">
+
+        var config = {
+
+            '.chosen-select'           : {},
+
+            '.chosen-select-deselect'  : {allow_single_deselect:true},
+
+            '.chosen-select-no-single' : {disable_search_threshold:10},
+
+            '.chosen-select-no-results': {no_results_text:'Oops, nothing found!'},
+
+            '.chosen-select-width'     : {width:"95%"}
+
+        }
+
+        for (var selector in config) {
+
+            $(selector).chosen(config[selector]);
+
+        }
+
+    </script>
+</div>
+</body>
+</html>

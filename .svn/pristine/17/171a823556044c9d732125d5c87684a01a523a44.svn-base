@@ -1,0 +1,663 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.penghaisoft.wcs.taskmanagement.model.dao.WcsTaskMapper" >
+  <resultMap id="BaseResultMap" type="com.penghaisoft.wcs.taskmanagement.model.entity.WcsTask" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="task_id" property="taskId" jdbcType="BIGINT" />
+    <result column="rely_task_id" property="relyTaskId" jdbcType="BIGINT" />
+    <result column="task_type" property="taskType" jdbcType="CHAR" />
+    <result column="task_status" property="taskStatus" jdbcType="CHAR" />
+    <result column="pallet_code" property="palletCode" jdbcType="VARCHAR" />
+    <result column="from_address" property="fromAddress" jdbcType="INTEGER" />
+    <result column="to_address" property="toAddress" jdbcType="INTEGER" />
+    <result column="report_wms" property="reportWms" jdbcType="CHAR" />
+    <result column="priority" property="priority" jdbcType="INTEGER" />
+    <result column="error_msg" property="errorMsg" jdbcType="VARCHAR" />
+    <result column="user_defined1" property="userDefined1" jdbcType="VARCHAR" />
+    <result column="user_defined2" property="userDefined2" jdbcType="VARCHAR" />
+    <result column="user_defined3" property="userDefined3" jdbcType="VARCHAR" />
+    <result column="user_defined4" property="userDefined4" jdbcType="VARCHAR" />
+    <result column="user_defined5" property="userDefined5" jdbcType="VARCHAR" />
+    <result column="gmt_start" property="gmtStart" jdbcType="TIMESTAMP" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="last_modified_by" property="lastModifiedBy" jdbcType="VARCHAR" />
+    <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+    <result column="gmt_end" property="gmtEnd" jdbcType="TIMESTAMP" />
+    <result column="end_by" property="endBy" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, task_id, rely_task_id, task_type, task_status, pallet_code, from_address, to_address, 
+    report_wms, priority, error_msg, user_defined1, user_defined2, user_defined3, user_defined4, 
+    user_defined5, gmt_start, create_by, gmt_create, last_modified_by, gmt_modified, 
+    gmt_end, end_by
+  </sql>
+
+  <!-- mysql 分页 -->
+  <sql id="pagination_tail">
+	  limit #{page.pageOffset} , #{page.rows}
+  </sql>
+  <!-- mysql 查询总数 -->
+  <sql id="count_Tail">
+		select count(1) from
+  </sql>
+
+  <sql id="where_fragement">
+    where 1=1
+    <if test="entity!=null">
+      <if test="entity.id != null  and entity.id !=''">
+        <![CDATA[ and wcs_task_.id  LIKE CONCAT('%',#{entity.id},'%')]]>
+      </if>
+      <if test="entity.taskId != null  and entity.taskId !=''">
+        <![CDATA[ and wcs_task_.task_id  LIKE CONCAT('%',#{entity.taskId},'%')]]>
+      </if>
+      <if test="entity.relyTaskId != null  and entity.relyTaskId !=''">
+        <![CDATA[ and wcs_task_.rely_task_id  LIKE CONCAT('%',#{entity.relyTaskId},'%')]]>
+      </if>
+      <if test="entity.taskType != null  and entity.taskType !=''">
+        <![CDATA[ and wcs_task_.task_type  LIKE CONCAT('%',#{entity.taskType},'%')]]>
+      </if>
+      <if test="entity.taskStatus != null  and entity.taskStatus !=''">
+        <![CDATA[ and wcs_task_.task_status  LIKE CONCAT('%',#{entity.taskStatus},'%')]]>
+      </if>
+      <if test="entity.palletCode != null  and entity.palletCode !=''">
+        <![CDATA[ and wcs_task_.pallet_code  LIKE CONCAT('%',#{entity.palletCode},'%')]]>
+      </if>
+      <if test="entity.fromAddress != null  and entity.fromAddress !=''">
+        <![CDATA[ and wcs_task_.from_address  LIKE CONCAT('%',#{entity.fromAddress},'%')]]>
+      </if>
+      <if test="entity.toAddress != null  and entity.toAddress !=''">
+        <![CDATA[ and wcs_task_.to_address  LIKE CONCAT('%',#{entity.toAddress},'%')]]>
+      </if>
+      <if test="entity.reportWms != null  and entity.reportWms !=''">
+        <![CDATA[ and wcs_task_.report_wms  LIKE CONCAT('%',#{entity.reportWms},'%')]]>
+      </if>
+      <if test="entity.priority != null  and entity.priority !=''">
+        <![CDATA[ and wcs_task_.priority  LIKE CONCAT('%',#{entity.priority},'%')]]>
+      </if>
+      <if test="entity.errorMsg != null  and entity.errorMsg !=''">
+        <![CDATA[ and wcs_task_.error_msg  LIKE CONCAT('%',#{entity.errorMsg},'%')]]>
+      </if>
+      <if test="entity.userDefined1 != null  and entity.userDefined1 !=''">
+        <![CDATA[ and wcs_task_.user_defined1  LIKE CONCAT('%',#{entity.userDefined1},'%')]]>
+      </if>
+      <if test="entity.userDefined2 != null  and entity.userDefined2 !=''">
+        <![CDATA[ and wcs_task_.user_defined2  LIKE CONCAT('%',#{entity.userDefined2},'%')]]>
+      </if>
+      <if test="entity.userDefined3 != null  and entity.userDefined3 !=''">
+        <![CDATA[ and wcs_task_.user_defined3  LIKE CONCAT('%',#{entity.userDefined3},'%')]]>
+      </if>
+      <if test="entity.userDefined4 != null  and entity.userDefined4 !=''">
+        <![CDATA[ and wcs_task_.user_defined4  LIKE CONCAT('%',#{entity.userDefined4},'%')]]>
+      </if>
+      <if test="entity.userDefined5 != null  and entity.userDefined5 !=''">
+        <![CDATA[ and wcs_task_.user_defined5  LIKE CONCAT('%',#{entity.userDefined5},'%')]]>
+      </if>
+      <if test="entity.gmtStart != null  and entity.gmtStart !=''">
+        <![CDATA[ and wcs_task_.gmt_start  LIKE CONCAT('%',#{entity.gmtStart},'%')]]>
+      </if>
+      <if test="entity.createBy != null  and entity.createBy !=''">
+        <![CDATA[ and wcs_task_.create_by  LIKE CONCAT('%',#{entity.createBy},'%')]]>
+      </if>
+      <if test="entity.gmtCreate != null  and entity.gmtCreate !=''">
+        <![CDATA[ and wcs_task_.gmt_create  LIKE CONCAT('%',#{entity.gmtCreate},'%')]]>
+      </if>
+      <if test="entity.lastModifiedBy != null  and entity.lastModifiedBy !=''">
+        <![CDATA[ and wcs_task_.last_modified_by  LIKE CONCAT('%',#{entity.lastModifiedBy},'%')]]>
+      </if>
+      <if test="entity.gmtModified != null  and entity.gmtModified !=''">
+        <![CDATA[ and wcs_task_.gmt_modified  LIKE CONCAT('%',#{entity.gmtModified},'%')]]>
+      </if>
+      <if test="entity.gmtEnd != null  and entity.gmtEnd !=''">
+        <![CDATA[ and wcs_task_.gmt_end  LIKE CONCAT('%',#{entity.gmtEnd},'%')]]>
+      </if>
+      <if test="entity.endBy != null  and entity.endBy !=''">
+        <![CDATA[ and wcs_task_.end_by  LIKE CONCAT('%',#{entity.endBy},'%')]]>
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from wcs_task
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <!-- 分页查询 -->
+  <select id="queryList" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from wcs_task wcs_task_
+    <include refid="where_fragement" />
+    <if test="entity.orderBy != null">
+      order by ${entity.orderBy}
+    </if>
+    <if test="page!=null">
+      <include refid="pagination_tail" />
+    </if>
+  </select>
+
+  <select id="queryCount" resultType="long">
+    <include refid="count_Tail" />
+    wcs_task wcs_task_
+    <include refid="where_fragement" />
+  </select>
+
+  <select id="selectByTaskId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from wcs_task
+    where task_id = #{taskId,jdbcType=BIGINT}
+  </select>
+  <select id="selectByTaskIds" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from wcs_task
+    where task_id in
+    <foreach collection="taskIds" index="index" item="taskId" open="(" separator="," close=")">
+      #{taskId,jdbcType=BIGINT}
+    </foreach>
+  </select>
+  <select id="queryByGmtEndMax" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from wcs_task
+    <![CDATA[
+    where gmt_end < #{gmtEndMax,jdbcType=TIMESTAMP}
+    ]]>
+  </select>
+  <select id="selectByRelyTaskId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from wcs_task
+    where rely_task_id = #{taskId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+  delete from wcs_task
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.penghaisoft.wcs.taskmanagement.model.entity.WcsTask" >
+    insert into wcs_task (id, task_id, rely_task_id, 
+      task_type, task_status, pallet_code, 
+      from_address, to_address, report_wms, 
+      priority, error_msg, user_defined1, 
+      user_defined2, user_defined3, user_defined4, 
+      user_defined5, gmt_start, create_by, 
+      gmt_create, last_modified_by, gmt_modified, 
+      gmt_end, end_by)
+    values (#{id,jdbcType=INTEGER}, #{taskId,jdbcType=BIGINT}, #{relyTaskId,jdbcType=BIGINT},
+      #{taskType,jdbcType=CHAR}, #{taskStatus,jdbcType=CHAR}, #{palletCode,jdbcType=VARCHAR}, 
+      #{fromAddress,jdbcType=INTEGER}, #{toAddress,jdbcType=INTEGER}, #{reportWms,jdbcType=CHAR}, 
+      #{priority,jdbcType=INTEGER}, #{errorMsg,jdbcType=VARCHAR}, #{userDefined1,jdbcType=VARCHAR}, 
+      #{userDefined2,jdbcType=VARCHAR}, #{userDefined3,jdbcType=VARCHAR}, #{userDefined4,jdbcType=VARCHAR}, 
+      #{userDefined5,jdbcType=VARCHAR}, #{gmtStart,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{lastModifiedBy,jdbcType=VARCHAR}, #{gmtModified,jdbcType=TIMESTAMP}, 
+      #{gmtEnd,jdbcType=TIMESTAMP}, #{endBy,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.penghaisoft.wcs.taskmanagement.model.entity.WcsTask" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
+    insert into wcs_task
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="taskId != null" >
+        task_id,
+      </if>
+      <if test="relyTaskId != null" >
+        rely_task_id,
+      </if>
+      <if test="taskType != null" >
+        task_type,
+      </if>
+      <if test="taskStatus != null" >
+        task_status,
+      </if>
+      <if test="palletCode != null" >
+        pallet_code,
+      </if>
+      <if test="fromAddress != null" >
+        from_address,
+      </if>
+      <if test="toAddress != null" >
+        to_address,
+      </if>
+      <if test="reportWms != null" >
+        report_wms,
+      </if>
+      <if test="priority != null" >
+        priority,
+      </if>
+      <if test="errorMsg != null" >
+        error_msg,
+      </if>
+      <if test="userDefined1 != null" >
+        user_defined1,
+      </if>
+      <if test="userDefined2 != null" >
+        user_defined2,
+      </if>
+      <if test="userDefined3 != null" >
+        user_defined3,
+      </if>
+      <if test="userDefined4 != null" >
+        user_defined4,
+      </if>
+      <if test="userDefined5 != null" >
+        user_defined5,
+      </if>
+      <if test="gmtStart != null" >
+        gmt_start,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create,
+      </if>
+      <if test="lastModifiedBy != null" >
+        last_modified_by,
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified,
+      </if>
+      <if test="gmtEnd != null" >
+        gmt_end,
+      </if>
+      <if test="endBy != null" >
+        end_by,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="taskId != null" >
+        #{taskId,jdbcType=BIGINT},
+      </if>
+      <if test="relyTaskId != null" >
+        #{relyTaskId,jdbcType=BIGINT},
+      </if>
+      <if test="taskType != null" >
+        #{taskType,jdbcType=CHAR},
+      </if>
+      <if test="taskStatus != null" >
+        #{taskStatus,jdbcType=CHAR},
+      </if>
+      <if test="palletCode != null" >
+        #{palletCode,jdbcType=VARCHAR},
+      </if>
+      <if test="fromAddress != null" >
+        #{fromAddress,jdbcType=INTEGER},
+      </if>
+      <if test="toAddress != null" >
+        #{toAddress,jdbcType=INTEGER},
+      </if>
+      <if test="reportWms != null" >
+        #{reportWms,jdbcType=CHAR},
+      </if>
+      <if test="priority != null" >
+        #{priority,jdbcType=INTEGER},
+      </if>
+      <if test="errorMsg != null" >
+        #{errorMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined1 != null" >
+        #{userDefined1,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined2 != null" >
+        #{userDefined2,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined3 != null" >
+        #{userDefined3,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined4 != null" >
+        #{userDefined4,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined5 != null" >
+        #{userDefined5,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtStart != null" >
+        #{gmtStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifiedBy != null" >
+        #{lastModifiedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtModified != null" >
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtEnd != null" >
+        #{gmtEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endBy != null" >
+        #{endBy,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.penghaisoft.wcs.taskmanagement.model.entity.WcsTask" >
+    update wcs_task
+    <set >
+      <if test="taskId != null" >
+        task_id = #{taskId,jdbcType=BIGINT},
+      </if>
+      <if test="relyTaskId != null" >
+        rely_task_id = #{relyTaskId,jdbcType=BIGINT},
+      </if>
+      <if test="taskType != null" >
+        task_type = #{taskType,jdbcType=CHAR},
+      </if>
+      <if test="taskStatus != null" >
+        task_status = #{taskStatus,jdbcType=CHAR},
+      </if>
+      <if test="palletCode != null" >
+        pallet_code = #{palletCode,jdbcType=VARCHAR},
+      </if>
+      <if test="fromAddress != null" >
+        from_address = #{fromAddress,jdbcType=INTEGER},
+      </if>
+      <if test="toAddress != null" >
+        to_address = #{toAddress,jdbcType=INTEGER},
+      </if>
+      <if test="reportWms != null" >
+        report_wms = #{reportWms,jdbcType=CHAR},
+      </if>
+      <if test="priority != null" >
+        priority = #{priority,jdbcType=INTEGER},
+      </if>
+      <if test="errorMsg != null" >
+        error_msg = #{errorMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined1 != null" >
+        user_defined1 = #{userDefined1,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined2 != null" >
+        user_defined2 = #{userDefined2,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined3 != null" >
+        user_defined3 = #{userDefined3,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined4 != null" >
+        user_defined4 = #{userDefined4,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined5 != null" >
+        user_defined5 = #{userDefined5,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtStart != null" >
+        gmt_start = #{gmtStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifiedBy != null" >
+        last_modified_by = #{lastModifiedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtEnd != null" >
+        gmt_end = #{gmtEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endBy != null" >
+        end_by = #{endBy,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.penghaisoft.wcs.taskmanagement.model.entity.WcsTask" >
+    update wcs_task
+    set task_id = #{taskId,jdbcType=BIGINT},
+      rely_task_id = #{relyTaskId,jdbcType=BIGINT},
+      task_type = #{taskType,jdbcType=CHAR},
+      task_status = #{taskStatus,jdbcType=CHAR},
+      pallet_code = #{palletCode,jdbcType=VARCHAR},
+      from_address = #{fromAddress,jdbcType=INTEGER},
+      to_address = #{toAddress,jdbcType=INTEGER},
+      report_wms = #{reportWms,jdbcType=CHAR},
+      priority = #{priority,jdbcType=INTEGER},
+      error_msg = #{errorMsg,jdbcType=VARCHAR},
+      user_defined1 = #{userDefined1,jdbcType=VARCHAR},
+      user_defined2 = #{userDefined2,jdbcType=VARCHAR},
+      user_defined3 = #{userDefined3,jdbcType=VARCHAR},
+      user_defined4 = #{userDefined4,jdbcType=VARCHAR},
+      user_defined5 = #{userDefined5,jdbcType=VARCHAR},
+      gmt_start = #{gmtStart,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      last_modified_by = #{lastModifiedBy,jdbcType=VARCHAR},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      gmt_end = #{gmtEnd,jdbcType=TIMESTAMP},
+      end_by = #{endBy,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByTaskIdSelective"  parameterType="com.penghaisoft.wcs.taskmanagement.model.entity.WcsTask">
+    update wcs_task
+    <set >
+      <if test="relyTaskId != null" >
+        rely_task_id = #{relyTaskId,jdbcType=BIGINT},
+      </if>
+      <if test="taskType != null" >
+        task_type = #{taskType,jdbcType=CHAR},
+      </if>
+      <if test="taskStatus != null" >
+        task_status = #{taskStatus,jdbcType=CHAR},
+      </if>
+      <if test="palletCode != null" >
+        pallet_code = #{palletCode,jdbcType=VARCHAR},
+      </if>
+      <if test="fromAddress != null" >
+        from_address = #{fromAddress,jdbcType=INTEGER},
+      </if>
+      <if test="toAddress != null" >
+        to_address = #{toAddress,jdbcType=INTEGER},
+      </if>
+      <if test="reportWms != null" >
+        report_wms = #{reportWms,jdbcType=CHAR},
+      </if>
+      <if test="priority != null" >
+        priority = #{priority,jdbcType=INTEGER},
+      </if>
+      <if test="errorMsg != null" >
+        error_msg = #{errorMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined1 != null" >
+        user_defined1 = #{userDefined1,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined2 != null" >
+        user_defined2 = #{userDefined2,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined3 != null" >
+        user_defined3 = #{userDefined3,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined4 != null" >
+        user_defined4 = #{userDefined4,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined5 != null" >
+        user_defined5 = #{userDefined5,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtStart != null" >
+        gmt_start = #{gmtStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifiedBy != null" >
+        last_modified_by = #{lastModifiedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtEnd != null" >
+        gmt_end = #{gmtEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endBy != null" >
+        end_by = #{endBy,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where  task_id = #{taskId,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectCompleteTask" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from wcs_task
+    where task_status in('3', '4', '5') and report_wms in('0', '3')
+  </select>
+  <select id="selectByFromAddressAndStatus" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from wcs_task
+    where from_address = #{fromAddress,jdbcType=INTEGER}
+    and task_status = #{taskStatus,jdbcType=CHAR}
+  </select>
+  <select id="selectByTaskNo" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from wcs_task
+    where task_no = #{taskNo,jdbcType=INTEGER}
+  </select>
+  <select id="selectOneInTaskByByPalletAndStatus" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from wcs_task
+    WHERE pallet_code=#{palletCode,jdbcType=VARCHAR}
+    AND task_status=#{status,jdbcType=CHAR}
+    AND task_type=#{taskType,jdbcType=CHAR}
+  </select>
+  <select id="selectByCond" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from wcs_task
+    WHERE 1=1
+    <if test="entity.taskType!= null" >
+      and task_type = #{entity.taskType,jdbcType=CHAR}
+    </if>
+    <if test="entity.taskStatus!= null" >
+      and task_status = #{entity.taskStatus,jdbcType=CHAR}
+    </if>
+  </select>
+  <select id="selectWithFourwaycarTaskNoByStatusOrderBy" resultMap="BaseResultMap">
+    SELECT
+      a.id,
+      a.task_id,
+      a.task_type,
+      a.task_status,
+      a.pallet_code,
+      a.from_address,
+      a.to_address,
+      b.task_no as user_defined1,
+      b.fourwaycar_task_id as user_defined2
+    FROM
+      wcs_task a,
+      wcs_fourwaycar_task b
+    WHERE
+        a.task_id = b.task_id
+    and
+        a.task_type = #{entity.taskType,jdbcType=CHAR}
+    and
+        a.task_status = #{entity.taskStatus,jdbcType=CHAR}
+    ORDER BY
+        a.task_id
+  </select>
+  <select id="selectByPalletAndTaskIdPrefix" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from wcs_task
+    where pallet_code = #{palletCode,jdbcType=VARCHAR}
+    <![CDATA[ and task_id  LIKE CONCAT(#{taskId},'%')]]>
+  </select>
+
+  <update id="updateByPrimaryKeyList" parameterType="com.penghaisoft.wcs.taskmanagement.model.entity.WcsTask" >
+    update wcs_task
+    <set >
+      <if test="taskId != null" >
+        task_id = #{taskId,jdbcType=BIGINT},
+      </if>
+      <if test="relyTaskId != null" >
+        rely_task_id = #{relyTaskId,jdbcType=BIGINT},
+      </if>
+      <if test="taskType != null" >
+        task_type = #{taskType,jdbcType=CHAR},
+      </if>
+      <if test="taskStatus != null" >
+        task_status = #{taskStatus,jdbcType=CHAR},
+      </if>
+      <if test="palletCode != null" >
+        pallet_code = #{palletCode,jdbcType=VARCHAR},
+      </if>
+      <if test="fromAddress != null" >
+        from_address = #{fromAddress,jdbcType=INTEGER},
+      </if>
+      <if test="toAddress != null" >
+        to_address = #{toAddress,jdbcType=INTEGER},
+      </if>
+      <if test="reportWms != null" >
+        report_wms = #{reportWms,jdbcType=CHAR},
+      </if>
+      <if test="priority != null" >
+        priority = #{priority,jdbcType=INTEGER},
+      </if>
+      <if test="errorMsg != null" >
+        error_msg = #{errorMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined1 != null" >
+        user_defined1 = #{userDefined1,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined2 != null" >
+        user_defined2 = #{userDefined2,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined3 != null" >
+        user_defined3 = #{userDefined3,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined4 != null" >
+        user_defined4 = #{userDefined4,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined5 != null" >
+        user_defined5 = #{userDefined5,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtStart != null" >
+        gmt_start = #{gmtStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifiedBy != null" >
+        last_modified_by = #{lastModifiedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtEnd != null" >
+        gmt_end = #{gmtEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endBy != null" >
+        end_by = #{endBy,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id in
+    <foreach collection="idList" index="index" item="id" open="(" separator="," close=")">
+      #{id,jdbcType=INTEGER}
+    </foreach>
+  </update>
+
+  <update id="deleteTaskByIdList" parameterType="INTEGER">
+    DELETE FROM wcs_task
+    where id in
+    <foreach collection="taskIdList" index="index" item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </update>
+</mapper>

@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.penghaisoft.wcs.log.model.dao.WcsCallFourwaycarLogMapper" >
+  <resultMap id="BaseResultMap" type="com.penghaisoft.wcs.log.model.entity.WcsCallFourwaycarLog" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="interface_name" property="interfaceName" jdbcType="VARCHAR" />
+    <result column="group_id" property="groupId" jdbcType="VARCHAR" />
+    <result column="req_param" property="reqParam" jdbcType="VARCHAR" />
+    <result column="req_flag" property="reqFlag" jdbcType="CHAR" />
+    <result column="resp_data" property="respData" jdbcType="VARCHAR" />
+    <result column="user_defined1" property="userDefined1" jdbcType="VARCHAR" />
+    <result column="user_defined2" property="userDefined2" jdbcType="VARCHAR" />
+    <result column="user_defined3" property="userDefined3" jdbcType="VARCHAR" />
+    <result column="user_defined4" property="userDefined4" jdbcType="VARCHAR" />
+    <result column="user_defined5" property="userDefined5" jdbcType="VARCHAR" />
+    <result column="send_time" property="sendTime" jdbcType="TIMESTAMP" />
+    <result column="resp_time" property="respTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <!-- mysql 分页 -->
+  <sql id="pagination_tail">
+	  limit #{page.pageOffset} , #{page.rows}
+  </sql>
+  <!-- mysql 查询总数 -->
+  <sql id="count_Tail">
+		select count(1) from
+  </sql>
+
+  <sql id="Base_Column_List" >
+    id, interface_name, group_id, req_param, req_flag, resp_data, user_defined1, user_defined2, 
+    user_defined3, user_defined4, user_defined5, send_time, resp_time
+  </sql>
+
+  <sql id="where_fragement">
+    where 1=1
+    <if test="entity!=null">
+      <if test="entity.id != null  and entity.id !=''">
+        <![CDATA[ and wcs_call_fourwaycar_log_.id  LIKE CONCAT('%',#{entity.id},'%')]]>
+      </if>
+      <if test="entity.interfaceName != null  and entity.interfaceName !=''">
+        <![CDATA[ and wcs_call_fourwaycar_log_.interface_name  LIKE CONCAT('%',#{entity.interfaceName},'%')]]>
+      </if>
+      <if test="entity.groupId != null  and entity.groupId !=''">
+        <![CDATA[ and wcs_call_fourwaycar_log_.group_id  LIKE CONCAT('%',#{entity.groupId},'%')]]>
+      </if>
+      <if test="entity.reqParam != null  and entity.reqParam !=''">
+        <![CDATA[ and wcs_call_fourwaycar_log_.req_param  LIKE CONCAT('%',#{entity.reqParam},'%')]]>
+      </if>
+      <if test="entity.reqFlag != null  and entity.reqFlag !=''">
+        <![CDATA[ and wcs_call_fourwaycar_log_.req_flag  LIKE CONCAT('%',#{entity.reqFlag},'%')]]>
+      </if>
+      <if test="entity.respData != null  and entity.respData !=''">
+        <![CDATA[ and wcs_call_fourwaycar_log_.resp_data  LIKE CONCAT('%',#{entity.respData},'%')]]>
+      </if>
+      <if test="entity.userDefined1 != null  and entity.userDefined1 !=''">
+        <![CDATA[ and wcs_call_fourwaycar_log_.user_defined1  LIKE CONCAT('%',#{entity.userDefined1},'%')]]>
+      </if>
+      <if test="entity.userDefined2 != null  and entity.userDefined2 !=''">
+        <![CDATA[ and wcs_call_fourwaycar_log_.user_defined2  LIKE CONCAT('%',#{entity.userDefined2},'%')]]>
+      </if>
+      <if test="entity.userDefined3 != null  and entity.userDefined3 !=''">
+        <![CDATA[ and wcs_call_fourwaycar_log_.user_defined3  LIKE CONCAT('%',#{entity.userDefined3},'%')]]>
+      </if>
+      <if test="entity.userDefined4 != null  and entity.userDefined4 !=''">
+        <![CDATA[ and wcs_call_fourwaycar_log_.user_defined4  LIKE CONCAT('%',#{entity.userDefined4},'%')]]>
+      </if>
+      <if test="entity.userDefined5 != null  and entity.userDefined5 !=''">
+        <![CDATA[ and wcs_call_fourwaycar_log_.user_defined5  LIKE CONCAT('%',#{entity.userDefined5},'%')]]>
+      </if>
+      <if test="entity.sendTime != null  and entity.sendTime !=''">
+        <![CDATA[ and wcs_call_fourwaycar_log_.send_time  LIKE CONCAT('%',#{entity.sendTime},'%')]]>
+      </if>
+      <if test="entity.respTime != null  and entity.respTime !=''">
+        <![CDATA[ and wcs_call_fourwaycar_log_.resp_time  LIKE CONCAT('%',#{entity.respTime},'%')]]>
+      </if>
+    </if>
+  </sql>
+
+
+  <!-- 分页查询 -->
+  <select id="queryList" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    FROM
+    wcs_call_fourwaycar_log wcs_call_fourwaycar_log_
+    <include refid="where_fragement" />
+    <if test="entity.orderBy != null">
+      order by ${entity.orderBy}
+    </if>
+    <if test="page!=null">
+      <include refid="pagination_tail" />
+    </if>
+  </select>
+
+  <select id="queryCount" resultType="long">
+    <include refid="count_Tail" />
+    wcs_call_fourwaycar_log wcs_call_fourwaycar_log_
+    <include refid="where_fragement" />
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from wcs_call_fourwaycar_log
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from wcs_call_fourwaycar_log
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.penghaisoft.wcs.log.model.entity.WcsCallFourwaycarLog" >
+    insert into wcs_call_fourwaycar_log (id, interface_name, group_id, 
+      req_param, req_flag, resp_data, 
+      user_defined1, user_defined2, user_defined3, 
+      user_defined4, user_defined5, send_time, 
+      resp_time)
+    values (#{id,jdbcType=INTEGER}, #{interfaceName,jdbcType=VARCHAR}, #{groupId,jdbcType=VARCHAR},
+      #{reqParam,jdbcType=VARCHAR}, #{reqFlag,jdbcType=CHAR}, #{respData,jdbcType=VARCHAR}, 
+      #{userDefined1,jdbcType=VARCHAR}, #{userDefined2,jdbcType=VARCHAR}, #{userDefined3,jdbcType=VARCHAR}, 
+      #{userDefined4,jdbcType=VARCHAR}, #{userDefined5,jdbcType=VARCHAR}, #{sendTime,jdbcType=TIMESTAMP}, 
+      #{respTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.penghaisoft.wcs.log.model.entity.WcsCallFourwaycarLog" >
+    insert into wcs_call_fourwaycar_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="interfaceName != null" >
+        interface_name,
+      </if>
+      <if test="groupId != null" >
+        group_id,
+      </if>
+      <if test="reqParam != null" >
+        req_param,
+      </if>
+      <if test="reqFlag != null" >
+        req_flag,
+      </if>
+      <if test="respData != null" >
+        resp_data,
+      </if>
+      <if test="userDefined1 != null" >
+        user_defined1,
+      </if>
+      <if test="userDefined2 != null" >
+        user_defined2,
+      </if>
+      <if test="userDefined3 != null" >
+        user_defined3,
+      </if>
+      <if test="userDefined4 != null" >
+        user_defined4,
+      </if>
+      <if test="userDefined5 != null" >
+        user_defined5,
+      </if>
+      <if test="sendTime != null" >
+        send_time,
+      </if>
+      <if test="respTime != null" >
+        resp_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="interfaceName != null" >
+        #{interfaceName,jdbcType=VARCHAR},
+      </if>
+      <if test="groupId != null" >
+        #{groupId,jdbcType=VARCHAR},
+      </if>
+      <if test="reqParam != null" >
+        #{reqParam,jdbcType=VARCHAR},
+      </if>
+      <if test="reqFlag != null" >
+        #{reqFlag,jdbcType=CHAR},
+      </if>
+      <if test="respData != null" >
+        #{respData,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined1 != null" >
+        #{userDefined1,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined2 != null" >
+        #{userDefined2,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined3 != null" >
+        #{userDefined3,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined4 != null" >
+        #{userDefined4,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined5 != null" >
+        #{userDefined5,jdbcType=VARCHAR},
+      </if>
+      <if test="sendTime != null" >
+        #{sendTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="respTime != null" >
+        #{respTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.penghaisoft.wcs.log.model.entity.WcsCallFourwaycarLog" >
+    update wcs_call_fourwaycar_log
+    <set >
+      <if test="interfaceName != null" >
+        interface_name = #{interfaceName,jdbcType=VARCHAR},
+      </if>
+      <if test="groupId != null" >
+        group_id = #{groupId,jdbcType=VARCHAR},
+      </if>
+      <if test="reqParam != null" >
+        req_param = #{reqParam,jdbcType=VARCHAR},
+      </if>
+      <if test="reqFlag != null" >
+        req_flag = #{reqFlag,jdbcType=CHAR},
+      </if>
+      <if test="respData != null" >
+        resp_data = #{respData,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined1 != null" >
+        user_defined1 = #{userDefined1,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined2 != null" >
+        user_defined2 = #{userDefined2,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined3 != null" >
+        user_defined3 = #{userDefined3,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined4 != null" >
+        user_defined4 = #{userDefined4,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined5 != null" >
+        user_defined5 = #{userDefined5,jdbcType=VARCHAR},
+      </if>
+      <if test="sendTime != null" >
+        send_time = #{sendTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="respTime != null" >
+        resp_time = #{respTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.penghaisoft.wcs.log.model.entity.WcsCallFourwaycarLog" >
+    update wcs_call_fourwaycar_log
+    set interface_name = #{interfaceName,jdbcType=VARCHAR},
+      group_id = #{groupId,jdbcType=VARCHAR},
+      req_param = #{reqParam,jdbcType=VARCHAR},
+      req_flag = #{reqFlag,jdbcType=CHAR},
+      resp_data = #{respData,jdbcType=VARCHAR},
+      user_defined1 = #{userDefined1,jdbcType=VARCHAR},
+      user_defined2 = #{userDefined2,jdbcType=VARCHAR},
+      user_defined3 = #{userDefined3,jdbcType=VARCHAR},
+      user_defined4 = #{userDefined4,jdbcType=VARCHAR},
+      user_defined5 = #{userDefined5,jdbcType=VARCHAR},
+      send_time = #{sendTime,jdbcType=TIMESTAMP},
+      resp_time = #{respTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

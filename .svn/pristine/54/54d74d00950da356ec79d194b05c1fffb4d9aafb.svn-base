@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible">
+    	<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<title>报表管理页面</title>
+		<!--[if lt IE]>
+			<script src="../../../js/html5shiv.min.js"></script>
+		<![endif]-->
+		<link rel="stylesheet" href="../../css/bootstrap.min.css" />
+		<link rel="stylesheet" href="../../css/pace-theme-barber-shop.css" />
+		<link rel="stylesheet" href="../../css/gTableCSS.min.css" />
+		<link rel="stylesheet" type="text/css" href="../../css/jquery.dataTables.min.css">
+		<style>
+			html,body{
+				height: 100%;
+				width: 100%;
+			}
+			h2{
+				text-align: center;
+				font-size: 34px;
+				font-weight: normal;
+			}
+			/*table{  
+			    font-family: verdana,arial,sans-serif;  
+			    color:#333333;  
+			    border-width: 1px;  
+			    border-color: #666666;  
+			    border-collapse: collapse; 
+		    	-moz-box-shadow:0px 0px 5px #333333; 
+				-webkit-box-shadow:0px 0px 5px #333333; 
+				box-shadow:0px 0px 5px #333333;
+				border-radius: 5px;
+				border: 1px solid #dddddd;
+			}  
+			
+			th{ 
+				cursor: pointer; 
+				text-align: center; 
+			    border-width: 1px;  
+			    padding: 8px;  
+			    border-style: solid;  
+			    border-color: #666666;  
+			    color: white;
+				background: rgba(51,122,183,0.9);
+				border: 1px solid #dddddd;
+				height: 50px;
+			} 
+			td{  
+				cursor: pointer; 
+			    padding: 8px;  
+				border: 1px solid #dddddd;
+				overflow: hidden;
+				Word-break: break-all;
+				text-align: center;
+			}*/
+		
+			table button{
+				margin: 5px;
+			}
+			.mainContainer{
+				/*width: 100%;*/
+				padding: 20px;
+				/*height: 100%;*/
+			}
+			/*tbody tr:hover td{
+				background: rgba(0,204,255,0.1);
+			}
+			tbody tr:nth-child(2n){
+				background-color: #F9F9F9;
+			}
+			th{
+				text-align: center;
+			}*/
+			th{
+				text-align: center;
+			}
+			.parentWindows{
+				position: fixed;
+				z-index: 100;
+				border-radius: 5px;
+				-moz-box-shadow:0px 0px 5px #333333;
+				-webkit-box-shadow:0px 0px 5px #333333; 
+				box-shadow:0px 0px 5px #333333;
+				background-color: #DEDEDE;
+				display: none;
+				margin: auto;
+				top: 0;
+				bottom: 0;
+				left: 0;
+				right: 0;
+				width: 360px;
+				height: 300px;
+			}
+			
+			.closeWindows{
+				cursor: pointer;
+				position: absolute;
+				top: 10px;
+				right: 10px;
+				color: red;
+			}
+			.title{
+				margin-top: 40px;
+				margin-bottom:40px ;
+			}
+			.parentWindows input{
+				width: 170px;
+				display: inline-block;
+			}
+			.inputContainer{
+				text-align: center;
+				margin: 30px 0px;
+			}
+			.inputContainer .requireSpan{
+				width: 5px;
+				color: red;
+				padding-left: 5px;
+				vertical-align: bottom;
+			}
+			.inputContainer span{
+				font-size: 14px;
+				display: inline-block;
+				width: 110px;
+				text-align: left;
+				margin-right: 10px;
+			}
+			.inputContainer textarea{
+				width: 170px;
+			}
+			.submitButton{
+				display: block;
+				position: absolute;
+				bottom: 0;
+				left: 0;
+				right: 0;
+				text-align: center;
+				margin-bottom: 20px;
+			}
+			.reportsList{
+				text-align: center;
+			}
+			.addDiv{
+				/*position: absolute;
+				left: 0;
+				right: 0;
+				margin: auto;*/
+				text-align: left;
+			}
+			.reportsTableContainer{
+				/*display: inline-block;*/
+			}
+			.reportsTableContainer table{
+			}
+			.listinfo{
+				margin-top: 40px;
+			}
+			.listinfo input{
+				width: 40px;
+				text-align: center;
+			}
+			#addNewReport{
+				height: 400px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="mainContainer">
+			<div class="reportsList">
+				<div id="" style="overflow: hidden;height: 60px;">
+					<div class="addDiv">
+						<button class="addNewReport btn btn-primary" style="margin: 15px 0px;">添加报表</button>
+					</div>
+				</div>
+				<div class="reportsTableContainer">
+					<table class="table table-striped jambo_table bulk_action">
+						<thead>
+							<tr>
+								<th>报表名称</th>
+								<!--<th>报表URL</th>-->
+								<th>报表描述</th>
+								<!--<th>操作</th>-->
+							</tr>
+						</thead>
+						<tbody>
+							
+						</tbody>
+					</table>
+					<div class="listinfo" style="">
+						<p class="listNumber">共 <span class="dataNumber"></span> 条数据，每页显示 
+							20 条数据，当前为第
+							<button class="previousPage"><</button>
+								<input class="currentPage" value="1" type="text" onkeyup="this.value=this.value.replace(/[^0-9]+/g, '');"/>
+								<button class="nextPage">></button> 页,共 
+								<span class="pageNumber"></span> 页数据 
+								<button type="button" id="refrech" data-loading-text="请求数据中..." class="btn btn-primary btn-sm" autocomplete="off">跳转</button>
+						</p>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+		
+		<div style="display: none; z-index: 99; position: fixed; background: rgba(51,51,51,0.5); top: 0;left: 0; right: 0;bottom: 0; width: 100%;height: 100%;" class="mask"></div>
+		<!--添加报表-->
+		<div id="addNewReport" class="parentWindows">
+			<span class="closeWindows glyphicon glyphicon-remove"></span>
+			<div class="title"><h2>添加报表</h2></div>
+			<form action="" id="fileForm">
+				<div class="inputContainer">
+					<span>报表名称：</span><input name="title" class="reportName" maxlength="20" /><span class="requireSpan">*</span>
+				</div>
+				<div class="inputContainer">
+					<span>选择报表文件：</span><input type="file" accept=".cpt,.frm" name="file" class="reportFile" /><span class="requireSpan">*</span>
+				</div>
+				<div class="inputContainer" style="vertical-align: top;">
+					<span style="vertical-align: top;">报表描述：</span><textarea name="description" style="width: 170px; resize: none;" class="reportDescription" maxlength="100" class="container" style="width: 300px; height: 150px;resize: none;"></textarea>
+					<span class="requireSpan"></span>
+				</div>
+			</form>
+			<div class="submitButton">
+				<button class="submitNewReport btn btn-primary" type="button" data-loading-text="提交更改中..."  autocomplete="off">添加</button>
+				<button class="btn btn-default closeWindowsButton" type="button" autocomplete="off">关闭</button>
+			</div>
+		</div>
+		<!--修改报表-->
+		<!--<div id="editReport" class="parentWindows">
+			<span class="closeWindows glyphicon glyphicon-remove"></span>
+			<div class="title"><h2>修改报表</h2></div>
+			<div class="inputContainer">
+				<span>报表名称</span><input class="reportName" maxlength="20" />
+			</div>
+			<div class="inputContainer">
+				<span>报表描述</span>
+				<textarea maxlength="100" class="container" style="width: 300px; height: 150px;resize: none;"></textarea>
+			</div>
+			<div class="submitButton">
+				<button class="submitDescription btn btn-primary" type="button" data-loading-text="提交更改中..."  autocomplete="off">确认</button>
+				<button class="btn btn-default closeWindowsButton" type="button" autocomplete="off">关闭</button>
+			</div>
+		</div>-->
+		
+		<script type="text/javascript" src="../../js/jquery.min.js" ></script>
+		<script type="text/javascript" src="../../js/jquery-ui.min.js" ></script>
+		<script type="text/javascript" src="../../js/pace.min.js" ></script>
+		<script type="text/javascript" src="../../js/common.js" ></script>
+		<script type="text/javascript" src="../../js/jquery.dataTables.min.js"></script>
+		<script type="text/javascript" src="../../js/bootstrap.min.js" ></script>
+		<script type="text/javascript" src="../../js/doAjax.js"></script>
+		<script type="text/javascript" src="../../js/confirm.js" ></script>
+		<script type="text/javascript" src="./js/reportsManagement.js"></script>
+	</body>
+</html>

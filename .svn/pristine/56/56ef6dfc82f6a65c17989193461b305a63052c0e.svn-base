@@ -1,0 +1,24 @@
+package com.penghaisoft.pda.outwarehouse.service;
+
+import com.penghaisoft.pda.common.Resp;
+import com.penghaisoft.pda.outwarehouse.model.WmsTaskExecutionLog;
+import com.penghaisoft.pda.storage.model.WmsGoods;
+
+/**
+ * <p>
+ * 业务接口类
+ * </p>
+ *
+ * @author
+ * @createDate
+ **/
+public interface WmsTaskExecutionLogService {
+    public Resp inStereoscopicTaskCreate(WmsTaskExecutionLog condition);
+
+    /**
+     * 根据托盘号，找到最近的本托盘出库商品
+     * @param palletCode
+     * @return
+     */
+    WmsGoods queryLastOutGoodsByPallet(String palletCode);
+}

@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>立库库位视图</title>
+    <link rel="stylesheet" href="../../css/bootstrap.min.css"/>
+    <style>
+        html, body {
+            height: 100%;
+            background: #F1F4F4;
+        }
+        /*如果纵向多，调试width:100%
+        table{
+            width: 100%;
+            border-collapse:collapse;
+            border:none;
+        }*/
+        table{
+            width: 30%;
+            border-collapse:collapse;
+            border:none;
+        }
+        th{
+            text-align: center
+        }
+        td{
+            text-align: center;
+            color: whitesmoke;
+        }
+        .row-desc-td{
+            color: black;
+            font-weight:bold;
+        }
+        td:hover{
+            cursor: pointer;
+            transform: scale(1.1);/*鼠标放上之后元素变成1.4倍大小*/
+        }
+        hr{
+            background-color: black;
+            height: 2px;
+        }
+        .empty-loc{
+            background: #00B83F;
+            border:solid #FFFFFF 1px;
+        }
+        .empty-div{
+            background: #00B83F;
+            height: 20px;
+            width: 50px;
+            border:solid #FFFFFF 1px;
+        }
+        .used-loc{
+            background: #00A1CB;
+            border:solid #FFFFFF 1px;
+        }
+        .used-div{
+            background: #00A1CB;
+            height: 20px;
+            width: 50px;
+            border:solid #FFFFFF 1px;
+        }
+        .locked-in-div{
+            background: orange;
+            height: 20px;
+            width: 50px;
+            border:solid #FFFFFF 1px;
+        }
+        .locked-out-div{
+            background: #75ff8a;
+            height: 20px;
+            width: 50px;
+            border:solid #FFFFFF 1px;
+        }
+        .disabled-div{
+            background: #EEEEEE;
+            height: 20px;
+            width: 50px;
+            border:solid #EEEEEE 1px;
+        }
+        .error-div{
+            background: red;
+            height: 20px;
+            width: 50px;
+            border:solid #FFFFFF 1px;
+        }
+        .inKu-div{
+            background: #dad55e;
+            height: 20px;
+            width: 50px;
+            border:solid #FFFFFF 1px;
+        }
+        .outKu-div{
+            background: #a1abff;
+            height: 20px;
+            width: 50px;
+            border:solid #FFFFFF 1px;
+        }
+        .non-existent-loc{
+            /* jumbotron 的背景色*/
+            background: #EEEEEE;
+            height: 20px;
+            width: 50px;
+            border:solid #EEEEEE 1px;
+        }
+        .line{
+            float:left;
+            margin-top: 0px;
+            width: 8px;
+            height: 40px;
+            background-color: darkolivegreen;
+        }
+    </style>
+</head>
+<body>
+
+<!-- 货位图示-->
+<div class="container-fluid" style="padding-top:15px">
+    <div style="padding:15px 15px 30px; border-radius: 6px; background-color: #eee; box-sizing: border-box; margin-bottom: 30px;">
+        <!--        <div class="jumbotron">-->
+        <label class="col-label control-label">楼层：</label>
+        <select id="layers" style="width: 100px;" placeholder=" 请选择楼层" onchange="layersChange()">
+            <option value="1" selected = "selected">一层</option>
+            <option value="2">二层</option>
+            <option value="3">三层</option>
+            <option value="4">四层</option>
+        </select>
+        <table>
+            <thead>
+            <tr id="head-desc">
+            </tr>
+            </thead>
+            <tbody id="layers-container">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- 货位图示-->
+<!-- 提示信息区-->
+<div class="container-fluid">
+    <div class="jumbotron">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="row">
+                    <div class="col-lg-2">
+                        <div class="line"></div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="empty-div"></div>
+                    </div>
+                    <div class="col-lg-5">
+                        空货位
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-2">
+                        <div class="line" ></div>
+                    </div>
+                    <div class="col-lg-5">
+                        仓库合计：
+                    </div>
+                    <div class="col-lg-5">
+                        <span class="text-primary" id="empty-count">...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="row">
+                    <div class="col-lg-2">
+                        <div class="line"></div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="used-div"></div>
+                    </div>
+                    <div class="col-lg-5">
+                        已占用
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-2">
+                        <div class="line"></div>
+                    </div>
+                    <div class="col-lg-5">
+                        仓库合计：
+                    </div>
+                    <div class="col-lg-5">
+                        <span class="text-primary" id="used-count">...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="row">
+                    <div class="col-lg-2">
+                        <div class="line"></div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="locked-in-div"></div>
+                    </div>
+                    <div class="col-lg-5">
+                        锁定(入库)
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-2">
+                        <div class="line"></div>
+                    </div>
+                    <div class="col-lg-5">
+                        仓库合计：
+                    </div>
+                    <div class="col-lg-5">
+                        <span class="text-primary" id="locked-in-count">...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="row">
+                    <div class="col-lg-2">
+                        <div class="line"></div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="locked-out-div"></div>
+                    </div>
+                    <div class="col-lg-5">
+                        锁定(出库)
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-2">
+                        <div class="line"></div>
+                    </div>
+                    <div class="col-lg-5">
+                        仓库合计：
+                    </div>
+                    <div class="col-lg-5">
+                        <span class="text-primary" id="locked-out-count">...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="row">
+                    <div class="col-lg-2">
+                        <div class="line"></div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="disabled-div"></div>
+                    </div>
+                    <div class="col-lg-5">
+                        禁用
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-2">
+                        <div class="line"></div>
+                    </div>
+                    <div class="col-lg-5">
+                        仓库合计：
+                    </div>
+                    <div class="col-lg-5">
+                        <span class="text-primary" id="disabled-count">...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="row">
+                    <div class="col-lg-2">
+                        <div class="line"></div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="error-div"></div>
+                    </div>
+                    <div class="col-lg-5">
+                        异常
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-2">
+                        <div class="line"></div>
+                    </div>
+                    <div class="col-lg-5">
+                        仓库合计：
+                    </div>
+                    <div class="col-lg-5">
+                        <span class="text-primary" id="error-count">...</span>
+                    </div>
+                </div>
+            </div>
+            <!--现场添加 入库未过账/出库未过账-->
+            <div class="col-lg-3">
+                <div class="row">
+                    <div class="col-lg-2">
+                        <div class="line"></div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="inKu-div"></div>
+                    </div>
+                    <div class="col-lg-5">
+                        入库未过账
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-2">
+                        <div class="line"></div>
+                    </div>
+                    <div class="col-lg-5">
+                        仓库合计：
+                    </div>
+                    <div class="col-lg-5">
+                        <span class="text-primary" id="inKu-count">...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="row">
+                    <div class="col-lg-2">
+                        <div class="line"></div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="outKu-div"></div>
+                    </div>
+                    <div class="col-lg-5">
+                        出库未过账
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-2">
+                        <div class="line"></div>
+                    </div>
+                    <div class="col-lg-5">
+                        仓库合计：
+                    </div>
+                    <div class="col-lg-5">
+                        <span class="text-primary" id="outKu-count">...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    库位详情
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">货位:</label>
+                        <div class="col-sm-9">
+                            <span class="form-control" id="loc-modal-desc"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">托盘号:</label>
+                        <div class="col-sm-9">
+                            <span class="form-control" id="loc-modal-pallet-no"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">物料名称:</label>
+                        <div class="col-sm-9">
+                            <span class="form-control" id="loc-modal-goods-name"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">物料编码:</label>
+                        <div class="col-sm-9">
+                            <span class="form-control" id="loc-modal-goods-code"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">批次号:</label>
+                        <div class="col-sm-9">
+                            <span class="form-control" id="loc-modal-batch-no"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">数量:</label>
+                        <div class="col-sm-9">
+                            <span class="form-control" id="loc-modal-amount"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">状态:</label>
+                        <div class="col-sm-9">
+                            <span class="form-control" id="loc-modal-useStatus"></span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+</body>
+<script type="text/javascript" src="../../js/jquery.min.js"></script>
+<script type="text/javascript" src="../../js/common.js"></script>
+<script type="text/javascript" src="../../js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/NHStereoscopicLocationView.js"></script>
+</html>

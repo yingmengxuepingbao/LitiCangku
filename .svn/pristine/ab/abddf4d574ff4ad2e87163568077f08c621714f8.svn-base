@@ -1,0 +1,777 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.penghaisoft.wms.outboundmanagement.model.dao.WmsOrderOutStereoscopicDeailMapper">
+	
+	<!-- =========================================================== -->
+    <!-- 定义resultMap                                                                                                                                                                             -->
+    <!-- =========================================================== -->
+	<resultMap id="wmsOrderOutStereoscopicDeailMap" type="com.penghaisoft.wms.outboundmanagement.model.entity.WmsOrderOutStereoscopicDeail">
+	    <result property="orderOutDetailId" column="order_out_detail_id"/>
+	    <result property="orderOutId" column="order_out_id"/>
+	    <result property="orderNo" column="order_no"/>
+	    <result property="goodsName" column="goods_name"/>
+	    <result property="goodsCode" column="goods_code"/>
+	    <result property="batchNo" column="batch_no"/>
+	    <result property="planAmount" column="plan_amount"/>
+	    <result property="realAmount" column="real_amount"/>
+		<result property="planPalletAmount" column="plan_pallet_amount"/>
+		<result property="realPalletAmount" column="real_pallet_amount"/>
+	    <result property="remark" column="remark"/>
+	    <result property="userDefined1" column="user_defined1"/>
+	    <result property="userDefined2" column="user_defined2"/>
+	    <result property="userDefined3" column="user_defined3"/>
+	    <result property="userDefined4" column="user_defined4"/>
+	    <result property="userDefined5" column="user_defined5"/>
+	    <result property="createBy" column="create_by"/>
+	    <result property="gmtCreate" column="gmt_create"/>
+	    <result property="lastModifiedBy" column="last_modified_by"/>
+	    <result property="gmtModified" column="gmt_modified"/>
+	    <result property="activeFlag" column="active_flag"/>
+		<result property="orderType" column="order_type"/>
+		<result property="orderStatus" column="order_status"/>
+		<result property="outAddress" column="out_address"/>
+		<result property="remark1" column="remark1"/>
+	</resultMap>
+	
+	<!-- =========================================================== -->
+    <!-- 一些公共变量设置                                                                                                                                                                             -->
+    <!-- =========================================================== -->
+	<!-- mysql 分页 -->
+	<sql id="pagination_tail">
+		top ((#{page.pageOffset} +1)* #{page.rows})
+	</sql>
+	<!-- mysql 查询总数 -->
+	<sql id="count_Tail">
+		select count(1) from 
+	</sql>
+	
+	<sql id="selectAllColumns">
+		<![CDATA[
+ 			wms_order_out_stereoscopic_deail_.order_out_detail_id
+ 			,wms_order_out_stereoscopic_.order_type
+ 			,wms_order_out_stereoscopic_.order_status
+ 			,wms_order_out_stereoscopic_.out_address
+ 			,wms_order_out_stereoscopic_.remark remark1
+ 			,wms_order_out_stereoscopic_deail_.order_out_id
+ 			,wms_order_out_stereoscopic_deail_.order_no
+ 			,wms_order_out_stereoscopic_deail_.goods_name
+ 			,wms_order_out_stereoscopic_deail_.goods_code
+ 			,wms_order_out_stereoscopic_deail_.batch_no
+ 			,wms_order_out_stereoscopic_deail_.plan_amount
+ 			,wms_order_out_stereoscopic_deail_.real_amount
+ 			,wms_order_out_stereoscopic_deail_.plan_pallet_amount
+ 			,wms_order_out_stereoscopic_deail_.real_pallet_amount
+ 			,wms_order_out_stereoscopic_deail_.remark
+ 			,wms_order_out_stereoscopic_.user_defined1
+ 			,wms_order_out_stereoscopic_deail_.user_defined2
+ 			,wms_order_out_stereoscopic_deail_.user_defined3
+ 			,wms_order_out_stereoscopic_deail_.user_defined4
+ 			,wms_order_out_stereoscopic_deail_.user_defined5
+ 			,wms_order_out_stereoscopic_deail_.create_by
+ 			,wms_order_out_stereoscopic_deail_.gmt_create
+ 			,wms_order_out_stereoscopic_deail_.last_modified_by
+ 			,wms_order_out_stereoscopic_deail_.gmt_modified
+ 			,wms_order_out_stereoscopic_deail_.active_flag
+		FROM 
+		wms_order_out_stereoscopic_deail wms_order_out_stereoscopic_deail_
+		left join wms_order_out_stereoscopic wms_order_out_stereoscopic_
+		on wms_order_out_stereoscopic_deail_.order_no = wms_order_out_stereoscopic_.order_no
+		and wms_order_out_stereoscopic_deail_.active_flag = '1'
+		and wms_order_out_stereoscopic_.active_flag = '1'
+		]]>
+	</sql>
+	
+	<sql id="where_fragement">
+		where 1=1
+		<if test="entity!=null">
+			<if test="entity.orderOutDetailId != null and entity.orderOutDetailId !=''">
+				<![CDATA[ and wms_order_out_stereoscopic_deail_.order_out_detail_id LIKE CONCAT('%',#{entity.orderOutDetailId},'%')]]>
+			</if>
+			<if test="entity.orderOutId != null and entity.orderOutId !=''">
+				<![CDATA[ and wms_order_out_stereoscopic_deail_.order_out_id LIKE CONCAT('%',#{entity.orderOutId},'%')]]>
+			</if>
+			<if test="entity.orderNo != null and entity.orderNo !=''">
+				<![CDATA[ and wms_order_out_stereoscopic_deail_.order_no LIKE CONCAT('%',#{entity.orderNo},'%')]]>
+			</if>
+			<if test="entity.goodsName != null and entity.goodsName !=''">
+				<![CDATA[ and wms_order_out_stereoscopic_deail_.goods_name LIKE CONCAT('%',#{entity.goodsName},'%')]]>
+			</if>
+			<if test="entity.goodsCode != null and entity.goodsCode !=''">
+				<![CDATA[ and wms_order_out_stereoscopic_deail_.goods_code LIKE CONCAT('%',#{entity.goodsCode},'%')]]>
+			</if>
+			<if test="entity.batchNo != null and entity.batchNo !=''">
+				<![CDATA[ and wms_order_out_stereoscopic_deail_.batch_no LIKE CONCAT('%',#{entity.batchNo},'%')]]>
+			</if>
+			<if test="entity.planAmount != null and entity.planAmount !=''">
+				<![CDATA[ and wms_order_out_stereoscopic_deail_.plan_amount LIKE CONCAT('%',#{entity.planAmount},'%')]]>
+			</if>
+			<if test="entity.realAmount != null and entity.realAmount !=''">
+				<![CDATA[ and wms_order_out_stereoscopic_deail_.real_amount LIKE CONCAT('%',#{entity.realAmount},'%')]]>
+			</if>
+			<if test="entity.planPalletAmount != null and entity.planPalletAmount !=''">
+				<![CDATA[ and wms_order_out_stereoscopic_deail_.plan_pallet_amount LIKE CONCAT('%',#{entity.planPalletAmount},'%')]]>
+			</if>
+			<if test="entity.realPalletAmount != null and entity.realPalletAmount !=''">
+				<![CDATA[ and wms_order_out_stereoscopic_deail_.real_pallet_amount LIKE CONCAT('%',#{entity.realAmount},'%')]]>
+			</if>
+			<if test="entity.remark != null and entity.remark !=''">
+				<![CDATA[ and wms_order_out_stereoscopic_deail_.remark LIKE CONCAT('%',#{entity.remark},'%')]]>
+			</if>
+			<if test="entity.userDefined1 != null and entity.userDefined1 !=''">
+				<![CDATA[ and wms_order_out_stereoscopic_deail_.user_defined1 LIKE CONCAT('%',#{entity.userDefined1},'%')]]>
+			</if>
+			<if test="entity.userDefined2 != null and entity.userDefined2 !=''">
+				<![CDATA[ and wms_order_out_stereoscopic_deail_.user_defined2 LIKE CONCAT('%',#{entity.userDefined2},'%')]]>
+			</if>
+			<if test="entity.userDefined3 != null and entity.userDefined3 !=''">
+				<![CDATA[ and wms_order_out_stereoscopic_deail_.user_defined3 LIKE CONCAT('%',#{entity.userDefined3},'%')]]>
+			</if>
+			<if test="entity.userDefined4 != null and entity.userDefined4 !=''">
+				<![CDATA[ and wms_order_out_stereoscopic_deail_.user_defined4 LIKE CONCAT('%',#{entity.userDefined4},'%')]]>
+			</if>
+			<if test="entity.userDefined5 != null and entity.userDefined5 !=''">
+				<![CDATA[ and wms_order_out_stereoscopic_deail_.user_defined5 LIKE CONCAT('%',#{entity.userDefined5},'%')]]>
+			</if>
+			<if test="entity.createBy != null and entity.createBy !=''">
+				<![CDATA[ and wms_order_out_stereoscopic_deail_.create_by LIKE CONCAT('%',#{entity.createBy},'%')]]>
+			</if>
+			<if test="entity.gmtCreate != null">
+				<![CDATA[ and wms_order_out_stereoscopic_deail_.gmt_create LIKE CONCAT('%',#{entity.gmtCreate},'%')]]>
+			</if>
+			<if test="entity.lastModifiedBy != null and entity.lastModifiedBy !=''">
+				<![CDATA[ and wms_order_out_stereoscopic_deail_.last_modified_by LIKE CONCAT('%',#{entity.lastModifiedBy},'%')]]>
+			</if>
+			<if test="entity.gmtModified != null">
+				<![CDATA[ and wms_order_out_stereoscopic_deail_.gmt_modified LIKE CONCAT('%',#{entity.gmtModified},'%')]]>
+			</if>
+			<if test="entity.activeFlag != null and entity.activeFlag !=''">
+				<![CDATA[ and wms_order_out_stereoscopic_deail_.active_flag LIKE CONCAT('%',#{entity.activeFlag},'%')]]>
+			</if>
+		</if>
+	</sql>
+	
+	<sql id="where_any">
+		where 1=1
+		<if test="entity!=null">
+			<if test="entity.orderOutDetailId != null and entity.orderOutDetailId !=''">
+				<![CDATA[ and wms_order_out_stereoscopic_deail_.order_out_detail_id = #{entity.orderOutDetailId}]]>
+			</if>
+			<if test="entity.orderOutId != null and entity.orderOutId !=''">
+				<![CDATA[ and wms_order_out_stereoscopic_deail_.order_out_id = #{entity.orderOutId}]]>
+			</if>
+			<if test="entity.orderNo != null and entity.orderNo !=''">
+				<![CDATA[ and wms_order_out_stereoscopic_deail_.order_no = #{entity.orderNo}]]>
+			</if>
+			<if test="entity.goodsName != null and entity.goodsName !=''">
+				<![CDATA[ and wms_order_out_stereoscopic_deail_.goods_name = #{entity.goodsName}]]>
+			</if>
+			<if test="entity.goodsCode != null and entity.goodsCode !=''">
+				<![CDATA[ and wms_order_out_stereoscopic_deail_.goods_code = #{entity.goodsCode}]]>
+			</if>
+			<if test="entity.batchNo != null and entity.batchNo !=''">
+				<![CDATA[ and wms_order_out_stereoscopic_deail_.batch_no = #{entity.batchNo}]]>
+			</if>
+			<if test="entity.planAmount != null and entity.planAmount !=''">
+				<![CDATA[ and wms_order_out_stereoscopic_deail_.plan_amount = #{entity.planAmount}]]>
+			</if>
+			<if test="entity.planAmountMoreRealAmount != null">
+				<![CDATA[ and wms_order_out_stereoscopic_deail_.plan_amount > wms_order_out_stereoscopic_deail_.real_amount]]>
+			</if>
+			<if test="entity.planPalletAmount != null and entity.planPalletAmount !=''">
+				<![CDATA[ and wms_order_out_stereoscopic_deail_.plan_pallet_amount = #{entity.planPalletAmount}]]>
+			</if>
+			<if test="entity.realPalletAmount != null and entity.realPalletAmount !=''">
+				<![CDATA[ and wms_order_out_stereoscopic_deail_.real_pallet_amount = #{entity.realPalletAmount}]]>
+			</if>
+			<if test="entity.planAmount != null and entity.planAmount !=''">
+				<![CDATA[ and wms_order_out_stereoscopic_deail_.plan_amount = #{entity.planAmount}]]>
+			</if>
+			<if test="entity.remark != null and entity.remark !=''">
+				<![CDATA[ and wms_order_out_stereoscopic_deail_.remark = #{entity.remark}]]>
+			</if>
+			<if test="entity.userDefined1 != null and entity.userDefined1 !=''">
+				<![CDATA[ and wms_order_out_stereoscopic_deail_.user_defined1 = #{entity.userDefined1}]]>
+			</if>
+			<if test="entity.userDefined2 != null and entity.userDefined2 !=''">
+				<![CDATA[ and wms_order_out_stereoscopic_deail_.user_defined2 = #{entity.userDefined2}]]>
+			</if>
+			<if test="entity.userDefined3 != null and entity.userDefined3 !=''">
+				<![CDATA[ and wms_order_out_stereoscopic_deail_.user_defined3 = #{entity.userDefined3}]]>
+			</if>
+			<if test="entity.userDefined4 != null and entity.userDefined4 !=''">
+				<![CDATA[ and wms_order_out_stereoscopic_deail_.user_defined4 = #{entity.userDefined4}]]>
+			</if>
+			<if test="entity.userDefined5 != null and entity.userDefined5 !=''">
+				<![CDATA[ and wms_order_out_stereoscopic_deail_.user_defined5 = #{entity.userDefined5}]]>
+			</if>
+			<if test="entity.createBy != null and entity.createBy !=''">
+				<![CDATA[ and wms_order_out_stereoscopic_deail_.create_by = #{entity.createBy}]]>
+			</if>
+			<if test="entity.gmtCreate != null">
+				<![CDATA[ and wms_order_out_stereoscopic_deail_.gmt_create = #{entity.gmtCreate}]]>
+			</if>
+			<if test="entity.lastModifiedBy != null and entity.lastModifiedBy !=''">
+				<![CDATA[ and wms_order_out_stereoscopic_deail_.last_modified_by = #{entity.lastModifiedBy}]]>
+			</if>
+			<if test="entity.gmtModified != null">
+				<![CDATA[ and wms_order_out_stereoscopic_deail_.gmt_modified = #{entity.gmtModified}]]>
+			</if>
+			<if test="entity.activeFlag != null and entity.activeFlag !=''">
+				<![CDATA[ and wms_order_out_stereoscopic_deail_.active_flag = #{entity.activeFlag}]]>
+			</if>
+		</if>
+	</sql>
+	
+	<!-- =========================================================== -->
+    <!-- DAO方法中的基本增删改查方法                                                                                                                                                           -->
+    <!-- =========================================================== -->
+   <!-- 根据id查询 -->
+	<select id="queryById" resultMap="wmsOrderOutStereoscopicDeailMap" parameterType="java.lang.String">
+		select
+		<include refid="selectAllColumns" />
+		<![CDATA[
+		where wms_order_out_stereoscopic_deail_.order_out_detail_id = #{id}
+		]]>
+	</select>
+	
+	<!-- 分页查询 -->
+	<select id="queryList" resultMap="wmsOrderOutStereoscopicDeailMap" >
+		select
+		<if test="page!=null">
+			<include refid="pagination_tail" />
+		</if>
+		<include refid="selectAllColumns"/>
+		<include refid="where_fragement" />
+
+	</select>
+	
+	<select id="queryCount" resultType="long">
+		<include refid="count_Tail" />
+		wms_order_out_stereoscopic_deail wms_order_out_stereoscopic_deail_
+		<include refid="where_fragement" />
+	</select>
+	
+	<!-- 插入记录 -->
+	<insert id="create" parameterType="com.penghaisoft.wms.outboundmanagement.model.entity.WmsOrderOutStereoscopicDeail">
+		<![CDATA[
+		insert into wms_order_out_stereoscopic_deail (
+		    	 order_out_detail_id
+		    	 ,order_out_id
+		    	 ,order_no
+		    	 ,goods_name
+		    	 ,goods_code
+		    	 ,batch_no
+		    	 ,plan_amount
+		    	 ,real_amount
+		    	 ,plan_pallet_amount
+		    	 ,real_pallet_amount
+		    	 ,remark
+		    	 ,user_defined1
+		    	 ,user_defined2
+		    	 ,user_defined3
+		    	 ,user_defined4
+		    	 ,user_defined5
+		    	 ,create_by
+		    	 ,gmt_create
+		    	 ,last_modified_by
+		    	 ,gmt_modified
+		    	 ,active_flag
+		   )values(
+		    	#{orderOutDetailId}
+		    	,#{orderOutId}
+		    	,#{orderNo}
+		    	,#{goodsName}
+		    	,#{goodsCode}
+		    	,#{batchNo}
+		    	,#{planAmount}
+		    	,#{realAmount}
+		    	,#{planPalletAmount}
+		    	,#{realPalletAmount}
+		    	,#{remark}
+		    	,#{userDefined1}
+		    	,#{userDefined2}
+		    	,#{userDefined3}
+		    	,#{userDefined4}
+		    	,#{userDefined5}
+		    	,#{createBy}
+		    	,#{gmtCreate}
+		    	,#{lastModifiedBy}
+		    	,#{gmtModified}
+		    	,#{activeFlag}
+		   )
+	    ]]>	
+	</insert>
+	
+	<!-- 批量插入记录 -->
+	<insert id="batchInsert" parameterType="java.util.List">
+		insert into wms_order_out_stereoscopic_deail (
+		    	 order_out_detail_id
+		    	 ,order_out_id
+		    	 ,order_no
+		    	 ,goods_name
+		    	 ,goods_code
+		    	 ,batch_no
+		    	 ,plan_amount
+		    	 ,real_amount
+				 ,plan_pallet_amount
+				 ,real_pallet_amount
+		    	 ,remark
+		    	 ,user_defined1
+		    	 ,user_defined2
+		    	 ,user_defined3
+		    	 ,user_defined4
+		    	 ,user_defined5
+		    	 ,create_by
+		    	 ,gmt_create
+		    	 ,last_modified_by
+		    	 ,gmt_modified
+		    	 ,active_flag
+		   )
+		   values
+		   <foreach collection="list" item="item" index="index" separator="," >
+		   (
+		    	#{item.orderOutDetailId}
+		    	,#{item.orderOutId}
+		    	,#{item.orderNo}
+		    	,#{item.goodsName}
+		    	,#{item.goodsCode}
+		    	,#{item.batchNo}
+		    	,#{item.planAmount}
+		    	,#{item.realAmount}
+			    ,#{item.planPalletAmount}
+			    ,#{item.realPalletAmount}
+		    	,#{item.remark}
+		    	,#{item.userDefined1}
+		    	,#{item.userDefined2}
+		    	,#{item.userDefined3}
+		    	,#{item.userDefined4}
+		    	,#{item.userDefined5}
+		    	,#{item.createBy}
+		    	,#{item.gmtCreate}
+		    	,#{item.lastModifiedBy}
+		    	,#{item.gmtModified}
+		    	,#{item.activeFlag}
+		   )
+		   </foreach>	
+	</insert>
+	
+	<!-- 根据id，修改记录 -->
+	<update id="update" parameterType="com.penghaisoft.wms.outboundmanagement.model.entity.WmsOrderOutStereoscopicDeail">
+		<![CDATA[
+		update wms_order_out_stereoscopic_deail set
+   			
+   			order_out_id = #{orderOutId}
+   			,order_no = #{orderNo}
+   			,goods_name = #{goodsName}
+   			,goods_code = #{goodsCode}
+   			,batch_no = #{batchNo}
+   			,plan_amount = #{planAmount}
+   			,real_amount = #{realAmount}
+   			,remark = #{remark}
+   			,user_defined1 = #{userDefined1}
+   			,user_defined2 = #{userDefined2}
+   			,user_defined3 = #{userDefined3}
+   			,user_defined4 = #{userDefined4}
+   			,user_defined5 = #{userDefined5}
+   			,create_by = #{createBy}
+   			,gmt_create = #{gmtCreate}
+   			,last_modified_by = #{lastModifiedBy}
+   			,gmt_modified = #{gmtModified}
+   			,active_flag = #{activeFlag}
+		 where order_out_detail_id = #{orderOutDetailId}
+		]]>
+	</update>
+	
+	<!--  -->
+	<update id="updateBySelect" parameterType="com.penghaisoft.wms.outboundmanagement.model.entity.WmsOrderOutStereoscopicDeail">
+		update wms_order_out_stereoscopic_deail <set>
+		<if test="entity!=null">
+				<if test="entity.orderOutDetailId != null and entity.orderOutDetailId !=''">
+					
+				</if>
+				<if test="entity.orderOutId != null and entity.orderOutId !=''">
+					<![CDATA[ order_out_id = #{entity.orderOutId}, ]]>
+				</if>
+				<if test="entity.orderNo != null and entity.orderNo !=''">
+					<![CDATA[ order_no = #{entity.orderNo}, ]]>
+				</if>
+				<if test="entity.goodsName != null and entity.goodsName !=''">
+					<![CDATA[ goods_name = #{entity.goodsName}, ]]>
+				</if>
+				<if test="entity.goodsCode != null and entity.goodsCode !=''">
+					<![CDATA[ goods_code = #{entity.goodsCode}, ]]>
+				</if>
+				<if test="entity.batchNo != null and entity.batchNo !=''">
+					<![CDATA[ batch_no = #{entity.batchNo}, ]]>
+				</if>
+				<if test="entity.planAmount != null and entity.planAmount !=''">
+					<![CDATA[ plan_amount = #{entity.planAmount}, ]]>
+				</if>
+				<if test="entity.realAmount != null and entity.realAmount !=''">
+					<![CDATA[ real_amount = #{entity.realAmount}, ]]>
+				</if>
+				<if test="entity.planPalletAmount != null and entity.planPalletAmount !=''">
+					<![CDATA[ plan_pallet_amount = #{entity.planPalletAmount}, ]]>
+				</if>
+				<if test="entity.realPalletAmount != null and entity.realPalletAmount !=''">
+					<![CDATA[ real_pallet_amount = #{entity.realPalletAmount}, ]]>
+				</if>
+				<if test="entity.remark != null and entity.remark !=''">
+					<![CDATA[ remark = #{entity.remark}, ]]>
+				</if>
+				<if test="entity.userDefined1 != null and entity.userDefined1 !=''">
+					<![CDATA[ user_defined1 = ISNULL(user_defined1, 0) + #{entity.userDefined1}, ]]>
+				</if>
+				<if test="entity.userDefined2 != null and entity.userDefined2 !=''">
+					<![CDATA[ user_defined2 = ISNULL(user_defined2, 0) + #{entity.userDefined2}, ]]>
+				</if>
+				<if test="entity.userDefined3 != null and entity.userDefined3 !=''">
+					<![CDATA[ user_defined3 = #{entity.userDefined3}, ]]>
+				</if>
+				<if test="entity.userDefined4 != null and entity.userDefined4 !=''">
+					<![CDATA[ user_defined4 = #{entity.userDefined4}, ]]>
+				</if>
+				<if test="entity.userDefined5 != null and entity.userDefined5 !=''">
+					<![CDATA[ user_defined5 = #{entity.userDefined5}, ]]>
+				</if>
+				<if test="entity.createBy != null and entity.createBy !=''">
+					<![CDATA[ create_by = #{entity.createBy}, ]]>
+				</if>
+				<if test="entity.gmtCreate != null">
+					<![CDATA[ gmt_create = #{entity.gmtCreate}, ]]>
+				</if>
+				<if test="entity.lastModifiedBy != null and entity.lastModifiedBy !=''">
+					<![CDATA[ last_modified_by = #{entity.lastModifiedBy}, ]]>
+				</if>
+				<if test="entity.gmtModified != null">
+					<![CDATA[ gmt_modified = #{entity.gmtModified}, ]]>
+				</if>
+				<if test="entity.activeFlag != null and entity.activeFlag !=''">
+					<![CDATA[ active_flag = #{entity.activeFlag}, ]]>
+				</if>
+		</if>
+		</set>
+		 where order_out_detail_id = #{entity.orderOutDetailId}
+	</update>
+
+	   <!-- 逻辑删除,根据主键设置active_flag ='0' -->
+	  <update id="delete" parameterType="com.penghaisoft.wms.outboundmanagement.model.entity.WmsOrderOutStereoscopicDeail">
+	    UPDATE wms_order_out_stereoscopic_deail
+	    SET active_flag = "0"
+	    ,last_modified_by = #{entity.lastModifiedBy}
+	    ,gmt_modified = #{entity.gmtModified}
+	     where order_out_detail_id = #{entity.orderOutDetailId}
+	  </update>
+	  
+	  <update id="batchDelete" parameterType="com.penghaisoft.wms.outboundmanagement.model.entity.WmsOrderOutStereoscopicDeail">
+	    DELETE FROM wms_order_out_stereoscopic_deail
+	    where order_out_detail_id in 
+	    <foreach collection="entity.orderOutDetailIdList" index="index" item="item" open="(" separator="," close=")">
+	      #{item}
+	    </foreach>
+	  </update>
+
+	<!-- 任意字段全匹配 -->
+	<select id="queryByAny" resultMap="wmsOrderOutStereoscopicDeailMap" >
+		select
+		<include refid="selectAllColumns"/>
+		<include refid="where_any" />
+	</select>
+	
+	<select id="queryByAnyCount" resultType="long">
+		<include refid="count_Tail" />
+		wms_order_out_stereoscopic_deail wms_order_out_stereoscopic_deail_
+		<include refid="where_any" />
+	</select>
+
+	<update id="updateByOrderNo" parameterType="com.penghaisoft.wms.outboundmanagement.model.entity.WmsOrderOutStereoscopicDeail">
+		update wms_order_out_stereoscopic_deail <set>
+		<if test="entity!=null">
+			<if test="entity.orderOutDetailId != null and entity.orderOutDetailId !=''">
+
+			</if>
+			<if test="entity.orderOutId != null and entity.orderOutId !=''">
+				<![CDATA[ order_out_id = #{entity.orderOutId}, ]]>
+			</if>
+			<if test="entity.orderNo != null and entity.orderNo !=''">
+				<![CDATA[ order_no = #{entity.orderNo}, ]]>
+			</if>
+			<if test="entity.goodsName != null and entity.goodsName !=''">
+				<![CDATA[ goods_name = #{entity.goodsName}, ]]>
+			</if>
+			<if test="entity.goodsCode != null and entity.goodsCode !=''">
+				<![CDATA[ goods_code = #{entity.goodsCode}, ]]>
+			</if>
+			<if test="entity.batchNo != null and entity.batchNo !=''">
+				<![CDATA[ batch_no = #{entity.batchNo}, ]]>
+			</if>
+			<if test="entity.planAmount != null and entity.planAmount !=''">
+				<![CDATA[ plan_amount = #{entity.planAmount}, ]]>
+			</if>
+			<if test="entity.realAmount != null and entity.realAmount !=''">
+				<![CDATA[ real_amount = #{entity.realAmount}, ]]>
+			</if>
+			<if test="entity.planPalletAmount != null and entity.planPalletAmount !=''">
+				<![CDATA[ plan_pallet_amount = #{entity.planPalletAmount}, ]]>
+			</if>
+			<if test="entity.realPalletAmount != null and entity.realPalletAmount !=''">
+				<![CDATA[ real_pallet_amount = #{entity.realPalletAmount}, ]]>
+			</if>
+			<if test="entity.remark != null and entity.remark !=''">
+				<![CDATA[ remark = #{entity.remark}, ]]>
+			</if>
+			<if test="entity.userDefined1 != null and entity.userDefined1 !=''">
+				<![CDATA[ user_defined1 = #{entity.userDefined1}, ]]>
+			</if>
+			<if test="entity.userDefined2 != null and entity.userDefined2 !=''">
+				<![CDATA[ user_defined2 = #{entity.userDefined2}, ]]>
+			</if>
+			<if test="entity.userDefined3 != null and entity.userDefined3 !=''">
+				<![CDATA[ user_defined3 = #{entity.userDefined3}, ]]>
+			</if>
+			<if test="entity.userDefined4 != null and entity.userDefined4 !=''">
+				<![CDATA[ user_defined4 = #{entity.userDefined4}, ]]>
+			</if>
+			<if test="entity.userDefined5 != null and entity.userDefined5 !=''">
+				<![CDATA[ user_defined5 = #{entity.userDefined5}, ]]>
+			</if>
+			<if test="entity.createBy != null and entity.createBy !=''">
+				<![CDATA[ create_by = #{entity.createBy}, ]]>
+			</if>
+			<if test="entity.gmtCreate != null">
+				<![CDATA[ gmt_create = #{entity.gmtCreate}, ]]>
+			</if>
+			<if test="entity.lastModifiedBy != null and entity.lastModifiedBy !=''">
+				<![CDATA[ last_modified_by = #{entity.lastModifiedBy}, ]]>
+			</if>
+			<if test="entity.gmtModified != null">
+				<![CDATA[ gmt_modified = #{entity.gmtModified}, ]]>
+			</if>
+			<if test="entity.activeFlag != null and entity.activeFlag !=''">
+				<![CDATA[ active_flag = #{entity.activeFlag}, ]]>
+			</if>
+		</if>
+	</set>
+		where order_no = #{entity.orderNo} and active_flag = '1'
+	</update>
+
+	<update id="updateByOrderNoBatch" parameterType="com.penghaisoft.wms.outboundmanagement.model.entity.WmsOrderOutStereoscopicDeail">
+		update wms_order_out_stereoscopic_deail <set>
+		<if test="entity!=null">
+			<if test="entity.orderOutDetailId != null and entity.orderOutDetailId !=''">
+
+			</if>
+			<if test="entity.orderOutId != null and entity.orderOutId !=''">
+				<![CDATA[ order_out_id = #{entity.orderOutId}, ]]>
+			</if>
+			<if test="entity.orderNo != null and entity.orderNo !=''">
+				<![CDATA[ order_no = #{entity.orderNo}, ]]>
+			</if>
+			<if test="entity.goodsName != null and entity.goodsName !=''">
+				<![CDATA[ goods_name = #{entity.goodsName}, ]]>
+			</if>
+			<if test="entity.goodsCode != null and entity.goodsCode !=''">
+				<![CDATA[ goods_code = #{entity.goodsCode}, ]]>
+			</if>
+			<if test="entity.batchNo != null and entity.batchNo !=''">
+				<![CDATA[ batch_no = #{entity.batchNo}, ]]>
+			</if>
+			<if test="entity.planAmount != null and entity.planAmount !=''">
+				<![CDATA[ plan_amount = #{entity.planAmount}, ]]>
+			</if>
+			<if test="entity.realAmount != null and entity.realAmount !=''">
+				<![CDATA[ real_amount = #{entity.realAmount}, ]]>
+			</if>
+			<if test="entity.planPalletAmount != null and entity.planPalletAmount !=''">
+				<![CDATA[ plan_pallet_amount = #{entity.planPalletAmount}, ]]>
+			</if>
+			<if test="entity.realPalletAmount != null and entity.realPalletAmount !=''">
+				<![CDATA[ real_pallet_amount = #{entity.realPalletAmount}, ]]>
+			</if>
+			<if test="entity.remark != null and entity.remark !=''">
+				<![CDATA[ remark = #{entity.remark}, ]]>
+			</if>
+			<if test="entity.userDefined1 != null and entity.userDefined1 !=''">
+				<![CDATA[ user_defined1 = #{entity.userDefined1}, ]]>
+			</if>
+			<if test="entity.userDefined2 != null and entity.userDefined2 !=''">
+				<![CDATA[ user_defined2 = #{entity.userDefined2}, ]]>
+			</if>
+			<if test="entity.userDefined3 != null and entity.userDefined3 !=''">
+				<![CDATA[ user_defined3 = #{entity.userDefined3}, ]]>
+			</if>
+			<if test="entity.userDefined4 != null and entity.userDefined4 !=''">
+				<![CDATA[ user_defined4 = #{entity.userDefined4}, ]]>
+			</if>
+			<if test="entity.userDefined5 != null and entity.userDefined5 !=''">
+				<![CDATA[ user_defined5 = #{entity.userDefined5}, ]]>
+			</if>
+			<if test="entity.createBy != null and entity.createBy !=''">
+				<![CDATA[ create_by = #{entity.createBy}, ]]>
+			</if>
+			<if test="entity.gmtCreate != null">
+				<![CDATA[ gmt_create = #{entity.gmtCreate}, ]]>
+			</if>
+			<if test="entity.lastModifiedBy != null and entity.lastModifiedBy !=''">
+				<![CDATA[ last_modified_by = #{entity.lastModifiedBy}, ]]>
+			</if>
+			<if test="entity.gmtModified != null">
+				<![CDATA[ gmt_modified = #{entity.gmtModified}, ]]>
+			</if>
+			<if test="entity.activeFlag != null and entity.activeFlag !=''">
+				<![CDATA[ active_flag = #{entity.activeFlag}, ]]>
+			</if>
+		</if>
+	</set>
+		where active_flag = '1' and order_no in
+		<foreach collection="entity.orderNoList" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</update>
+
+	<!--查询 立库出库单明细表-->
+	<select id="queryMergeList" resultMap="wmsOrderOutStereoscopicDeailMap" >
+		SELECT
+			t.goods_name,
+			t.goods_code,
+			t.batch_no,
+			sum(t.plan_amount) plan_amount,
+			sum(t.real_amount) real_amount
+		FROM
+			wms_order_out_stereoscopic_deail t
+		WHERE
+			t.active_flag = '1' and t.order_no in
+			<foreach collection="entity.orderNoList" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		GROUP BY
+			t.goods_code,
+			t.goods_name,
+			t.batch_no
+	</select>
+
+	<update id="updateByOrderNoGoodCodeBatchNo" parameterType="com.penghaisoft.wms.outboundmanagement.model.entity.WmsOrderOutStereoscopicDeail">
+		UPDATE wms_order_out_stereoscopic_deail
+		SET real_amount = ISNULL(real_amount, 0) + #{entity.realAmountAdd},
+		real_pallet_amount = ISNULL(real_pallet_amount, 0) + 1,
+		 last_modified_by = #{entity.lastModifiedBy},
+		 gmt_modified = #{entity.gmtModified}
+		WHERE
+			active_flag = '1'
+		AND order_no = #{entity.orderNo}
+		AND goods_code = #{entity.goodsCode}
+		AND batch_no = #{entity.batchNo}
+	</update>
+
+	<!-- 批次号可以为空 -->
+	<update id="updateByOrderNo_HB" parameterType="com.penghaisoft.wms.outboundmanagement.model.entity.WmsOrderOutStereoscopicDeail">
+		UPDATE wms_order_out_stereoscopic_deail
+		SET real_amount = #{entity.realAmount},
+		real_pallet_amount = ISNULL(real_pallet_amount, 0) + 1,
+		 last_modified_by = #{entity.lastModifiedBy},
+		 gmt_modified = #{entity.gmtModified}
+		WHERE
+			active_flag = '1'
+		AND order_no = #{entity.orderNo}
+		AND goods_code = #{entity.goodsCode}
+		AND batch_no = #{entity.batchNo}
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.penghaisoft.wms.outboundmanagement.model.entity.WmsOrderOutStereoscopicDeail" >
+		update wms_order_out_stereoscopic_deail
+		<set >
+			<if test="orderOutId != null" >
+				order_out_id = #{orderOutId,jdbcType=VARCHAR},
+			</if>
+			<if test="orderNo != null" >
+				order_no = #{orderNo,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsName != null" >
+				goods_name = #{goodsName,jdbcType=VARCHAR},
+			</if>
+			<if test="goodsCode != null" >
+				goods_code = #{goodsCode,jdbcType=VARCHAR},
+			</if>
+			<if test="batchNo != null" >
+				batch_no = #{batchNo,jdbcType=VARCHAR},
+			</if>
+			<if test="planAmount != null" >
+				plan_amount = #{planAmount,jdbcType=INTEGER},
+			</if>
+			<if test="realAmount != null" >
+				real_amount = #{realAmount,jdbcType=INTEGER},
+			</if>
+			<if test="realAmountAdd != null" >
+				real_amount = ISNULL(real_amount, 0) + #{realAmountAdd,jdbcType=INTEGER},
+			</if>
+			<if test="planPalletAmount != null" >
+				plan_pallet_amount = #{planPalletAmount,jdbcType=INTEGER},
+			</if>
+			<if test="realPalletAmount != null" >
+				real_pallet_amount = #{realPalletAmount,jdbcType=INTEGER},
+			</if>
+			<if test="remark != null" >
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="userDefined1 != null" >
+				user_defined1 = #{userDefined1,jdbcType=VARCHAR},
+			</if>
+			<if test="userDefined2 != null" >
+				user_defined2 = #{userDefined2,jdbcType=VARCHAR},
+			</if>
+			<if test="userDefined3 != null" >
+				user_defined3 = #{userDefined3,jdbcType=VARCHAR},
+			</if>
+			<if test="userDefined4 != null" >
+				user_defined4 = #{userDefined4,jdbcType=VARCHAR},
+			</if>
+			<if test="userDefined5 != null" >
+				user_defined5 = #{userDefined5,jdbcType=VARCHAR},
+			</if>
+			<if test="createBy != null" >
+				create_by = #{createBy,jdbcType=VARCHAR},
+			</if>
+			<if test="gmtCreate != null" >
+				gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="lastModifiedBy != null" >
+				last_modified_by = #{lastModifiedBy,jdbcType=VARCHAR},
+			</if>
+			<if test="gmtModified != null" >
+				gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+			</if>
+			<if test="activeFlag != null" >
+				active_flag = #{activeFlag,jdbcType=CHAR},
+			</if>
+		</set>
+		where order_out_detail_id = #{orderOutDetailId,jdbcType=VARCHAR} and active_flag = '1'
+	</update>
+
+
+	<select id="queryByAnyList" resultMap="wmsOrderOutStereoscopicDeailMap" >
+		SELECT
+			wms_order_out_stereoscopic_deail_.order_out_detail_id,
+			wms_order_out_stereoscopic_deail_.order_out_id,
+			wms_order_out_stereoscopic_deail_.order_no,
+			wms_order_out_stereoscopic_deail_.goods_name,
+			wms_order_out_stereoscopic_deail_.goods_code,
+			wms_order_out_stereoscopic_deail_.batch_no,
+			wms_order_out_stereoscopic_deail_.plan_amount,
+			wms_order_out_stereoscopic_deail_.real_amount,
+			wms_order_out_stereoscopic_deail_.plan_pallet_amount,
+			wms_order_out_stereoscopic_deail_.real_pallet_amount,
+			wms_order_out_stereoscopic_deail_.remark,
+			wms_order_out_stereoscopic_deail_.user_defined1,
+			wms_order_out_stereoscopic_deail_.user_defined2,
+			wms_order_out_stereoscopic_deail_.user_defined3,
+			wms_order_out_stereoscopic_deail_.user_defined4,
+			wms_order_out_stereoscopic_deail_.user_defined5,
+			wms_order_out_stereoscopic_deail_.create_by,
+			wms_order_out_stereoscopic_deail_.gmt_create,
+			wms_order_out_stereoscopic_deail_.last_modified_by,
+			wms_order_out_stereoscopic_deail_.gmt_modified,
+			wms_order_out_stereoscopic_deail_.active_flag
+		FROM
+		wms_order_out_stereoscopic_deail wms_order_out_stereoscopic_deail_
+		<include refid="where_any" />
+	</select>
+</mapper>

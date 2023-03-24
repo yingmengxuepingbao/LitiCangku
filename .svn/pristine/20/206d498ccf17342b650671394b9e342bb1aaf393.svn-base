@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.penghaisoft.framework.basics.model.dao.IDepartmentTypeDao">
+
+    <select id="getDepartmentTypes" resultType="com.penghaisoft.framework.basics.model.entity.DepartmentType">
+        SELECT dt.id, dt.name
+        FROM department_type dt
+    </select>
+
+    <select id="getDepartmentType" parameterType="int" resultType="com.penghaisoft.framework.basics.model.entity.DepartmentType">
+        SELECT dt.id, dt.name
+        FROM department_type dt
+        WHERE dt.id = #{id}
+    </select>
+
+    <select id="checkDepartmentTypeAvailable" parameterType="com.penghaisoft.framework.basics.model.entity.DepartmentType" resultType="boolean">
+        SELECT COUNT(0)
+        FROM department_type dt
+        WHERE dt.name = #{name}
+          AND dt.id &lt;&gt; #{id}
+    </select>
+
+    <insert id="addDepartmentTypes" parameterType="com.penghaisoft.framework.basics.model.entity.DepartmentType">
+        INSERT INTO department_type (
+          `name`
+        ) VALUES (
+          #{name}
+        )
+    </insert>
+
+    <update id="editDepartmentTypes" parameterType="com.penghaisoft.framework.basics.model.entity.DepartmentType">
+        UPDATE department_type dt
+        SET dt.name = #{name}
+        WHERE dt.id = #{id}
+    </update>
+
+    <delete id="deleteDepartmentTypes" parameterType="int">
+        DELETE FROM department_type
+        WHERE id = #{id}
+    </delete>
+</mapper>

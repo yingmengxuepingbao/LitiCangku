@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.penghaisoft.wms.nuohua.model.dao.WmsInOutTacticsMapper">
+  <resultMap id="BaseResultMap" type="com.penghaisoft.wms.nuohua.model.entity.WmsInOutTactics">
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="tactics_name" jdbcType="VARCHAR" property="tacticsName" />
+    <result column="tactics_code" jdbcType="VARCHAR" property="tacticsCode" />
+    <result column="user_defined1" jdbcType="VARCHAR" property="userDefined1" />
+    <result column="user_defined2" jdbcType="VARCHAR" property="userDefined2" />
+    <result column="user_defined3" jdbcType="VARCHAR" property="userDefined3" />
+    <result column="user_defined4" jdbcType="VARCHAR" property="userDefined4" />
+    <result column="user_defined5" jdbcType="VARCHAR" property="userDefined5" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="last_modified_by" jdbcType="VARCHAR" property="lastModifiedBy" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+    <result column="active_flag" jdbcType="CHAR" property="activeFlag" />
+  </resultMap>
+  <!-- =========================================================== -->
+  <!-- 一些公共变量设置                                                                                                                                                                             -->
+  <!-- =========================================================== -->
+  <!-- mysql 分页 -->
+  <sql id="pagination_tail">
+    top ((#{page.pageOffset} +1)* #{page.rows})
+  </sql>
+  <!-- mysql 查询总数 -->
+  <sql id="count_Tail">
+    select count(1) from
+  </sql>
+  <sql id="where_fragement">
+    where 1=1
+    <if test="entity!=null">
+      <if test="entity.id != null  and entity.id !=''">
+        <![CDATA[ and wms_in_out_tactics_.id  LIKE CONCAT('%',#{entity.id},'%')]]>
+      </if>
+      <if test="entity.tacticsName != null  and entity.tacticsName !=''">
+        <![CDATA[ and wms_in_out_tactics_.tactics_name  LIKE CONCAT('%',#{entity.tacticsName},'%')]]>
+      </if>
+      <if test="entity.tacticsCode != null  and entity.tacticsCode !=''">
+        <![CDATA[ and wms_in_out_tactics_.tactics_code  LIKE CONCAT('%',#{entity.tacticsCode},'%')]]>
+      </if>
+      <if test="entity.userDefined1 != null  and entity.userDefined1 !=''">
+        <![CDATA[ and wms_in_out_tactics_.user_defined1  LIKE CONCAT('%',#{entity.userDefined1},'%')]]>
+      </if>
+      <if test="entity.userDefined2 != null  and entity.userDefined2 !=''">
+        <![CDATA[ and wms_in_out_tactics_.user_defined2  LIKE CONCAT('%',#{entity.userDefined2},'%')]]>
+      </if>
+      <if test="entity.userDefined3 != null  and entity.userDefined3 !=''">
+        <![CDATA[ and wms_in_out_tactics_.user_defined3  LIKE CONCAT('%',#{entity.userDefined3},'%')]]>
+      </if>
+      <if test="entity.userDefined4 != null  and entity.userDefined4 !=''">
+        <![CDATA[ and wms_in_out_tactics_.user_defined4  LIKE CONCAT('%',#{entity.userDefined4},'%')]]>
+      </if>
+      <if test="entity.userDefined5 != null  and entity.userDefined5 !=''">
+        <![CDATA[ and wms_in_out_tactics_.user_defined5  LIKE CONCAT('%',#{entity.userDefined5},'%')]]>
+      </if>
+      <if test="entity.createBy != null  and entity.createBy !=''">
+        <![CDATA[ and wms_in_out_tactics_.create_by  LIKE CONCAT('%',#{entity.createBy},'%')]]>
+      </if>
+      <if test="entity.gmtCreate != null  and entity.gmtCreate !=''">
+        <![CDATA[ and wms_in_out_tactics_.gmt_create  LIKE CONCAT('%',#{entity.gmtCreate},'%')]]>
+      </if>
+      <if test="entity.lastModifiedBy != null  and entity.lastModifiedBy !=''">
+        <![CDATA[ and wms_in_out_tactics_.last_modified_by  LIKE CONCAT('%',#{entity.lastModifiedBy},'%')]]>
+      </if>
+      <if test="entity.gmtModified != null  ">
+        <![CDATA[ and wms_in_out_tactics_.gmt_modified  LIKE CONCAT('%',#{entity.gmtModified},'%')]]>
+      </if>
+      <if test="entity.activeFlag != null  and entity.activeFlag !=''">
+        <![CDATA[ and wms_in_out_tactics_.active_flag  LIKE CONCAT('%',#{entity.activeFlag},'%')]]>
+      </if>
+    </if>
+  </sql>
+  <sql id="where_any">
+    where 1=1
+    <if test="entity!=null">
+      <if test="entity.id != null  and entity.id !=''">
+        <![CDATA[ and wms_in_out_tactics_.id =#{entity.id}]]>
+      </if>
+      <if test="entity.tacticsName != null  and entity.tacticsName !=''">
+        <![CDATA[ and wms_in_out_tactics_.tactics_name =#{entity.tacticsName}]]>
+      </if>
+      <if test="entity.tacticsCode != null  and entity.tacticsCode !=''">
+        <![CDATA[ and wms_in_out_tactics_.tactics_code =#{entity.tacticsCode}]]>
+      </if>
+      <if test="entity.userDefined1 != null  and entity.userDefined1 !=''">
+        <![CDATA[ and wms_in_out_tactics_.user_defined1  = #{entity.userDefined1}]]>
+      </if>
+      <if test="entity.userDefined2 != null  and entity.userDefined2 !=''">
+        <![CDATA[ and wms_in_out_tactics_.user_defined2  = #{entity.userDefined2}]]>
+      </if>
+      <if test="entity.userDefined3 != null  and entity.userDefined3 !=''">
+        <![CDATA[ and wms_in_out_tactics_.user_defined3  = #{entity.userDefined3}]]>
+      </if>
+      <if test="entity.userDefined4 != null  and entity.userDefined4 !=''">
+        <![CDATA[ and wms_in_out_tactics_.user_defined4  = #{entity.userDefined4}]]>
+      </if>
+      <if test="entity.userDefined5 != null  and entity.userDefined5 !=''">
+        <![CDATA[ and wms_in_out_tactics_.user_defined5  = #{entity.userDefined5}]]>
+      </if>
+      <if test="entity.createBy != null  and entity.createBy !=''">
+        <![CDATA[ and wms_in_out_tactics_.create_by  = #{entity.createBy}]]>
+      </if>
+      <if test="entity.gmtCreate != null  and entity.gmtCreate !=''">
+        <![CDATA[ and wms_in_out_tactics_.gmt_create  = #{entity.gmtCreate}]]>
+      </if>
+      <if test="entity.lastModifiedBy != null  and entity.lastModifiedBy !=''">
+        <![CDATA[ and wms_in_out_tactics_.last_modified_by  = #{entity.lastModifiedBy}]]>
+      </if>
+      <if test="entity.gmtModified != null  ">
+        <![CDATA[ and wms_in_out_tactics_.gmt_modified  = #{entity.gmtModified}]]>
+      </if>
+      <if test="entity.activeFlag != null  and entity.activeFlag !=''">
+        <![CDATA[ and wms_in_out_tactics_.active_flag  = #{entity.activeFlag}]]>
+      </if>
+    </if>
+  </sql>
+
+  <sql id="selectAllColumns">
+		<![CDATA[
+            id
+            ,tactics_name
+ 			,tactics_code
+ 			,user_defined1
+ 			,user_defined2
+ 			,user_defined3
+ 			,user_defined4
+ 			,user_defined5
+ 			,create_by
+ 			,gmt_create
+ 			,last_modified_by
+ 			,gmt_modified
+ 			,active_flag
+		FROM
+		wms_in_out_tactics wms_in_out_tactics_
+    ]]>
+	</sql>
+  <!-- 根据id查询 -->
+  <select id="queryById" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select
+    <include refid="selectAllColumns" />
+    <![CDATA[
+		where wms_in_out_tactics_.id = #{id}
+		]]>
+  </select>
+  <!-- 分页查询 -->
+  <select id="queryList" resultMap="BaseResultMap" >
+    select
+    <if test="page!=null">
+      <include refid="pagination_tail" />
+    </if>
+    <include refid="selectAllColumns"/>
+    <include refid="where_fragement" />
+  </select>
+
+  <select id="queryCount" resultType="long">
+    <include refid="count_Tail" />
+    wms_in_out_tactics wms_in_out_tactics_
+    <include refid="where_fragement" />
+  </select>
+
+  <!-- 物理删除 -->
+  <update id="delete" parameterType="com.penghaisoft.wms.nuohua.model.entity.WmsInOutTactics">
+    DELETE FROM wms_in_out_tactics
+    where id = #{entity.id}
+  </update>
+
+  <insert id="insert" parameterType="com.penghaisoft.wms.nuohua.model.entity.WmsInOutTactics">
+    insert into wms_in_out_tactics ( tactics_name, tactics_code,
+      user_defined1, user_defined2, user_defined3, 
+      user_defined4, user_defined5, create_by, 
+      gmt_create, last_modified_by, gmt_modified, 
+      active_flag)
+    values ( #{tacticsName,jdbcType=VARCHAR}, #{tacticsCode,jdbcType=VARCHAR},
+      #{userDefined1,jdbcType=VARCHAR}, #{userDefined2,jdbcType=VARCHAR}, #{userDefined3,jdbcType=VARCHAR}, 
+      #{userDefined4,jdbcType=VARCHAR}, #{userDefined5,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{lastModifiedBy,jdbcType=VARCHAR}, #{gmtModified,jdbcType=TIMESTAMP}, 
+      #{activeFlag,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.penghaisoft.wms.nuohua.model.entity.WmsInOutTactics">
+    insert into wms_in_out_tactics
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="tacticsName != null">
+        tactics_name,
+      </if>
+      <if test="tacticsCode != null">
+        tactics_code,
+      </if>
+      <if test="userDefined1 != null">
+        user_defined1,
+      </if>
+      <if test="userDefined2 != null">
+        user_defined2,
+      </if>
+      <if test="userDefined3 != null">
+        user_defined3,
+      </if>
+      <if test="userDefined4 != null">
+        user_defined4,
+      </if>
+      <if test="userDefined5 != null">
+        user_defined5,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="lastModifiedBy != null">
+        last_modified_by,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
+      </if>
+      <if test="activeFlag != null">
+        active_flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="tacticsName != null">
+        #{tacticsName,jdbcType=VARCHAR},
+      </if>
+      <if test="tacticsCode != null">
+        #{tacticsCode,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined1 != null">
+        #{userDefined1,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined2 != null">
+        #{userDefined2,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined3 != null">
+        #{userDefined3,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined4 != null">
+        #{userDefined4,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined5 != null">
+        #{userDefined5,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifiedBy != null">
+        #{lastModifiedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activeFlag != null">
+        #{activeFlag,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <!-- 根据id，修改记录 -->
+  <update id="update" parameterType="com.penghaisoft.wms.nuohua.model.entity.WmsInOutTactics">
+		<![CDATA[
+    update wms_in_out_tactics set
+      tactics_name = #{tacticsName}
+           ,tactics_code = #{tacticsCode}
+           ,user_defined1 = #{userDefined1}
+           ,user_defined2 = #{userDefined2}
+           ,user_defined3 = #{userDefined3}
+           ,user_defined4 = #{userDefined4}
+           ,user_defined5 = #{userDefined5}
+           ,create_by = #{createBy}
+           ,gmt_create = #{gmtCreate}
+           ,last_modified_by = #{lastModifiedBy}
+           ,gmt_modified = #{gmtModified}
+           ,active_flag = #{activeFlag}
+    where id = #{id}
+    ]]>
+	</update>
+</mapper>

@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.penghaisoft.pda.storage.dao.WmsLocationStereoscopicMapper">
+    <resultMap id="BaseResultMap" type="com.penghaisoft.pda.storage.model.WmsLocationStereoscopic">
+        <id column="location_id" property="locationId" jdbcType="VARCHAR"/>
+        <result column="warehouse_code" property="warehouseCode" jdbcType="VARCHAR"/>
+        <result column="area_code" property="areaCode" jdbcType="VARCHAR"/>
+        <result column="location_code" property="locationCode" jdbcType="VARCHAR"/>
+        <result column="location_attr" property="locationAttr" jdbcType="VARCHAR"/>
+        <result column="location_desc" property="locationDesc" jdbcType="VARCHAR"/>
+        <result column="pallet_code" property="palletCode" jdbcType="VARCHAR"/>
+        <result column="in_seq" property="inSeq" jdbcType="INTEGER"/>
+        <result column="out_seq" property="outSeq" jdbcType="INTEGER"/>
+        <result property="floorNumber" column="floor_number"/>
+        <result column="shelves_number" property="shelvesNumber" jdbcType="INTEGER"/>
+        <result column="column_number" property="columnNumber" jdbcType="INTEGER"/>
+        <result column="layer_number" property="layerNumber" jdbcType="INTEGER"/>
+        <result column="use_status" property="useStatus" jdbcType="CHAR"/>
+        <result column="allow_mix" property="allowMix" jdbcType="CHAR"/>
+        <result column="user_defined1" property="userDefined1" jdbcType="VARCHAR"/>
+        <result column="user_defined2" property="userDefined2" jdbcType="VARCHAR"/>
+        <result column="user_defined3" property="userDefined3" jdbcType="VARCHAR"/>
+        <result column="user_defined4" property="userDefined4" jdbcType="VARCHAR"/>
+        <result column="user_defined5" property="userDefined5" jdbcType="VARCHAR"/>
+        <result column="create_by" property="createBy" jdbcType="VARCHAR"/>
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP"/>
+        <result column="last_modified_by" property="lastModifiedBy" jdbcType="VARCHAR"/>
+        <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP"/>
+        <result column="active_flag" property="activeFlag" jdbcType="CHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    location_id, warehouse_code, area_code, location_code, location_attr, location_desc,
+    pallet_code, in_seq, out_seq, shelves_number, column_number, layer_number, use_status,
+    allow_mix, user_defined1, user_defined2, user_defined3, user_defined4, user_defined5,
+    create_by, gmt_create, last_modified_by, gmt_modified, active_flag
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from wms_location_stereoscopic
+        where location_id = #{locationId,jdbcType=VARCHAR}
+    </select>
+    <select id="selectByLocationCode" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from wms_location_stereoscopic
+        where location_code = #{locationCode,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from wms_location_stereoscopic
+    where location_id = #{locationId,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insertSelective" parameterType="com.penghaisoft.pda.storage.model.WmsLocationStereoscopic">
+        insert into wms_location_stereoscopic
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="locationId != null">
+                location_id,
+            </if>
+            <if test="warehouseCode != null">
+                warehouse_code,
+            </if>
+            <if test="areaCode != null">
+                area_code,
+            </if>
+            <if test="locationCode != null">
+                location_code,
+            </if>
+            <if test="locationAttr != null">
+                location_attr,
+            </if>
+            <if test="locationDesc != null">
+                location_desc,
+            </if>
+            <if test="palletCode != null">
+                pallet_code,
+            </if>
+            <if test="inSeq != null">
+                in_seq,
+            </if>
+            <if test="outSeq != null">
+                out_seq,
+            </if>
+            <if test="shelvesNumber != null">
+                shelves_number,
+            </if>
+            <if test="columnNumber != null">
+                column_number,
+            </if>
+            <if test="layerNumber != null">
+                layer_number,
+            </if>
+            <if test="useStatus != null">
+                use_status,
+            </if>
+            <if test="allowMix != null">
+                allow_mix,
+            </if>
+            <if test="userDefined1 != null">
+                user_defined1,
+            </if>
+            <if test="userDefined2 != null">
+                user_defined2,
+            </if>
+            <if test="userDefined3 != null">
+                user_defined3,
+            </if>
+            <if test="userDefined4 != null">
+                user_defined4,
+            </if>
+            <if test="userDefined5 != null">
+                user_defined5,
+            </if>
+            <if test="createBy != null">
+                create_by,
+            </if>
+            <if test="gmtCreate != null">
+                gmt_create,
+            </if>
+            <if test="lastModifiedBy != null">
+                last_modified_by,
+            </if>
+            <if test="gmtModified != null">
+                gmt_modified,
+            </if>
+            <if test="activeFlag != null">
+                active_flag,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="locationId != null">
+                #{locationId,jdbcType=VARCHAR},
+            </if>
+            <if test="warehouseCode != null">
+                #{warehouseCode,jdbcType=VARCHAR},
+            </if>
+            <if test="areaCode != null">
+                #{areaCode,jdbcType=VARCHAR},
+            </if>
+            <if test="locationCode != null">
+                #{locationCode,jdbcType=VARCHAR},
+            </if>
+            <if test="locationAttr != null">
+                #{locationAttr,jdbcType=VARCHAR},
+            </if>
+            <if test="locationDesc != null">
+                #{locationDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="palletCode != null">
+                #{palletCode,jdbcType=VARCHAR},
+            </if>
+            <if test="inSeq != null">
+                #{inSeq,jdbcType=INTEGER},
+            </if>
+            <if test="outSeq != null">
+                #{outSeq,jdbcType=INTEGER},
+            </if>
+            <if test="shelvesNumber != null">
+                #{shelvesNumber,jdbcType=INTEGER},
+            </if>
+            <if test="columnNumber != null">
+                #{columnNumber,jdbcType=INTEGER},
+            </if>
+            <if test="layerNumber != null">
+                #{layerNumber,jdbcType=INTEGER},
+            </if>
+            <if test="useStatus != null">
+                #{useStatus,jdbcType=CHAR},
+            </if>
+            <if test="allowMix != null">
+                #{allowMix,jdbcType=CHAR},
+            </if>
+            <if test="userDefined1 != null">
+                #{userDefined1,jdbcType=VARCHAR},
+            </if>
+            <if test="userDefined2 != null">
+                #{userDefined2,jdbcType=VARCHAR},
+            </if>
+            <if test="userDefined3 != null">
+                #{userDefined3,jdbcType=VARCHAR},
+            </if>
+            <if test="userDefined4 != null">
+                #{userDefined4,jdbcType=VARCHAR},
+            </if>
+            <if test="userDefined5 != null">
+                #{userDefined5,jdbcType=VARCHAR},
+            </if>
+            <if test="createBy != null">
+                #{createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="gmtCreate != null">
+                #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastModifiedBy != null">
+                #{lastModifiedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="gmtModified != null">
+                #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+            <if test="activeFlag != null">
+                #{activeFlag,jdbcType=CHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.penghaisoft.pda.storage.model.WmsLocationStereoscopic">
+        update wms_location_stereoscopic
+        <set>
+            <if test="warehouseCode != null">
+                warehouse_code = #{warehouseCode,jdbcType=VARCHAR},
+            </if>
+            <if test="areaCode != null">
+                area_code = #{areaCode,jdbcType=VARCHAR},
+            </if>
+            <if test="locationCode != null">
+                location_code = #{locationCode,jdbcType=VARCHAR},
+            </if>
+            <if test="locationAttr != null">
+                location_attr = #{locationAttr,jdbcType=VARCHAR},
+            </if>
+            <if test="locationDesc != null">
+                location_desc = #{locationDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="palletCode != null">
+                pallet_code = #{palletCode,jdbcType=VARCHAR},
+            </if>
+            <if test="inSeq != null">
+                in_seq = #{inSeq,jdbcType=INTEGER},
+            </if>
+            <if test="outSeq != null">
+                out_seq = #{outSeq,jdbcType=INTEGER},
+            </if>
+            <if test="shelvesNumber != null">
+                shelves_number = #{shelvesNumber,jdbcType=INTEGER},
+            </if>
+            <if test="columnNumber != null">
+                column_number = #{columnNumber,jdbcType=INTEGER},
+            </if>
+            <if test="layerNumber != null">
+                layer_number = #{layerNumber,jdbcType=INTEGER},
+            </if>
+            <if test="useStatus != null">
+                use_status = #{useStatus,jdbcType=CHAR},
+            </if>
+            <if test="allowMix != null">
+                allow_mix = #{allowMix,jdbcType=CHAR},
+            </if>
+            <if test="userDefined1 != null">
+                user_defined1 = #{userDefined1,jdbcType=VARCHAR},
+            </if>
+            <if test="userDefined2 != null">
+                user_defined2 = #{userDefined2,jdbcType=VARCHAR},
+            </if>
+            <if test="userDefined3 != null">
+                user_defined3 = #{userDefined3,jdbcType=VARCHAR},
+            </if>
+            <if test="userDefined4 != null">
+                user_defined4 = #{userDefined4,jdbcType=VARCHAR},
+            </if>
+            <if test="userDefined5 != null">
+                user_defined5 = #{userDefined5,jdbcType=VARCHAR},
+            </if>
+            <if test="createBy != null">
+                create_by = #{createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="gmtCreate != null">
+                gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastModifiedBy != null">
+                last_modified_by = #{lastModifiedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="gmtModified != null">
+                gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+            <if test="activeFlag != null">
+                active_flag = #{activeFlag,jdbcType=CHAR},
+            </if>
+        </set>
+        where location_id = #{locationId,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByLocationCode" parameterType="com.penghaisoft.pda.storage.model.WmsLocationStereoscopic">
+        update wms_location_stereoscopic
+        <set>
+            <if test="warehouseCode != null">
+                warehouse_code = #{warehouseCode,jdbcType=VARCHAR},
+            </if>
+            <if test="areaCode != null">
+                area_code = #{areaCode,jdbcType=VARCHAR},
+            </if>
+            <if test="locationCode != null">
+                location_code = #{locationCode,jdbcType=VARCHAR},
+            </if>
+            <if test="locationAttr != null">
+                location_attr = #{locationAttr,jdbcType=VARCHAR},
+            </if>
+            <if test="locationDesc != null">
+                location_desc = #{locationDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="palletCode != null">
+                pallet_code = #{palletCode,jdbcType=VARCHAR},
+            </if>
+            <if test="inSeq != null">
+                in_seq = #{inSeq,jdbcType=INTEGER},
+            </if>
+            <if test="outSeq != null">
+                out_seq = #{outSeq,jdbcType=INTEGER},
+            </if>
+            <if test="shelvesNumber != null">
+                shelves_number = #{shelvesNumber,jdbcType=INTEGER},
+            </if>
+            <if test="columnNumber != null">
+                column_number = #{columnNumber,jdbcType=INTEGER},
+            </if>
+            <if test="layerNumber != null">
+                layer_number = #{layerNumber,jdbcType=INTEGER},
+            </if>
+            <if test="useStatus != null">
+                use_status = #{useStatus,jdbcType=CHAR},
+            </if>
+            <if test="allowMix != null">
+                allow_mix = #{allowMix,jdbcType=CHAR},
+            </if>
+            <if test="userDefined1 != null">
+                user_defined1 = #{userDefined1,jdbcType=VARCHAR},
+            </if>
+            <if test="userDefined2 != null">
+                user_defined2 = #{userDefined2,jdbcType=VARCHAR},
+            </if>
+            <if test="userDefined3 != null">
+                user_defined3 = #{userDefined3,jdbcType=VARCHAR},
+            </if>
+            <if test="userDefined4 != null">
+                user_defined4 = #{userDefined4,jdbcType=VARCHAR},
+            </if>
+            <if test="userDefined5 != null">
+                user_defined5 = #{userDefined5,jdbcType=VARCHAR},
+            </if>
+            <if test="createBy != null">
+                create_by = #{createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="gmtCreate != null">
+                gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastModifiedBy != null">
+                last_modified_by = #{lastModifiedBy,jdbcType=VARCHAR},
+            </if>
+            <if test="gmtModified != null">
+                gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+            <if test="activeFlag != null">
+                active_flag = #{activeFlag,jdbcType=CHAR},
+            </if>
+        </set>
+        where location_code = #{locationCode,jdbcType=VARCHAR}
+    </update>
+
+    <select id="getAllLocationInfo" resultMap="BaseResultMap">
+		SELECT
+			m.location_code,
+			m.pallet_code,
+			m.floor_number,
+			m.shelves_number,
+			m.layer_number,
+			m.column_number,
+			m.use_status,
+			n.goods_code,
+			n.batch_no,
+			n.amount
+		FROM
+			wms_location_stereoscopic m
+		LEFT JOIN wms_pallet n ON m.pallet_code = n.pallet_code AND n.active_flag = '1'
+		WHERE m.active_flag = '1'
+		ORDER BY
+			m.floor_number ASC,
+			m.layer_number ASC,
+			m.column_number ASC,
+			m.shelves_number ASC
+	</select>
+</mapper>

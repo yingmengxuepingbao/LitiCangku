@@ -1,0 +1,86 @@
+package com.penghaisoft.pda.common;
+
+import java.awt.*;
+
+import lombok.extern.slf4j.Slf4j;
+import onbon.bx06.Bx6GEnv;
+import onbon.bx06.Bx6GScreenClient;
+import onbon.bx06.area.*;
+import onbon.bx06.area.page.TextBxPage;
+import onbon.bx06.file.ProgramBxFile;
+import onbon.bx06.series.Bx6E;
+import onbon.bx06.utils.DisplayStyleFactory.DisplayStyle;
+import onbon.bx06.utils.DisplayStyleFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.PostConstruct;
+
+/**
+ * @ClassName KanbanUtil
+ * @Description 电子看板工具类
+ * @Author zhangx
+ * @Date 2020/6/12 14:01
+ **/
+@Slf4j
+@Service
+public class KanbanUtil {
+
+    @Value("${led.ip}")
+    private String ledIp;
+
+    @Value("${led.port}")
+    private String ledPort;
+
+
+    @PostConstruct
+    public static void init() throws Exception {
+        log.info("电子看板初始化");
+        Bx6GEnv.initial();
+    }
+
+    /**
+      * @Description 发送欢迎屏
+      * @Author luot
+      * @Date 2020/6/17 10:44
+      * @Param
+      * @return
+      **/
+    public void sendWelcome() {
+        try{
+            log.info("发送欢迎屏！！！！！！！！！！！！！！！！！！！！");
+            DisplayStyle[] styles = DisplayStyleFactory.getStyles().toArray(new DisplayStyle[0]);
+
+            // 创建screen对象,用于与控制卡的交互
+            // 第二个参数是控制卡型号，只有型号对才能正常通讯，否则会出现逾时未回应，如果使用的型号API中未定义，用new Bx6M()替代
+            Bx6GScreenClient screen = new Bx6GScreenClient( "MyScreen",new Bx6E() );
+
+            // 连接控制器
+            screen.connect(ledIp, Integer.parseInt(ledPort));
+
+            // 创建节目 一个节目相当于一屏显示内容
+            ProgramBxFile pf = new ProgramBxFile( "P000",screen.getProfile() );
+
+            // 创建一个分区
+            // 分别输入X，Y，width，heigth
+            // 注意区域坐标和宽度高度不要越界
+            TextCaptionBxArea area = new TextCaptionBxArea( 0,22,192,42,screen.getProfile() );
+
+            TextBxPage page = new TextBxPage("青岛宝博生物有限公司");
+
+            // 设置字体
+            page.setFont(new Font("宋体", Font.PLAIN, 19));
+
+            area.addPage( page );
+            // 将area添加到节目中，节目中可以添加多个area
+            pf.addArea( area );
+            // 更新节目
+            screen.writeProgram( pf );
+
+            // 断开连接
+            screen.disconnect();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+}

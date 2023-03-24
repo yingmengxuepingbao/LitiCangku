@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.penghaisoft.wcs.monitormanagement.model.dao.WcsManualOperationLogMapper">
+	
+	<!-- =========================================================== -->
+    <!-- 定义resultMap                                                                                                                                                                             -->
+    <!-- =========================================================== -->
+	<resultMap id="wcsManualOperationLogMap" type="com.penghaisoft.wcs.monitormanagement.model.entity.WcsManualOperationLog">
+	    <result property="manualOperationLogId" column="manual_operation_log_id"/>
+	    <result property="operationType" column="operation_type"/>
+	    <result property="operationName" column="operation_name"/>
+	    <result property="data" column="data"/>
+	    <result property="status" column="status"/>
+	    <result property="userDefined1" column="user_defined1"/>
+	    <result property="userDefined2" column="user_defined2"/>
+	    <result property="userDefined3" column="user_defined3"/>
+	    <result property="userDefined4" column="user_defined4"/>
+	    <result property="userDefined5" column="user_defined5"/>
+	    <result property="gmtCreate" column="gmt_create"/>
+	    <result property="createBy" column="create_by"/>
+	    <result property="gmtEnd" column="gmt_end"/>
+	</resultMap>
+	
+	<!-- =========================================================== -->
+    <!-- 一些公共变量设置                                                                                                                                                                             -->
+    <!-- =========================================================== -->
+	<!-- mysql 分页 -->
+	<sql id="pagination_tail">
+	  limit #{page.pageOffset} , #{page.rows}
+	</sql>
+	<!-- mysql 查询总数 -->
+	<sql id="count_Tail">
+		select count(1) from 
+	</sql>
+	
+	<sql id="selectAllColumns">
+		<![CDATA[
+		select
+ 			manual_operation_log_id
+ 			,operation_type
+ 			,operation_name
+ 			,data
+ 			,status
+ 			,user_defined1
+ 			,user_defined2
+ 			,user_defined3
+ 			,user_defined4
+ 			,user_defined5
+ 			,gmt_create
+ 			,create_by
+ 			,gmt_end
+		FROM 
+		wcs_manual_operation_log wcs_manual_operation_log_
+		]]>
+	</sql>
+	
+	<sql id="where_fragement">
+		where 1=1
+		<if test="entity!=null">
+			<if test="entity.manualOperationLogId != null and entity.manualOperationLogId !=''">
+				<![CDATA[ and wcs_manual_operation_log_.manual_operation_log_id LIKE CONCAT('%',#{entity.manualOperationLogId},'%')]]>
+			</if>
+			<if test="entity.operationType != null and entity.operationType !=''">
+				<![CDATA[ and wcs_manual_operation_log_.operation_type LIKE CONCAT('%',#{entity.operationType},'%')]]>
+			</if>
+			<if test="entity.operationName != null and entity.operationName !=''">
+				<![CDATA[ and wcs_manual_operation_log_.operation_name LIKE CONCAT('%',#{entity.operationName},'%')]]>
+			</if>
+			<if test="entity.data != null and entity.data !=''">
+				<![CDATA[ and wcs_manual_operation_log_.data LIKE CONCAT('%',#{entity.data},'%')]]>
+			</if>
+			<if test="entity.status != null and entity.status !=''">
+				<![CDATA[ and wcs_manual_operation_log_.status LIKE CONCAT('%',#{entity.status},'%')]]>
+			</if>
+			<if test="entity.userDefined1 != null and entity.userDefined1 !=''">
+				<![CDATA[ and wcs_manual_operation_log_.user_defined1 LIKE CONCAT('%',#{entity.userDefined1},'%')]]>
+			</if>
+			<if test="entity.userDefined2 != null and entity.userDefined2 !=''">
+				<![CDATA[ and wcs_manual_operation_log_.user_defined2 LIKE CONCAT('%',#{entity.userDefined2},'%')]]>
+			</if>
+			<if test="entity.userDefined3 != null and entity.userDefined3 !=''">
+				<![CDATA[ and wcs_manual_operation_log_.user_defined3 LIKE CONCAT('%',#{entity.userDefined3},'%')]]>
+			</if>
+			<if test="entity.userDefined4 != null and entity.userDefined4 !=''">
+				<![CDATA[ and wcs_manual_operation_log_.user_defined4 LIKE CONCAT('%',#{entity.userDefined4},'%')]]>
+			</if>
+			<if test="entity.userDefined5 != null and entity.userDefined5 !=''">
+				<![CDATA[ and wcs_manual_operation_log_.user_defined5 LIKE CONCAT('%',#{entity.userDefined5},'%')]]>
+			</if>
+			<if test="entity.gmtCreate != null">
+				<![CDATA[ and wcs_manual_operation_log_.gmt_create LIKE CONCAT('%',#{entity.gmtCreate},'%')]]>
+			</if>
+			<if test="entity.createBy != null and entity.createBy !=''">
+				<![CDATA[ and wcs_manual_operation_log_.create_by LIKE CONCAT('%',#{entity.createBy},'%')]]>
+			</if>
+			<if test="entity.gmtEnd != null and entity.gmtEnd !=''">
+				<![CDATA[ and wcs_manual_operation_log_.gmt_end LIKE CONCAT('%',#{entity.gmtEnd},'%')]]>
+			</if>
+		</if>
+	</sql>
+	
+	<sql id="where_any">
+		where 1=1
+		<if test="entity!=null">
+			<if test="entity.manualOperationLogId != null and entity.manualOperationLogId !=''">
+				<![CDATA[ and wcs_manual_operation_log_.manual_operation_log_id = #{entity.manualOperationLogId}]]>
+			</if>
+			<if test="entity.operationType != null and entity.operationType !=''">
+				<![CDATA[ and wcs_manual_operation_log_.operation_type = #{entity.operationType}]]>
+			</if>
+			<if test="entity.operationName != null and entity.operationName !=''">
+				<![CDATA[ and wcs_manual_operation_log_.operation_name = #{entity.operationName}]]>
+			</if>
+			<if test="entity.data != null and entity.data !=''">
+				<![CDATA[ and wcs_manual_operation_log_.data = #{entity.data}]]>
+			</if>
+			<if test="entity.status != null and entity.status !=''">
+				<![CDATA[ and wcs_manual_operation_log_.status = #{entity.status}]]>
+			</if>
+			<if test="entity.userDefined1 != null and entity.userDefined1 !=''">
+				<![CDATA[ and wcs_manual_operation_log_.user_defined1 = #{entity.userDefined1}]]>
+			</if>
+			<if test="entity.userDefined2 != null and entity.userDefined2 !=''">
+				<![CDATA[ and wcs_manual_operation_log_.user_defined2 = #{entity.userDefined2}]]>
+			</if>
+			<if test="entity.userDefined3 != null and entity.userDefined3 !=''">
+				<![CDATA[ and wcs_manual_operation_log_.user_defined3 = #{entity.userDefined3}]]>
+			</if>
+			<if test="entity.userDefined4 != null and entity.userDefined4 !=''">
+				<![CDATA[ and wcs_manual_operation_log_.user_defined4 = #{entity.userDefined4}]]>
+			</if>
+			<if test="entity.userDefined5 != null and entity.userDefined5 !=''">
+				<![CDATA[ and wcs_manual_operation_log_.user_defined5 = #{entity.userDefined5}]]>
+			</if>
+			<if test="entity.gmtCreate != null">
+				<![CDATA[ and wcs_manual_operation_log_.gmt_create = #{entity.gmtCreate}]]>
+			</if>
+			<if test="entity.createBy != null and entity.createBy !=''">
+				<![CDATA[ and wcs_manual_operation_log_.create_by = #{entity.createBy}]]>
+			</if>
+			<if test="entity.gmtEnd != null and entity.gmtEnd !=''">
+				<![CDATA[ and wcs_manual_operation_log_.gmt_end = #{entity.gmtEnd}]]>
+			</if>
+		</if>
+	</sql>
+	
+	<!-- =========================================================== -->
+    <!-- DAO方法中的基本增删改查方法                                                                                                                                                           -->
+    <!-- =========================================================== -->
+   <!-- 根据id查询 -->
+	<select id="queryById" resultMap="wcsManualOperationLogMap" parameterType="java.lang.String">
+		<include refid="selectAllColumns" />
+		<![CDATA[
+		where wcs_manual_operation_log_.manual_operation_log_id = #{id}
+		]]>
+	</select>
+	
+	<!-- 分页查询 -->
+	<select id="queryList" resultMap="wcsManualOperationLogMap" >
+		<include refid="selectAllColumns"/>
+		<include refid="where_fragement" />
+		<if test="page!=null">
+			<include refid="pagination_tail" />
+		</if>
+	</select>
+	
+	<select id="queryCount" resultType="long">
+		<include refid="count_Tail" />
+		wcs_manual_operation_log wcs_manual_operation_log_
+		<include refid="where_fragement" />
+	</select>
+	
+	<!-- 插入记录 -->
+	<insert id="create" parameterType="com.penghaisoft.wcs.monitormanagement.model.entity.WcsManualOperationLog">
+		<![CDATA[
+		insert into wcs_manual_operation_log (
+		    	 manual_operation_log_id
+		    	 ,operation_type
+		    	 ,operation_name
+		    	 ,data
+		    	 ,status
+		    	 ,user_defined1
+		    	 ,user_defined2
+		    	 ,user_defined3
+		    	 ,user_defined4
+		    	 ,user_defined5
+		    	 ,gmt_create
+		    	 ,create_by
+		    	 ,gmt_end
+		   )values(
+		    	#{manualOperationLogId}
+		    	,#{operationType}
+		    	,#{operationName}
+		    	,#{data}
+		    	,#{status}
+		    	,#{userDefined1}
+		    	,#{userDefined2}
+		    	,#{userDefined3}
+		    	,#{userDefined4}
+		    	,#{userDefined5}
+		    	,#{gmtCreate}
+		    	,#{createBy}
+		    	,#{gmtEnd}
+		   )
+	    ]]>	
+	</insert>
+	
+	<!-- 批量插入记录 -->
+	<insert id="batchInsert" parameterType="java.util.List">
+		insert into wcs_manual_operation_log (
+		    	 manual_operation_log_id
+		    	 ,operation_type
+		    	 ,operation_name
+		    	 ,data
+		    	 ,status
+		    	 ,user_defined1
+		    	 ,user_defined2
+		    	 ,user_defined3
+		    	 ,user_defined4
+		    	 ,user_defined5
+		    	 ,gmt_create
+		    	 ,create_by
+		    	 ,gmt_end
+		   )
+		   values
+		   <foreach collection="list" item="item" index="index" separator="," >
+		   (
+		    	#{item.manualOperationLogId}
+		    	,#{item.operationType}
+		    	,#{item.operationName}
+		    	,#{item.data}
+		    	,#{item.status}
+		    	,#{item.userDefined1}
+		    	,#{item.userDefined2}
+		    	,#{item.userDefined3}
+		    	,#{item.userDefined4}
+		    	,#{item.userDefined5}
+		    	,#{item.gmtCreate}
+		    	,#{item.createBy}
+		    	,#{item.gmtEnd}
+		   )
+		   </foreach>	
+	</insert>
+	
+	<!-- 根据id，修改记录 -->
+	<update id="update" parameterType="com.penghaisoft.wcs.monitormanagement.model.entity.WcsManualOperationLog">
+		<![CDATA[
+		update wcs_manual_operation_log set
+   			
+   			operation_type = #{operationType}
+   			,operation_name = #{operationName}
+   			,data = #{data}
+   			,status = #{status}
+   			,user_defined1 = #{userDefined1}
+   			,user_defined2 = #{userDefined2}
+   			,user_defined3 = #{userDefined3}
+   			,user_defined4 = #{userDefined4}
+   			,user_defined5 = #{userDefined5}
+   			,gmt_create = #{gmtCreate}
+   			,create_by = #{createBy}
+   			,gmt_end = #{gmtEnd}
+		 where manual_operation_log_id = #{manualOperationLogId}
+		]]>
+	</update>
+	
+	<!--  -->
+	<update id="updateBySelect" parameterType="com.penghaisoft.wcs.monitormanagement.model.entity.WcsManualOperationLog">
+		update wcs_manual_operation_log <set>
+		<if test="entity!=null">
+				<if test="entity.manualOperationLogId != null and entity.manualOperationLogId !=''">
+					
+				</if>
+				<if test="entity.operationType != null and entity.operationType !=''">
+					<![CDATA[ operation_type = #{entity.operationType}, ]]>
+				</if>
+				<if test="entity.operationName != null and entity.operationName !=''">
+					<![CDATA[ operation_name = #{entity.operationName}, ]]>
+				</if>
+				<if test="entity.data != null and entity.data !=''">
+					<![CDATA[ data = #{entity.data}, ]]>
+				</if>
+				<if test="entity.status != null and entity.status !=''">
+					<![CDATA[ status = #{entity.status}, ]]>
+				</if>
+				<if test="entity.userDefined1 != null and entity.userDefined1 !=''">
+					<![CDATA[ user_defined1 = #{entity.userDefined1}, ]]>
+				</if>
+				<if test="entity.userDefined2 != null and entity.userDefined2 !=''">
+					<![CDATA[ user_defined2 = #{entity.userDefined2}, ]]>
+				</if>
+				<if test="entity.userDefined3 != null and entity.userDefined3 !=''">
+					<![CDATA[ user_defined3 = #{entity.userDefined3}, ]]>
+				</if>
+				<if test="entity.userDefined4 != null and entity.userDefined4 !=''">
+					<![CDATA[ user_defined4 = #{entity.userDefined4}, ]]>
+				</if>
+				<if test="entity.userDefined5 != null and entity.userDefined5 !=''">
+					<![CDATA[ user_defined5 = #{entity.userDefined5}, ]]>
+				</if>
+				<if test="entity.gmtCreate != null">
+					<![CDATA[ gmt_create = #{entity.gmtCreate}, ]]>
+				</if>
+				<if test="entity.createBy != null and entity.createBy !=''">
+					<![CDATA[ create_by = #{entity.createBy}, ]]>
+				</if>
+				<if test="entity.gmtEnd != null and entity.gmtEnd !=''">
+					<![CDATA[ gmt_end = #{entity.gmtEnd}, ]]>
+				</if>
+		</if>
+		</set>
+		 where manual_operation_log_id = #{entity.manualOperationLogId}
+	</update>
+
+	   <!-- 逻辑删除,根据主键设置active_flag ='0' -->
+	  <update id="delete" parameterType="com.penghaisoft.wcs.monitormanagement.model.entity.WcsManualOperationLog">
+	    UPDATE wcs_manual_operation_log
+	    SET active_flag = "0"
+	    ,last_modified_by = #{entity.lastModifiedBy}
+	    ,gmt_modified = #{entity.gmtModified}
+	     where manual_operation_log_id = #{entity.manualOperationLogId}
+	  </update>
+	  
+	  <update id="batchDelete" parameterType="com.penghaisoft.wcs.monitormanagement.model.entity.WcsManualOperationLog">
+	    DELETE FROM wcs_manual_operation_log
+	    where manual_operation_log_id in 
+	    <foreach collection="entity.manualOperationLogIdList" index="index" item="item" open="(" separator="," close=")">
+	      #{item}
+	    </foreach>
+	  </update>
+
+	<!-- 任意字段全匹配 -->
+	<select id="queryByAny" resultMap="wcsManualOperationLogMap" >
+		<include refid="selectAllColumns"/>
+		<include refid="where_any" />
+	</select>
+	
+	<select id="queryByAnyCount" resultType="long">
+		<include refid="count_Tail" />
+		wcs_manual_operation_log wcs_manual_operation_log_
+		<include refid="where_any" />
+	</select>
+</mapper>

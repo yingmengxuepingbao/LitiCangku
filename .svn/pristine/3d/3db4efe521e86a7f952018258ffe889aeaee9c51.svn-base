@@ -1,0 +1,390 @@
+body{
+	background-color:  #F1F4F4;
+}
+.lf{float:left}
+label{color: #444;}
+.btn-default{
+	padding-left: 15px;
+	padding-right: 15px;
+}
+.btn-lists {
+	padding: 10px 0;
+	border-bottom: 1px solid #ECF0F1;;
+}
+.btn-lists btn{
+	padding-left: 15px;
+	padding-right: 15px;
+}
+.btn-lists .btn-add{
+	background-color: #1DBBF4;
+	color:#fff;
+	border: 1px solid #1DBBF4;
+}
+.btn-lists .btn-add span{font-size: 10px;color:#fff;}
+/*/重定义tab*/
+.nav-tabs {
+	border-bottom: 1px solid #e5e5e5;
+}
+.nav-tabs > li > a {
+	margin-right: 6px;
+	margin-bottom:0px;
+	line-height: 1.42857143;
+	width: 160px;
+	text-align: center;
+	border: 1px solid #e5e5e5;
+	color: #666;
+	background: #f8f8f8;
+	height: 41px;
+}
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+	color: #1DBBF4;
+	background-color: #fff;
+	border: 1px solid #ddd;
+	border-bottom-color: transparent;
+	cursor: default;
+	border-top: 3px solid #1DBBF4;
+}
+.wrap{position: relative;}
+.content{position: relative; overflow: hidden;}
+.search-area{
+	overflow: hidden;
+	position: relative;
+}
+
+.search-title{
+	overflow: hidden;
+	border-bottom: 1px solid #ECF0F1;
+	padding: 10px 0;
+	position: relative;
+}
+.search-title .title{
+	font-size: 16px ;
+	color: #000;
+	line-height: 33px;
+}
+.search-border-reset{
+	border:1px solid #ECF0F1;
+}
+.input-group-addon{
+	border: 1px solid #1DBBF4;
+	background-color:#1DBBF4 ;
+	cursor:pointer;
+}
+
+input::-webkit-input-placeholder{
+	/*WebKit browsers*/
+	color: #C7C7CC !important;
+}
+textarea::-webkit-input-placeholder{
+	/*WebKit browsers*/
+	color: #C7C7CC !important;
+}
+.add-btn{margin:0;border-bottom: 1px solid #ECF0F1;width: 100%; overflow: hidden;padding-bottom: 10px}
+.add-btn .btn-add{
+	background-color: #1DBBF4;
+	color:#fff;
+	border: 1px solid #1DBBF4;
+	margin-top: 10px;
+	padding-left: 15px;
+	padding-right: 15px;
+}
+.add-btn .btn-add span{font-size: 10px;color:#fff;}
+.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+	padding: 15px 0;
+	line-height: 1.42857143;
+	vertical-align: top;
+	border-top: 1px solid #ECF0F1 ;
+}
+.table > thead > tr > th {
+	vertical-align: bottom;
+	border-bottom: none;
+	padding-right: 10px;
+}
+.table .fa{
+	color:#999;
+}
+.table .fa:hover{
+	color: #1DBBF4;
+}
+.pagination-con{overflow: inherit;height: 28px;line-height: 28px}
+.pagination-con .previousPage, .pagination-con .nextPage {
+	width: 22px;
+	line-height: 23px;
+	border: none;
+	color: #999;
+}
+.pagination-con .currentPageBtn{
+	width: 60px;
+	padding: 1px 5px;
+	font-size: 12px;
+	line-height: 22px;
+	border-radius: 3px;
+	border: 1px solid #ddd;
+	outline: none;
+	text-align: center;
+}
+.pagination-con .currentPage{
+	margin-right: 2px;
+	color: #999;
+}
+.pagination-con .pageNumber{
+	margin-left: 2px;
+	color: #999;
+}
+.listNumber{
+	color:#999;
+}
+.listNumber .pageJump{
+	padding: 2px 15px;
+	background-color: #1DBBF4 ;
+	border: 1px solid #1DBBF4 ;
+	color: #fff;
+}
+.pop-body .form-group .btn{
+	width: 130px;
+}
+.pop-body .form-group .save{
+	background-color: #1DBBF4;
+	border: 1px solid #1DBBF4;
+	color: #fff;
+}
+.fa-asterisk{
+	font-size: 9px;
+	color: #EF4836 ;
+}
+
+
+.tree{
+	min-height: 500px;
+	border-right:1px solid #ECF0F1;
+	padding-left: 0px;
+	padding-right: 10px;
+	min-width:240px;
+}
+.tree .input-group{
+	margin:10px 0px 10px 0;
+}
+.tree .tree-con{
+	min-width:240px;
+	overflow: auto;
+}
+.category{
+	padding-right: 0px;
+	position: relative;
+}
+.category .category-con{
+	padding-top: 15px;
+	width: 100%;
+	height:100%;
+}
+.head-sort tr th{
+	-webkit-user-select:none;
+	-moz-user-select:none;
+	-ms-user-select:none;
+	user-select:none;
+	cursor: pointer;
+}
+.errorMsg{
+	margin-bottom: 10px;
+	text-align: center;
+	line-height: 30px;
+	color: #EF4836;
+}
+
+.form-control {
+	border: 1px solid #ECF0F1;
+}
+.rt-bt-btn{
+	position: absolute;
+	right: 20px;
+	bottom: 15px;
+}
+.rt-bt-btn .btn{
+	width: 130px;
+}
+.rt-bt-btn .save{
+	background-color: #1DBBF4;
+	border: 1px solid #1DBBF4;
+	color: #fff;
+}
+.rt-bt-btn .clear{
+	background-color: #fff;
+	border: 1px solid #1DBBF4;
+	color: #1DBBF4;
+	margin-right: 8px;
+}
+.rt-bt-btn .clear:hover{
+	background-color: #1DBBF4;
+	border: 1px solid #1DBBF4;
+	color: #fff;
+}
+/*搜索放大镜 仅提示用*/
+.icon-search{
+	position: relative;
+	width: 180px;
+	display: inline-block;
+	/*margin-right: 8px;*/
+	margin-left: 10px;
+}
+.icon-search img{
+	position: absolute;
+	color: #C7C7CC;
+	right: 10px;
+	top: 10px;
+	width: auto;
+	cursor: text;
+}
+.btn-search{
+	background: rgba(29,187,244,.9);
+	color: #fff;
+	border: 1px solid #fff;
+}
+.btn-search:hover{
+	background: rgba(29,187,244,1);
+	color: #fff;
+	border: 1px solid #1DBBF4;
+}
+/*树的样式覆盖*/
+.ztree li span.button.roots_open ,
+.ztree li span.button.center_open ,
+.ztree li span.button.bottom_open,
+.ztree li span.button.root_open {
+
+	background-position: 1px -69px;
+}
+.ztree li span.button.center_close ,
+.ztree li span.button.roots_close ,
+.ztree li span.button.bottom_close ,
+.ztree li span.button.root_close{
+	background-position: -12px -70px;
+}
+.ztree li ul.line {
+	background:none;
+}
+.ztree li span.button.center_docu ,
+.ztree li span.button.bottom_docu ,
+.ztree li span.button.roots_docu {
+	background-position: 0 -84px;
+}
+.ztree li a {
+	height: 30px;
+}
+
+.ztree li {
+	line-height:30px;
+	text-align: left;
+	white-space: nowrap;
+	padding: 0px;
+	margin: 0px;
+	list-style: none;
+	outline: 0px;
+}
+.ztree li a.curSelectedNode {
+	padding-top: 0px;
+	background-color: #F1F4F4;
+	color: black;
+	height: 30px;
+	border:1px solid #1DBBF4 ;
+	border-image: initial;
+}
+/*按钮列表和搜索按钮在一行*/
+.bt-and-search{
+	position: relative;
+	border-bottom: 1px solid #ECF0F1;
+	overflow: hidden;
+}
+.bt-and-search .btn-lists {border-bottom:none;}
+.bt-and-search .hide-search {
+	width: 200px;
+}
+.bt-and-search .hide-search span{
+	color:  rgba(29,187,244,.8);
+	font-weight:bold;
+	display: inline-block;
+	padding:16px 0;
+}
+.bt-and-search .hide-search span .fa{color: rgba(29,187,244,1);
+font-size:16px;}
+.bt-and-search .hide-search span:hover{cursor:pointer;color: rgba(29,187,244,1)}
+.bt-and-search .hide-search button{
+	background: rgba(29,187,244,.9);
+	color: #fff;
+	display: inline-block;
+	border: 1px solid #fff;
+	margin-top: 10px
+}
+.bt-and-search .hide-search button:hover{
+	background: rgba(29,187,244,1);
+	color: #fff;
+	border: 1px solid #1DBBF4;
+}
+/*隐藏的搜索条件*/
+.hidden-search-type{
+	position: relative;
+	display: block;
+	/*overflow: auto;*/
+}
+.hidden-search-type .form-control{
+	width: 120px;
+	float: right;
+	margin-left: 10px
+}
+.hidden-search-type span{
+	float: right;
+	display: inline-block;
+	padding: 5px 2px 5px 10px;
+}
+.absolute-bottom-btn .rt-bt-btn .btn{
+	width: 130px;
+}
+.absolute-bottom-btn .rt-bt-btn .saveAll{
+	background-color:rgba(29,187,244,.9);
+	border: 1px solid #1DBBF4;
+	color: #fff;
+}
+.absolute-bottom-btn .rt-bt-btn .clearAll,
+.absolute-bottom-btn .rt-bt-btn .return{
+	background-color: #fff;
+	border: 1px solid #1DBBF4;
+	color: #1DBBF4;
+	margin-right: 8px;
+}
+.absolute-bottom-btn .rt-bt-btn .btn:hover{
+	background-color:rgba(29,187,244,1);
+	border: 1px solid #1DBBF4;
+	color: #fff;
+}
+
+
+
+.rt-bt-btn{
+	position: absolute;
+	right: 20px;
+	bottom: 20px;
+}
+.rt-bt-btn .btn{
+	width: 130px;
+}
+.rt-bt-btn .save,
+.rt-bt-btn .saveParam{
+	background-color: #1DBBF4;
+	border: 1px solid #1DBBF4;
+	color: #fff;
+}
+.rt-bt-btn .clear,
+.rt-bt-btn .clearParam{
+	background-color: #fff;
+	border: 1px solid #1DBBF4;
+	color: #1DBBF4;
+	margin-right: 8px;
+}
+.rt-bt-btn .clear:hover,
+.rt-bt-btn .clearParam:hover{
+	background-color: #1DBBF4;
+	border: 1px solid #1DBBF4;
+	color: #fff;
+}
+/*表头排序图标变蓝*/
+.th-sort-active{
+	color: #1DBBF4 !important;
+}

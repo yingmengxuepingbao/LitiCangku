@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>操作日志</title>
+	<link rel="stylesheet" href="../../css/bootstrap.min.css" />
+	<link rel="stylesheet" href="../../css/font-awesome.min.css">
+	<link rel="stylesheet" href="../../css/zdialog.css">
+	<link rel="stylesheet" href="../../css/jedate.css" />
+	<link rel="stylesheet" href="../../css/detail.css" type="text/css">
+
+	<link rel="stylesheet" href="../../css/jquery-easyui-1.5/themes/default/easyui.css">
+	<link rel="stylesheet" href="../../css/jquery-easyui-1.5/themes/icon.css">
+	<link rel="stylesheet" href="../../css/common.css?version=2.9">
+	<link rel="stylesheet" href="../../css/pageNum.css?version=1.0">
+	<style>
+		/*html,body{*/
+			/*height: 100%;*/
+			/*background: #F1F4F4;;*/
+		/*}*/
+		/*.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {*/
+			/*padding: 10px 0;*/
+			/*line-height: 1.42857143;*/
+			/*vertical-align: top;*/
+			/*border-top: 1px solid #ECF0F1 ;*/
+		/*}*/
+		/*.table > thead > tr > th {*/
+			/*vertical-align: bottom;*/
+			/*border-bottom: none;*/
+		/*}*/
+		/*.tit-search{margin-left: 15px}*/
+		/*.form-group{*/
+			/*display: inline-block;*/
+			/*margin-right:10px;*/
+			/*margin-top: 15px;*/
+		/*}*/
+		/*.form-group .btn{background: #1DBBF4;color:#fff}*/
+	</style>
+</head>
+<body>
+<div class="container-fluid commontotal">
+	<!--<div class="wrap">-->
+	<ol class="breadcrumb">
+		<li>
+			<a><span class="glyphicon glyphicon-home" style="margin-right:5px"></span>日志管理</a>
+		</li>
+		<li>操作日志</li>
+	</ol>
+	<div class="headbox">
+		<div class="headbtnbox">
+			<button type="button" id="searchButton" class="btn  btn-backgroundcolor" onclick="getLogList('search')"><span class="glyphicon glyphicon-search"></span>查询</button>
+			<button type="button" id="clearTextButton" class="btn  btn-backgroundcolor" onclick="clearText()"><span class="glyphicon glyphicon-refresh"></span>清空</button>
+			<span class="pull-right-btn">
+				<span>收起</span>
+					<i class="fa fa-angle-left down"></i>
+				</span>
+		</div>
+		<div class="container-fluid  h-process  h-process-radius">
+			<form id="searchForm">
+				<table class="common-search-tb" border="0" cellspacing="0" cellpadding="0">
+					<tbody>
+					<tr>
+						<td class="wrig" align="right">用户ID：</td>
+						<td><input id="userIdSearch" type="text" class="form-control" placeholder="请输入用户ID"></td>
+						<td class="wrig" align="right">用户名：</td>
+						<td><input id="userNameSearch" type="text" class="form-control"  placeholder="请输入用户名"></td>
+						<td class="wrig" align="right">开始时间：</td>
+						<td><input id="beginTimeSearch" name="beginTimeSearch" type="text" placeholder="YYYY-MM-DD" class="form-control datainp wicon"></td>
+						<td class="wrig" align="right">结束时间：</td>
+						<td><input id="endTimeSearch" name="endTimeSearch" type="text" placeholder="YYYY-MM-DD" class="form-control datainp wicon"></td>
+					</tr>
+					</tbody>
+				</table>
+			</form>
+		</div>
+	</div>
+
+	<div class="scrollbox_ overflow_x" style="padding-top: 10px;">
+		<!-- class="table-responsive" -->
+		<table id="tableDatagrid" class="table" style="">
+		</table>
+		<div class="j-pagination" id="j-pagination">
+		</div>
+	</div>
+
+	</div>
+
+<!--信息模态框-->
+<!--<div id="warningDiv" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">-->
+	<!--<div class="modal-dialog modal-sm" role="document">-->
+		<!--<div class="modal-content">-->
+			<!--<div class="modal-header">-->
+				<!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+				<!--<h4 class="modal-title" id="myModalLabel">提示信息</h4>-->
+			<!--</div>-->
+			<!--<div class="modal-body">-->
+				<!--<span>服务器运行异常！</span>-->
+			<!--</div>-->
+			<!--<div class="modal-footer">-->
+				<!--<button type="button" class="btn btn-primary" data-dismiss="modal">确认</button>-->
+			<!--</div>-->
+		<!--</div>-->
+	<!--</div>-->
+<!--</div>-->
+<script type="text/javascript" src="../../js/jquery.min.js" ></script>
+<script type="text/javascript" src="../../js/bootstrap.min.js" ></script>
+<script type="text/javascript" src="../../js/zdialog.js"></script>
+<script type="text/javascript" src="../../js/common.js"></script>
+<script type="text/javascript" src="../../js/jquery.jedate.js" ></script>
+
+<!-- common js jquery封装的通用组件 从mes来-->
+<script type="text/javascript" src="../../js/tableNew.js"></script>
+<script type="text/javascript" src="../../js/modal_new.js"></script>
+<script type="text/javascript" src="../../js/base_datamap.js" ></script>
+<script type="text/javascript" src="../../js/common_baseparse.js"></script>
+<script type="text/javascript" src="../../js/common_parse.js"></script>
+<script type="text/javascript" src="../../js/common_selectBase.js"></script>
+<script type="text/javascript" src="../../js/common_baseCheck.js"></script>
+<script type="text/javascript" src="../../js/common_checkbox.js"></script>
+<script type="text/javascript" src="../../js/I18n/message_zh.js"></script>
+<script type="text/javascript" src="../../js/bootstrap3-validation.js"></script>
+<script type="text/javascript" src="./js/operationLog.js"></script>
+</body>
+</html>

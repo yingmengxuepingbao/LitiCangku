@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>任务执行明细日志</title>
+    <link rel="stylesheet" href="../../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../../css/font-awesome.min.css">
+
+    <!--<link rel="stylesheet" href="../../css/base.css">-->
+    <link rel="stylesheet" href="../../css/jquery-easyui-1.5/themes/default/easyui.css">
+    <link rel="stylesheet" href="../../css/jquery-easyui-1.5/themes/icon.css">
+    <link rel="stylesheet" href="../../css/common.css?version=2.9">
+    <link rel="stylesheet" href="../../css/pageNum.css?version=1.0">
+    <!-- 定制化css -->
+    <link rel="stylesheet" type="text/css" href="./css/jobExecution.css?version=1.0">
+</head>
+<body>
+<div class="container-fluid commontotal">
+    <ol class="breadcrumb">
+        <li>
+            <a><span class="glyphicon glyphicon-home" style="margin-right:5px"></span>任务</a>
+        </li>
+        <li>执行明细日志</li>
+    </ol>
+    <div class="headbox">
+        <div class="headbtnbox">
+            <button type="button" id="searchButton" class="btn  btn-backgroundcolor" onclick="getExecutionDetailLogList('search')"><span class="glyphicon glyphicon-search"></span>查询</button>
+            <button type="button" id="clearTextButton" class="btn  btn-backgroundcolor" onclick="clearText()"><span class="glyphicon glyphicon-refresh"></span>清空</button>
+            <span class="pull-right-btn">
+				<span>收起</span>
+                <i class="fa fa-angle-left down"></i>
+            </span>
+        </div>
+        <div class="container-fluid  h-process  h-process-radius">
+            <form id="searchForm">
+                <table class="common-search-tb" border="0" cellspacing="0" cellpadding="0">
+                    <tbody>
+                    <tr>
+                        <td class="wrig" align="right">任务名称：</td>
+                        <td><input id="jobNameSearch" type="text" class="form-control"></td>
+                        <td class="wrig" align="right">实现类：</td>
+                        <td><input id="jobClassSearch" type="text" class="form-control"></td>
+                        <td class="wrig" align="right">时间表达式：</td>
+                        <td><input id="expressionSearch" type="text" class="form-control"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div>
+
+    <div style="padding-bottom:10px;">
+        <!--<button type="button" class="btn  btn-default"  onclick="exportFile()"><span class="glyphicon glyphicon-export"></span>导出</button>-->
+    </div>
+    <div class="scrollbox_ overflow_x" style="padding-top: 10px;">
+        <!-- class="table-responsive" -->
+        <table id="tableDatagrid" class="table" style="">
+        </table>
+        <div class="j-pagination" id="j-pagination">
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript" src="../../js/jquery.min.js" ></script>
+<script type="text/javascript" src="../../js/bootstrap.min.js" ></script>
+
+<!-- common js jquery封装的通用组件 从mes来-->
+<script type="text/javascript" src="../../js/tableNew.js"></script>
+<script type="text/javascript" src="../../js/modal_new.js"></script>
+<script type="text/javascript" src="../../js/common.js"></script>
+<script type="text/javascript" src="../../js/base_datamap.js" ></script>
+<script type="text/javascript" src="../../js/common_baseparse.js"></script>
+<script type="text/javascript" src="../../js/common_parse.js"></script>
+<script type="text/javascript" src="../../js/common_selectBase.js"></script>
+<script type="text/javascript" src="../../js/common_baseCheck.js"></script>
+<script type="text/javascript" src="../../js/common_checkbox.js"></script>
+<script type="text/javascript" src="../../js/I18n/message_zh.js"></script>
+<script type="text/javascript" src="../../js/bootstrap3-validation.js"></script>
+
+<script type="text/javascript" src="./js/executionDetialLog.js"></script>
+</body>
+</html>

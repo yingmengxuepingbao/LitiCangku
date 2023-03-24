@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/framework-common/framework-common.iml" filepath="$PROJECT_DIR$/framework-common/framework-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pda/pda.iml" filepath="$PROJECT_DIR$/pda/pda.iml" />
+      <module fileurl="file://$PROJECT_DIR$/wcs/wcs.iml" filepath="$PROJECT_DIR$/wcs/wcs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/wmcs.iml" filepath="$PROJECT_DIR$/wmcs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/wms/wms.iml" filepath="$PROJECT_DIR$/wms/wms.iml" />
+    </modules>
+  </component>
+</project>

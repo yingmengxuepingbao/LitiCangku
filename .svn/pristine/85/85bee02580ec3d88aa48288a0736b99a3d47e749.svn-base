@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.penghaisoft.pda.inwarehouse.dao.WmsOrderCrossInMapper" >
+  <resultMap id="BaseResultMap" type="com.penghaisoft.pda.inwarehouse.model.WmsOrderCrossIn" >
+    <id column="order_cross_in_id" property="orderCrossInId" jdbcType="VARCHAR" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="order_type" property="orderType" jdbcType="VARCHAR" />
+    <result column="order_status" property="orderStatus" jdbcType="CHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="user_defined1" property="userDefined1" jdbcType="VARCHAR" />
+    <result column="user_defined2" property="userDefined2" jdbcType="VARCHAR" />
+    <result column="user_defined3" property="userDefined3" jdbcType="VARCHAR" />
+    <result column="user_defined4" property="userDefined4" jdbcType="VARCHAR" />
+    <result column="user_defined5" property="userDefined5" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="last_modified_by" property="lastModifiedBy" jdbcType="VARCHAR" />
+    <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+    <result column="active_flag" property="activeFlag" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    order_cross_in_id, order_no, order_type, order_status, remark, user_defined1, user_defined2, 
+    user_defined3, user_defined4, user_defined5, create_by, gmt_create, last_modified_by, 
+    gmt_modified, active_flag
+  </sql>
+  <select id="selectByOrderNoAndStatus" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from wms_order_cross_in
+    where order_no = #{orderNo,jdbcType=VARCHAR}
+    AND order_status IN
+    <foreach item="item" index="index" collection="list" open="(" separator="," close=")">#{item}</foreach>
+    AND active_flag = '1'
+  </select>
+  <select id="queryOrderCrossListByNo" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from wms_order_cross_in
+    where order_no = #{orderNo,jdbcType=VARCHAR}
+    AND active_flag = '1'
+  </select>
+  <update id="updateStatusByOrderNo" parameterType="com.penghaisoft.pda.inwarehouse.model.WmsOrderCrossIn" >
+    update wms_order_cross_in
+    <set >
+        order_status = #{orderStatus,jdbcType=CHAR},
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined1 != null" >
+        user_defined1 = #{userDefined1,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined2 != null" >
+        user_defined2 = #{userDefined2,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined3 != null" >
+        user_defined3 = #{userDefined3,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined4 != null" >
+        user_defined4 = #{userDefined4,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined5 != null" >
+        user_defined5 = #{userDefined5,jdbcType=VARCHAR},
+      </if>
+        last_modified_by = #{lastModifiedBy,jdbcType=VARCHAR},
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+    </set>
+    where order_no = #{orderNo,jdbcType=VARCHAR}
+  </update>
+</mapper>

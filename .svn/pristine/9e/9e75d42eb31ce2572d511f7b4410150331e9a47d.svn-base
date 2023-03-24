@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>编辑菜单列表</title>
+	<link rel="stylesheet" href="../../css/bootstrap.min.css" />
+	<link rel="stylesheet" href="../../css/perfect-scrollbar.min.css" />
+	<link rel="stylesheet" href="../../css/zTreeStyleOutLook.css" />
+	<link rel="stylesheet" href="../../css/pace-theme-barber-shop.css" />
+	<link rel="stylesheet" href="../../css/zdialog.css">
+	<link rel="stylesheet" href="../../css/iconfont.css" />
+	<style>
+		html,body{
+			height: 100%;
+		}
+		.MenuContiner{
+			width: 750px;
+			height: 90%;
+			max-height: 800px;
+			position: absolute;
+			left: 0;
+			right: 0;
+			top: 0;
+			bottom: 0;
+			margin: auto;
+		}
+		.menuList{
+			-moz-box-shadow: 0px 0px 5px #ccc;
+			-webkit-box-shadow: 0px 0px 5px #ccc;
+			box-shadow: 0px 0px 5px #ccc;
+			border-radius: 5px;
+			float: left;
+			height: 100%;
+			width: 340px;
+			position: relative;
+			display: flex;
+			flex-direction: column;
+		}
+		.treeList{
+			width: 100%;
+			height: 360px;
+			position: relative;
+			overflow: auto;
+			flex: 1;
+		}
+		.treeList .moveUp{
+			top: 0px;
+		}
+		.treeList .moveDown{
+			top: 40px;
+		}
+		.treeList .deleteMenu{
+			top: 80px;
+		}
+		.btnList{
+			text-align: center;
+		}
+		.btnList button{
+			text-align: center;
+			width: 100px;
+			margin:10px 0px 15px 0px;
+		}
+		.menuInfo{
+			float: right;
+			height: 100%;
+			width: 400px;
+			position: relative;
+			display: flex;
+			flex-direction: column;
+		}
+		.infoList{
+			-moz-box-shadow: 0px 0px 5px #ccc;
+			-webkit-box-shadow: 0px 0px 5px #ccc;
+			box-shadow: 0px 0px 5px #ccc;
+			border-radius: 5px;
+			flex: 1;
+		}
+		.menuInfo .titleSpan{
+			display: inline-block;
+			width: 60px;
+		}
+		.menuInfo .infoDiv{
+			margin-left:20px;
+			margin-top: 20px;
+		}
+		.submitMenu{
+			text-align: center;
+		}
+		.submitMenu button{
+			width: 40%;
+			margin: 10px;
+		}
+		#treeListContainerUL{
+			margin: 0;
+			padding: 0;
+		}
+		#treeListContainerUL a{
+			height: 20px;
+		}
+		#treeListContainerUL span{
+			font-size: 16px;
+		}
+		#treeListContainerUL{
+			margin-left: 10px;
+			margin-top: 10px;
+		}
+		.menuList .menuTitle{
+			border-top-right-radius:5px;
+			border-top-left-radius:5px;
+			color: white;
+			background: rgba(51,122,183,0.9);
+			font-size: 15px;
+			text-align: center;
+			padding: 8px;
+		}
+		.menuInfo .infoTitle{
+			color: white;
+			border-top-right-radius:5px;
+			border-top-left-radius:5px;
+			font-size: 15px;
+			text-align: center;
+			background: rgba(51,122,183,0.9);
+			padding: 8px;
+		}
+		.moveButtonList{
+			position: absolute;
+			right: -60px;
+			top: 30px;
+			width: 50px;
+		}
+		.moveButtonList button{
+			margin-top: 10px;
+			width: 40px;
+			border: none;
+		}
+		#treeListContainerUL a:hover{
+			background: rgba(0,204,255,0.1);
+		}
+		#targetFileChangeUl{
+			max-height: 300px;
+		}
+		.currentImg{
+			width: 50px;
+			height: 50px;
+			border: 1px solid black;
+			margin-left: 20px;
+		}
+		.imgContainer{
+			display: none;
+			position: absolute;
+			background: white;
+			-moz-box-shadow:0px 0px 5px #ccc;
+			-webkit-box-shadow:0px 0px 5px #ccc;
+			box-shadow:0px 0px 5px #ccc;
+			border-radius: 5px;
+		}
+		.imgs{
+			width: 357px;
+			height: 200px;
+			text-align: left;
+			overflow-y: scroll;
+		}
+		.imgs img{
+			width: 30px;
+			border: 2px solid #DDDDDD;
+		}
+		.imgs img:hover{
+			border: 0px dotted #DDDDDD;
+			cursor: pointer;
+		}
+		.imgButton{
+			text-align: right;
+		}
+		#treeListContainerUL  a .button{
+			display: none;
+			background-color: red;
+		}
+		.menu-attr{
+			padding: 20px 10px 20px 20px;position: relative
+		}
+		.menu-attr .form-group label{width: 80px}
+		.menu-attr .form-group label i{color: red}
+		.router{
+			width: 296px;
+			border: 1px solid #ccc;
+			background: white;
+			min-height: 150px;
+			overflow: auto;
+			position: relative;
+			left: 83px;
+			top: 1px;
+			border-radius: 4px;
+			padding-left: 5px;
+			display: none;
+		}
+		.router label{
+			width: 210px !important;
+		}
+		.a-radio{
+			display: none;
+		}
+		.b-radio{
+			display: inline-block;
+			border:1px solid #ccc;
+			width:16px;
+			height: 16px;
+			border-radius:2px;
+			vertical-align: middle;
+			margin-right: 5px;
+			position: relative;
+		}
+		.b-radio:before{
+			content: '';
+			font-size: 0;
+			width: 10px;
+			height: 10px;
+			background: rgba(51,122,183,0.9);
+			position: absolute;
+			left:50%;
+			top:50%;
+			margin-left: -5px;
+			margin-top: -5px;
+			border-radius: 2px;
+		}
+		.a-radio:checked~.b-radio:before{
+			display: block;
+		}
+	</style>
+</head>
+<body>
+<div class="MenuContiner">
+	<div class="menuList">
+		<div class="menuTitle">资源列表</div>
+		<div class="treeList">
+			<div id="treeListContainer">
+				<ul id="treeListContainerUL" class="ztree">
+				</ul>
+			</div>
+		</div>
+		<div class="moveButtonList">
+			<!--<button class="iconfont icon-shangshengxiajiangjiantou btn btn-primary moveUp" title="上移菜单" ></button>-->
+			<!--<button class="iconfont icon-shangshengxiajiangjiantou1 btn btn-primary moveDown" title="下移菜单" ></button>-->
+			<!--<button style="background-color: #FB3838;" class="iconfont icon-chushaixuanxiang btn btn-primary deleteMenu" title="删除当前选中菜单" ></button>-->
+		</div>
+		<div class="btnList">
+			<button title="在根节点添加新的菜单" class="btn btn-primary addRootMenu">添加根</button>
+			<button title="选中节点下添加新的菜单" class="btn btn-primary addChildMenu">添加子菜单</button>
+			<!--<button title="还原到打开窗口时的菜单列表" class="btn btn-primary reSetMenuList">还 原</button>-->
+			<button title="删除当前选中菜单" class="btn btn-primary deleteMenu">删除</button>
+		</div>
+	</div>
+	<div class="menuInfo">
+		<div class="infoList">
+			<div class="infoTitle">资源属性</div>
+			<div class="menu-attr">
+				<div class="form-group form-inline">
+					<label for="menuName"><i>* </i> 资源名称：</label>
+					<input type="text" id="menuName" class="form-control " style="width: 275px;" maxlength="20"  />
+				</div>
+				<div class="form-group form-inline">
+					<label for="menuSequence"><i>* </i> 资源排序：</label>
+					<input type="number"  id="menuSequence" class="form-control " style="width: 275px;"  />
+				</div>
+				<div class="form-group form-inline">
+					<label for="menuCode">资源编码：</label>
+					<input type="text"  id="menuCode" class="form-control " style="width: 275px;" maxlength="10" />
+				</div>
+				<div class="form-group form-inline">
+					<label>资源类型：</label>
+					<select id="menuResType" class="form-control " style="width: 275px;" >
+						<option value="0">菜单</option>
+						<option value="1">按钮</option>
+						<option value="2">外部链接</option>
+						<option value="3">报表</option>
+						<option value="4">手持功能</option>
+					</select>
+				</div>
+				<div class="form-group form-inline" style="position:relative;">
+					<label>路   径：</label>
+					<input id="targetFileChangeInput" class="form-control" autocomplete="off" placeholder="只可输入数字、字母及._/" style="width: 275px; position: relative;"/>
+					<select id="reportUrlSelect" class="form-control" style="width: 275px; display: none"></select>
+					<!--<div class="router" id="routers" >-->
+						<!--<label>-->
+							<!--<input type="radio" name="reportRouter" value=""  class="a-radio">-->
+							<!--<span class="b-radio"></span>好-->
+						<!--</label>-->
+						<!--<label>-->
+							<!--<input type="radio" name="reportRouter"  class="a-radio">-->
+							<!--<span class="b-radio"></span>很好-->
+						<!--</label>-->
+
+						<!--<label>-->
+							<!--<input type="radio" name="reportRouter"  class="a-radio">-->
+							<!--<span class="b-radio"></span>很棒-->
+						<!--</label>-->
+					<!--</div>-->
+				</div>
+				<div class="form-group form-inline">
+					<label for="descriptTextarea" >资源描述：</label>
+					<textarea maxlength="100"class="form-control" id="descriptTextarea" draggable="false" style="resize: none; width: 275px;" name="" rows="" cols=""></textarea>
+				</div>
+				<div class="imgDiv" style="margin-right: 20px;">
+					<span class="titleSpan"></span>
+					<img class="currentImg" src=" "/>
+					<button class="uploadMenuImg btn btn-primary btn-sm">选择菜单图标</button>
+					<div class="imgContainer">
+						<div></div>
+						<div class="imgs">
+							<!--<img src="../../../img/defaultIcon.png" />-->
+						</div>
+						<div class="imgButton">
+							<!--<button class="setImg btn btn-primary">确认</button>-->
+							<!--<button class="giveUpImg btn btn-default">取消</button>-->
+						</div>
+					</div>
+				</div>
+			</div>
+			<button style="margin:0 20px;width: 100px;" data-loading-text="保存中..." class="btn btn-success saveMenuChange">保 存</button>
+		</div>
+		<div class="submitMenu">
+		</div>
+	</div>
+</div>
+<script type="text/javascript" src="../../js/jquery.min.js" ></script>
+<script type="text/javascript" src="../../js/bootstrap.min.js" ></script>
+<script type="text/javascript" src="../../js/pace.min.js" ></script>
+<script type="text/javascript" src="../../js/common.js" ></script>
+<script type="text/javascript" src="../../js/confirm.js" ></script>
+<script type="text/javascript" src="../../js/zdialog.js"></script>
+<script type="text/javascript" src="../../js/perfect-scrollbar.jquery.min.js" ></script>
+<script type="text/javascript" src="../../js/jquery.ztree.all.min.js" ></script>
+<script type="text/javascript" src="../../js/doAjax.js"></script>
+<script type="text/javascript" src="./js/resourceManagement.js" ></script>
+</body>
+</html>

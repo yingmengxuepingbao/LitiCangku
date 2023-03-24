@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>修改用户个人信息</title>
+		<link rel="stylesheet" href="../../css/bootstrap.min.css" />
+		<style>
+			.container{
+				display: inline-block;
+				text-align: left;
+				width: 400px;
+			}
+			#submitButton{
+				text-align: center;
+				margin-right: 30px;
+			}
+			h2{
+				
+				margin: 40px;
+				padding-left: 30px;
+			}
+			#userinfomation label{
+				display: block;
+			}
+			#userinfomation label>span{
+				display: inline-block;
+				width: 100px;
+			}
+			#userinfomation .glyphicon{
+				text-indent: 10px;
+				display: none;
+				width: auto;
+			}
+			#myButton{
+				margin-top: 40px;
+			}
+		</style>
+	</head>
+	
+	<body>
+		<div style="text-align: center; vertical-align: middle; width: 100%;height: 100%;">
+			<div style=" border-radius: 5px; border: 1px solid gray; padding-left: 60px; margin-top: 40px; padding-bottom: 40px;  display: inline-block; text-align: center;">
+				<div class="container">
+					<h2>修改个人信息</h2>
+					<div id="userinfomation">
+						<label for="account"><span>账&nbsp;&nbsp;号 ：</span><input id="account" type="text" disabled="disabled"/><span class="glyphicon"></span></label>
+						<label for="name"><span>用户名：</span><input placeholder="2-16个字符，中英文下划线" maxlength="16" id="name" type="text"/><span class="glyphicon"></span ><span style="width: auto; color: grey;font-size: 12px; text-indent: 10px;"></span></label>
+						<label for="email"><span>邮箱号：</span><input id="email" maxlength="50" type="text"/><span class="glyphicon"></span></label>
+						<label for="phoneNumber"><span>手机号：</span><input id="phoneNumber" maxlength="11" type="text"/><span class="glyphicon"></span></label>
+					</div>
+					<div id="submitButton">
+						<button type="button" id="myButton" data-loading-text="提交更改中..." class="btn btn-primary" autocomplete="off">保存</button>
+						<span id="resultMessage"  style=" display: block; width: auto; color: grey;font-size: 12px;"></span>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+		<!--提示信息-->
+		<div id="warningDiv" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+		  <div class="modal-dialog modal-sm" role="document">
+		    <div class="modal-content">
+		  	<div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		        <h4 class="modal-title" id="myModalLabel">提示信息</h4>
+		    </div>
+		      <div class="modal-body">
+		        <span>服务器运行异常！</span>
+		      </div>
+		    <div class="modal-footer">
+		        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+		     </div>
+		    </div>
+		  </div>
+		</div>
+		<script type="text/javascript" src="../../js/jquery.min.js" ></script>
+		<script type="text/javascript" src="../../js/bootstrap.min.js" ></script>
+		<script type="text/javascript" src="../../js/common.js" ></script>
+		<script type="text/javascript" src="../../js/doAjax.js"></script>
+		<script type="text/javascript" src="./js/modifyPersonalInformation.js"></script>
+	</body>
+</html>

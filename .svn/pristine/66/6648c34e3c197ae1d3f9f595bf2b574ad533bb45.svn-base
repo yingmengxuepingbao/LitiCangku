@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>wmcs</artifactId>
+        <groupId>com.penghaisoft</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>pda</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>pda</name>
+
+    <dependencies>
+        <!-- 热部署工具-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
+        <!-- web工程-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jetty</artifactId>
+        </dependency>
+        <!-- druid连接池-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+            <version>1.1.18</version>
+        </dependency>
+        <!-- mysql 连接-->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <!-- mybatis-->
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+            <version>2.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+        </dependency>
+        <!--        电子看板驱动-->
+        <dependency>
+            <groupId>kanban</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.12.4</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/log4j-1.2.14.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>kanban</groupId>
+            <artifactId>bx06-message</artifactId>
+            <version>0.6.0-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/bx06.message-0.6.0-SNAPSHOT.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>kanban</groupId>
+            <artifactId>bx06</artifactId>
+            <version>0.6.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/bx06-0.6.0-SNAPSHOT.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>kanban</groupId>
+            <artifactId>simple-xml</artifactId>
+            <version>2.7.1</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/simple-xml-2.7.1.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>kanban</groupId>
+            <artifactId>uia-common</artifactId>
+            <version>0.2.2</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/uia.comm-0.2.2.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>kanban</groupId>
+            <artifactId>uia-message</artifactId>
+            <version>0.6.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/uia.message-0.6.0.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>kanban</groupId>
+            <artifactId>uia-utils</artifactId>
+            <version>0.1.2</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/uia.utils-0.1.2.jar</systemPath>
+        </dependency>
+        <!--        电子看板驱动-->
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <executable>true</executable>
+                    <includeSystemScope>true</includeSystemScope>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

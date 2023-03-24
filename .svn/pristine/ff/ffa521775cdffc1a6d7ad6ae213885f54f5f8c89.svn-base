@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.penghaisoft.wms.basicmanagement.model.dao.WmsWarehouseMapper">
+	
+	<!-- =========================================================== -->
+    <!-- 定义resultMap                                                                                                                                                                             -->
+    <!-- =========================================================== -->
+	<resultMap id="wmsWarehouseMap" type="com.penghaisoft.wms.basicmanagement.model.entity.WmsWarehouse">
+				<result property="warehouseId" column="warehouse_id"/>
+				<result property="warehouseName" column="warehouse_name"/>
+				<result property="warehouseCode" column="warehouse_code"/>
+				<result property="warehouseAttr" column="warehouse_attr"/>
+				<result property="warehouseAddr" column="warehouse_addr"/>
+				<result property="warehouseCapacity" column="warehouse_capacity"/>
+				<result property="factoryName" column="factory_name"/>
+				<result property="address" column="address"/>
+				<result property="userDefined1" column="user_defined1"/>
+				<result property="userDefined2" column="user_defined2"/>
+				<result property="userDefined3" column="user_defined3"/>
+				<result property="userDefined4" column="user_defined4"/>
+				<result property="userDefined5" column="user_defined5"/>
+				<result property="createBy" column="create_by"/>
+				<result property="gmtCreate" column="gmt_create"/>
+				<result property="lastModifiedBy" column="last_modified_by"/>
+				<result property="gmtModified" column="gmt_modified"/>
+				<result property="activeFlag" column="active_flag"/>
+	</resultMap>
+	
+	<!-- =========================================================== -->
+    <!-- 一些公共变量设置                                                                                                                                                                             -->
+    <!-- =========================================================== -->
+	<!-- mysql 分页 -->
+	<sql id="pagination_tail">
+		top ((#{page.pageOffset} +1)* #{page.rows})
+	</sql>
+	<!-- mysql 查询总数 -->
+	<sql id="count_Tail">
+		select count(1) from 
+	</sql>
+	
+	<sql id="selectAllColumns">
+		<![CDATA[
+ 			warehouse_id
+ 			,warehouse_name
+ 			,warehouse_code
+ 			,warehouse_attr
+ 			,warehouse_addr
+ 			,warehouse_capacity
+ 			,factory_name
+ 			,address
+ 			,user_defined1
+ 			,user_defined2
+ 			,user_defined3
+ 			,user_defined4
+ 			,user_defined5
+ 			,create_by
+ 			,gmt_create
+ 			,last_modified_by
+ 			,gmt_modified
+ 			,active_flag
+		FROM 
+		wms_warehouse wms_warehouse_
+		]]>
+	</sql>
+	
+	<sql id="where_fragement">
+		where 1=1
+		<if test="entity!=null">
+			<if test="entity.warehouseId != null  and entity.warehouseId !=''">
+				<![CDATA[ and wms_warehouse_.warehouse_id  LIKE CONCAT('%',#{entity.warehouseId},'%')]]>
+			</if>
+			<if test="entity.warehouseName != null  and entity.warehouseName !=''">
+				<![CDATA[ and wms_warehouse_.warehouse_name  LIKE CONCAT('%',#{entity.warehouseName},'%')]]>
+			</if>
+			<if test="entity.warehouseCode != null  and entity.warehouseCode !=''">
+				<![CDATA[ and wms_warehouse_.warehouse_code  LIKE CONCAT('%',#{entity.warehouseCode},'%')]]>
+			</if>
+			<if test="entity.warehouseAttr != null  and entity.warehouseAttr !=''">
+				<![CDATA[ and wms_warehouse_.warehouse_attr  LIKE CONCAT('%',#{entity.warehouseAttr},'%')]]>
+			</if>
+			<if test="entity.warehouseAddr != null  and entity.warehouseAddr !=''">
+				<![CDATA[ and wms_warehouse_.warehouse_addr  LIKE CONCAT('%',#{entity.warehouseAddr},'%')]]>
+			</if>
+			<if test="entity.warehouseCapacity != null  and entity.warehouseCapacity !=''">
+				<![CDATA[ and wms_warehouse_.warehouse_capacity  LIKE CONCAT('%',#{entity.warehouseCapacity},'%')]]>
+			</if>
+			<if test="entity.factoryName != null  and entity.factoryName !=''">
+				<![CDATA[ and wms_warehouse_.factory_name  LIKE CONCAT('%',#{entity.factoryName},'%')]]>
+			</if>
+			<if test="entity.address != null  and entity.address !=''">
+				<![CDATA[ and wms_warehouse_.address  LIKE CONCAT('%',#{entity.address},'%')]]>
+			</if>
+			<if test="entity.userDefined1 != null  and entity.userDefined1 !=''">
+				<![CDATA[ and wms_warehouse_.user_defined1  LIKE CONCAT('%',#{entity.userDefined1},'%')]]>
+			</if>
+			<if test="entity.userDefined2 != null  and entity.userDefined2 !=''">
+				<![CDATA[ and wms_warehouse_.user_defined2  LIKE CONCAT('%',#{entity.userDefined2},'%')]]>
+			</if>
+			<if test="entity.userDefined3 != null  and entity.userDefined3 !=''">
+				<![CDATA[ and wms_warehouse_.user_defined3  LIKE CONCAT('%',#{entity.userDefined3},'%')]]>
+			</if>
+			<if test="entity.userDefined4 != null  and entity.userDefined4 !=''">
+				<![CDATA[ and wms_warehouse_.user_defined4  LIKE CONCAT('%',#{entity.userDefined4},'%')]]>
+			</if>
+			<if test="entity.userDefined5 != null  and entity.userDefined5 !=''">
+				<![CDATA[ and wms_warehouse_.user_defined5  LIKE CONCAT('%',#{entity.userDefined5},'%')]]>
+			</if>
+			<if test="entity.createBy != null  and entity.createBy !=''">
+				<![CDATA[ and wms_warehouse_.create_by  LIKE CONCAT('%',#{entity.createBy},'%')]]>
+			</if>
+			<if test="entity.gmtCreate != null  and entity.gmtCreate !=''">
+				<![CDATA[ and wms_warehouse_.gmt_create  LIKE CONCAT('%',#{entity.gmtCreate},'%')]]>
+			</if>
+			<if test="entity.lastModifiedBy != null  and entity.lastModifiedBy !=''">
+				<![CDATA[ and wms_warehouse_.last_modified_by  LIKE CONCAT('%',#{entity.lastModifiedBy},'%')]]>
+			</if>
+			<if test="entity.gmtModified != null  ">
+				<![CDATA[ and wms_warehouse_.gmt_modified  LIKE CONCAT('%',#{entity.gmtModified},'%')]]>
+			</if>
+			<if test="entity.activeFlag != null  and entity.activeFlag !=''">
+				<![CDATA[ and wms_warehouse_.active_flag  LIKE CONCAT('%',#{entity.activeFlag},'%')]]>
+			</if>
+		</if>
+	</sql>
+	
+	<sql id="where_any">
+		where 1=1
+		<if test="entity!=null">
+			<if test="entity.warehouseId != null  and entity.warehouseId !=''">
+				<![CDATA[ and wms_warehouse_.warehouse_id  = #{entity.warehouseId}]]>
+			</if>
+			<if test="entity.warehouseName != null  and entity.warehouseName !=''">
+				<![CDATA[ and wms_warehouse_.warehouse_name  = #{entity.warehouseName}]]>
+			</if>
+			<if test="entity.warehouseCode != null  and entity.warehouseCode !=''">
+				<![CDATA[ and wms_warehouse_.warehouse_code  = #{entity.warehouseCode}]]>
+			</if>
+			<if test="entity.warehouseAttr != null  and entity.warehouseAttr !=''">
+				<![CDATA[ and wms_warehouse_.warehouse_attr  = #{entity.warehouseAttr}]]>
+			</if>
+			<if test="entity.warehouseAddr != null  and entity.warehouseAddr !=''">
+				<![CDATA[ and wms_warehouse_.warehouse_addr  = #{entity.warehouseAddr}]]>
+			</if>
+			<if test="entity.warehouseCapacity != null  and entity.warehouseCapacity !=''">
+				<![CDATA[ and wms_warehouse_.warehouse_capacity  = #{entity.warehouseCapacity}]]>
+			</if>
+			<if test="entity.factoryName != null  and entity.factoryName !=''">
+				<![CDATA[ and wms_warehouse_.factory_name  = #{entity.factoryName}]]>
+			</if>
+			<if test="entity.address != null  and entity.address !=''">
+				<![CDATA[ and wms_warehouse_.address  = #{entity.address}]]>
+			</if>
+			<if test="entity.userDefined1 != null  and entity.userDefined1 !=''">
+				<![CDATA[ and wms_warehouse_.user_defined1  = #{entity.userDefined1}]]>
+			</if>
+			<if test="entity.userDefined2 != null  and entity.userDefined2 !=''">
+				<![CDATA[ and wms_warehouse_.user_defined2  = #{entity.userDefined2}]]>
+			</if>
+			<if test="entity.userDefined3 != null  and entity.userDefined3 !=''">
+				<![CDATA[ and wms_warehouse_.user_defined3  = #{entity.userDefined3}]]>
+			</if>
+			<if test="entity.userDefined4 != null  and entity.userDefined4 !=''">
+				<![CDATA[ and wms_warehouse_.user_defined4  = #{entity.userDefined4}]]>
+			</if>
+			<if test="entity.userDefined5 != null  and entity.userDefined5 !=''">
+				<![CDATA[ and wms_warehouse_.user_defined5  = #{entity.userDefined5}]]>
+			</if>
+			<if test="entity.createBy != null  and entity.createBy !=''">
+				<![CDATA[ and wms_warehouse_.create_by  = #{entity.createBy}]]>
+			</if>
+			<if test="entity.gmtCreate != null  and entity.gmtCreate !=''">
+				<![CDATA[ and wms_warehouse_.gmt_create  = #{entity.gmtCreate}]]>
+			</if>
+			<if test="entity.lastModifiedBy != null  and entity.lastModifiedBy !=''">
+				<![CDATA[ and wms_warehouse_.last_modified_by  = #{entity.lastModifiedBy}]]>
+			</if>
+			<if test="entity.gmtModified != null  ">
+				<![CDATA[ and wms_warehouse_.gmt_modified  = #{entity.gmtModified}]]>
+			</if>
+			<if test="entity.activeFlag != null  and entity.activeFlag !=''">
+				<![CDATA[ and wms_warehouse_.active_flag  = #{entity.activeFlag}]]>
+			</if>
+		</if>
+	</sql>
+	
+	<!-- =========================================================== -->
+    <!-- DAO方法中的基本增删改查方法                                                                                                                                                           -->
+    <!-- =========================================================== -->
+   <!-- 根据id查询 -->
+	<select id="queryById" resultMap="wmsWarehouseMap" parameterType="java.lang.String">
+		select
+		<include refid="selectAllColumns" />
+		<![CDATA[
+		where wms_warehouse_.warehouse_id = #{id}
+		]]>
+	</select>
+	
+	<!-- 分页查询 -->
+	<select id="queryList" resultMap="wmsWarehouseMap" >
+		select
+		<if test="page!=null">
+			<include refid="pagination_tail" />
+		</if>
+		<include refid="selectAllColumns"/>
+		<include refid="where_fragement" />
+	</select>
+	
+	<select id="queryCount" resultType="long">
+		<include refid="count_Tail" />
+		wms_warehouse wms_warehouse_
+		<include refid="where_fragement" />
+	</select>
+	
+	<!-- 插入记录 -->
+	<insert id="create" parameterType="com.penghaisoft.wms.basicmanagement.model.entity.WmsWarehouse">
+		<![CDATA[
+		insert into wms_warehouse (
+		    	 warehouse_id
+		    	 ,warehouse_name
+		    	 ,warehouse_code
+		    	 ,warehouse_attr
+		    	 ,warehouse_addr
+		    	 ,warehouse_capacity
+		    	 ,factory_name
+		    	 ,address
+		    	 ,user_defined1
+		    	 ,user_defined2
+		    	 ,user_defined3
+		    	 ,user_defined4
+		    	 ,user_defined5
+		    	 ,create_by
+		    	 ,gmt_create
+		    	 ,last_modified_by
+		    	 ,gmt_modified
+		    	 ,active_flag
+		   )values(
+		    	#{warehouseId}
+		    	,#{warehouseName}
+		    	,#{warehouseCode}
+		    	,#{warehouseAttr}
+		    	,#{warehouseAddr}
+		    	,#{warehouseCapacity}
+		    	,#{factoryName}
+		    	,#{address}
+		    	,#{userDefined1}
+		    	,#{userDefined2}
+		    	,#{userDefined3}
+		    	,#{userDefined4}
+		    	,#{userDefined5}
+		    	,#{createBy}
+		    	,#{gmtCreate}
+		    	,#{lastModifiedBy}
+		    	,#{gmtModified}
+		    	,#{activeFlag}
+		   )
+	    ]]>	
+	</insert>
+	
+	<!-- 批量插入记录 -->
+	<insert id="batchInsert" parameterType="java.util.List">
+		insert into wms_warehouse (
+		    	 warehouse_id
+		    	 ,warehouse_name
+		    	 ,warehouse_code
+		    	 ,warehouse_attr
+		    	 ,warehouse_addr
+		    	 ,warehouse_capacity
+		    	 ,factory_name
+		    	 ,address
+		    	 ,user_defined1
+		    	 ,user_defined2
+		    	 ,user_defined3
+		    	 ,user_defined4
+		    	 ,user_defined5
+		    	 ,create_by
+		    	 ,gmt_create
+		    	 ,last_modified_by
+		    	 ,gmt_modified
+		    	 ,active_flag
+		   )
+		   values
+		   <foreach collection="list" item="item" index="index" separator="," >
+		   (
+		    	#{item.warehouseId}
+		    	,#{item.warehouseName}
+		    	,#{item.warehouseCode}
+		    	,#{item.warehouseAttr}
+		    	,#{item.warehouseAddr}
+		    	,#{item.warehouseCapacity}
+		    	,#{item.factoryName}
+		    	,#{item.address}
+		    	,#{item.userDefined1}
+		    	,#{item.userDefined2}
+		    	,#{item.userDefined3}
+		    	,#{item.userDefined4}
+		    	,#{item.userDefined5}
+		    	,#{item.createBy}
+		    	,#{item.gmtCreate}
+		    	,#{item.lastModifiedBy}
+		    	,#{item.gmtModified}
+		    	,#{item.activeFlag}
+		   )
+		   </foreach>	
+	</insert>
+	
+	<!-- 根据id，修改记录 -->
+	<update id="update" parameterType="com.penghaisoft.wms.basicmanagement.model.entity.WmsWarehouse">
+		<![CDATA[
+		update wms_warehouse set
+   			
+   			warehouse_name = #{warehouseName}
+   			,warehouse_code = #{warehouseCode}
+   			,warehouse_attr = #{warehouseAttr}
+   			,warehouse_addr = #{warehouseAddr}
+   			,warehouse_capacity = #{warehouseCapacity}
+   			,factory_name = #{factoryName}
+   			,address = #{address}
+   			,user_defined1 = #{userDefined1}
+   			,user_defined2 = #{userDefined2}
+   			,user_defined3 = #{userDefined3}
+   			,user_defined4 = #{userDefined4}
+   			,user_defined5 = #{userDefined5}
+   			,create_by = #{createBy}
+   			,gmt_create = #{gmtCreate}
+   			,last_modified_by = #{lastModifiedBy}
+   			,gmt_modified = #{gmtModified}
+   			,active_flag = #{activeFlag}
+		 where warehouse_id = #{warehouseId}
+		]]>
+	</update>
+	
+	<!--  -->
+	<update id="updateBySelect" parameterType="com.penghaisoft.wms.basicmanagement.model.entity.WmsWarehouse">
+		update wms_warehouse <set>
+		<if test="entity!=null">
+				<if test="entity.warehouseId != null  and entity.warehouseId !=''">
+					
+				</if>
+				<if test="entity.warehouseName != null  and entity.warehouseName !=''">
+					<![CDATA[ warehouse_name = #{entity.warehouseName}, ]]>
+				</if>
+				<if test="entity.warehouseCode != null  and entity.warehouseCode !=''">
+					<![CDATA[ warehouse_code = #{entity.warehouseCode}, ]]>
+				</if>
+				<if test="entity.warehouseAttr != null  and entity.warehouseAttr !=''">
+					<![CDATA[ warehouse_attr = #{entity.warehouseAttr}, ]]>
+				</if>
+				<if test="entity.warehouseAddr != null  and entity.warehouseAddr !=''">
+					<![CDATA[ warehouse_addr = #{entity.warehouseAddr}, ]]>
+				</if>
+				<if test="entity.warehouseCapacity != null  and entity.warehouseCapacity !=''">
+					<![CDATA[ warehouse_capacity = #{entity.warehouseCapacity}, ]]>
+				</if>
+				<if test="entity.factoryName != null  and entity.factoryName !=''">
+					<![CDATA[ factory_name = #{entity.factoryName}, ]]>
+				</if>
+				<if test="entity.address != null  and entity.address !=''">
+					<![CDATA[ address = #{entity.address}, ]]>
+				</if>
+				<if test="entity.userDefined1 != null  and entity.userDefined1 !=''">
+					<![CDATA[ user_defined1 = #{entity.userDefined1}, ]]>
+				</if>
+				<if test="entity.userDefined2 != null  and entity.userDefined2 !=''">
+					<![CDATA[ user_defined2 = #{entity.userDefined2}, ]]>
+				</if>
+				<if test="entity.userDefined3 != null  and entity.userDefined3 !=''">
+					<![CDATA[ user_defined3 = #{entity.userDefined3}, ]]>
+				</if>
+				<if test="entity.userDefined4 != null  and entity.userDefined4 !=''">
+					<![CDATA[ user_defined4 = #{entity.userDefined4}, ]]>
+				</if>
+				<if test="entity.userDefined5 != null  and entity.userDefined5 !=''">
+					<![CDATA[ user_defined5 = #{entity.userDefined5}, ]]>
+				</if>
+				<if test="entity.createBy != null  and entity.createBy !=''">
+					<![CDATA[ create_by = #{entity.createBy}, ]]>
+				</if>
+				<if test="entity.gmtCreate != null  and entity.gmtCreate !=''">
+					<![CDATA[ gmt_create = #{entity.gmtCreate}, ]]>
+				</if>
+				<if test="entity.lastModifiedBy != null  and entity.lastModifiedBy !=''">
+					<![CDATA[ last_modified_by = #{entity.lastModifiedBy}, ]]>
+				</if>
+				<if test="entity.gmtModified != null  ">
+					<![CDATA[ gmt_modified = #{entity.gmtModified}, ]]>
+				</if>
+				<if test="entity.activeFlag != null  and entity.activeFlag !=''">
+					<![CDATA[ active_flag = #{entity.activeFlag}, ]]>
+				</if>
+		</if>
+		</set>
+		 where warehouse_id = #{entity.warehouseId}
+	</update>
+
+	   <!-- 逻辑删除,根据主键设置active_flag ='0' -->
+	  <update id="delete" parameterType="com.penghaisoft.wms.basicmanagement.model.entity.WmsWarehouse">
+	    DELETE FROM wms_warehouse
+	     where warehouse_id = #{entity.warehouseId}
+	  </update>
+	  
+	  <update id="batchDelete" parameterType="com.penghaisoft.wms.basicmanagement.model.entity.WmsWarehouse">
+	    DELETE FROM wms_warehouse
+	    where warehouse_id in 
+	    <foreach collection="entity.warehouseIdList" index="index" item="item" open="(" separator="," close=")">
+	      #{item}
+	    </foreach>
+	  </update>
+
+	<!-- 任意字段全匹配 -->
+	<select id="queryByAny" resultMap="wmsWarehouseMap" >
+		select
+		<include refid="selectAllColumns"/>
+		<include refid="where_any" />
+	</select>
+</mapper>

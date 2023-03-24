@@ -1,0 +1,464 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.penghaisoft.wcs.taskmanagement.model.dao.WcsAgvTaskMapper" >
+  <resultMap id="BaseResultMap" type="com.penghaisoft.wcs.taskmanagement.model.entity.WcsAgvTask" >
+  <id column="agv_task_id" property="agvTaskId" jdbcType="INTEGER" />
+    <result column="task_no" property="taskNo" jdbcType="INTEGER" />
+    <result column="agv_id" property="agvId" jdbcType="INTEGER" />
+    <result column="task_id" property="taskId" jdbcType="BIGINT" />
+    <result column="agv_task_type" property="agvTaskType" jdbcType="CHAR" />
+    <result column="action_type" property="actionType" jdbcType="CHAR" />
+    <result column="task_status" property="taskStatus" jdbcType="CHAR" />
+    <result column="pallet_code" property="palletCode" jdbcType="VARCHAR" />
+    <result column="path_id" property="pathId" jdbcType="INTEGER" />
+    <result column="priority" property="priority" jdbcType="INTEGER" />
+    <result column="error_msg" property="errorMsg" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="user_defined1" property="userDefined1" jdbcType="VARCHAR" />
+    <result column="user_defined2" property="userDefined2" jdbcType="VARCHAR" />
+    <result column="user_defined3" property="userDefined3" jdbcType="VARCHAR" />
+    <result column="user_defined4" property="userDefined4" jdbcType="VARCHAR" />
+    <result column="user_defined5" property="userDefined5" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="gmt_start" property="gmtStart" jdbcType="TIMESTAMP" />
+    <result column="last_modified_by" property="lastModifiedBy" jdbcType="VARCHAR" />
+    <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+    <result column="gmt_end" property="gmtEnd" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    agv_task_id, task_no, agv_id, task_id, agv_task_type, action_type, task_status, pallet_code, 
+    path_id, priority, error_msg, remark, user_defined1, user_defined2, user_defined3, 
+    user_defined4, user_defined5, create_by, gmt_create, gmt_start, last_modified_by, 
+    gmt_modified, gmt_end
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from wcs_agv_task
+    where agv_task_id = #{agvTaskId,jdbcType=INTEGER}
+  </select>
+
+
+  <select id="queryAnyByKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select
+    <include refid="Base_Column_List" />
+    from wcs_agv_task
+    where task_id = #{taskId,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectAgvTaskById" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from wcs_agv_task
+    where task_id in
+    <foreach collection="taskIdList" index="index" item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </select>
+
+  <select id="selectByTaskStatus" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from wcs_agv_task
+    where task_status in
+    <foreach collection="taskStatusList" index="index" item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </select>
+
+  <select id="selectByCond" parameterType="com.penghaisoft.wcs.taskmanagement.model.entity.WcsAgvTask"
+          resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from wcs_agv_task
+    where 1=1
+    <if test="pathId != null" >
+      and path_id = #{pathId,jdbcType=INTEGER}
+    </if>
+    <if test="taskStatus != null" >
+      and task_status=#{taskStatus,jdbcType=CHAR}
+    </if>
+    <if test="taskNo != null" >
+      and task_no=#{taskNo,jdbcType=INTEGER}
+    </if>
+    <if test="palletCode != null" >
+      and pallet_code = #{palletCode,jdbcType=VARCHAR}
+    </if>
+    <if test="userDefined1 != null" >
+      and user_defined1=#{userDefined1,jdbcType=VARCHAR}
+    </if>
+    <if test="userDefined2 != null" >
+      and user_defined2=#{userDefined2,jdbcType=VARCHAR}
+    </if>
+    <if test="userDefined3 != null" >
+      and user_defined3=#{userDefined3,jdbcType=VARCHAR}
+    </if>
+    order by priority
+  </select>
+  <select id="selectEarlyWaitingInTaskByCond" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from wcs_agv_task
+    <![CDATA[
+    where priority>0 AND task_status=#{entity.taskStatus,jdbcType=CHAR}
+    ]]>
+    order by priority
+  </select>
+  <select id="selectByTaskId" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from wcs_agv_task
+    where task_id = #{taskId,jdbcType=BIGINT}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from wcs_agv_task
+    where agv_task_id = #{agvTaskId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.penghaisoft.wcs.taskmanagement.model.entity.WcsAgvTask" >
+    insert into wcs_agv_task (agv_task_id, task_no, agv_id, 
+      task_id, agv_task_type, action_type, 
+      task_status, pallet_code, path_id, 
+      priority, error_msg, remark, 
+      user_defined1, user_defined2, user_defined3, 
+      user_defined4, user_defined5, create_by, 
+      gmt_create, gmt_start, last_modified_by, 
+      gmt_modified, gmt_end)
+    values (#{agvTaskId,jdbcType=INTEGER}, #{taskNo,jdbcType=INTEGER}, #{agvId,jdbcType=INTEGER}, 
+      #{taskId,jdbcType=BIGINT}, #{agvTaskType,jdbcType=CHAR}, #{actionType,jdbcType=CHAR}, 
+      #{taskStatus,jdbcType=CHAR}, #{palletCode,jdbcType=VARCHAR}, #{pathId,jdbcType=INTEGER}, 
+      #{priority,jdbcType=INTEGER}, #{errorMsg,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{userDefined1,jdbcType=VARCHAR}, #{userDefined2,jdbcType=VARCHAR}, #{userDefined3,jdbcType=VARCHAR}, 
+      #{userDefined4,jdbcType=VARCHAR}, #{userDefined5,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtStart,jdbcType=TIMESTAMP}, #{lastModifiedBy,jdbcType=VARCHAR}, 
+      #{gmtModified,jdbcType=TIMESTAMP}, #{gmtEnd,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.penghaisoft.wcs.taskmanagement.model.entity.WcsAgvTask" >
+    insert into wcs_agv_task
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="agvTaskId != null" >
+        agv_task_id,
+      </if>
+      <if test="taskNo != null" >
+        task_no,
+      </if>
+      <if test="agvId != null" >
+        agv_id,
+      </if>
+      <if test="taskId != null" >
+        task_id,
+      </if>
+      <if test="agvTaskType != null" >
+        agv_task_type,
+      </if>
+      <if test="actionType != null" >
+        action_type,
+      </if>
+      <if test="taskStatus != null" >
+        task_status,
+      </if>
+      <if test="palletCode != null" >
+        pallet_code,
+      </if>
+      <if test="pathId != null" >
+        path_id,
+      </if>
+      <if test="priority != null" >
+        priority,
+      </if>
+      <if test="errorMsg != null" >
+        error_msg,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="userDefined1 != null" >
+        user_defined1,
+      </if>
+      <if test="userDefined2 != null" >
+        user_defined2,
+      </if>
+      <if test="userDefined3 != null" >
+        user_defined3,
+      </if>
+      <if test="userDefined4 != null" >
+        user_defined4,
+      </if>
+      <if test="userDefined5 != null" >
+        user_defined5,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create,
+      </if>
+      <if test="gmtStart != null" >
+        gmt_start,
+      </if>
+      <if test="lastModifiedBy != null" >
+        last_modified_by,
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified,
+      </if>
+      <if test="gmtEnd != null" >
+        gmt_end,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="agvTaskId != null" >
+        #{agvTaskId,jdbcType=INTEGER},
+      </if>
+      <if test="taskNo != null" >
+        #{taskNo,jdbcType=INTEGER},
+      </if>
+      <if test="agvId != null" >
+        #{agvId,jdbcType=INTEGER},
+      </if>
+      <if test="taskId != null" >
+        #{taskId,jdbcType=BIGINT},
+      </if>
+      <if test="agvTaskType != null" >
+        #{agvTaskType,jdbcType=CHAR},
+      </if>
+      <if test="actionType != null" >
+        #{actionType,jdbcType=CHAR},
+      </if>
+      <if test="taskStatus != null" >
+        #{taskStatus,jdbcType=CHAR},
+      </if>
+      <if test="palletCode != null" >
+        #{palletCode,jdbcType=VARCHAR},
+      </if>
+      <if test="pathId != null" >
+        #{pathId,jdbcType=INTEGER},
+      </if>
+      <if test="priority != null" >
+        #{priority,jdbcType=INTEGER},
+      </if>
+      <if test="errorMsg != null" >
+        #{errorMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined1 != null" >
+        #{userDefined1,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined2 != null" >
+        #{userDefined2,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined3 != null" >
+        #{userDefined3,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined4 != null" >
+        #{userDefined4,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined5 != null" >
+        #{userDefined5,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtStart != null" >
+        #{gmtStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifiedBy != null" >
+        #{lastModifiedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtModified != null" >
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtEnd != null" >
+        #{gmtEnd,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.penghaisoft.wcs.taskmanagement.model.entity.WcsAgvTask" >
+    update wcs_agv_task
+    <set >
+      <if test="taskNo != null" >
+        task_no = #{taskNo,jdbcType=INTEGER},
+      </if>
+      <if test="agvId != null" >
+        agv_id = #{agvId,jdbcType=INTEGER},
+      </if>
+      <if test="taskId != null" >
+        task_id = #{taskId,jdbcType=BIGINT},
+      </if>
+      <if test="agvTaskType != null" >
+        agv_task_type = #{agvTaskType,jdbcType=CHAR},
+      </if>
+      <if test="actionType != null" >
+        action_type = #{actionType,jdbcType=CHAR},
+      </if>
+      <if test="taskStatus != null" >
+        task_status = #{taskStatus,jdbcType=CHAR},
+      </if>
+      <if test="palletCode != null" >
+        pallet_code = #{palletCode,jdbcType=VARCHAR},
+      </if>
+      <if test="pathId != null" >
+        path_id = #{pathId,jdbcType=INTEGER},
+      </if>
+      <if test="priority != null" >
+        priority = #{priority,jdbcType=INTEGER},
+      </if>
+      <if test="errorMsg != null" >
+        error_msg = #{errorMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined1 != null" >
+        user_defined1 = #{userDefined1,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined2 != null" >
+        user_defined2 = #{userDefined2,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined3 != null" >
+        user_defined3 = #{userDefined3,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined4 != null" >
+        user_defined4 = #{userDefined4,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined5 != null" >
+        user_defined5 = #{userDefined5,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtStart != null" >
+        gmt_start = #{gmtStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifiedBy != null" >
+        last_modified_by = #{lastModifiedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtEnd != null" >
+        gmt_end = #{gmtEnd,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where agv_task_id = #{agvTaskId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.penghaisoft.wcs.taskmanagement.model.entity.WcsAgvTask" >
+    update wcs_agv_task
+    set task_no = #{taskNo,jdbcType=INTEGER},
+      agv_id = #{agvId,jdbcType=INTEGER},
+      task_id = #{taskId,jdbcType=BIGINT},
+      agv_task_type = #{agvTaskType,jdbcType=CHAR},
+      action_type = #{actionType,jdbcType=CHAR},
+      task_status = #{taskStatus,jdbcType=CHAR},
+      pallet_code = #{palletCode,jdbcType=VARCHAR},
+      path_id = #{pathId,jdbcType=INTEGER},
+      priority = #{priority,jdbcType=INTEGER},
+      error_msg = #{errorMsg,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      user_defined1 = #{userDefined1,jdbcType=VARCHAR},
+      user_defined2 = #{userDefined2,jdbcType=VARCHAR},
+      user_defined3 = #{userDefined3,jdbcType=VARCHAR},
+      user_defined4 = #{userDefined4,jdbcType=VARCHAR},
+      user_defined5 = #{userDefined5,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_start = #{gmtStart,jdbcType=TIMESTAMP},
+      last_modified_by = #{lastModifiedBy,jdbcType=VARCHAR},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      gmt_end = #{gmtEnd,jdbcType=TIMESTAMP}
+    where agv_task_id = #{agvTaskId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByTaskCode">
+    update wcs_agv_task
+    <set >
+      <if test="agvId != null" >
+        agv_id = #{agvId,jdbcType=INTEGER},
+      </if>
+      <if test="taskId != null" >
+        task_id = #{taskId,jdbcType=BIGINT},
+      </if>
+      <if test="agvTaskType != null" >
+        agv_task_type = #{agvTaskType,jdbcType=CHAR},
+      </if>
+      <if test="actionType != null" >
+        action_type = #{actionType,jdbcType=CHAR},
+      </if>
+      <if test="taskStatus != null" >
+        task_status = #{taskStatus,jdbcType=CHAR},
+      </if>
+      <if test="palletCode != null" >
+        pallet_code = #{palletCode,jdbcType=VARCHAR},
+      </if>
+      <if test="pathId != null" >
+        path_id = #{pathId,jdbcType=INTEGER},
+      </if>
+      <if test="priority != null" >
+        priority = #{priority,jdbcType=INTEGER},
+      </if>
+      <if test="errorMsg != null" >
+        error_msg = #{errorMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined1 != null" >
+        user_defined1 = #{userDefined1,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined2 != null" >
+        user_defined2 = #{userDefined2,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined3 != null" >
+        user_defined3 = #{userDefined3,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined4 != null" >
+        user_defined4 = #{userDefined4,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined5 != null" >
+        user_defined5 = #{userDefined5,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtStart != null" >
+        gmt_start = #{gmtStart,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifiedBy != null" >
+        last_modified_by = #{lastModifiedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtEnd != null" >
+        gmt_end = #{gmtEnd,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where task_no = #{taskNo,jdbcType=INTEGER}
+  </update>
+
+  <delete id="deleteAgvTaskByIdList" parameterType="java.lang.Long" >
+    delete from wcs_agv_task
+    where task_id in
+    <foreach collection="taskIdList" index="index" item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+  <delete id="deleteByUserDefined3">
+    delete from wcs_agv_task
+    where user_defined3 = #{inTaskNo,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByTaskCode">
+    delete from wcs_agv_task
+    where task_no = #{taskCode,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteAll">
+    delete from wcs_agv_task
+  </delete>
+</mapper>

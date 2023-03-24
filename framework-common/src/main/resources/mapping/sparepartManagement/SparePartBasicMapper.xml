@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.penghaisoft.framework.sparepartManagement.model.dao.ISparePartBasicDAO" >
+  <sql id="Base_Column_List" >
+    id,
+    spare_part_code sparePartCode,
+    spare_part_name sparePartName,
+    spec_and_type specAndType,
+    manufacturer ,
+    case is_pivotal
+    when 1 then '是'
+    when 0 then '否'
+    else '' end  isPivotal,
+    case is_share
+    when 1 then '是'
+    when 0 then '否'
+    else '' end isShare,
+    case is_force_replace
+    when 1 then '是'
+    when 0 then '否'
+    else '' end isForceReplace,
+    IFNULL(cycle,0) cycle,
+    unit,
+    min_stock minStock,
+    max_stock maxStock,
+    IFNULL(( SELECT sd.supplier_name FROM supplier sd WHERE sd.id = sp.supplier),'') as  supplier,
+    brand,
+    status,
+    confirm_person confirmPerson,
+    IFNULL(( SELECT sd.NAME FROM sys_dictionaries sd WHERE sd.id = sp.calculate_unit),'') as  calculateUnit,
+    IFNULL((SELECT sum(stock_number) from stock_info  where spare_part_id = sp.id GROUP BY  spare_part_id ),0) as sumStockNumber
+  </sql>
+
+  <select id="getAllSparePart" resultType="com.penghaisoft.framework.sparepartManagement.model.entity.SparePart">
+    SELECT
+base_unit.unit_id calculateUnit,
+base_unit.unit_zh_name cycle,
+base_unit.unit_en_name manufacturer,
+base_unit.unit_change sparePartName,
+base_unit.unit_type confirmPerson,
+base_unit.user_defined1 supplier,
+base_unit.user_defined2,
+base_unit.user_defined3,
+base_unit.user_defined4,
+base_unit.user_defined5,
+base_unit.create_by,
+base_unit.gmt_create,
+base_unit.last_modified_by,
+base_unit.gmt_modified,
+base_unit.active_flag,
+base_unit.unit_code
+FROM `base_unit`
+  </select>
+
+<!--  <select id="getAllSparePart" resultType="com.penghaisoft.framework.sparepartManagement.model.entity.SparePart">-->
+<!--    select <include refid="Base_Column_List"/>-->
+<!--    from  spare_part sp-->
+<!--    <where>-->
+<!--      <if test="queryContent != null and queryContent != ''">-->
+<!--        AND (spare_part_code like concat('%',#{queryContent},'%')-->
+<!--        or spare_part_name like concat('%',#{queryContent},'%')-->
+<!--        or manufacturer like concat('%',#{queryContent},'%'))-->
+<!--      </if>-->
+<!--      <if test="createUserId != null and createUserId != 0">-->
+<!--        AND ( create_user_id = #{createUserId}-->
+<!--        or  confirm_person = #{createUserId}-->
+<!--        )-->
+<!--      </if>-->
+<!--      <if test="status != null and status != '' ">-->
+<!--        AND status = #{status}-->
+<!--      </if>-->
+<!--    </where>-->
+<!--    <choose>-->
+<!--      <when test="orderBy != null and orderBy != ''">-->
+<!--        order by ${orderBy}-->
+<!--      </when>-->
+<!--      <otherwise>-->
+<!--        order by id desc-->
+<!--      </otherwise>-->
+<!--    </choose>-->
+<!--  </select>-->
+
+
+
+</mapper>

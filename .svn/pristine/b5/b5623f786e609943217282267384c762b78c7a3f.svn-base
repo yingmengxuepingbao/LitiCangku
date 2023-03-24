@@ -1,0 +1,30 @@
+//
+// Source code recreated from a .class file by IntelliJ IDEA
+// (powered by Fernflower decompiler)
+//
+
+package com.penghaisoft.wms.storagemanagement.model.business;
+
+import com.penghaisoft.framework.util.Pager;
+import com.penghaisoft.framework.util.Resp;
+import com.penghaisoft.wms.storagemanagement.model.entity.WmsMoveStereoscopic;
+import com.penghaisoft.wms.storagemanagement.model.entity.WmsTaskExecutionLog;
+import java.util.List;
+
+public interface IWmsMoveStereoscopicService {
+    Resp create(WmsMoveStereoscopic wmsMoveStereoscopic);
+
+    Resp delete(WmsMoveStereoscopic wmsMoveStereoscopic);
+
+    Pager<WmsMoveStereoscopic> findListByCondition(int page, int rows, WmsMoveStereoscopic condition);
+
+    WmsMoveStereoscopic findById(String id);
+
+    Resp update(WmsMoveStereoscopic wmsMoveStereoscopic);
+
+    List<WmsMoveStereoscopic> queryByAny(WmsMoveStereoscopic condition);
+
+    Resp reportNormalYkTask(WmsTaskExecutionLog condition);
+
+    Resp startYkTask(WmsMoveStereoscopic wmsMoveStereoscopic);
+}

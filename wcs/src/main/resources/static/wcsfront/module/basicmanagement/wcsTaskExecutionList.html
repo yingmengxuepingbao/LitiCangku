@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>任务管理</title>
+    <link rel="stylesheet" href="../../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../../css/font-awesome.min.css">
+    <link rel="stylesheet" href="../../css/zdialog.css">
+    <link rel="stylesheet" href="../../css/jedate.css" />
+    <link rel="stylesheet" href="../../css/detail.css" type="text/css">
+    <link rel="stylesheet" href="../../css/layout.css" type="text/css">
+    <link rel="stylesheet" href="../../js/chosen-1.8.7/chosen.min.css" type="text/css" />
+    <style>
+        html,body{
+            height: 100%;
+            background: #F1F4F4;;
+        }
+        .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+            padding: 10px 0;
+            line-height: 1.42857143;
+            vertical-align: top;
+            border-top: 1px solid #ECF0F1 ;
+        }
+        .table > thead > tr > th {
+            vertical-align: bottom;
+            border-bottom: none;
+        }
+        .tit-search{margin-left: 15px}
+        .search-inline{
+            display: inline-block;
+            margin-right:10px;
+            margin-top: 15px;
+        }
+        .search-inline .btn{background: #1DBBF4;color:#fff}
+        /*.btn{background: #1DBBF4;color:#fff}*/
+        .form-horizontal .form-control{
+            width: 85%;
+        }
+        .fa-asterisk {
+            font-size: 9px;
+            color: #EF4836;
+        }
+        .modal-title{color: #444;
+            font-weight: 600;
+            font-size: 15px;
+        }
+        .modal-footer .btn+.btn {
+            background: #1DBBF4;
+            color: #fff;
+            border: 1px solid #fff;
+        }
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <ol class="breadcrumb">
+        <li><a href="#" class="link">任务管理</a></li>
+        <li class="active">任务执行</li>
+    </ol>
+    <div class="content">
+        <div class="tit-search">
+
+            <div class="search-inline">
+                <div class="form-group form-inline">
+                    <label for="taskIdPoP">任务ID:</label>
+                    <input type="text" id="taskIdPoP" placeholder="ID(数字)"  class="form-control" onkeyup="this.value=this.value.replace(/\D/g,'')" />
+                </div>
+            </div>
+            <div class="search-inline">
+                <div class="form-group form-inline">
+                    <label for="palletCodePoP">托盘号:</label>
+                    <input type="text" id="palletCodePoP" placeholder="编号"  class="form-control" />
+                </div>
+            </div>
+            <div class="search-inline">
+                <div class="form-group form-inline">
+                    <label for="taskTypePoP">任务类型:</label>
+                    <select class="form-control" id="taskTypePoP">
+                        <option value=""></option>
+                        <option value="10">生产入库</option>
+<!--                        <option value="11">分拣入库</option>-->
+<!--                        <option value="12">盘点入库</option>-->
+<!--                        <option value="13">包材入库</option>-->
+<!--                        <option value="14">异常口入库</option>-->
+                        <option value="15">虚拟托盘入库</option>
+                        <option value="16">人工入库</option>
+                        <option value="20">直发出库</option>
+<!--                        <option value="21">分拣出库</option>-->
+<!--                        <option value="22">盘点出库</option>-->
+<!--                        <option value="23">包材出库</option>-->
+<!--                        <option value="24">异常出库</option>-->
+                        <option value="25">虚拟托盘出库</option>
+                        <option value="26">人工出库</option>
+                        <option value="30">普通移库</option>
+<!--                        <option value="31">出库移库</option>-->
+<!--                        <option value="40">生产越库</option>-->
+                    </select>
+                </div>
+            </div>
+            <div class="search-inline">
+                <div class="form-group form-inline">
+                    <label for="taskStatusPoP">任务状态:</label>
+                    <select class="form-control" id="taskStatusPoP">
+                        <option value=""></option>
+                        <option value="1">创建</option>
+                        <option value="2">执行中</option>
+                        <option value="3">完成</option>
+                        <option value="4">异常</option>
+                        <option value="5">取消</option>
+                    </select>
+                </div>
+            </div>
+            </div>
+            <div class="search-inline">
+                <button type="button" id="reset" class="btn">重置</button>
+                <button type="button" id="refrechTop" class="btn">搜&nbsp;&nbsp;索</button>
+            </div>
+            <div class="search-inline rt">
+                <button type="button" id="delTask" class="btn">删除任务</button>
+                <button type="button" id="mainTaskStatus" class="btn">更改主任务状态</button>
+                <button type="button" id="uploadWms" class="btn">更改上传WMS状态</button>
+            </div>
+        </div>
+        <table id="formTable"  class="table table-hover table-striped" style="margin-left: 15px">
+            <thead class="head-sort">
+            <th style="width: 50px">
+                <div class="checkbox-custom checkbox-default">
+                    <input type="checkbox" id="check-all">
+                    <label></label>
+                </div>
+            </th>
+            <th data-sort="task_id">任务ID<i class="fa fa-sort-amount-asc"></i></th>
+            <th data-sort="pallet_code">托盘号<i class="fa fa-sort-amount-asc"></i></th>
+            <th data-sort="task_status">任务状态<i class="fa fa-sort-amount-asc"></i></th>
+            <th data-sort="task_type">任务类型<i class="fa fa-sort-amount-asc"></i></th>
+            <th data-sort="report_wms">上报WMS结果<i class="fa fa-sort-amount-asc"></i></th>
+            <th data-sort="create_by">创建人员<i class="fa fa-sort-amount-asc"></i></th>
+            <th data-sort="gmt_create">创建时间<i class="fa fa-sort-amount-asc"></i></th>
+            <th data-sort="from_address">源地址<i class="fa fa-sort-amount-asc"></i></th>
+            <th data-sort="to_address">目标地址<i class="fa fa-sort-amount-asc"></i></th>
+            <th>操作</th>
+            </thead>
+            <tbody class="tbody-load">
+            </tbody>
+        </table>
+        <div class="pagination-con" style="display: block;margin: 15px">
+            <p class="listNumber rt">
+                <button class="btn btn-default btn-xs previousPage"><i class="fa fa-caret-left fa-lg"></i></button>
+                <span class="currentPage">1</span>/<span class="pageNumber">1</span>
+                <button class="btn btn-default btn-xs nextPage"><i class="fa fa-caret-right fa-lg"></i></button>
+                <input class="currentPageBtn" value="1" type="text"  onkeyup="this.value=this.value.replace(/[^0-9]+/g, '');"/>
+                <button type="button" id="pageJump"  data-loading-text="请求数据中..." class="btn btn-default pageJump" autocomplete="off">跳转</button>
+                每页<span class="pageOneNumber">20</span>条，共<span class="dataNumber">30</span>条记录
+            </p>
+        </div>
+    </div>
+</div>
+
+
+<!--主任务状态-->
+<div class="modal" id="formModel" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document" style="width: 500px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">更改主任务状态</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="formInfo">
+                    <div class="form-group">
+                        <input type="hidden" id="type">
+                        <input type="hidden" id="id">
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3"><i class="fa fa-asterisk"></i>任务状态:</label>
+                        <div class="col-sm-8">
+                            <select id="taskStatus" class="form-control" placeholder="请选择任务状态">
+                                <option value="">请选择任务状态</option>
+                                <option value="1">创建</option>
+                                <option value="2">执行</option>
+                                <option value="3">完成</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" id="saveButton" class="btn" data-dismiss="modal">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--上传Wms状态-->
+<div class="modal" id="formModelUp" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document" style="width: 500px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalUp">更改主任务状态</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="formInfoUp">
+                    <div class="form-group">
+                        <input type="hidden" id="typeUp">
+                        <input type="hidden" id="idUp">
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3"><i class="fa fa-asterisk"></i>上传WMS状态:</label>
+                        <div class="col-sm-8">
+                            <select id="reportWms" class="form-control" placeholder="请选择上传状态">
+                                <option value="">请选择上传状态</option>
+                                <option value="0">未上传</option>
+                                <option value="1">成功上传</option>
+                                <option value="2">业务异常</option>
+                                <option value="3">上传失败</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" id="saveButtonUp" class="btn" data-dismiss="modal">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="../../js/jquery.min.js" ></script>
+<script type="text/javascript" src="../../js/bootstrap.min.js" ></script>
+<script type="text/javascript" src="../../js/zdialog.js"></script>
+<script type="text/javascript" src="../../js/common.js"></script>
+<script type="text/javascript" src="../../js/jquery.jedate.js" ></script>
+<script type="text/javascript" src="../../js/chosen-1.8.7/chosen.jquery.min.js"></script>
+<script type="text/javascript" src="js/wcsTaskExecutionList.js"></script>
+</body>
+</html>

@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.penghaisoft.wcs.operation.model.dao.WcsBindingInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.penghaisoft.wcs.operation.model.WcsBindingInfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="palletizer_id" property="palletizerId" jdbcType="INTEGER" />
+    <result column="address_id" property="addressId" jdbcType="INTEGER" />
+    <result column="pallet_code" property="palletCode" jdbcType="VARCHAR" />
+    <result column="goods_code" property="goodsCode" jdbcType="VARCHAR" />
+    <result column="amount" property="amount" jdbcType="INTEGER" />
+    <result column="batch_no" property="batchNo" jdbcType="VARCHAR" />
+    <result column="report_wms" property="reportWms" jdbcType="CHAR" />
+    <result column="recommended_location" property="recommendedLocation" jdbcType="INTEGER" />
+    <result column="is_cross" property="isCross" jdbcType="CHAR" />
+    <result column="error_msg" property="errorMsg" jdbcType="VARCHAR" />
+    <result column="user_defined1" property="userDefined1" jdbcType="VARCHAR" />
+    <result column="user_defined2" property="userDefined2" jdbcType="VARCHAR" />
+    <result column="user_defined3" property="userDefined3" jdbcType="VARCHAR" />
+    <result column="user_defined4" property="userDefined4" jdbcType="VARCHAR" />
+    <result column="user_defined5" property="userDefined5" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="last_modified_by" property="lastModifiedBy" jdbcType="VARCHAR" />
+    <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, palletizer_id, address_id, pallet_code, goods_code, amount, batch_no, report_wms, 
+    recommended_location, is_cross, error_msg, user_defined1, user_defined2, user_defined3, 
+    user_defined4, user_defined5, create_by, gmt_create, last_modified_by, gmt_modified
+  </sql>
+  <!-- mysql 分页 -->
+  <sql id="pagination_tail">
+	  limit #{page.pageOffset} , #{page.rows}
+  </sql>
+  <sql id="where_fragement">
+    where 1=1
+    <if test="entity!=null">
+      <if test="entity.id != null  and entity.id !=''">
+        <![CDATA[ and wcs_binding_info_.id  LIKE CONCAT('%',#{entity.id},'%')]]>
+      </if>
+      <if test="entity.palletizerId != null  and entity.palletizerId !=''">
+        <![CDATA[ and wcs_binding_info_.palletizer_id  LIKE CONCAT('%',#{entity.palletizerId},'%')]]>
+      </if>
+      <if test="entity.addressId != null  and entity.addressId !=''">
+        <![CDATA[ and wcs_binding_info_.address_id  LIKE CONCAT('%',#{entity.addressId},'%')]]>
+      </if>
+      <if test="entity.palletCode != null  and entity.palletCode !=''">
+        <![CDATA[ and wcs_binding_info_.pallet_code  LIKE CONCAT('%',#{entity.palletCode},'%')]]>
+      </if>
+      <if test="entity.goodsCode != null  and entity.goodsCode !=''">
+        <![CDATA[ and wcs_binding_info_.goods_code  LIKE CONCAT('%',#{entity.goodsCode},'%')]]>
+      </if>
+      <if test="entity.amount != null  and entity.amount !=''">
+        <![CDATA[ and wcs_binding_info_.amount  LIKE CONCAT('%',#{entity.amount},'%')]]>
+      </if>
+      <if test="entity.batchNo != null  and entity.batchNo !=''">
+        <![CDATA[ and wcs_binding_info_.batch_no  LIKE CONCAT('%',#{entity.batchNo},'%')]]>
+      </if>
+      <if test="entity.reportWms != null  and entity.reportWms !=''">
+        <![CDATA[ and wcs_binding_info_.report_wms  LIKE CONCAT('%',#{entity.reportWms},'%')]]>
+      </if>
+      <if test="entity.recommendedLocation != null  and entity.recommendedLocation !=''">
+        <![CDATA[ and wcs_binding_info_.recommended_location  LIKE CONCAT('%',#{entity.recommendedLocation},'%')]]>
+      </if>
+      <if test="entity.isCross != null  and entity.isCross !=''">
+        <![CDATA[ and wcs_binding_info_.is_cross  LIKE CONCAT('%',#{entity.isCross},'%')]]>
+      </if>
+      <if test="entity.errorMsg != null  and entity.errorMsg !=''">
+        <![CDATA[ and wcs_binding_info_.error_msg  LIKE CONCAT('%',#{entity.errorMsg},'%')]]>
+      </if>
+      <if test="entity.userDefined1 != null  and entity.userDefined1 !=''">
+        <![CDATA[ and wcs_binding_info_.user_defined1  LIKE CONCAT('%',#{entity.userDefined1},'%')]]>
+      </if>
+      <if test="entity.userDefined2 != null  and entity.userDefined2 !=''">
+        <![CDATA[ and wcs_binding_info_.user_defined2  LIKE CONCAT('%',#{entity.userDefined2},'%')]]>
+      </if>
+      <if test="entity.userDefined3 != null  and entity.userDefined3 !=''">
+        <![CDATA[ and wcs_binding_info_.user_defined3  LIKE CONCAT('%',#{entity.userDefined3},'%')]]>
+      </if>
+      <if test="entity.userDefined4 != null  and entity.userDefined4 !=''">
+        <![CDATA[ and wcs_binding_info_.user_defined4  LIKE CONCAT('%',#{entity.userDefined4},'%')]]>
+      </if>
+      <if test="entity.userDefined5 != null  and entity.userDefined5 !=''">
+        <![CDATA[ and wcs_binding_info_.user_defined5  LIKE CONCAT('%',#{entity.userDefined5},'%')]]>
+      </if>
+      <if test="entity.createBy != null  and entity.createBy !=''">
+        <![CDATA[ and wcs_binding_info_.create_by  LIKE CONCAT('%',#{entity.createBy},'%')]]>
+      </if>
+      <if test="entity.gmtCreate != null  and entity.gmtCreate !=''">
+        <![CDATA[ and wcs_binding_info_.gmt_create  LIKE CONCAT('%',#{entity.gmtCreate},'%')]]>
+      </if>
+      <if test="entity.lastModifiedBy != null  and entity.lastModifiedBy !=''">
+        <![CDATA[ and wcs_binding_info_.last_modified_by  LIKE CONCAT('%',#{entity.lastModifiedBy},'%')]]>
+      </if>
+      <if test="entity.gmtModified != null  and entity.gmtModified !=''">
+        <![CDATA[ and wcs_binding_info_.gmt_modified  LIKE CONCAT('%',#{entity.gmtModified},'%')]]>
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from wcs_binding_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <!-- 分页查询 -->
+  <select id="queryList" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from wcs_binding_info wcs_binding_info_
+    <include refid="where_fragement" />
+    <if test="entity.orderBy != null">
+      order by ${entity.orderBy}
+    </if>
+    <if test="page!=null">
+      <include refid="pagination_tail" />
+    </if>
+  </select>
+
+  <select id="queryCount" resultType="long">
+    select count(1) from
+    wcs_binding_info wcs_binding_info_
+    <include refid="where_fragement" />
+  </select>
+
+  <select id="selectByCond" resultMap="BaseResultMap" parameterType="com.penghaisoft.wcs.operation.model.WcsBindingInfo">
+    select  <include refid="Base_Column_List" />
+    from wcs_binding_info
+    where
+      pallet_code = #{palletCode,jdbcType=VARCHAR}
+    and
+      goods_code = #{goodsCode,jdbcType=VARCHAR}
+    and
+      batch_no = #{batchNo,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from wcs_binding_info
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.penghaisoft.wcs.operation.model.WcsBindingInfo" >
+    insert into wcs_binding_info (id, palletizer_id, address_id, 
+      pallet_code, goods_code, amount, 
+      batch_no, report_wms, recommended_location, 
+      is_cross, error_msg, user_defined1, 
+      user_defined2, user_defined3, user_defined4, 
+      user_defined5, create_by, gmt_create, 
+      last_modified_by, gmt_modified)
+    values (#{id,jdbcType=INTEGER}, #{palletizerId,jdbcType=INTEGER}, #{addressId,jdbcType=INTEGER}, 
+      #{palletCode,jdbcType=VARCHAR}, #{goodsCode,jdbcType=VARCHAR}, #{amount,jdbcType=INTEGER}, 
+      #{batchNo,jdbcType=VARCHAR}, #{reportWms,jdbcType=CHAR}, #{recommendedLocation,jdbcType=INTEGER}, 
+      #{isCross,jdbcType=CHAR}, #{errorMsg,jdbcType=VARCHAR}, #{userDefined1,jdbcType=VARCHAR}, 
+      #{userDefined2,jdbcType=VARCHAR}, #{userDefined3,jdbcType=VARCHAR}, #{userDefined4,jdbcType=VARCHAR}, 
+      #{userDefined5,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, 
+      #{lastModifiedBy,jdbcType=VARCHAR}, #{gmtModified,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.penghaisoft.wcs.operation.model.WcsBindingInfo" useGeneratedKeys="true" keyProperty="id">
+    insert into wcs_binding_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="palletizerId != null" >
+        palletizer_id,
+      </if>
+      <if test="addressId != null" >
+        address_id,
+      </if>
+      <if test="palletCode != null" >
+        pallet_code,
+      </if>
+      <if test="goodsCode != null" >
+        goods_code,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="batchNo != null" >
+        batch_no,
+      </if>
+      <if test="reportWms != null" >
+        report_wms,
+      </if>
+      <if test="recommendedLocation != null" >
+        recommended_location,
+      </if>
+      <if test="isCross != null" >
+        is_cross,
+      </if>
+      <if test="errorMsg != null" >
+        error_msg,
+      </if>
+      <if test="userDefined1 != null" >
+        user_defined1,
+      </if>
+      <if test="userDefined2 != null" >
+        user_defined2,
+      </if>
+      <if test="userDefined3 != null" >
+        user_defined3,
+      </if>
+      <if test="userDefined4 != null" >
+        user_defined4,
+      </if>
+      <if test="userDefined5 != null" >
+        user_defined5,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create,
+      </if>
+      <if test="lastModifiedBy != null" >
+        last_modified_by,
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="palletizerId != null" >
+        #{palletizerId,jdbcType=INTEGER},
+      </if>
+      <if test="addressId != null" >
+        #{addressId,jdbcType=INTEGER},
+      </if>
+      <if test="palletCode != null" >
+        #{palletCode,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsCode != null" >
+        #{goodsCode,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=INTEGER},
+      </if>
+      <if test="batchNo != null" >
+        #{batchNo,jdbcType=VARCHAR},
+      </if>
+      <if test="reportWms != null" >
+        #{reportWms,jdbcType=CHAR},
+      </if>
+      <if test="recommendedLocation != null" >
+        #{recommendedLocation,jdbcType=INTEGER},
+      </if>
+      <if test="isCross != null" >
+        #{isCross,jdbcType=CHAR},
+      </if>
+      <if test="errorMsg != null" >
+        #{errorMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined1 != null" >
+        #{userDefined1,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined2 != null" >
+        #{userDefined2,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined3 != null" >
+        #{userDefined3,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined4 != null" >
+        #{userDefined4,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined5 != null" >
+        #{userDefined5,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifiedBy != null" >
+        #{lastModifiedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtModified != null" >
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.penghaisoft.wcs.operation.model.WcsBindingInfo" >
+    update wcs_binding_info
+    <set >
+      <if test="palletizerId != null" >
+        palletizer_id = #{palletizerId,jdbcType=INTEGER},
+      </if>
+      <if test="addressId != null" >
+        address_id = #{addressId,jdbcType=INTEGER},
+      </if>
+      <if test="palletCode != null" >
+        pallet_code = #{palletCode,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsCode != null" >
+        goods_code = #{goodsCode,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=INTEGER},
+      </if>
+      <if test="batchNo != null" >
+        batch_no = #{batchNo,jdbcType=VARCHAR},
+      </if>
+      <if test="reportWms != null" >
+        report_wms = #{reportWms,jdbcType=CHAR},
+      </if>
+      <if test="recommendedLocation != null" >
+        recommended_location = #{recommendedLocation,jdbcType=INTEGER},
+      </if>
+      <if test="isCross != null" >
+        is_cross = #{isCross,jdbcType=CHAR},
+      </if>
+      <if test="errorMsg != null" >
+        error_msg = #{errorMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined1 != null" >
+        user_defined1 = #{userDefined1,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined2 != null" >
+        user_defined2 = #{userDefined2,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined3 != null" >
+        user_defined3 = #{userDefined3,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined4 != null" >
+        user_defined4 = #{userDefined4,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined5 != null" >
+        user_defined5 = #{userDefined5,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifiedBy != null" >
+        last_modified_by = #{lastModifiedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.penghaisoft.wcs.operation.model.WcsBindingInfo" >
+    update wcs_binding_info
+    set palletizer_id = #{palletizerId,jdbcType=INTEGER},
+      address_id = #{addressId,jdbcType=INTEGER},
+      pallet_code = #{palletCode,jdbcType=VARCHAR},
+      goods_code = #{goodsCode,jdbcType=VARCHAR},
+      amount = #{amount,jdbcType=INTEGER},
+      batch_no = #{batchNo,jdbcType=VARCHAR},
+      report_wms = #{reportWms,jdbcType=CHAR},
+      recommended_location = #{recommendedLocation,jdbcType=INTEGER},
+      is_cross = #{isCross,jdbcType=CHAR},
+      error_msg = #{errorMsg,jdbcType=VARCHAR},
+      user_defined1 = #{userDefined1,jdbcType=VARCHAR},
+      user_defined2 = #{userDefined2,jdbcType=VARCHAR},
+      user_defined3 = #{userDefined3,jdbcType=VARCHAR},
+      user_defined4 = #{userDefined4,jdbcType=VARCHAR},
+      user_defined5 = #{userDefined5,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      last_modified_by = #{lastModifiedBy,jdbcType=VARCHAR},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="queryMoveBindingInfo" resultMap="BaseResultMap" parameterType="com.penghaisoft.wcs.operation.model.WcsBindingInfo">
+    select  <include refid="Base_Column_List" />
+    from wcs_binding_info
+    where
+    report_wms = #{reportWms,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByPalletCode" resultMap="BaseResultMap">
+    select  <include refid="Base_Column_List" />
+    from wcs_binding_info
+    where
+    pallet_code = #{palletCode,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteBindInfoByIdList" parameterType="java.lang.Integer" >
+    delete from wcs_binding_info
+    where id in
+    <foreach collection="idList" index="index" item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+  <delete id="deleteAll">
+    delete from wcs_binding_info
+  </delete>
+</mapper>

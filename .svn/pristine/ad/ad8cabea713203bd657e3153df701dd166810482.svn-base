@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.penghaisoft.framework.permissionmanagement.model.dao.RoleMapper">
+    <resultMap id="BaseResultMap" type="com.penghaisoft.framework.permissionmanagement.model.entity.Role">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="created_time" property="createdTime" jdbcType="TIMESTAMP"/>
+        <collection property="resourceList"
+                    ofType="com.penghaisoft.framework.permissionmanagement.model.entity.Resources">
+            <id column="res_id" property="id" jdbcType="INTEGER"/>
+            <result column="parent_id" property="parentId" jdbcType="INTEGER"/>
+            <result column="level" property="level"/>
+            <result column="sequence" property="sequence"/>
+            <result column="title" property="title"/>
+            <result column="res_code" property="resCode"/>
+            <result column="re_description" property="description"/>
+            <result column="icon" property="icon"/>
+            <result column="is_modifiable" property="isModifiable"/>
+            <result column="res_type" property="resType"/>
+            <result column="url" property="url"/>
+        </collection>
+    </resultMap>
+
+
+    <sql id="Base_Column_List">
+    id, name, description, created_time
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    SELECT
+    ro.id, ro.name, ro.description, ro.created_time,
+    re.id res_id, re.parent_id parent_id , re.level level, re.sequence sequence, re.title title, re.res_code res_code, re.description re_description, re.icon icon, re.is_modifiable is_modifiable,
+    re.res_type res_type, re.url url
+    FROM
+    role ro
+    left  join  role_res rr on rr.role_id = ro.id
+    left join  resources re  on re.id = rr.res_id
+    WHERE
+    ro.id = #{id,jdbcType=INTEGER}
+  </select>
+    <delete id="deleteRoleByRoleId" parameterType="java.lang.Integer">
+    delete from role
+    where id = #{roleId,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.penghaisoft.framework.permissionmanagement.model.entity.Role">
+    insert into role (id, name, description, 
+      created_time)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP})
+  </insert>
+    <insert id="insertSelective" parameterType="com.penghaisoft.framework.permissionmanagement.model.entity.Role"
+            useGeneratedKeys="true" keyProperty="id"  >
+        insert into role
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                name,
+            </if>
+            <if test="description != null">
+                description,
+            </if>
+            <if test="createdTime != null">
+                created_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="createdTime != null">
+                #{createdTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective"
+            parameterType="com.penghaisoft.framework.permissionmanagement.model.entity.Role">
+        update role
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                description = #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="createdTime != null">
+                created_time = #{createdTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.penghaisoft.framework.permissionmanagement.model.entity.Role">
+    update role
+    set name = #{name,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+    <!-- 插入新的角色信息 -->
+    <insert id="insertRole" useGeneratedKeys="true">
+		INSERT INTO role
+			(
+				name,
+				description
+			)
+		VALUES
+			(
+				#{name},
+				#{description}
+			)
+	</insert>
+
+    <!-- 修改角色的描述信息 -->
+    <update id="editRoleDescriptionByRoleId">
+		UPDATE
+			role
+		SET
+			description = #{description}
+		WHERE
+			id = #{id}
+	</update>
+
+
+    <!-- 查询所有角色信息 -->
+    <select id="getAllRoles" resultMap="BaseResultMap" resultType="java.util.List">
+    SELECT
+    ro.id, ro.name, ro.description, ro.created_time,
+    re.id res_id, re.parent_id parent_id , re.level level, re.sequence sequence, re.title title, re.res_code res_code, re.description re_description, re.icon icon, re.is_modifiable is_modifiable,
+    re.res_type res_type, re.url url
+    FROM
+    role ro
+    left  join  role_res rr on rr.role_id = ro.id
+    left join  resources re  on re.id = rr.res_id
+    WHERE
+    1=1
+  </select>
+
+
+</mapper>

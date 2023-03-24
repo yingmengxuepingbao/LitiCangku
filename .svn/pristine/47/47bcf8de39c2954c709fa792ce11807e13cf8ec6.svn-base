@@ -1,0 +1,821 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.penghaisoft.wms.storagemanagement.model.dao.WmsPalletMapper">
+
+    <!-- =========================================================== -->
+    <!-- 定义resultMap                                                                                                                                                                             -->
+    <!-- =========================================================== -->
+    <resultMap id="wmsPalletMap" type="com.penghaisoft.wms.storagemanagement.model.entity.WmsPallet">
+        <result property="palletId" column="pallet_id"/>
+        <result property="palletCode" column="pallet_code"/>
+        <result property="goodsCode" column="goods_code"/>
+        <result property="goodsName" column="goods_name"/>
+        <result property="amount" column="amount"/>
+        <result property="number" column="number"/>
+        <result property="batchNo" column="batch_no"/>
+        <result property="warehouseCode" column="warehouse_code"/>
+        <result property="areaCode" column="area_code"/>
+        <result property="locationCode" column="location_code"/>
+        <result property="lockBy" column="lock_by"/>
+        <result property="channelLocation" column="channel_location"/>
+        <result property="userDefined1" column="user_defined1"/>
+        <result property="userDefined2" column="user_defined2"/>
+        <result property="userDefined3" column="user_defined3"/>
+        <result property="userDefined4" column="user_defined4"/>
+        <result property="userDefined5" column="user_defined5"/>
+        <result property="createBy" column="create_by"/>
+        <result property="gmtCreate" column="gmt_create"/>
+        <result property="lastModifiedBy" column="last_modified_by"/>
+        <result property="gmtModified" column="gmt_modified"/>
+        <result property="activeFlag" column="active_flag"/>
+        <result property="boxBarcodeList" column="boxBarcodeList"/>
+        <result property="hasBoxCode" column="has_box_code"/>
+    </resultMap>
+
+    <!-- =========================================================== -->
+    <!-- 一些公共变量设置                                                                                                                                                                             -->
+    <!-- =========================================================== -->
+    <!-- mysql 分页 -->
+    <sql id="pagination_tail">
+        top ((#{page.pageOffset} +1)* #{page.rows})
+	</sql>
+    <!-- mysql 查询总数 -->
+    <sql id="count_Tail">
+		select count(1) from 
+	</sql>
+
+    <sql id="selectAllColumns">
+		<![CDATA[
+                wms_pallet_.pallet_id,
+                wms_pallet_.pallet_code,
+                wms_pallet_.goods_code,
+                wms_goods_.goods_name,
+                wms_goods_.has_box_code,
+                wms_pallet_.amount,
+                wms_pallet_.batch_no,
+                wms_pallet_.warehouse_code,
+                wms_pallet_.area_code,
+                wms_pallet_.location_code,
+                wms_pallet_.lock_by,
+                wms_pallet_.channel_location,
+                wms_pallet_.user_defined1,
+                wms_pallet_.user_defined2,
+                wms_pallet_.user_defined3,
+                wms_pallet_.user_defined4,
+                wms_pallet_.user_defined5,
+                wms_pallet_.create_by,
+                wms_pallet_.gmt_create,
+                wms_pallet_.last_modified_by,
+                wms_pallet_.gmt_modified,
+                wms_pallet_.active_flag
+                ,(
+                    SELECT
+                            s.box_barcode
+                    FROM
+                        wms_box_barcode s, wms_pallet p
+                    WHERE
+                            s.pallet_code = p.pallet_code
+                ) boxBarcodeList
+            FROM
+                wms_pallet wms_pallet_
+            LEFT JOIN wms_goods wms_goods_ ON wms_pallet_.goods_code = wms_goods_.goods_code
+        ]]>
+	</sql>
+
+    <sql id="selectAllColumnsStereoscopic">
+		<![CDATA[
+                                                    wms_pallet_.pallet_id,
+                                                    wms_pallet_.pallet_code,
+                                                    wms_pallet_.goods_code,
+                                                    wms_goods_.goods_name,
+                                                    wms_pallet_.amount,
+                                                    wms_pallet_.batch_no,
+                                                    wms_pallet_.warehouse_code,
+                                                    wms_pallet_.area_code,
+                                                    wms_pallet_.location_code,
+                                                    wms_pallet_.lock_by,
+                                                    wms_pallet_.channel_location,
+                                                    wms_pallet_.user_defined1,
+                                                    wms_pallet_.user_defined2,
+                                                    wms_pallet_.user_defined3,
+                                                    wms_pallet_.user_defined4,
+                                                    wms_pallet_.user_defined5,
+                                                    wms_pallet_.create_by,
+                                                    wms_pallet_.gmt_create,
+                                                    wms_pallet_.last_modified_by,
+                                                    wms_pallet_.gmt_modified,
+                                                    wms_pallet_.active_flag
+                                                FROM
+                                                    wms_pallet wms_pallet_
+                                                JOIN wms_location_stereoscopic wms_location_stereoscopic_ ON wms_pallet_.location_code = wms_location_stereoscopic_.location_code
+                                                AND wms_location_stereoscopic_.active_flag = '1'
+                                                LEFT JOIN wms_goods wms_goods_ ON wms_pallet_.goods_code = wms_goods_.goods_code
+
+
+
+
+
+        ]]>
+	</sql>
+
+    <sql id="where_fragement">
+        where 1=1
+        <if test="entity!=null">
+            <if test="entity.palletId != null  and entity.palletId !=''">
+                <![CDATA[ and wms_pallet_.pallet_id  LIKE CONCAT('%',#{entity.palletId},'%')]]>
+            </if>
+            <if test="entity.palletCode != null  and entity.palletCode !=''">
+                <![CDATA[ and wms_pallet_.pallet_code  LIKE CONCAT('%',#{entity.palletCode},'%')]]>
+            </if>
+            <if test="entity.goodsCode != null  and entity.goodsCode !=''">
+                <![CDATA[ and wms_pallet_.goods_code  LIKE CONCAT('%',#{entity.goodsCode},'%')]]>
+            </if>
+            <if test="entity.goodsCodeIsNotNull != null  and entity.goodsCodeIsNotNull !=''">
+                <![CDATA[ and wms_pallet_.goods_code is not null]]>
+            </if>
+            <if test="entity.amount != null  and entity.amount !=''">
+                <![CDATA[ and wms_pallet_.amount  LIKE CONCAT('%',#{entity.amount},'%')]]>
+            </if>
+            <if test="entity.batchNo != null  and entity.batchNo !=''">
+                <![CDATA[ and wms_pallet_.batch_no  LIKE CONCAT('%',#{entity.batchNo},'%')]]>
+            </if>
+            <if test="entity.warehouseCode != null  and entity.warehouseCode !=''">
+                <![CDATA[ and wms_pallet_.warehouse_code  LIKE CONCAT('%',#{entity.warehouseCode},'%')]]>
+            </if>
+            <if test="entity.areaCode != null  and entity.areaCode !=''">
+                <![CDATA[ and wms_pallet_.area_code  LIKE CONCAT('%',#{entity.areaCode},'%')]]>
+            </if>
+            <if test="entity.locationCode != null  and entity.locationCode !=''">
+                <![CDATA[ and wms_pallet_.location_code  LIKE CONCAT('%',#{entity.locationCode},'%')]]>
+            </if>
+            <if test="entity.locationCodeIsNull != null  and entity.locationCodeIsNull !=''">
+                <![CDATA[ and ISNULL(wms_pallet_.location_code,'') = '']]>
+            </if>
+            <if test="entity.lockBy != null  and entity.lockBy !=''">
+                <![CDATA[ and wms_pallet_.lock_by  LIKE CONCAT('%',#{entity.lockBy},'%')]]>
+            </if>
+            <if test="entity.lockByIsNull != null  and entity.lockByIsNull !=''">
+                <![CDATA[ and ISNULL(wms_pallet_.lock_by,'') = '']]>
+            </if>
+            <if test="entity.channelLocation != null  and entity.channelLocation !=''">
+                <![CDATA[ and wms_pallet_.channel_location  LIKE CONCAT('%',#{entity.channelLocation},'%')]]>
+            </if>
+            <if test="entity.userDefined1 != null  and entity.userDefined1 !=''">
+                <![CDATA[ and wms_pallet_.user_defined1  LIKE CONCAT('%',#{entity.userDefined1},'%')]]>
+            </if>
+            <if test="entity.userDefined2 != null  and entity.userDefined2 !=''">
+                <![CDATA[ and wms_pallet_.user_defined2  LIKE CONCAT('%',#{entity.userDefined2},'%')]]>
+            </if>
+            <if test="entity.userDefined3 != null  and entity.userDefined3 !=''">
+                <![CDATA[ and wms_pallet_.user_defined3  LIKE CONCAT('%',#{entity.userDefined3},'%')]]>
+            </if>
+            <if test="entity.userDefined4 != null  and entity.userDefined4 !=''">
+                <![CDATA[ and wms_pallet_.user_defined4  LIKE CONCAT('%',#{entity.userDefined4},'%')]]>
+            </if>
+            <if test="entity.userDefined5 != null  and entity.userDefined5 !=''">
+                <![CDATA[ and wms_pallet_.user_defined5  LIKE CONCAT('%',#{entity.userDefined5},'%')]]>
+            </if>
+            <if test="entity.createBy != null  and entity.createBy !=''">
+                <![CDATA[ and wms_pallet_.create_by  LIKE CONCAT('%',#{entity.createBy},'%')]]>
+            </if>
+            <if test="entity.gmtCreate != null">
+                <![CDATA[ and wms_pallet_.gmt_create  LIKE CONCAT('%',#{entity.gmtCreate},'%')]]>
+            </if>
+            <if test="entity.lastModifiedBy != null  and entity.lastModifiedBy !=''">
+                <![CDATA[ and wms_pallet_.last_modified_by  LIKE CONCAT('%',#{entity.lastModifiedBy},'%')]]>
+            </if>
+            <if test="entity.gmtModified != null">
+                <![CDATA[ and wms_pallet_.gmt_modified  LIKE CONCAT('%',#{entity.gmtModified},'%')]]>
+            </if>
+            <if test="entity.activeFlag != null  and entity.activeFlag !=''">
+                <![CDATA[ and wms_pallet_.active_flag  LIKE CONCAT('%',#{entity.activeFlag},'%')]]>
+            </if>
+        </if>
+    </sql>
+
+    <sql id="where_any">
+        where 1=1
+        <if test="entity!=null">
+            <if test="entity.palletId != null  and entity.palletId !=''">
+                <![CDATA[ and wms_pallet_.pallet_id  = #{entity.palletId}]]>
+            </if>
+            <if test="entity.palletCode != null  and entity.palletCode !=''">
+                <![CDATA[ and wms_pallet_.pallet_code  = #{entity.palletCode}]]>
+            </if>
+            <if test="entity.goodsCode != null  and entity.goodsCode !=''">
+                <![CDATA[ and wms_pallet_.goods_code  = #{entity.goodsCode}]]>
+            </if>
+            <if test="entity.amount != null  and entity.amount !=''">
+                <![CDATA[ and wms_pallet_.amount  = #{entity.amount}]]>
+            </if>
+            <if test="entity.batchNo != null  and entity.batchNo !=''">
+                <![CDATA[ and wms_pallet_.batch_no  = #{entity.batchNo}]]>
+            </if>
+            <if test="entity.warehouseCode != null  and entity.warehouseCode !=''">
+                <![CDATA[ and wms_pallet_.warehouse_code  = #{entity.warehouseCode}]]>
+            </if>
+            <if test="entity.areaCode != null  and entity.areaCode !=''">
+                <![CDATA[ and wms_pallet_.area_code  = #{entity.areaCode}]]>
+            </if>
+            <if test="entity.locationCode != null  and entity.locationCode !=''">
+                <![CDATA[ and wms_pallet_.location_code  = #{entity.locationCode}]]>
+            </if>
+            <if test="entity.lockBy != null  and entity.lockBy !=''">
+                <![CDATA[ and wms_pallet_.lock_by  = #{entity.lockBy}]]>
+            </if>
+            <if test="entity.channelLocation != null  and entity.channelLocation !=''">
+                <![CDATA[ and wms_pallet_.channel_location  = #{entity.channelLocation}]]>
+            </if>
+            <if test="entity.userDefined1 != null  and entity.userDefined1 !=''">
+                <![CDATA[ and wms_pallet_.user_defined1  = #{entity.userDefined1}]]>
+            </if>
+            <if test="entity.userDefined2 != null  and entity.userDefined2 !=''">
+                <![CDATA[ and wms_pallet_.user_defined2  = #{entity.userDefined2}]]>
+            </if>
+            <if test="entity.userDefined3 != null  and entity.userDefined3 !=''">
+                <![CDATA[ and wms_pallet_.user_defined3  = #{entity.userDefined3}]]>
+            </if>
+            <if test="entity.userDefined4 != null  and entity.userDefined4 !=''">
+                <![CDATA[ and wms_pallet_.user_defined4  = #{entity.userDefined4}]]>
+            </if>
+            <if test="entity.userDefined5 != null  and entity.userDefined5 !=''">
+                <![CDATA[ and wms_pallet_.user_defined5  = #{entity.userDefined5}]]>
+            </if>
+            <if test="entity.createBy != null  and entity.createBy !=''">
+                <![CDATA[ and wms_pallet_.create_by  = #{entity.createBy}]]>
+            </if>
+            <if test="entity.gmtCreate != null">
+                <![CDATA[ and wms_pallet_.gmt_create  = #{entity.gmtCreate}]]>
+            </if>
+            <if test="entity.lastModifiedBy != null  and entity.lastModifiedBy !=''">
+                <![CDATA[ and wms_pallet_.last_modified_by  = #{entity.lastModifiedBy}]]>
+            </if>
+            <if test="entity.gmtModified != null">
+                <![CDATA[ and wms_pallet_.gmt_modified  = #{entity.gmtModified}]]>
+            </if>
+            <if test="entity.activeFlag != null  and entity.activeFlag !=''">
+                <![CDATA[ and wms_pallet_.active_flag  = #{entity.activeFlag}]]>
+            </if>
+        </if>
+    </sql>
+
+    <!-- =========================================================== -->
+    <!-- DAO方法中的基本增删改查方法                                                                                                                                                           -->
+    <!-- =========================================================== -->
+    <!-- 根据id查询 -->
+    <select id="queryById" resultMap="wmsPalletMap" parameterType="java.lang.String">
+        select
+        <include refid="selectAllColumns"/>
+        <![CDATA[
+		where wms_pallet_.pallet_id = #{id}
+		]]>
+    </select>
+
+    <!-- 分页查询 -->
+    <select id="queryList" resultMap="wmsPalletMap">
+        select
+        <if test="page!=null">
+            <include refid="pagination_tail"/>
+        </if>
+        <include refid="selectAllColumns"/>
+        <include refid="where_fragement"/>
+        <if test="entity.orderBy != null and entity.orderBy !=''">
+            order by ${entity.orderBy}
+        </if>
+
+    </select>
+
+    <select id="queryCount" resultType="long">
+        <include refid="count_Tail"/>
+        wms_pallet wms_pallet_
+        <include refid="where_fragement"/>
+    </select>
+
+    <!-- 插入记录 -->
+    <insert id="create" parameterType="com.penghaisoft.wms.storagemanagement.model.entity.WmsPallet">
+		<![CDATA[
+
+
+
+
+
+                                                insert into wms_pallet (
+                                                         pallet_id
+                                                         ,pallet_code
+                                                         ,goods_code
+                                                         ,amount
+                                                         ,batch_no
+                                                         ,warehouse_code
+                                                         ,area_code
+                                                         ,location_code
+                                                         ,lock_by
+                                                         ,channel_location
+                                                         ,user_defined1
+                                                         ,user_defined2
+                                                         ,user_defined3
+                                                         ,user_defined4
+                                                         ,user_defined5
+                                                         ,create_by
+                                                         ,gmt_create
+                                                         ,last_modified_by
+                                                         ,gmt_modified
+                                                         ,active_flag
+                                                   )values(
+                                                        #{palletId}
+                                                        ,#{palletCode}
+                                                        ,#{goodsCode}
+                                                        ,#{amount}
+                                                        ,#{batchNo}
+                                                        ,#{warehouseCode}
+                                                        ,#{areaCode}
+                                                        ,#{locationCode}
+                                                        ,#{lockBy}
+                                                        ,#{channelLocation}
+                                                        ,#{userDefined1}
+                                                        ,#{userDefined2}
+                                                        ,#{userDefined3}
+                                                        ,#{userDefined4}
+                                                        ,#{userDefined5}
+                                                        ,#{createBy}
+                                                        ,#{gmtCreate}
+                                                        ,#{lastModifiedBy}
+                                                        ,#{gmtModified}
+                                                        ,#{activeFlag}
+                                                   )
+
+
+
+
+
+        ]]>
+	</insert>
+
+    <!-- 批量插入记录 -->
+    <insert id="batchInsert" parameterType="java.util.List">
+        insert into wms_pallet (
+        pallet_id
+        ,pallet_code
+        ,goods_code
+        ,amount
+        ,batch_no
+        ,warehouse_code
+        ,area_code
+        ,location_code
+        ,lock_by
+        ,channel_location
+        ,user_defined1
+        ,user_defined2
+        ,user_defined3
+        ,user_defined4
+        ,user_defined5
+        ,create_by
+        ,gmt_create
+        ,last_modified_by
+        ,gmt_modified
+        ,active_flag
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.palletId}
+            ,#{item.palletCode}
+            ,#{item.goodsCode}
+            ,#{item.amount}
+            ,#{item.batchNo}
+            ,#{item.warehouseCode}
+            ,#{item.areaCode}
+            ,#{item.locationCode}
+            ,#{item.lockBy}
+            ,#{item.channelLocation}
+            ,#{item.userDefined1}
+            ,#{item.userDefined2}
+            ,#{item.userDefined3}
+            ,#{item.userDefined4}
+            ,#{item.userDefined5}
+            ,#{item.createBy}
+            ,#{item.gmtCreate}
+            ,#{item.lastModifiedBy}
+            ,#{item.gmtModified}
+            ,#{item.activeFlag}
+            )
+        </foreach>
+    </insert>
+
+    <!-- 根据id，修改记录 -->
+    <update id="update" parameterType="com.penghaisoft.wms.storagemanagement.model.entity.WmsPallet">
+		<![CDATA[
+
+
+
+
+
+                                                update wms_pallet set
+
+                                                       pallet_code = #{palletCode}
+                                                       ,goods_code = #{goodsCode}
+                                                       ,amount = #{amount}
+                                                       ,batch_no = #{batchNo}
+                                                       ,warehouse_code = #{warehouseCode}
+                                                       ,area_code = #{areaCode}
+                                                       ,location_code = #{locationCode}
+                                                       ,lock_by = #{lockBy}
+                                                       ,channel_location = #{channelLocation}
+                                                       ,user_defined1 = #{userDefined1}
+                                                       ,user_defined2 = #{userDefined2}
+                                                       ,user_defined3 = #{userDefined3}
+                                                       ,user_defined4 = #{userDefined4}
+                                                       ,user_defined5 = #{userDefined5}
+                                                       ,create_by = #{createBy}
+                                                       ,gmt_create = #{gmtCreate}
+                                                       ,last_modified_by = #{lastModifiedBy}
+                                                       ,gmt_modified = #{gmtModified}
+                                                       ,active_flag = #{activeFlag}
+                                                 where pallet_id = #{palletId}
+
+
+
+
+
+        ]]>
+	</update>
+
+    <!-- 解绑托盘 -->
+    <update id="cleanPallet" parameterType="com.penghaisoft.wms.storagemanagement.model.entity.WmsPallet">
+		<![CDATA[
+
+
+
+
+
+                                                UPDATE wms_pallet
+                                                SET goods_code = NULL,
+                                                 amount = 0,
+                                                 batch_no = NULL,
+                                                 last_modified_by = #{lastModifiedBy},
+                                                    gmt_modified = #{gmtModified}
+                                                WHERE
+                                                pallet_id = #{palletId}
+
+
+
+
+
+        ]]>
+	</update>
+
+    <!--  -->
+    <update id="updateBySelect" parameterType="com.penghaisoft.wms.storagemanagement.model.entity.WmsPallet">
+        update wms_pallet
+        <set>
+            <if test="entity!=null">
+                <if test="entity.palletId != null  and entity.palletId !=''">
+
+                </if>
+                <if test="entity.palletCode != null  and entity.palletCode !=''">
+                    <![CDATA[ pallet_code = #{entity.palletCode}, ]]>
+                </if>
+                <if test="entity.goodsCode != null  and entity.goodsCode !=''">
+                    <![CDATA[ goods_code = #{entity.goodsCode}, ]]>
+                </if>
+                <if test="entity.goodsCodeNull != null  and entity.goodsCodeNull !=''">
+                    <![CDATA[ goods_code = Null, ]]>
+                </if>
+                <if test="entity.amount != null">
+                    <![CDATA[ amount = #{entity.amount}, ]]>
+                </if>
+                <if test="entity.amountNull != null  and entity.amountNull !=''">
+                    <![CDATA[ amount = null, ]]>
+                </if>
+                <if test="entity.batchNo != null  and entity.batchNo !=''">
+                    <![CDATA[ batch_no = #{entity.batchNo}, ]]>
+                </if>
+                <if test="entity.batchNoNull != null  and entity.batchNoNull !=''">
+                    <![CDATA[ batch_no = null, ]]>
+                </if>
+                <if test="entity.warehouseCode != null  and entity.warehouseCode !=''">
+                    <![CDATA[ warehouse_code = #{entity.warehouseCode}, ]]>
+                </if>
+                <if test="entity.areaCode != null  and entity.areaCode !=''">
+                    <![CDATA[ area_code = #{entity.areaCode}, ]]>
+                </if>
+                <if test="entity.locationCode != null  and entity.locationCode !=''">
+                    <![CDATA[ location_code = #{entity.locationCode}, ]]>
+                </if>
+                <if test="entity.locationCodeNull != null  and entity.locationCodeNull !=''">
+                    <![CDATA[ location_code = null, ]]>
+                </if>
+                <if test="entity.lockBy != null  and entity.lockBy !=''">
+                    <![CDATA[ lock_by = #{entity.lockBy}, ]]>
+                </if>
+                <if test="entity.lockByNull != null  and entity.lockByNull !=''">
+                    <![CDATA[ lock_by = null,user_defined1 = null, ]]>
+                </if>
+                <if test="entity.channelLocation != null  and entity.channelLocation !=''">
+                    <![CDATA[ channel_location = #{entity.channelLocation}, ]]>
+                </if>
+                <if test="entity.channelLocationNull != null  and entity.channelLocationNull !=''">
+                    <![CDATA[ channel_location = null, ]]>
+                </if>
+                <if test="entity.userDefined1 != null  and entity.userDefined1 !=''">
+                    <![CDATA[ user_defined1 = #{entity.userDefined1}, ]]>
+                </if>
+                <if test="entity.userDefined2 != null  and entity.userDefined2 !=''">
+                    <![CDATA[ user_defined2 = #{entity.userDefined2}, ]]>
+                </if>
+                <if test="entity.userDefined3Null != null  and entity.userDefined3Null !='' ">
+                    <![CDATA[ user_defined3 = null, ]]>
+                </if>
+                <if test="entity.userDefined3 != null  and entity.userDefined3 !=''">
+                    <![CDATA[ user_defined3 = #{entity.userDefined3},]]>
+                </if>
+
+                <if test="entity.userDefined4 != null  and entity.userDefined4 !=''">
+                    <![CDATA[ user_defined4 = #{entity.userDefined4}, ]]>
+                </if>
+                <if test="entity.userDefined5 != null  and entity.userDefined5 !=''">
+                    <![CDATA[ user_defined5 = #{entity.userDefined5}, ]]>
+                </if>
+                <if test="entity.createBy != null  and entity.createBy !=''">
+                    <![CDATA[ create_by = #{entity.createBy}, ]]>
+                </if>
+                <if test="entity.gmtCreate != null">
+                    <![CDATA[ gmt_create = #{entity.gmtCreate}, ]]>
+                </if>
+                <if test="entity.lastModifiedBy != null  and entity.lastModifiedBy !=''">
+                    <![CDATA[ last_modified_by = #{entity.lastModifiedBy}, ]]>
+                </if>
+                <if test="entity.gmtModified != null">
+                    <![CDATA[ gmt_modified = #{entity.gmtModified}, ]]>
+                </if>
+                <if test="entity.activeFlag != null  and entity.activeFlag !=''">
+                    <![CDATA[ active_flag = #{entity.activeFlag}, ]]>
+                </if>
+            </if>
+        </set>
+        where pallet_id = #{entity.palletId} and active_flag = '1'
+    </update>
+
+    <!-- 物理删除 -->
+    <update id="deleteByPalletCode" parameterType="com.penghaisoft.wms.storagemanagement.model.entity.WmsPallet">
+	    DELETE FROM wms_pallet
+	    where pallet_code = #{entity.palletCode}
+	  </update>
+
+    <update id="delete" parameterType="com.penghaisoft.wms.storagemanagement.model.entity.WmsPallet">
+	    DELETE FROM wms_pallet
+	    where pallet_id = #{entity.palletId}
+	  </update>
+
+    <update id="batchDelete" parameterType="com.penghaisoft.wms.storagemanagement.model.entity.WmsPallet">
+        DELETE FROM wms_pallet
+        where pallet_id in
+        <foreach collection="entity.palletIdList" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <!-- 任意字段全匹配 -->
+    <select id="queryByAny" resultMap="wmsPalletMap">
+        select
+        <include refid="selectAllColumns"/>
+        <include refid="where_any"/>
+    </select>
+
+    <!-- 分页查询【查询立体库库存】 -->
+    <select id="queryListStereoscopic" resultMap="wmsPalletMap">
+        select
+        <if test="page!=null">
+            <include refid="pagination_tail"/>
+        </if>
+        <include refid="selectAllColumnsStereoscopic"/>
+        <include refid="where_fragement"/>
+        <if test="entity.orderBy != null and entity.orderBy !=''">
+            order by ${entity.orderBy}
+        </if>
+    </select>
+
+    <!-- 分页查询【查询立体库库存】 -->
+    <select id="queryCountStereoscopic" resultType="long">
+        <include refid="count_Tail"/>
+        wms_pallet wms_pallet_
+        JOIN wms_location_stereoscopic wms_location_stereoscopic_ ON wms_pallet_.location_code =
+        wms_location_stereoscopic_.location_code
+        AND wms_location_stereoscopic_.active_flag = '1'
+        <include refid="where_fragement"/>
+    </select>
+
+    <!-- 分页查询【查询立体库库存】 -->
+    <select id="queryListStereoscopicHz" resultMap="wmsPalletMap">
+        SELECT
+        <if test="page!=null">
+            <include refid="pagination_tail"/>
+        </if>
+        goods_code,
+        goods_name,
+        batch_no,
+        sum(amount) amount,
+        count(1) number
+        FROM (
+            select
+        <include refid="selectAllColumnsStereoscopic"/>
+        <include refid="where_fragement"/>
+        AND (wms_pallet_.goods_code is NOT NULL OR wms_pallet_.batch_no is NOT NULL)
+        ) a
+        GROUP BY
+        a.goods_code,
+        a.goods_name,
+        a.batch_no
+        <if test="entity.orderBy != null and entity.orderBy !=''">
+            order by ${entity.orderBy}
+        </if>
+
+    </select>
+
+    <!-- 分页查询【查询立体库库存】 -->
+    <select id="queryCountStereoscopicHz" resultType="long">
+        SELECT COUNT(1) FROM(
+        SELECT
+        goods_code,
+        goods_name,
+        batch_no,
+        sum(amount) amount
+        FROM (
+            select
+        <include refid="selectAllColumnsStereoscopic"/>
+        <include refid="where_fragement"/>
+        AND (wms_pallet_.goods_code is NOT NULL OR wms_pallet_.batch_no is NOT NULL)
+        ) a
+        GROUP BY
+        a.goods_code,
+        a.goods_name,
+        a.batch_no
+        )b
+    </select>
+
+    <update id="updateByPalletCode" parameterType="com.penghaisoft.wms.storagemanagement.model.entity.WmsPallet">
+        update wms_pallet
+        <set>
+            <if test="entity!=null">
+                <if test="entity.palletId != null  and entity.palletId !=''">
+
+                </if>
+                <if test="entity.palletCode != null  and entity.palletCode !=''">
+                    <![CDATA[ pallet_code = #{entity.palletCode}, ]]>
+                </if>
+                <if test="entity.goodsCode != null  and entity.goodsCode !=''">
+                    <![CDATA[ goods_code = #{entity.goodsCode}, ]]>
+                </if>
+                <if test="entity.goodsCodeNull != null  and entity.goodsCodeNull !=''">
+                    <![CDATA[ goods_code = Null, ]]>
+                </if>
+                <if test="entity.amount != null  and entity.amount !=''">
+                    <![CDATA[ amount = #{entity.amount}, ]]>
+                </if>
+                <if test="entity.amountNull != null  and entity.amountNull !=''">
+                    <![CDATA[ amount = null, ]]>
+                </if>
+                <if test="entity.batchNo != null  and entity.batchNo !=''">
+                    <![CDATA[ batch_no = #{entity.batchNo}, ]]>
+                </if>
+                <if test="entity.batchNoNull != null  and entity.batchNoNull !=''">
+                    <![CDATA[ batch_no = null, ]]>
+                </if>
+                <if test="entity.warehouseCode != null  and entity.warehouseCode !=''">
+                    <![CDATA[ warehouse_code = #{entity.warehouseCode}, ]]>
+                </if>
+                <if test="entity.areaCode != null  and entity.areaCode !=''">
+                    <![CDATA[ area_code = #{entity.areaCode}, ]]>
+                </if>
+                <if test="entity.locationCode != null  and entity.locationCode !=''">
+                    <![CDATA[ location_code = #{entity.locationCode}, ]]>
+                </if>
+                <if test="entity.locationCodeNull != null  and entity.locationCodeNull !=''">
+                    <![CDATA[ location_code = null, ]]>
+                </if>
+                <if test="entity.lockBy != null  and entity.lockBy !=''">
+                    <![CDATA[ lock_by = #{entity.lockBy}, ]]>
+                </if>
+                <if test="entity.lockByNull != null  and entity.lockByNull !=''">
+                    <![CDATA[ lock_by = null,user_defined1=null, ]]>
+                </if>
+                <if test="entity.channelLocation != null  and entity.channelLocation !=''">
+                    <![CDATA[ channel_location = #{entity.channelLocation}, ]]>
+                </if>
+                <if test="entity.channelLocationNull != null  and entity.channelLocationNull !=''">
+                    <![CDATA[ channel_location = null, ]]>
+                </if>
+                <if test="entity.userDefined1 != null  and entity.userDefined1 !=''">
+                    <![CDATA[ user_defined1 = #{entity.userDefined1}, ]]>
+                </if>
+                <if test="entity.userDefined2 != null  and entity.userDefined2 !=''">
+                    <![CDATA[ user_defined2 = #{entity.userDefined2}, ]]>
+                </if>
+                <if test="entity.userDefined3Null != null  and entity.userDefined3Null !='' ">
+                    <![CDATA[ user_defined3 = null, ]]>
+                </if>
+                <if test="entity.userDefined3 != null  and entity.userDefined3 !=''">
+                    <![CDATA[ user_defined3 = #{entity.userDefined3}, ]]>
+                </if>
+                <if test="entity.userDefined4 != null  and entity.userDefined4 !=''">
+                    <![CDATA[ user_defined4 = #{entity.userDefined4}, ]]>
+                </if>
+                <if test="entity.userDefined5 != null  and entity.userDefined5 !=''">
+                    <![CDATA[ user_defined5 = #{entity.userDefined5}, ]]>
+                </if>
+                <if test="entity.createBy != null  and entity.createBy !=''">
+                    <![CDATA[ create_by = #{entity.createBy}, ]]>
+                </if>
+                <if test="entity.gmtCreate != null">
+                    <![CDATA[ gmt_create = #{entity.gmtCreate}, ]]>
+                </if>
+                <if test="entity.lastModifiedBy != null  and entity.lastModifiedBy !=''">
+                    <![CDATA[ last_modified_by = #{entity.lastModifiedBy}, ]]>
+                </if>
+                <if test="entity.gmtModified != null">
+                    <![CDATA[ gmt_modified = #{entity.gmtModified}, ]]>
+                </if>
+                <if test="entity.activeFlag != null  and entity.activeFlag !=''">
+                    <![CDATA[ active_flag = #{entity.activeFlag}, ]]>
+                </if>
+            </if>
+        </set>
+        where pallet_code = #{entity.palletCode} and active_flag = '1'
+    </update>
+
+    <update id="updateByBatch" parameterType="java.util.List">
+        update wms_pallet
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="lock_by =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.lockBy!=null">
+                        when pallet_code=#{item.palletCode} then #{item.lockBy}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="location_code =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.locationCode!=null">
+                        when pallet_code=#{item.palletCode} then #{item.locationCode}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="channel_location =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.channelLocation!=null">
+                        when pallet_code=#{item.palletCode} then #{item.channelLocation}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="last_modified_by =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.lastModifiedBy!=null">
+                        when pallet_code=#{item.palletCode} then #{item.lastModifiedBy}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="gmt_modified =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.gmtModified!=null">
+                        when pallet_code=#{item.palletCode} then #{item.gmtModified}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="user_defined1 =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.userDefined1!=null">
+                        when pallet_code=#{item.palletCode} then #{item.userDefined1}
+                    </if>
+                </foreach>
+            </trim>
+        </trim>
+        where active_flag = '1' and pallet_code in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item.palletCode}
+        </foreach>
+    </update>
+    <!-- 查询收货未上架的托盘总数-->
+    <select id="queryUnShelfCount" resultType="integer">
+        SELECT
+            count( 1 )
+        FROM
+            wms_pallet
+        WHERE
+            location_code = ''
+            AND goods_code != ''
+    </select>
+
+    <select id="queryCountPlane" resultType="integer">
+        <include refid="count_Tail"/>
+        wms_pallet wms_pallet_
+        JOIN wms_plane_location wms_plane_location_ ON wms_pallet_.location_code =
+        wms_plane_location_.location_code
+        AND wms_plane_location_.active_flag = '1'
+        <include refid="where_fragement"/>
+    </select>
+    <select id="queryMinBatchNo" resultType="java.lang.String">
+        SELECT top 1 batch_no FROM wms_pallet
+        WHERE goods_code is not null
+        AND location_code is not null
+        ORDER BY gmt_modified
+    </select>
+</mapper>

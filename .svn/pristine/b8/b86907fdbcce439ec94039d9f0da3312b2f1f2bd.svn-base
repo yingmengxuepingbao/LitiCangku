@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.penghaisoft.pda.storage.dao.WmsBoxBarcodeMapper" >
+  <resultMap id="BaseResultMap" type="com.penghaisoft.pda.storage.model.WmsBoxBarcode" >
+    <id column="pallet_code" property="palletCode" jdbcType="VARCHAR" />
+    <id column="box_barcode" property="boxBarcode" jdbcType="VARCHAR" />
+    <result column="user_defined1" property="userDefined1" jdbcType="VARCHAR" />
+    <result column="user_defined2" property="userDefined2" jdbcType="VARCHAR" />
+    <result column="user_defined3" property="userDefined3" jdbcType="VARCHAR" />
+    <result column="user_defined4" property="userDefined4" jdbcType="VARCHAR" />
+    <result column="user_defined5" property="userDefined5" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="last_modified_by" property="lastModifiedBy" jdbcType="VARCHAR" />
+    <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+    <result column="active_flag" property="activeFlag" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    pallet_code, box_barcode, user_defined1, user_defined2, user_defined3, user_defined4, 
+    user_defined5, create_by, gmt_create, last_modified_by, gmt_modified, active_flag
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.penghaisoft.pda.storage.model.WmsBoxBarcodeKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from wms_box_barcode
+    where pallet_code = #{palletCode,jdbcType=VARCHAR}
+      and box_barcode = #{boxBarcode,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByPalletCode" resultMap="BaseResultMap" parameterType="com.penghaisoft.pda.storage.model.WmsBoxBarcodeKey" >
+    select
+    <include refid="Base_Column_List" />
+    from wms_box_barcode
+    where pallet_code = #{palletCode,jdbcType=VARCHAR} and active_flag = '1'
+  </select>
+
+  <select id="queryByCode" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select
+    <include refid="Base_Column_List" />
+    from wms_box_barcode
+    where pallet_code = #{palletCode,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.penghaisoft.pda.storage.model.WmsBoxBarcodeKey" >
+    delete from wms_box_barcode
+    where pallet_code = #{palletCode,jdbcType=VARCHAR}
+      and box_barcode = #{boxBarcode,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByPalletCode" parameterType="com.penghaisoft.pda.storage.model.WmsBoxBarcodeKey" >
+    delete from wms_box_barcode
+    where pallet_code = #{palletCode,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByBoxBarcodeBatch" parameterType="java.util.List" >
+    delete from wms_box_barcode
+    where box_barcode in
+    <foreach collection="boxBarcodeList" index="index" item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </delete>
+  <insert id="insertSelective" parameterType="com.penghaisoft.pda.storage.model.WmsBoxBarcode" >
+    insert into wms_box_barcode
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="palletCode != null" >
+        pallet_code,
+      </if>
+      <if test="boxBarcode != null" >
+        box_barcode,
+      </if>
+      <if test="userDefined1 != null" >
+        user_defined1,
+      </if>
+      <if test="userDefined2 != null" >
+        user_defined2,
+      </if>
+      <if test="userDefined3 != null" >
+        user_defined3,
+      </if>
+      <if test="userDefined4 != null" >
+        user_defined4,
+      </if>
+      <if test="userDefined5 != null" >
+        user_defined5,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create,
+      </if>
+      <if test="lastModifiedBy != null" >
+        last_modified_by,
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified,
+      </if>
+      <if test="activeFlag != null" >
+        active_flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="palletCode != null" >
+        #{palletCode,jdbcType=VARCHAR},
+      </if>
+      <if test="boxBarcode != null" >
+        #{boxBarcode,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined1 != null" >
+        #{userDefined1,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined2 != null" >
+        #{userDefined2,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined3 != null" >
+        #{userDefined3,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined4 != null" >
+        #{userDefined4,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined5 != null" >
+        #{userDefined5,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifiedBy != null" >
+        #{lastModifiedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtModified != null" >
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activeFlag != null" >
+        #{activeFlag,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <!-- 批量插入记录 -->
+  <insert id="batchInsert" parameterType="java.util.List">
+    insert into wms_box_barcode (
+    pallet_code
+    ,box_barcode
+    ,user_defined1
+    ,user_defined2
+    ,user_defined3
+    ,user_defined4
+    ,user_defined5
+    ,create_by
+    ,gmt_create
+    ,last_modified_by
+    ,gmt_modified
+    ,active_flag
+    )
+    values
+    <foreach collection="list" item="item" index="index" separator="," >
+      (
+      #{item.palletCode}
+      ,#{item.boxBarcode}
+      ,#{item.userDefined1}
+      ,#{item.userDefined2}
+      ,#{item.userDefined3}
+      ,#{item.userDefined4}
+      ,#{item.userDefined5}
+      ,#{item.createBy}
+      ,#{item.gmtCreate}
+      ,#{item.lastModifiedBy}
+      ,#{item.gmtModified}
+      ,#{item.activeFlag}
+      )
+    </foreach>
+  </insert>
+
+  <update id="changePalletCode" parameterType="java.lang.String" >
+    UPDATE wms_box_barcode
+    SET
+     pallet_code = #{toPalletCode,jdbcType=VARCHAR}
+    WHERE
+        pallet_code = #{fromPalletCode,jdbcType=VARCHAR}
+    AND active_flag = '1'
+  </update>
+</mapper>

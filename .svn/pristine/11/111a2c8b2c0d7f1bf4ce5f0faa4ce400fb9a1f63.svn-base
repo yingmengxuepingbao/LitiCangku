@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.penghaisoft.wcs.jobmanagement.model.dao.WcsJobExecutionSummaryMapper" >
+    <resultMap id="BaseResultMap" type="com.penghaisoft.wcs.jobmanagement.model.entity.WcsJobExecutionSummary" >
+        <id column="job_name" property="jobName" jdbcType="VARCHAR" />
+        <id column="summary_hour" property="summaryHour" jdbcType="INTEGER" />
+        <result column="job_interval" property="jobInterval" jdbcType="INTEGER" />
+        <result column="total_count" property="totalCount" jdbcType="INTEGER" />
+        <result column="error_count" property="errorCount" jdbcType="INTEGER" />
+        <result column="total_elapsed_time" property="totalElapsedTime" jdbcType="INTEGER" />
+        <result column="min_elapsed_time" property="minElapsedTime" jdbcType="INTEGER" />
+        <result column="max_elapsed_time" property="maxElapsedTime" jdbcType="INTEGER" />
+        <result column="user_defined1" property="userDefined1" jdbcType="VARCHAR" />
+        <result column="user_defined2" property="userDefined2" jdbcType="VARCHAR" />
+        <result column="user_defined3" property="userDefined3" jdbcType="VARCHAR" />
+        <result column="user_defined4" property="userDefined4" jdbcType="VARCHAR" />
+        <result column="user_defined5" property="userDefined5" jdbcType="VARCHAR" />
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+        <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+    job_name, summary_hour, job_interval, total_count, error_count, total_elapsed_time, 
+    min_elapsed_time, max_elapsed_time, user_defined1, user_defined2, user_defined3, 
+    user_defined4, user_defined5, gmt_create, gmt_modified
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.penghaisoft.wcs.jobmanagement.model.entity.WcsJobExecutionSummaryKey" >
+        select
+        <include refid="Base_Column_List" />
+        from wcs_job_execution_summary
+        where job_name = #{jobName,jdbcType=VARCHAR}
+        and summary_hour = #{summaryHour,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="com.penghaisoft.wcs.jobmanagement.model.entity.WcsJobExecutionSummaryKey" >
+    delete from wcs_job_execution_summary
+    where job_name = #{jobName,jdbcType=VARCHAR}
+      and summary_hour = #{summaryHour,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.penghaisoft.wcs.jobmanagement.model.entity.WcsJobExecutionSummary" >
+    insert into wcs_job_execution_summary (job_name, summary_hour, job_interval, 
+      total_count, error_count, total_elapsed_time, 
+      min_elapsed_time, max_elapsed_time, user_defined1, 
+      user_defined2, user_defined3, user_defined4, 
+      user_defined5, gmt_create, gmt_modified
+      )
+    values (#{jobName,jdbcType=VARCHAR}, #{summaryHour,jdbcType=INTEGER}, #{jobInterval,jdbcType=INTEGER}, 
+      #{totalCount,jdbcType=INTEGER}, #{errorCount,jdbcType=INTEGER}, #{totalElapsedTime,jdbcType=INTEGER}, 
+      #{minElapsedTime,jdbcType=INTEGER}, #{maxElapsedTime,jdbcType=INTEGER}, #{userDefined1,jdbcType=VARCHAR}, 
+      #{userDefined2,jdbcType=VARCHAR}, #{userDefined3,jdbcType=VARCHAR}, #{userDefined4,jdbcType=VARCHAR}, 
+      #{userDefined5,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="com.penghaisoft.wcs.jobmanagement.model.entity.WcsJobExecutionSummary" >
+        insert into wcs_job_execution_summary
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="jobName != null" >
+                job_name,
+            </if>
+            <if test="summaryHour != null" >
+                summary_hour,
+            </if>
+            <if test="jobInterval != null" >
+                job_interval,
+            </if>
+            <if test="totalCount != null" >
+                total_count,
+            </if>
+            <if test="errorCount != null" >
+                error_count,
+            </if>
+            <if test="totalElapsedTime != null" >
+                total_elapsed_time,
+            </if>
+            <if test="minElapsedTime != null" >
+                min_elapsed_time,
+            </if>
+            <if test="maxElapsedTime != null" >
+                max_elapsed_time,
+            </if>
+            <if test="userDefined1 != null" >
+                user_defined1,
+            </if>
+            <if test="userDefined2 != null" >
+                user_defined2,
+            </if>
+            <if test="userDefined3 != null" >
+                user_defined3,
+            </if>
+            <if test="userDefined4 != null" >
+                user_defined4,
+            </if>
+            <if test="userDefined5 != null" >
+                user_defined5,
+            </if>
+            <if test="gmtCreate != null" >
+                gmt_create,
+            </if>
+            <if test="gmtModified != null" >
+                gmt_modified,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="jobName != null" >
+                #{jobName,jdbcType=VARCHAR},
+            </if>
+            <if test="summaryHour != null" >
+                #{summaryHour,jdbcType=INTEGER},
+            </if>
+            <if test="jobInterval != null" >
+                #{jobInterval,jdbcType=INTEGER},
+            </if>
+            <if test="totalCount != null" >
+                #{totalCount,jdbcType=INTEGER},
+            </if>
+            <if test="errorCount != null" >
+                #{errorCount,jdbcType=INTEGER},
+            </if>
+            <if test="totalElapsedTime != null" >
+                #{totalElapsedTime,jdbcType=INTEGER},
+            </if>
+            <if test="minElapsedTime != null" >
+                #{minElapsedTime,jdbcType=INTEGER},
+            </if>
+            <if test="maxElapsedTime != null" >
+                #{maxElapsedTime,jdbcType=INTEGER},
+            </if>
+            <if test="userDefined1 != null" >
+                #{userDefined1,jdbcType=VARCHAR},
+            </if>
+            <if test="userDefined2 != null" >
+                #{userDefined2,jdbcType=VARCHAR},
+            </if>
+            <if test="userDefined3 != null" >
+                #{userDefined3,jdbcType=VARCHAR},
+            </if>
+            <if test="userDefined4 != null" >
+                #{userDefined4,jdbcType=VARCHAR},
+            </if>
+            <if test="userDefined5 != null" >
+                #{userDefined5,jdbcType=VARCHAR},
+            </if>
+            <if test="gmtCreate != null" >
+                #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtModified != null" >
+                #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.penghaisoft.wcs.jobmanagement.model.entity.WcsJobExecutionSummary" >
+        update wcs_job_execution_summary
+        <set >
+            <if test="jobInterval != null" >
+                job_interval = #{jobInterval,jdbcType=INTEGER},
+            </if>
+            <if test="totalCount != null" >
+                total_count = #{totalCount,jdbcType=INTEGER},
+            </if>
+            <if test="errorCount != null" >
+                error_count = #{errorCount,jdbcType=INTEGER},
+            </if>
+            <if test="totalElapsedTime != null" >
+                total_elapsed_time = #{totalElapsedTime,jdbcType=INTEGER},
+            </if>
+            <if test="minElapsedTime != null" >
+                min_elapsed_time = #{minElapsedTime,jdbcType=INTEGER},
+            </if>
+            <if test="maxElapsedTime != null" >
+                max_elapsed_time = #{maxElapsedTime,jdbcType=INTEGER},
+            </if>
+            <if test="userDefined1 != null" >
+                user_defined1 = #{userDefined1,jdbcType=VARCHAR},
+            </if>
+            <if test="userDefined2 != null" >
+                user_defined2 = #{userDefined2,jdbcType=VARCHAR},
+            </if>
+            <if test="userDefined3 != null" >
+                user_defined3 = #{userDefined3,jdbcType=VARCHAR},
+            </if>
+            <if test="userDefined4 != null" >
+                user_defined4 = #{userDefined4,jdbcType=VARCHAR},
+            </if>
+            <if test="userDefined5 != null" >
+                user_defined5 = #{userDefined5,jdbcType=VARCHAR},
+            </if>
+            <if test="gmtCreate != null" >
+                gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtModified != null" >
+                gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where job_name = #{jobName,jdbcType=VARCHAR}
+        and summary_hour = #{summaryHour,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.penghaisoft.wcs.jobmanagement.model.entity.WcsJobExecutionSummary" >
+    update wcs_job_execution_summary
+    set job_interval = #{jobInterval,jdbcType=INTEGER},
+      total_count = #{totalCount,jdbcType=INTEGER},
+      error_count = #{errorCount,jdbcType=INTEGER},
+      total_elapsed_time = #{totalElapsedTime,jdbcType=INTEGER},
+      min_elapsed_time = #{minElapsedTime,jdbcType=INTEGER},
+      max_elapsed_time = #{maxElapsedTime,jdbcType=INTEGER},
+      user_defined1 = #{userDefined1,jdbcType=VARCHAR},
+      user_defined2 = #{userDefined2,jdbcType=VARCHAR},
+      user_defined3 = #{userDefined3,jdbcType=VARCHAR},
+      user_defined4 = #{userDefined4,jdbcType=VARCHAR},
+      user_defined5 = #{userDefined5,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+    where job_name = #{jobName,jdbcType=VARCHAR}
+      and summary_hour = #{summaryHour,jdbcType=INTEGER}
+  </update>
+    <update id="updateSummaryLog" parameterType="com.penghaisoft.wcs.jobmanagement.model.entity.WcsJobExecutionSummary">
+        update wcs_job_execution_summary
+        <set >
+            total_count = total_count + 1,
+            <if test="errorCount != null" >
+                error_count = error_count + 1,
+            </if>
+            <if test="totalElapsedTime != null" >
+                total_elapsed_time = total_elapsed_time + #{totalElapsedTime,jdbcType=INTEGER},
+            </if>
+            <if test="minElapsedTime != null" >
+                min_elapsed_time = #{minElapsedTime,jdbcType=INTEGER},
+            </if>
+            <if test="maxElapsedTime != null" >
+                max_elapsed_time = #{maxElapsedTime,jdbcType=INTEGER},
+            </if>
+            <if test="userDefined1 != null" >
+                user_defined1 = #{userDefined1,jdbcType=VARCHAR},
+            </if>
+            <if test="userDefined2 != null" >
+                user_defined2 = #{userDefined2,jdbcType=VARCHAR},
+            </if>
+            <if test="userDefined3 != null" >
+                user_defined3 = #{userDefined3,jdbcType=VARCHAR},
+            </if>
+            <if test="userDefined4 != null" >
+                user_defined4 = #{userDefined4,jdbcType=VARCHAR},
+            </if>
+            <if test="userDefined5 != null" >
+                user_defined5 = #{userDefined5,jdbcType=VARCHAR},
+            </if>
+            gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+        </set>
+        where job_name = #{jobName,jdbcType=VARCHAR}
+        and summary_hour = #{summaryHour,jdbcType=INTEGER}
+    </update>
+    <sql id="where_fragement">
+        where 1=1
+        <if test="entity!=null">
+            <if test="entity.jobName != null and entity.jobName !=''">
+                <![CDATA[ and wcs_job_execution_summary_.job_name LIKE CONCAT('%',#{entity.jobName},'%')]]>
+            </if>
+            <if test="entity.summaryHour != null and entity.summaryHour !=''">
+                <![CDATA[ and wcs_job_execution_summary_.summary_hour LIKE CONCAT('%',#{entity.summaryHour},'%')]]>
+            </if>
+            <if test="entity.jobInterval != null and entity.jobInterval !=''">
+                <![CDATA[ and wcs_job_execution_summary_.job_interval LIKE CONCAT('%',#{entity.jobInterval},'%')]]>
+            </if>
+            <if test="entity.totalCount != null and entity.totalCount !=''">
+                <![CDATA[ and wcs_job_execution_summary_.total_count LIKE CONCAT('%',#{entity.totalCount},'%')]]>
+            </if>
+            <if test="entity.errorCount != null and entity.errorCount !=''">
+                <![CDATA[ and wcs_job_execution_summary_.error_count LIKE CONCAT('%',#{entity.errorCount},'%')]]>
+            </if>
+            <if test="entity.totalElapsedTime != null and entity.totalElapsedTime !=''">
+                <![CDATA[ and wcs_job_execution_summary_.total_elapsed_time LIKE CONCAT('%',#{entity.totalElapsedTime},'%')]]>
+            </if>
+            <if test="entity.minElapsedTime != null and entity.minElapsedTime !=''">
+                <![CDATA[ and wcs_job_execution_summary_.min_elapsed_time LIKE CONCAT('%',#{entity.minElapsedTime},'%')]]>
+            </if>
+            <if test="entity.maxElapsedTime != null and entity.maxElapsedTime !=''">
+                <![CDATA[ and wcs_job_execution_summary_.max_elapsed_time LIKE CONCAT('%',#{entity.maxElapsedTime},'%')]]>
+            </if>
+            <if test="entity.userDefined1 != null and entity.userDefined1 !=''">
+                <![CDATA[ and wcs_job_execution_summary_.user_defined1 LIKE CONCAT('%',#{entity.userDefined1},'%')]]>
+            </if>
+            <if test="entity.userDefined2 != null and entity.userDefined2 !=''">
+                <![CDATA[ and wcs_job_execution_summary_.user_defined2 LIKE CONCAT('%',#{entity.userDefined2},'%')]]>
+            </if>
+            <if test="entity.userDefined3 != null and entity.userDefined3 !=''">
+                <![CDATA[ and wcs_job_execution_summary_.user_defined3 LIKE CONCAT('%',#{entity.userDefined3},'%')]]>
+            </if>
+            <if test="entity.userDefined4 != null and entity.userDefined4 !=''">
+                <![CDATA[ and wcs_job_execution_summary_.user_defined4 LIKE CONCAT('%',#{entity.userDefined4},'%')]]>
+            </if>
+            <if test="entity.userDefined5 != null and entity.userDefined5 !=''">
+                <![CDATA[ and wcs_job_execution_summary_.user_defined5 LIKE CONCAT('%',#{entity.userDefined5},'%')]]>
+            </if>
+            <if test="entity.gmtCreate != null">
+                <![CDATA[ and wcs_job_execution_summary_.gmt_create LIKE CONCAT('%',#{entity.gmtCreate},'%')]]>
+            </if>
+            <if test="entity.gmtModified != null">
+                <![CDATA[ and wcs_job_execution_summary_.gmt_modified LIKE CONCAT('%',#{entity.gmtModified},'%')]]>
+            </if>
+        </if>
+    </sql>
+    <select id="queryList" resultMap="BaseResultMap" >
+        select
+        <include refid="Base_Column_List"/>
+        from wcs_job_execution_summary wcs_job_execution_summary_
+        <include refid="where_fragement" />
+        <if test="entity.orderBy !=null and entity.orderBy != ''">
+            order by ${entity.orderBy}
+        </if>
+        <if test="entity.orderBy == null or entity.orderBy == ''">
+            order by gmt_create desc
+        </if>
+        <if test="page!=null">
+            limit #{page.pageOffset} , #{page.rows}
+        </if>
+    </select>
+
+    <select id="queryCount" resultType="long">
+        select count(1) from
+        wcs_job_execution_summary wcs_job_execution_summary_
+        <include refid="where_fragement" />
+    </select>
+
+    <select id="queryGmtCreateMax" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from wcs_job_execution_summary
+        <![CDATA[
+        where gmt_create < #{gmtCreateMax,jdbcType=TIMESTAMP}
+        ]]>
+    </select>
+
+    <delete id="deleteExecutionSummary" parameterType="com.penghaisoft.wcs.jobmanagement.model.entity.WcsJobExecutionSummary" >
+    delete from wcs_job_execution_summary
+    <![CDATA[
+    where gmt_create < #{gmtCreateMax,jdbcType=TIMESTAMP}
+    ]]>
+    </delete>
+</mapper>

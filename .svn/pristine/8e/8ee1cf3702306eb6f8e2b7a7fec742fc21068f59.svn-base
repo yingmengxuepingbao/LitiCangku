@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>移库基础</title>
+    <link rel="stylesheet" href="../../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../../css/font-awesome.min.css">
+    <link rel="stylesheet" href="../../css/zdialog.css">
+    <link rel="stylesheet" href="../../css/jedate.css" />
+    <link rel="stylesheet" href="../../css/detail.css" type="text/css">
+    <link rel="stylesheet" href="../../css/layout.css" type="text/css">
+    <link rel="stylesheet" href="../../js/chosen-1.8.7/chosen.min.css"  type="text/css" />
+    <style>
+        html,body{
+            height: 100%;
+            background: #F1F4F4;;
+        }
+        .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+            padding: 10px 0;
+            line-height: 1.42857143;
+            vertical-align: top;
+            border-top: 1px solid #ECF0F1 ;
+        }
+        .table > thead > tr > th {
+            vertical-align: bottom;
+            border-bottom: none;
+        }
+        .tit-search{margin-left: 15px}
+        .search-inline{
+            display: inline-block;
+            margin-right:10px;
+            margin-top: 15px;
+        }
+        .search-inline .btn{background: #1DBBF4;color:#fff}
+        /*.btn{background: #1DBBF4;color:#fff}*/
+        .form-horizontal .form-control{
+            width: 85%;
+        }
+        .fa-asterisk {
+            font-size: 9px;
+            color: #EF4836;
+        }
+        .modal-title{color: #444;
+            font-weight: 600;
+            font-size: 15px;
+        }
+        .modal-footer .btn+.btn {
+            background: #1DBBF4;
+            color: #fff;
+            border: 1px solid #fff;
+        }
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <ol class="breadcrumb">
+        <li><a href="#" class="link">日志管理</a></li>
+        <li class="active">移库日志</li>
+    </ol>
+    <div class="content">
+        <div class="tit-search">
+
+            <div class="search-inline">
+                <div class="form-group form-inline">
+                    <label for="taskIdPop">四向车任务号:</label>
+                    <input type="text" id="taskIdPop" placeholder="任务号（数字）"  class="form-control" onkeyup="this.value=this.value.replace(/\D/g,'')" />
+                </div>
+            </div>
+            <div class="search-inline">
+                <div class="search-inline">
+                    <div class="form-group form-inline">
+                        <label for="reportTypePop">任务类型:</label>
+                        <select class="form-control" id="reportTypePop">
+                            <option value=""></option>
+                            <option value="taskApply">taskApply</option>
+                            <option value="taskReport">taskReport</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="search-inline">
+                <div class="form-group form-inline">
+                    <label for="returnStatusPop">返回结果:</label>
+                    <select class="form-control" id="returnStatusPop">
+                        <option value=""></option>
+                        <option value="0">成功</option>
+                        <option value="1">失败</option>
+                    </select>
+                </div>
+            </div>
+            <div class="search-inline">
+                <div class="form-group form-inline">
+                <span style="font-weight:bold">接受时间</span>
+                <input type="text" id="receiveTime_begin"  class="form-control datainp wicon searchDate"  placeholder="请选择开始日期"/>
+                <span>-</span>
+                <input type="text" id="receiveTime_end"  class="form-control datainp wicon searchDate"  placeholder="请选择结束日期"/>
+                </div>
+            </div>
+            <div class="search-inline">
+
+
+            </div>
+            <div class="search-inline rt">
+                <button type="button" id="reset" class="btn">重置</button>
+                <button type="button" id="refrechTop" class="btn">搜&nbsp;&nbsp;索</button>
+            </div>
+        </div>
+        <table id="formTable"  class="table table-hover table-striped" style="margin-left: 15px">
+            <thead class="head-sort">
+            <th>日志ID</th>
+            <th>四向车任务号</th>
+            <th>任务类型</th>
+            <th>传入参数</th>
+            <th>返回结果</th>
+            <th>结果描述</th>
+            <th>接受时间</th>
+            <th>返回时间</th>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <div class="pagination-con" style="display: block;margin: 15px">
+            <p class="listNumber rt">
+                <button class="btn btn-default btn-xs previousPage"><i class="fa fa-caret-left fa-lg"></i></button>
+                <span class="currentPage">1</span>/<span class="pageNumber">1</span>
+                <button class="btn btn-default btn-xs nextPage"><i class="fa fa-caret-right fa-lg"></i></button>
+                <input class="currentPageBtn" value="1" type="text"  onkeyup="this.value=this.value.replace(/[^0-9]+/g, '');"/>
+                <button type="button" id="pageJump"  data-loading-text="请求数据中..." class="btn btn-default pageJump" autocomplete="off">跳转</button>
+                每页<span class="pageOneNumber">20</span>条，共<span class="dataNumber">30</span>条记录
+            </p>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="../../js/jquery.min.js" ></script>
+<script type="text/javascript" src="../../js/bootstrap.min.js" ></script>
+<script type="text/javascript" src="../../js/zdialog.js"></script>
+<script type="text/javascript" src="../../js/common.js"></script>
+<script type="text/javascript" src="../../js/jquery.jedate.js" ></script>
+<script type="text/javascript" src="../../js/chosen-1.8.7/chosen.jquery.min.js"></script>
+<script type="text/javascript" src="js/wcsFourwaycarReportLog.js"></script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+/*分页插件*/
+.tablePage{height: 28px; line-height: 28px}
+.tablePage div{float: right;font-size: 14px;color: #4d4d4d;margin-left: 40px;}
+.tablePage div a{cursor: pointer;}
+.tablePage div:nth-child(1){margin-left: 120px;}
+.tableCon{cursor: default;}
+.tableCon:hover{background: #f2f2f2;}
+.dele span{cursor: pointer;color: red;}
+.tablePage input{width: 30px; padding: 0 5px; margin-left:10px;}
+.tablePage span{margin-left: 10px;}
+.posiPage span{cursor: pointer;}
+.posiPage span:hover{color: #00c8b4;}

@@ -1,0 +1,581 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.penghaisoft.wcs.basicmanagement.model.dao.WcsDeviceMapper">
+	
+	<!-- =========================================================== -->
+    <!-- 定义resultMap                                                                                                                                                                             -->
+    <!-- =========================================================== -->
+	<resultMap id="wcsDeviceMap" type="com.penghaisoft.wcs.basicmanagement.model.entity.WcsDevice">
+				<result property="deviceId" column="device_id"/>
+				<result property="areaCode" column="area_code"/>
+				<result property="deviceName" column="device_name"/>
+				<result property="deviceDesc" column="device_desc"/>
+				<result property="deviceType" column="device_type"/>
+				<result property="deviceStatus" column="device_status"/>
+				<result property="communicationProtocol" column="communication_protocol"/>
+				<result property="ip" column="ip"/>
+				<result property="port" column="port"/>
+				<result property="remark" column="remark"/>
+				<result property="userDefined1" column="user_defined1"/>
+				<result property="userDefined2" column="user_defined2"/>
+				<result property="userDefined3" column="user_defined3"/>
+				<result property="userDefined4" column="user_defined4"/>
+				<result property="userDefined5" column="user_defined5"/>
+				<result property="createBy" column="create_by"/>
+				<result property="gmtCreate" column="gmt_create"/>
+				<result property="lastModifiedBy" column="last_modified_by"/>
+				<result property="gmtModified" column="gmt_modified"/>
+				<result property="activeFlag" column="active_flag"/>
+	</resultMap>
+	
+	<!-- =========================================================== -->
+    <!-- 一些公共变量设置                                                                                                                                                                             -->
+    <!-- =========================================================== -->
+	<!-- mysql 分页 -->
+	<sql id="pagination_tail">
+		top ((#{page.pageOffset} +1)* #{page.rows})
+	</sql>
+	<!-- mysql 查询总数 -->
+	<sql id="count_Tail">
+		select count(1) from 
+	</sql>
+	
+	<sql id="selectAllColumns">
+		<![CDATA[
+		select
+ 			device_id
+ 			,area_code
+ 			,device_name
+ 			,device_desc
+ 			,device_type
+ 			,device_status
+ 			,communication_protocol
+ 			,ip
+ 			,port
+ 			,remark
+ 			,user_defined1
+ 			,user_defined2
+ 			,user_defined3
+ 			,user_defined4
+ 			,user_defined5
+ 			,create_by
+ 			,gmt_create
+ 			,last_modified_by
+ 			,gmt_modified
+ 			,active_flag
+		FROM 
+		wcs_device wcs_device_
+		]]>
+	</sql>
+	
+	<sql id="where_fragement">
+		where 1=1
+		<if test="entity!=null">
+			<if test="entity.deviceId != null  and entity.deviceId !=''">
+				<![CDATA[ and wcs_device_.device_id  LIKE CONCAT('%',#{entity.deviceId},'%')]]>
+			</if>
+			<if test="entity.areaCode != null  and entity.areaCode !=''">
+				<![CDATA[ and wcs_device_.area_code  LIKE CONCAT('%',#{entity.areaCode},'%')]]>
+			</if>
+			<if test="entity.deviceName != null  and entity.deviceName !=''">
+				<![CDATA[ and wcs_device_.device_name  LIKE CONCAT('%',#{entity.deviceName},'%')]]>
+			</if>
+			<if test="entity.deviceDesc != null  and entity.deviceDesc !=''">
+				<![CDATA[ and wcs_device_.device_desc  LIKE CONCAT('%',#{entity.deviceDesc},'%')]]>
+			</if>
+			<if test="entity.deviceType != null  and entity.deviceType !=''">
+				<![CDATA[ and wcs_device_.device_type  LIKE CONCAT('%',#{entity.deviceType},'%')]]>
+			</if>
+			<if test="entity.deviceStatus != null  and entity.deviceStatus !=''">
+				<![CDATA[ and wcs_device_.device_status  LIKE CONCAT('%',#{entity.deviceStatus},'%')]]>
+			</if>
+			<if test="entity.communicationProtocol != null  and entity.communicationProtocol !=''">
+				<![CDATA[ and wcs_device_.communication_protocol  LIKE CONCAT('%',#{entity.communicationProtocol},'%')]]>
+			</if>
+			<if test="entity.ip != null  and entity.ip !=''">
+				<![CDATA[ and wcs_device_.ip  LIKE CONCAT('%',#{entity.ip},'%')]]>
+			</if>
+			<if test="entity.port != null  and entity.port !=''">
+				<![CDATA[ and wcs_device_.port  LIKE CONCAT('%',#{entity.port},'%')]]>
+			</if>
+			<if test="entity.remark != null  and entity.remark !=''">
+				<![CDATA[ and wcs_device_.remark  LIKE CONCAT('%',#{entity.remark},'%')]]>
+			</if>
+			<if test="entity.userDefined1 != null  and entity.userDefined1 !=''">
+				<![CDATA[ and wcs_device_.user_defined1  LIKE CONCAT('%',#{entity.userDefined1},'%')]]>
+			</if>
+			<if test="entity.userDefined2 != null  and entity.userDefined2 !=''">
+				<![CDATA[ and wcs_device_.user_defined2  LIKE CONCAT('%',#{entity.userDefined2},'%')]]>
+			</if>
+			<if test="entity.userDefined3 != null  and entity.userDefined3 !=''">
+				<![CDATA[ and wcs_device_.user_defined3  LIKE CONCAT('%',#{entity.userDefined3},'%')]]>
+			</if>
+			<if test="entity.userDefined4 != null  and entity.userDefined4 !=''">
+				<![CDATA[ and wcs_device_.user_defined4  LIKE CONCAT('%',#{entity.userDefined4},'%')]]>
+			</if>
+			<if test="entity.userDefined5 != null  and entity.userDefined5 !=''">
+				<![CDATA[ and wcs_device_.user_defined5  LIKE CONCAT('%',#{entity.userDefined5},'%')]]>
+			</if>
+			<if test="entity.createBy != null  and entity.createBy !=''">
+				<![CDATA[ and wcs_device_.create_by  LIKE CONCAT('%',#{entity.createBy},'%')]]>
+			</if>
+			<if test="entity.gmtCreate != null  and entity.gmtCreate !=''">
+				<![CDATA[ and wcs_device_.gmt_create  LIKE CONCAT('%',#{entity.gmtCreate},'%')]]>
+			</if>
+			<if test="entity.lastModifiedBy != null  and entity.lastModifiedBy !=''">
+				<![CDATA[ and wcs_device_.last_modified_by  LIKE CONCAT('%',#{entity.lastModifiedBy},'%')]]>
+			</if>
+			<if test="entity.gmtModified != null  and entity.gmtModified !=''">
+				<![CDATA[ and wcs_device_.gmt_modified  LIKE CONCAT('%',#{entity.gmtModified},'%')]]>
+			</if>
+			<if test="entity.activeFlag != null  and entity.activeFlag !=''">
+				<![CDATA[ and wcs_device_.active_flag  LIKE CONCAT('%',#{entity.activeFlag},'%')]]>
+			</if>
+		</if>
+	</sql>
+	
+	<sql id="where_any">
+		where 1=1
+		<if test="entity!=null">
+			<if test="entity.deviceId != null  and entity.deviceId !=''">
+				<![CDATA[ and wcs_device_.device_id  = #{entity.deviceId}]]>
+			</if>
+			<if test="entity.areaCode != null  and entity.areaCode !=''">
+				<![CDATA[ and wcs_device_.area_code  = #{entity.areaCode}]]>
+			</if>
+			<if test="entity.deviceName != null  and entity.deviceName !=''">
+				<![CDATA[ and wcs_device_.device_name  = #{entity.deviceName}]]>
+			</if>
+			<if test="entity.deviceDesc != null  and entity.deviceDesc !=''">
+				<![CDATA[ and wcs_device_.device_desc  = #{entity.deviceDesc}]]>
+			</if>
+			<if test="entity.deviceType != null  and entity.deviceType !=''">
+				<![CDATA[ and wcs_device_.device_type  = #{entity.deviceType}]]>
+			</if>
+			<if test="entity.deviceStatus != null  and entity.deviceStatus !=''">
+				<![CDATA[ and wcs_device_.device_status  = #{entity.deviceStatus}]]>
+			</if>
+			<if test="entity.communicationProtocol != null  and entity.communicationProtocol !=''">
+				<![CDATA[ and wcs_device_.communication_protocol  = #{entity.communicationProtocol}]]>
+			</if>
+			<if test="entity.ip != null  and entity.ip !=''">
+				<![CDATA[ and wcs_device_.ip  = #{entity.ip}]]>
+			</if>
+			<if test="entity.port != null  and entity.port !=''">
+				<![CDATA[ and wcs_device_.port  = #{entity.port}]]>
+			</if>
+			<if test="entity.remark != null  and entity.remark !=''">
+				<![CDATA[ and wcs_device_.remark  = #{entity.remark}]]>
+			</if>
+			<if test="entity.userDefined1 != null  and entity.userDefined1 !=''">
+				<![CDATA[ and wcs_device_.user_defined1  = #{entity.userDefined1}]]>
+			</if>
+			<if test="entity.userDefined2 != null  and entity.userDefined2 !=''">
+				<![CDATA[ and wcs_device_.user_defined2  = #{entity.userDefined2}]]>
+			</if>
+			<if test="entity.userDefined3 != null  and entity.userDefined3 !=''">
+				<![CDATA[ and wcs_device_.user_defined3  = #{entity.userDefined3}]]>
+			</if>
+			<if test="entity.userDefined4 != null  and entity.userDefined4 !=''">
+				<![CDATA[ and wcs_device_.user_defined4  = #{entity.userDefined4}]]>
+			</if>
+			<if test="entity.userDefined5 != null  and entity.userDefined5 !=''">
+				<![CDATA[ and wcs_device_.user_defined5  = #{entity.userDefined5}]]>
+			</if>
+			<if test="entity.createBy != null  and entity.createBy !=''">
+				<![CDATA[ and wcs_device_.create_by  = #{entity.createBy}]]>
+			</if>
+			<if test="entity.gmtCreate != null  and entity.gmtCreate !=''">
+				<![CDATA[ and wcs_device_.gmt_create  = #{entity.gmtCreate}]]>
+			</if>
+			<if test="entity.lastModifiedBy != null  and entity.lastModifiedBy !=''">
+				<![CDATA[ and wcs_device_.last_modified_by  = #{entity.lastModifiedBy}]]>
+			</if>
+			<if test="entity.gmtModified != null  and entity.gmtModified !=''">
+				<![CDATA[ and wcs_device_.gmt_modified  = #{entity.gmtModified}]]>
+			</if>
+			<if test="entity.activeFlag != null  and entity.activeFlag !=''">
+				<![CDATA[ and wcs_device_.active_flag  = #{entity.activeFlag}]]>
+			</if>
+		</if>
+	</sql>
+	
+	<!-- =========================================================== -->
+    <!-- DAO方法中的基本增删改查方法                                                                                                                                                           -->
+    <!-- =========================================================== -->
+   <!-- 根据id查询 -->
+	<select id="queryById" resultMap="wcsDeviceMap" parameterType="java.lang.String">
+		<include refid="selectAllColumns" />
+		<![CDATA[
+		where wcs_device_.device_id = #{id}
+		]]>
+	</select>
+	
+	<!-- 分页查询 -->
+	<select id="queryList" resultMap="wcsDeviceMap" >
+		<include refid="selectAllColumns"/>
+		<include refid="where_fragement" />
+		<if test="page!=null">
+			<include refid="pagination_tail" />
+		</if>
+	</select>
+	
+	<select id="queryCount" resultType="long">
+		<include refid="count_Tail" />
+		wcs_device wcs_device_
+		<include refid="where_fragement" />
+	</select>
+	
+	<!-- 插入记录 -->
+	<insert id="create" parameterType="com.penghaisoft.wcs.basicmanagement.model.entity.WcsDevice">
+		<![CDATA[
+		insert into wcs_device (
+		    	 device_id
+		    	 ,area_code
+		    	 ,device_name
+		    	 ,device_desc
+		    	 ,device_type
+		    	 ,device_status
+		    	 ,communication_protocol
+		    	 ,ip
+		    	 ,port
+		    	 ,remark
+		    	 ,user_defined1
+		    	 ,user_defined2
+		    	 ,user_defined3
+		    	 ,user_defined4
+		    	 ,user_defined5
+		    	 ,create_by
+		    	 ,gmt_create
+		    	 ,last_modified_by
+		    	 ,gmt_modified
+		    	 ,active_flag
+		   )values(
+		    	#{deviceId}
+		    	,#{areaCode}
+		    	,#{deviceName}
+		    	,#{deviceDesc}
+		    	,#{deviceType}
+		    	,#{deviceStatus}
+		    	,#{communicationProtocol}
+		    	,#{ip}
+		    	,#{port}
+		    	,#{remark}
+		    	,#{userDefined1}
+		    	,#{userDefined2}
+		    	,#{userDefined3}
+		    	,#{userDefined4}
+		    	,#{userDefined5}
+		    	,#{createBy}
+		    	,#{gmtCreate}
+		    	,#{lastModifiedBy}
+		    	,#{gmtModified}
+		    	,#{activeFlag}
+		   )
+	    ]]>	
+	</insert>
+	<!-- 条件插入 -->
+	<insert id="insertBySelect" parameterType="com.penghaisoft.wcs.basicmanagement.model.entity.WcsDevice">
+		
+		insert into wcs_device 
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="deviceId != null">
+		    	 device_id,
+			</if>
+			<if test="areaCode != null">
+		    	 area_code,
+			</if>
+			<if test="deviceName != null">
+		    	 device_name,
+			</if>
+			<if test="deviceDesc != null">
+		    	 device_desc,
+			</if>
+			<if test="deviceType != null">
+		    	 device_type,
+			</if>
+			<if test="deviceStatus != null">
+		    	 device_status,
+			</if>
+			<if test="communicationProtocol != null">
+		    	 communication_protocol,
+			</if>
+			<if test="ip != null">
+		    	 ip,
+			</if>
+			<if test="port != null">
+		    	 port,
+			</if>
+			<if test="remark != null">
+		    	 remark,
+			</if>
+			<if test="userDefined1 != null">
+		    	 user_defined1,
+			</if>
+			<if test="userDefined2 != null">
+		    	 user_defined2,
+			</if>
+			<if test="userDefined3 != null">
+		    	 user_defined3,
+			</if>
+			<if test="userDefined4 != null">
+		    	 user_defined4,
+			</if>
+			<if test="userDefined5 != null">
+		    	 user_defined5,
+			</if>
+			<if test="createBy != null">
+		    	 create_by,
+			</if>
+			<if test="gmtCreate != null">
+		    	 gmt_create,
+			</if>
+			<if test="lastModifiedBy != null">
+		    	 last_modified_by,
+			</if>
+			<if test="gmtModified != null">
+		    	 gmt_modified,
+			</if>
+			<if test="activeFlag != null">
+		    	 active_flag,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="deviceId != null">
+		    	#{deviceId},
+			</if>
+			<if test="areaCode != null">
+		    	#{areaCode},
+			</if>
+			<if test="deviceName != null">
+		    	#{deviceName},
+			</if>
+			<if test="deviceDesc != null">
+		    	#{deviceDesc},
+			</if>
+			<if test="deviceType != null">
+		    	#{deviceType},
+			</if>
+			<if test="deviceStatus != null">
+		    	#{deviceStatus},
+			</if>
+			<if test="communicationProtocol != null">
+		    	#{communicationProtocol},
+			</if>
+			<if test="ip != null">
+		    	#{ip},
+			</if>
+			<if test="port != null">
+		    	#{port},
+			</if>
+			<if test="remark != null">
+		    	#{remark},
+			</if>
+			<if test="userDefined1 != null">
+		    	#{userDefined1},
+			</if>
+			<if test="userDefined2 != null">
+		    	#{userDefined2},
+			</if>
+			<if test="userDefined3 != null">
+		    	#{userDefined3},
+			</if>
+			<if test="userDefined4 != null">
+		    	#{userDefined4},
+			</if>
+			<if test="userDefined5 != null">
+		    	#{userDefined5},
+			</if>
+			<if test="createBy != null">
+		    	#{createBy},
+			</if>
+			<if test="gmtCreate != null">
+		    	#{gmtCreate},
+			</if>
+			<if test="lastModifiedBy != null">
+		    	#{lastModifiedBy},
+			</if>
+			<if test="gmtModified != null">
+		    	#{gmtModified},
+			</if>
+			<if test="activeFlag != null">
+		    	#{activeFlag},
+			</if>
+		</trim>
+		
+	</insert>
+	
+	<!-- 批量插入记录 -->
+	<insert id="batchInsert" parameterType="java.util.List">
+		insert into wcs_device (
+		    	 device_id
+		    	 ,area_code
+		    	 ,device_name
+		    	 ,device_desc
+		    	 ,device_type
+		    	 ,device_status
+		    	 ,communication_protocol
+		    	 ,ip
+		    	 ,port
+		    	 ,remark
+		    	 ,user_defined1
+		    	 ,user_defined2
+		    	 ,user_defined3
+		    	 ,user_defined4
+		    	 ,user_defined5
+		    	 ,create_by
+		    	 ,gmt_create
+		    	 ,last_modified_by
+		    	 ,gmt_modified
+		    	 ,active_flag
+		   )
+		   values
+		   <foreach collection="list" item="item" index="index" separator="," >
+		   (
+		    	#{item.deviceId}
+		    	,#{item.areaCode}
+		    	,#{item.deviceName}
+		    	,#{item.deviceDesc}
+		    	,#{item.deviceType}
+		    	,#{item.deviceStatus}
+		    	,#{item.communicationProtocol}
+		    	,#{item.ip}
+		    	,#{item.port}
+		    	,#{item.remark}
+		    	,#{item.userDefined1}
+		    	,#{item.userDefined2}
+		    	,#{item.userDefined3}
+		    	,#{item.userDefined4}
+		    	,#{item.userDefined5}
+		    	,#{item.createBy}
+		    	,#{item.gmtCreate}
+		    	,#{item.lastModifiedBy}
+		    	,#{item.gmtModified}
+		    	,#{item.activeFlag}
+		   )
+		   </foreach>	
+	</insert>
+	
+	<!-- 根据id，修改记录 -->
+	<update id="update" parameterType="com.penghaisoft.wcs.basicmanagement.model.entity.WcsDevice">
+		<![CDATA[
+		update wcs_device set
+   			
+   			area_code = #{areaCode}
+   			,device_name = #{deviceName}
+   			,device_desc = #{deviceDesc}
+   			,device_type = #{deviceType}
+   			,device_status = #{deviceStatus}
+   			,communication_protocol = #{communicationProtocol}
+   			,ip = #{ip}
+   			,port = #{port}
+   			,remark = #{remark}
+   			,user_defined1 = #{userDefined1}
+   			,user_defined2 = #{userDefined2}
+   			,user_defined3 = #{userDefined3}
+   			,user_defined4 = #{userDefined4}
+   			,user_defined5 = #{userDefined5}
+   			,create_by = #{createBy}
+   			,gmt_create = #{gmtCreate}
+   			,last_modified_by = #{lastModifiedBy}
+   			,gmt_modified = #{gmtModified}
+   			,active_flag = #{activeFlag}
+		 where device_id = #{deviceId}
+		]]>
+	</update>
+	
+	<!--  -->
+	<update id="updateBySelect" parameterType="com.penghaisoft.wcs.basicmanagement.model.entity.WcsDevice">
+		update wcs_device <set>
+		<if test="entity!=null">
+				<if test="entity.deviceId != null  and entity.deviceId !=''">
+					
+				</if>
+				<if test="entity.areaCode != null  and entity.areaCode !=''">
+					<![CDATA[ area_code = #{entity.areaCode}, ]]>
+				</if>
+				<if test="entity.deviceName != null  and entity.deviceName !=''">
+					<![CDATA[ device_name = #{entity.deviceName}, ]]>
+				</if>
+				<if test="entity.deviceDesc != null  and entity.deviceDesc !=''">
+					<![CDATA[ device_desc = #{entity.deviceDesc}, ]]>
+				</if>
+				<if test="entity.deviceType != null  and entity.deviceType !=''">
+					<![CDATA[ device_type = #{entity.deviceType}, ]]>
+				</if>
+				<if test="entity.deviceStatus != null  and entity.deviceStatus !=''">
+					<![CDATA[ device_status = #{entity.deviceStatus}, ]]>
+				</if>
+				<if test="entity.communicationProtocol != null  and entity.communicationProtocol !=''">
+					<![CDATA[ communication_protocol = #{entity.communicationProtocol}, ]]>
+				</if>
+				<if test="entity.ip != null  and entity.ip !=''">
+					<![CDATA[ ip = #{entity.ip}, ]]>
+				</if>
+				<if test="entity.port != null  and entity.port !=''">
+					<![CDATA[ port = #{entity.port}, ]]>
+				</if>
+				<if test="entity.remark != null  and entity.remark !=''">
+					<![CDATA[ remark = #{entity.remark}, ]]>
+				</if>
+				<if test="entity.userDefined1 != null  and entity.userDefined1 !=''">
+					<![CDATA[ user_defined1 = #{entity.userDefined1}, ]]>
+				</if>
+				<if test="entity.userDefined2 != null  and entity.userDefined2 !=''">
+					<![CDATA[ user_defined2 = #{entity.userDefined2}, ]]>
+				</if>
+				<if test="entity.userDefined3 != null  and entity.userDefined3 !=''">
+					<![CDATA[ user_defined3 = #{entity.userDefined3}, ]]>
+				</if>
+				<if test="entity.userDefined4 != null  and entity.userDefined4 !=''">
+					<![CDATA[ user_defined4 = #{entity.userDefined4}, ]]>
+				</if>
+				<if test="entity.userDefined5 != null  and entity.userDefined5 !=''">
+					<![CDATA[ user_defined5 = #{entity.userDefined5}, ]]>
+				</if>
+				<if test="entity.createBy != null  and entity.createBy !=''">
+					<![CDATA[ create_by = #{entity.createBy}, ]]>
+				</if>
+				<if test="entity.gmtCreate != null">
+					<![CDATA[ gmt_create = #{entity.gmtCreate}, ]]>
+				</if>
+				<if test="entity.lastModifiedBy != null  and entity.lastModifiedBy !=''">
+					<![CDATA[ last_modified_by = #{entity.lastModifiedBy}, ]]>
+				</if>
+				<if test="entity.gmtModified != null">
+					<![CDATA[ gmt_modified = #{entity.gmtModified}, ]]>
+				</if>
+				<if test="entity.activeFlag != null  and entity.activeFlag !=''">
+					<![CDATA[ active_flag = #{entity.activeFlag}, ]]>
+				</if>
+		</if>
+		</set>
+		 where device_id = #{entity.deviceId}
+	</update>
+
+	   <!-- 物理删除 -->
+	  <update id="delete" parameterType="com.penghaisoft.wcs.basicmanagement.model.entity.WcsDevice">
+	    DELETE FROM wcs_device
+	    where device_id = #{entity.deviceId}
+	  </update>
+	  
+	  <update id="batchDelete" parameterType="com.penghaisoft.wcs.basicmanagement.model.entity.WcsDevice">
+	    DELETE FROM wcs_device
+	    where device_id in 
+	    <foreach collection="entity.deviceIdList" index="index" item="item" open="(" separator="," close=")">
+	      #{item}
+	    </foreach>
+	  </update>
+
+	<!-- 任意字段全匹配 -->
+	<select id="queryByAny" resultMap="wcsDeviceMap" >
+		<include refid="selectAllColumns"/>
+		<include refid="where_any" />
+	</select>
+	
+	<select id="selectByDeviceType" resultMap="wcsDeviceMap">
+    <include refid="selectAllColumns"/>
+    where wcs_device_.device_type = #{deviceType,jdbcType=CHAR}
+    and wcs_device_.active_flag = '1'
+  </select>
+</mapper>

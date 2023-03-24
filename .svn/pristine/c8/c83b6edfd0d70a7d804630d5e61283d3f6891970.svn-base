@@ -1,0 +1,17 @@
+package com.penghaisoft.wms.nuohua.service;
+
+import com.alibaba.fastjson.JSONObject;
+import com.penghaisoft.framework.util.Resp;
+
+/**
+ * @Description 检查接口传入的json串
+ * @Author zhangxin
+ * @Date 2022
+ **/
+public interface CheckJsonObjictService {
+
+
+    Resp outboundTask(JSONObject jsonObject);
+
+    Resp outwarehouse(JSONObject jsonObject);
+}

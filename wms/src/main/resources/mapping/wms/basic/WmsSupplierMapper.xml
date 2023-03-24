@@ -1,0 +1,512 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.penghaisoft.wms.basicmanagement.model.dao.WmsSupplierMapper">
+	
+	<!-- =========================================================== -->
+    <!-- 定义resultMap                                                                                                                                                                             -->
+    <!-- =========================================================== -->
+	<resultMap id="wmsSupplierMap" type="com.penghaisoft.wms.basicmanagement.model.entity.WmsSupplier">
+				<result property="supplierId" column="supplier_id"/>
+				<result property="supplierCode" column="supplier_code"/>
+				<result property="supplierFullName" column="supplier_full_name"/>
+				<result property="supplierShortName" column="supplier_short_name"/>
+				<result property="supplierEngName" column="supplier_eng_name"/>
+				<result property="supplierType" column="supplier_type"/>
+				<result property="supplierLevel" column="supplier_level"/>
+				<result property="firstContractDate" column="first_contract_date"/>
+				<result property="endContractDate" column="end_contract_date"/>
+				<result property="address" column="address"/>
+				<result property="contacts" column="contacts"/>
+				<result property="website" column="website"/>
+				<result property="registrationDate" column="registration_date"/>
+				<result property="remark" column="remark"/>
+				<result property="userDefined1" column="user_defined1"/>
+				<result property="userDefined2" column="user_defined2"/>
+				<result property="userDefined3" column="user_defined3"/>
+				<result property="userDefined4" column="user_defined4"/>
+				<result property="userDefined5" column="user_defined5"/>
+				<result property="createBy" column="create_by"/>
+				<result property="gmtCreate" column="gmt_create"/>
+				<result property="lastModifiedBy" column="last_modified_by"/>
+				<result property="gmtModified" column="gmt_modified"/>
+				<result property="activeFlag" column="active_flag"/>
+	</resultMap>
+	
+	<!-- =========================================================== -->
+    <!-- 一些公共变量设置                                                                                                                                                                             -->
+    <!-- =========================================================== -->
+	<!-- mysql 分页 -->
+	<sql id="pagination_tail">
+		top ((#{page.pageOffset} +1)* #{page.rows})
+	</sql>
+	<!-- mysql 查询总数 -->
+	<sql id="count_Tail">
+		select count(1) from 
+	</sql>
+	
+	<sql id="selectAllColumns">
+		<![CDATA[
+ 			supplier_id
+ 			,supplier_code
+ 			,supplier_full_name
+ 			,supplier_short_name
+ 			,supplier_eng_name
+ 			,supplier_type
+ 			,supplier_level
+ 			,first_contract_date
+ 			,end_contract_date
+ 			,address
+ 			,contacts
+ 			,website
+ 			,registration_date
+ 			,remark
+ 			,user_defined1
+ 			,user_defined2
+ 			,user_defined3
+ 			,user_defined4
+ 			,user_defined5
+ 			,create_by
+ 			,gmt_create
+ 			,last_modified_by
+ 			,gmt_modified
+ 			,active_flag
+		FROM 
+		wms_supplier wms_supplier_
+		]]>
+	</sql>
+	
+	<sql id="where_fragement">
+		where 1=1
+		<if test="entity!=null">
+			<if test="entity.supplierId != null  and entity.supplierId !=''">
+				<![CDATA[ and wms_supplier_.supplier_id  LIKE CONCAT('%',#{entity.supplierId},'%')]]>
+			</if>
+			<if test="entity.supplierCode != null  and entity.supplierCode !=''">
+				<![CDATA[ and wms_supplier_.supplier_code  LIKE CONCAT('%',#{entity.supplierCode},'%')]]>
+			</if>
+			<if test="entity.supplierFullName != null  and entity.supplierFullName !=''">
+				<![CDATA[ and wms_supplier_.supplier_full_name  LIKE CONCAT('%',#{entity.supplierFullName},'%')]]>
+			</if>
+			<if test="entity.supplierShortName != null  and entity.supplierShortName !=''">
+				<![CDATA[ and wms_supplier_.supplier_short_name  LIKE CONCAT('%',#{entity.supplierShortName},'%')]]>
+			</if>
+			<if test="entity.supplierEngName != null  and entity.supplierEngName !=''">
+				<![CDATA[ and wms_supplier_.supplier_eng_name  LIKE CONCAT('%',#{entity.supplierEngName},'%')]]>
+			</if>
+			<if test="entity.supplierType != null  and entity.supplierType !=''">
+				<![CDATA[ and wms_supplier_.supplier_type  LIKE CONCAT('%',#{entity.supplierType},'%')]]>
+			</if>
+			<if test="entity.supplierLevel != null  and entity.supplierLevel !=''">
+				<![CDATA[ and wms_supplier_.supplier_level  LIKE CONCAT('%',#{entity.supplierLevel},'%')]]>
+			</if>
+			<if test="entity.firstContractDate != null  and entity.firstContractDate !=''">
+				<![CDATA[ and wms_supplier_.first_contract_date  LIKE CONCAT('%',#{entity.firstContractDate},'%')]]>
+			</if>
+			<if test="entity.endContractDate != null  and entity.endContractDate !=''">
+				<![CDATA[ and wms_supplier_.end_contract_date  LIKE CONCAT('%',#{entity.endContractDate},'%')]]>
+			</if>
+			<if test="entity.address != null  and entity.address !=''">
+				<![CDATA[ and wms_supplier_.address  LIKE CONCAT('%',#{entity.address},'%')]]>
+			</if>
+			<if test="entity.contacts != null  and entity.contacts !=''">
+				<![CDATA[ and wms_supplier_.contacts  LIKE CONCAT('%',#{entity.contacts},'%')]]>
+			</if>
+			<if test="entity.website != null  and entity.website !=''">
+				<![CDATA[ and wms_supplier_.website  LIKE CONCAT('%',#{entity.website},'%')]]>
+			</if>
+			<if test="entity.registrationDate != null  and entity.registrationDate !=''">
+				<![CDATA[ and wms_supplier_.registration_date  LIKE CONCAT('%',#{entity.registrationDate},'%')]]>
+			</if>
+			<if test="entity.remark != null  and entity.remark !=''">
+				<![CDATA[ and wms_supplier_.remark  LIKE CONCAT('%',#{entity.remark},'%')]]>
+			</if>
+			<if test="entity.userDefined1 != null  and entity.userDefined1 !=''">
+				<![CDATA[ and wms_supplier_.user_defined1  LIKE CONCAT('%',#{entity.userDefined1},'%')]]>
+			</if>
+			<if test="entity.userDefined2 != null  and entity.userDefined2 !=''">
+				<![CDATA[ and wms_supplier_.user_defined2  LIKE CONCAT('%',#{entity.userDefined2},'%')]]>
+			</if>
+			<if test="entity.userDefined3 != null  and entity.userDefined3 !=''">
+				<![CDATA[ and wms_supplier_.user_defined3  LIKE CONCAT('%',#{entity.userDefined3},'%')]]>
+			</if>
+			<if test="entity.userDefined4 != null  and entity.userDefined4 !=''">
+				<![CDATA[ and wms_supplier_.user_defined4  LIKE CONCAT('%',#{entity.userDefined4},'%')]]>
+			</if>
+			<if test="entity.userDefined5 != null  and entity.userDefined5 !=''">
+				<![CDATA[ and wms_supplier_.user_defined5  LIKE CONCAT('%',#{entity.userDefined5},'%')]]>
+			</if>
+			<if test="entity.createBy != null  and entity.createBy !=''">
+				<![CDATA[ and wms_supplier_.create_by  LIKE CONCAT('%',#{entity.createBy},'%')]]>
+			</if>
+			<if test="entity.gmtCreate != null  and entity.gmtCreate !=''">
+				<![CDATA[ and wms_supplier_.gmt_create  LIKE CONCAT('%',#{entity.gmtCreate},'%')]]>
+			</if>
+			<if test="entity.lastModifiedBy != null  and entity.lastModifiedBy !=''">
+				<![CDATA[ and wms_supplier_.last_modified_by  LIKE CONCAT('%',#{entity.lastModifiedBy},'%')]]>
+			</if>
+			<if test="entity.gmtModified != null  ">
+				<![CDATA[ and wms_supplier_.gmt_modified  LIKE CONCAT('%',#{entity.gmtModified},'%')]]>
+			</if>
+			<if test="entity.activeFlag != null  and entity.activeFlag !=''">
+				<![CDATA[ and wms_supplier_.active_flag  LIKE CONCAT('%',#{entity.activeFlag},'%')]]>
+			</if>
+		</if>
+	</sql>
+	
+	<sql id="where_any">
+		where 1=1
+		<if test="entity!=null">
+			<if test="entity.supplierId != null  and entity.supplierId !=''">
+				<![CDATA[ and wms_supplier_.supplier_id  = #{entity.supplierId}]]>
+			</if>
+			<if test="entity.supplierCode != null  and entity.supplierCode !=''">
+				<![CDATA[ and wms_supplier_.supplier_code  = #{entity.supplierCode}]]>
+			</if>
+			<if test="entity.supplierFullName != null  and entity.supplierFullName !=''">
+				<![CDATA[ and wms_supplier_.supplier_full_name  = #{entity.supplierFullName}]]>
+			</if>
+			<if test="entity.supplierShortName != null  and entity.supplierShortName !=''">
+				<![CDATA[ and wms_supplier_.supplier_short_name  = #{entity.supplierShortName}]]>
+			</if>
+			<if test="entity.supplierEngName != null  and entity.supplierEngName !=''">
+				<![CDATA[ and wms_supplier_.supplier_eng_name  = #{entity.supplierEngName}]]>
+			</if>
+			<if test="entity.supplierType != null  and entity.supplierType !=''">
+				<![CDATA[ and wms_supplier_.supplier_type  = #{entity.supplierType}]]>
+			</if>
+			<if test="entity.supplierLevel != null  and entity.supplierLevel !=''">
+				<![CDATA[ and wms_supplier_.supplier_level  = #{entity.supplierLevel}]]>
+			</if>
+			<if test="entity.firstContractDate != null  and entity.firstContractDate !=''">
+				<![CDATA[ and wms_supplier_.first_contract_date  = #{entity.firstContractDate}]]>
+			</if>
+			<if test="entity.endContractDate != null  and entity.endContractDate !=''">
+				<![CDATA[ and wms_supplier_.end_contract_date  = #{entity.endContractDate}]]>
+			</if>
+			<if test="entity.address != null  and entity.address !=''">
+				<![CDATA[ and wms_supplier_.address  = #{entity.address}]]>
+			</if>
+			<if test="entity.contacts != null  and entity.contacts !=''">
+				<![CDATA[ and wms_supplier_.contacts  = #{entity.contacts}]]>
+			</if>
+			<if test="entity.website != null  and entity.website !=''">
+				<![CDATA[ and wms_supplier_.website  = #{entity.website}]]>
+			</if>
+			<if test="entity.registrationDate != null  and entity.registrationDate !=''">
+				<![CDATA[ and wms_supplier_.registration_date  = #{entity.registrationDate}]]>
+			</if>
+			<if test="entity.remark != null  and entity.remark !=''">
+				<![CDATA[ and wms_supplier_.remark  = #{entity.remark}]]>
+			</if>
+			<if test="entity.userDefined1 != null  and entity.userDefined1 !=''">
+				<![CDATA[ and wms_supplier_.user_defined1  = #{entity.userDefined1}]]>
+			</if>
+			<if test="entity.userDefined2 != null  and entity.userDefined2 !=''">
+				<![CDATA[ and wms_supplier_.user_defined2  = #{entity.userDefined2}]]>
+			</if>
+			<if test="entity.userDefined3 != null  and entity.userDefined3 !=''">
+				<![CDATA[ and wms_supplier_.user_defined3  = #{entity.userDefined3}]]>
+			</if>
+			<if test="entity.userDefined4 != null  and entity.userDefined4 !=''">
+				<![CDATA[ and wms_supplier_.user_defined4  = #{entity.userDefined4}]]>
+			</if>
+			<if test="entity.userDefined5 != null  and entity.userDefined5 !=''">
+				<![CDATA[ and wms_supplier_.user_defined5  = #{entity.userDefined5}]]>
+			</if>
+			<if test="entity.createBy != null  and entity.createBy !=''">
+				<![CDATA[ and wms_supplier_.create_by  = #{entity.createBy}]]>
+			</if>
+			<if test="entity.gmtCreate != null  and entity.gmtCreate !=''">
+				<![CDATA[ and wms_supplier_.gmt_create  = #{entity.gmtCreate}]]>
+			</if>
+			<if test="entity.lastModifiedBy != null  and entity.lastModifiedBy !=''">
+				<![CDATA[ and wms_supplier_.last_modified_by  = #{entity.lastModifiedBy}]]>
+			</if>
+			<if test="entity.gmtModified != null  ">
+				<![CDATA[ and wms_supplier_.gmt_modified  = #{entity.gmtModified}]]>
+			</if>
+			<if test="entity.activeFlag != null  and entity.activeFlag !=''">
+				<![CDATA[ and wms_supplier_.active_flag  = #{entity.activeFlag}]]>
+			</if>
+		</if>
+	</sql>
+	
+	<!-- =========================================================== -->
+    <!-- DAO方法中的基本增删改查方法                                                                                                                                                           -->
+    <!-- =========================================================== -->
+   <!-- 根据id查询 -->
+	<select id="queryById" resultMap="wmsSupplierMap" parameterType="java.lang.String">
+		select
+		<include refid="selectAllColumns" />
+		<![CDATA[
+		where wms_supplier_.supplier_id = #{id}
+		]]>
+	</select>
+	
+	<!-- 分页查询 -->
+	<select id="queryList" resultMap="wmsSupplierMap" >
+		select
+		<if test="page!=null">
+			<include refid="pagination_tail" />
+		</if>
+		<include refid="selectAllColumns"/>
+		<include refid="where_fragement" />
+
+	</select>
+	
+	<select id="queryCount" resultType="long">
+		<include refid="count_Tail" />
+		wms_supplier wms_supplier_
+		<include refid="where_fragement" />
+	</select>
+	
+	<!-- 插入记录 -->
+	<insert id="create" parameterType="com.penghaisoft.wms.basicmanagement.model.entity.WmsSupplier">
+		<![CDATA[
+		insert into wms_supplier (
+		    	 supplier_id
+		    	 ,supplier_code
+		    	 ,supplier_full_name
+		    	 ,supplier_short_name
+		    	 ,supplier_eng_name
+		    	 ,supplier_type
+		    	 ,supplier_level
+		    	 ,first_contract_date
+		    	 ,end_contract_date
+		    	 ,address
+		    	 ,contacts
+		    	 ,website
+		    	 ,registration_date
+		    	 ,remark
+		    	 ,user_defined1
+		    	 ,user_defined2
+		    	 ,user_defined3
+		    	 ,user_defined4
+		    	 ,user_defined5
+		    	 ,create_by
+		    	 ,gmt_create
+		    	 ,last_modified_by
+		    	 ,gmt_modified
+		    	 ,active_flag
+		   )values(
+		    	#{supplierId}
+		    	,#{supplierCode}
+		    	,#{supplierFullName}
+		    	,#{supplierShortName}
+		    	,#{supplierEngName}
+		    	,#{supplierType}
+		    	,#{supplierLevel}
+		    	,#{firstContractDate}
+		    	,#{endContractDate}
+		    	,#{address}
+		    	,#{contacts}
+		    	,#{website}
+		    	,#{registrationDate}
+		    	,#{remark}
+		    	,#{userDefined1}
+		    	,#{userDefined2}
+		    	,#{userDefined3}
+		    	,#{userDefined4}
+		    	,#{userDefined5}
+		    	,#{createBy}
+		    	,#{gmtCreate}
+		    	,#{lastModifiedBy}
+		    	,#{gmtModified}
+		    	,#{activeFlag}
+		   )
+	    ]]>	
+	</insert>
+	
+	<!-- 批量插入记录 -->
+	<insert id="batchInsert" parameterType="java.util.List">
+		insert into wms_supplier (
+		    	 supplier_id
+		    	 ,supplier_code
+		    	 ,supplier_full_name
+		    	 ,supplier_short_name
+		    	 ,supplier_eng_name
+		    	 ,supplier_type
+		    	 ,supplier_level
+		    	 ,first_contract_date
+		    	 ,end_contract_date
+		    	 ,address
+		    	 ,contacts
+		    	 ,website
+		    	 ,registration_date
+		    	 ,remark
+		    	 ,user_defined1
+		    	 ,user_defined2
+		    	 ,user_defined3
+		    	 ,user_defined4
+		    	 ,user_defined5
+		    	 ,create_by
+		    	 ,gmt_create
+		    	 ,last_modified_by
+		    	 ,gmt_modified
+		    	 ,active_flag
+		   )
+		   values
+		   <foreach collection="list" item="item" index="index" separator="," >
+		   (
+		    	#{item.supplierId}
+		    	,#{item.supplierCode}
+		    	,#{item.supplierFullName}
+		    	,#{item.supplierShortName}
+		    	,#{item.supplierEngName}
+		    	,#{item.supplierType}
+		    	,#{item.supplierLevel}
+		    	,#{item.firstContractDate}
+		    	,#{item.endContractDate}
+		    	,#{item.address}
+		    	,#{item.contacts}
+		    	,#{item.website}
+		    	,#{item.registrationDate}
+		    	,#{item.remark}
+		    	,#{item.userDefined1}
+		    	,#{item.userDefined2}
+		    	,#{item.userDefined3}
+		    	,#{item.userDefined4}
+		    	,#{item.userDefined5}
+		    	,#{item.createBy}
+		    	,#{item.gmtCreate}
+		    	,#{item.lastModifiedBy}
+		    	,#{item.gmtModified}
+		    	,#{item.activeFlag}
+		   )
+		   </foreach>	
+	</insert>
+	
+	<!-- 根据id，修改记录 -->
+	<update id="update" parameterType="com.penghaisoft.wms.basicmanagement.model.entity.WmsSupplier">
+		<![CDATA[
+		update wms_supplier set
+   			
+   			supplier_code = #{supplierCode}
+   			,supplier_full_name = #{supplierFullName}
+   			,supplier_short_name = #{supplierShortName}
+   			,supplier_eng_name = #{supplierEngName}
+   			,supplier_type = #{supplierType}
+   			,supplier_level = #{supplierLevel}
+   			,first_contract_date = #{firstContractDate}
+   			,end_contract_date = #{endContractDate}
+   			,address = #{address}
+   			,contacts = #{contacts}
+   			,website = #{website}
+   			,registration_date = #{registrationDate}
+   			,remark = #{remark}
+   			,user_defined1 = #{userDefined1}
+   			,user_defined2 = #{userDefined2}
+   			,user_defined3 = #{userDefined3}
+   			,user_defined4 = #{userDefined4}
+   			,user_defined5 = #{userDefined5}
+   			,create_by = #{createBy}
+   			,gmt_create = #{gmtCreate}
+   			,last_modified_by = #{lastModifiedBy}
+   			,gmt_modified = #{gmtModified}
+   			,active_flag = #{activeFlag}
+		 where supplier_id = #{supplierId}
+		]]>
+	</update>
+	
+	<!--  -->
+	<update id="updateBySelect" parameterType="com.penghaisoft.wms.basicmanagement.model.entity.WmsSupplier">
+		update wms_supplier <set>
+		<if test="entity!=null">
+				<if test="entity.supplierId != null  and entity.supplierId !=''">
+					
+				</if>
+				<if test="entity.supplierCode != null  and entity.supplierCode !=''">
+					<![CDATA[ supplier_code = #{entity.supplierCode}, ]]>
+				</if>
+				<if test="entity.supplierFullName != null  and entity.supplierFullName !=''">
+					<![CDATA[ supplier_full_name = #{entity.supplierFullName}, ]]>
+				</if>
+				<if test="entity.supplierShortName != null  and entity.supplierShortName !=''">
+					<![CDATA[ supplier_short_name = #{entity.supplierShortName}, ]]>
+				</if>
+				<if test="entity.supplierEngName != null  and entity.supplierEngName !=''">
+					<![CDATA[ supplier_eng_name = #{entity.supplierEngName}, ]]>
+				</if>
+				<if test="entity.supplierType != null  and entity.supplierType !=''">
+					<![CDATA[ supplier_type = #{entity.supplierType}, ]]>
+				</if>
+				<if test="entity.supplierLevel != null  and entity.supplierLevel !=''">
+					<![CDATA[ supplier_level = #{entity.supplierLevel}, ]]>
+				</if>
+				<if test="entity.firstContractDate != null  and entity.firstContractDate !=''">
+					<![CDATA[ first_contract_date = #{entity.firstContractDate}, ]]>
+				</if>
+				<if test="entity.endContractDate != null  and entity.endContractDate !=''">
+					<![CDATA[ end_contract_date = #{entity.endContractDate}, ]]>
+				</if>
+				<if test="entity.address != null  and entity.address !=''">
+					<![CDATA[ address = #{entity.address}, ]]>
+				</if>
+				<if test="entity.contacts != null  and entity.contacts !=''">
+					<![CDATA[ contacts = #{entity.contacts}, ]]>
+				</if>
+				<if test="entity.website != null  and entity.website !=''">
+					<![CDATA[ website = #{entity.website}, ]]>
+				</if>
+				<if test="entity.registrationDate != null  and entity.registrationDate !=''">
+					<![CDATA[ registration_date = #{entity.registrationDate}, ]]>
+				</if>
+				<if test="entity.remark != null  and entity.remark !=''">
+					<![CDATA[ remark = #{entity.remark}, ]]>
+				</if>
+				<if test="entity.userDefined1 != null  and entity.userDefined1 !=''">
+					<![CDATA[ user_defined1 = #{entity.userDefined1}, ]]>
+				</if>
+				<if test="entity.userDefined2 != null  and entity.userDefined2 !=''">
+					<![CDATA[ user_defined2 = #{entity.userDefined2}, ]]>
+				</if>
+				<if test="entity.userDefined3 != null  and entity.userDefined3 !=''">
+					<![CDATA[ user_defined3 = #{entity.userDefined3}, ]]>
+				</if>
+				<if test="entity.userDefined4 != null  and entity.userDefined4 !=''">
+					<![CDATA[ user_defined4 = #{entity.userDefined4}, ]]>
+				</if>
+				<if test="entity.userDefined5 != null  and entity.userDefined5 !=''">
+					<![CDATA[ user_defined5 = #{entity.userDefined5}, ]]>
+				</if>
+				<if test="entity.createBy != null  and entity.createBy !=''">
+					<![CDATA[ create_by = #{entity.createBy}, ]]>
+				</if>
+				<if test="entity.gmtCreate != null  and entity.gmtCreate !=''">
+					<![CDATA[ gmt_create = #{entity.gmtCreate}, ]]>
+				</if>
+				<if test="entity.lastModifiedBy != null  and entity.lastModifiedBy !=''">
+					<![CDATA[ last_modified_by = #{entity.lastModifiedBy}, ]]>
+				</if>
+				<if test="entity.gmtModified != null  ">
+					<![CDATA[ gmt_modified = #{entity.gmtModified}, ]]>
+				</if>
+				<if test="entity.activeFlag != null  and entity.activeFlag !=''">
+					<![CDATA[ active_flag = #{entity.activeFlag}, ]]>
+				</if>
+		</if>
+		</set>
+		 where supplier_id = #{entity.supplierId}
+	</update>
+
+	   <!-- 逻辑删除,根据主键设置active_flag ='0' -->
+	  <update id="delete" parameterType="com.penghaisoft.wms.basicmanagement.model.entity.WmsSupplier">
+		  DELETE FROM wms_supplier
+		  where supplier_id = #{entity.supplierId}
+	  </update>
+	  
+	  <update id="batchDelete" parameterType="com.penghaisoft.wms.basicmanagement.model.entity.WmsSupplier">
+	    DELETE FROM wms_supplier
+	    where supplier_id in 
+	    <foreach collection="entity.supplierIdList" index="index" item="item" open="(" separator="," close=")">
+	      #{item}
+	    </foreach>
+	  </update>
+
+	<!-- 任意字段全匹配 -->
+	<select id="queryByAny" resultMap="wmsSupplierMap" >
+		select
+		<include refid="selectAllColumns"/>
+		<include refid="where_any" />
+	</select>
+</mapper>

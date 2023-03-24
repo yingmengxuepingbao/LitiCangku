@@ -1,0 +1,68 @@
+spring:
+  banner:
+    location: banner.txt
+    charset: UTF-8
+  application:
+    name: wms
+  profiles:
+    active: dev
+
+server:
+  port: 8081
+  servlet:
+    context-path: /wms
+  tomcat:
+    max-http-post-size: -1
+
+logging:
+  config: classpath:logback-spring.xml
+  path: E:\logs
+  level:
+    root: info
+    web: info
+
+
+
+
+
+mybatis:
+  mapper-locations: classpath:mapping/wms/*/*.xml,classpath*:mapping/*/*.xml
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+wcs:
+  sys-url: http://localhost:8081/wcs
+
+fourwaycar:
+  sys-url: http://localhost:8081/wcs
+
+surui:
+  surui-url: http://localhost:8081/wcs
+AGV:
+  AGV-url: http://localhost:8081/wcs
+
+
+
+# 框架工程自定义配置
+framework:
+  login-interceptor:
+    exclude: /login,/framework/**,/wmsfront/**,/userManagement/login,/error,/expose/**,/excel/**,/nuohua/**,/wmsMoveStereoscopic/**
+#        - /login
+#        - /framework/login.html
+#        - /framework/css/**
+#        - /framework/fonts/**
+#        - /framework/images/**
+#        - /framework/js/**
+  authorization-interceptor:
+    exclude: /login,/framework/**,/wmsfront/**,/userManagement/login,/error,/expose/**,/nuohua/**,/wmsMoveStereoscopic/**
+  #默认20分钟
+  expiredTime: 20
+  isOpenMail: 0
+  #  上传文件大小限制,默认20M
+  uploadFileSizeLimit: 20
+  multipart:
+    maxFileSize: 100MB
+
+# 当前上线工厂 NH--诺华
+applyfactory: NH
+

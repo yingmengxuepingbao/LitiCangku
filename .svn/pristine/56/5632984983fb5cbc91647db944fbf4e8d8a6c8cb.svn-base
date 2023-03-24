@@ -1,0 +1,680 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.penghaisoft.wms.basicmanagement.model.dao.WmsGoodsMapper">
+	
+	<!-- =========================================================== -->
+    <!-- 定义resultMap                                                                                                                                                                             -->
+    <!-- =========================================================== -->
+	<resultMap id="wmsGoodsMap" type="com.penghaisoft.wms.basicmanagement.model.entity.WmsGoods">
+				<result property="goodsId" column="goods_id"/>
+				<result property="owner" column="owner"/>
+				<result property="ownerName" column="owner_name"/>
+				<result property="goodsName" column="goods_name"/>
+				<result property="goodsDesc" column="goods_desc"/>
+				<result property="goodsCode" column="goods_code"/>
+				<result property="goodsAttr" column="goods_attr"/>
+				<result property="goodsType" column="goods_type"/>
+				<result property="unit" column="unit"/>
+				<result property="hasBoxCode" column="has_box_code"/>
+				<result property="layerQuantity" column="layer_quantity"/>
+				<result property="boxLength" column="box_length"/>
+				<result property="boxWidth" column="box_width"/>
+				<result property="boxHeight" column="box_height"/>
+				<result property="qualityGuaranteeDays" column="quality_guarantee_days"/>
+				<result property="splitUnit" column="split_unit"/>
+				<result property="splitCount" column="split_count"/>
+				<result property="grossWeight" column="gross_weight"/>
+				<result property="userDefined1" column="user_defined1"/>
+				<result property="userDefined2" column="user_defined2"/>
+				<result property="userDefined3" column="user_defined3"/>
+				<result property="userDefined4" column="user_defined4"/>
+				<result property="userDefined5" column="user_defined5"/>
+				<result property="createBy" column="create_by"/>
+				<result property="gmtCreate" column="gmt_create"/>
+				<result property="lastModifiedBy" column="last_modified_by"/>
+				<result property="gmtModified" column="gmt_modified"/>
+				<result property="activeFlag" column="active_flag"/>
+
+				<result property="batchNo" column="batch_no"/>
+	</resultMap>
+	
+	<!-- =========================================================== -->
+    <!-- 一些公共变量设置                                                                                                                                                                             -->
+    <!-- =========================================================== -->
+	<!-- mysql 分页 -->
+	<sql id="pagination_tail">
+		top ((#{page.pageOffset} +1)* #{page.rows})
+	</sql>
+	<!-- mysql 查询总数 -->
+	<sql id="count_Tail">
+		select count(1) from 
+	</sql>
+	
+	<sql id="selectAllColumns">
+		<![CDATA[
+ 			goods_id
+ 			,owner
+ 			,owner_name
+ 			,goods_name
+ 			,goods_desc
+ 			,goods_code
+ 			,goods_attr
+ 			,goods_type
+ 			,unit
+ 			,has_box_code
+ 			,layer_quantity
+ 			,box_length
+ 			,box_width
+ 			,box_height
+ 			,quality_guarantee_days
+ 			,split_unit
+ 			,split_count
+ 			,gross_weight
+ 			,user_defined1
+ 			,user_defined2
+ 			,user_defined3
+ 			,user_defined4
+ 			,user_defined5
+ 			,create_by
+ 			,gmt_create
+ 			,last_modified_by
+ 			,gmt_modified
+ 			,active_flag
+		FROM 
+		wms_goods wms_goods_
+		]]>
+	</sql>
+	
+	<sql id="where_fragement">
+		where 1=1
+		<if test="entity!=null">
+			<if test="entity.goodsId != null  and entity.goodsId !=''">
+				<![CDATA[ and wms_goods_.goods_id  LIKE CONCAT('%',#{entity.goodsId},'%')]]>
+			</if>
+			<if test="entity.owner != null  and entity.owner !=''">
+				<![CDATA[ and wms_goods_.owner  LIKE CONCAT('%',#{entity.owner},'%')]]>
+			</if>
+			<if test="entity.ownerName != null  and entity.ownerName !=''">
+				<![CDATA[ and wms_goods_.owner_name  LIKE CONCAT('%',#{entity.ownerName},'%')]]>
+			</if>
+			<if test="entity.goodsName != null  and entity.goodsName !=''">
+				<![CDATA[ and wms_goods_.goods_name  LIKE CONCAT('%',#{entity.goodsName},'%')]]>
+			</if>
+			<if test="entity.goodsDesc != null  and entity.goodsDesc !=''">
+				<![CDATA[ and wms_goods_.goods_desc  LIKE CONCAT('%',#{entity.goodsDesc},'%')]]>
+			</if>
+			<if test="entity.goodsCode != null  and entity.goodsCode !=''">
+				<![CDATA[ and wms_goods_.goods_code  LIKE CONCAT('%',#{entity.goodsCode},'%')]]>
+			</if>
+			<if test="entity.goodsAttr != null  and entity.goodsAttr !=''">
+				<![CDATA[ and wms_goods_.goods_attr  LIKE CONCAT('%',#{entity.goodsAttr},'%')]]>
+			</if>
+			<if test="entity.goodsType != null  and entity.goodsType !=''">
+				<![CDATA[ and wms_goods_.goods_type  LIKE CONCAT('%',#{entity.goodsType},'%')]]>
+			</if>
+			<if test="entity.unit != null  and entity.unit !=''">
+				<![CDATA[ and wms_goods_.unit  LIKE CONCAT('%',#{entity.unit},'%')]]>
+			</if>
+			<if test="entity.hasBoxCode != null  and entity.hasBoxCode !=''">
+				<![CDATA[ and wms_goods_.has_box_code  LIKE CONCAT('%',#{entity.hasBoxCode},'%')]]>
+			</if>
+			<if test="entity.layerQuantity != null  and entity.layerQuantity !=''">
+				<![CDATA[ and wms_goods_.layer_quantity  LIKE CONCAT('%',#{entity.layerQuantity},'%')]]>
+			</if>
+			<if test="entity.boxLength != null  and entity.boxLength !=''">
+				<![CDATA[ and wms_goods_.box_length  LIKE CONCAT('%',#{entity.boxLength},'%')]]>
+			</if>
+			<if test="entity.boxWidth != null  and entity.boxWidth !=''">
+				<![CDATA[ and wms_goods_.box_width  LIKE CONCAT('%',#{entity.boxWidth},'%')]]>
+			</if>
+			<if test="entity.boxHeight != null  and entity.boxHeight !=''">
+				<![CDATA[ and wms_goods_.box_height  LIKE CONCAT('%',#{entity.boxHeight},'%')]]>
+			</if>
+			<if test="entity.qualityGuaranteeDays != null  and entity.qualityGuaranteeDays !=''">
+				<![CDATA[ and wms_goods_.quality_guarantee_days  LIKE CONCAT('%',#{entity.qualityGuaranteeDays},'%')]]>
+			</if>
+			<if test="entity.splitUnit != null  and entity.splitUnit !=''">
+				<![CDATA[ and wms_goods_.split_unit  LIKE CONCAT('%',#{entity.splitUnit},'%')]]>
+			</if>
+			<if test="entity.splitCount != null  and entity.splitCount !=''">
+				<![CDATA[ and wms_goods_.split_count  LIKE CONCAT('%',#{entity.splitCount},'%')]]>
+			</if>
+			<if test="entity.grossWeight != null  and entity.grossWeight !=''">
+				<![CDATA[ and wms_goods_.gross_weight  LIKE CONCAT('%',#{entity.grossWeight},'%')]]>
+			</if>
+			<if test="entity.userDefined1 != null  and entity.userDefined1 !=''">
+				<![CDATA[ and wms_goods_.user_defined1  LIKE CONCAT('%',#{entity.userDefined1},'%')]]>
+			</if>
+			<if test="entity.userDefined2 != null  and entity.userDefined2 !=''">
+				<![CDATA[ and wms_goods_.user_defined2  LIKE CONCAT('%',#{entity.userDefined2},'%')]]>
+			</if>
+			<if test="entity.userDefined3 != null  and entity.userDefined3 !=''">
+				<![CDATA[ and wms_goods_.user_defined3  LIKE CONCAT('%',#{entity.userDefined3},'%')]]>
+			</if>
+			<if test="entity.userDefined4 != null  and entity.userDefined4 !=''">
+				<![CDATA[ and wms_goods_.user_defined4  LIKE CONCAT('%',#{entity.userDefined4},'%')]]>
+			</if>
+			<if test="entity.userDefined5 != null  and entity.userDefined5 !=''">
+				<![CDATA[ and wms_goods_.user_defined5  LIKE CONCAT('%',#{entity.userDefined5},'%')]]>
+			</if>
+			<if test="entity.createBy != null  and entity.createBy !=''">
+				<![CDATA[ and wms_goods_.create_by  LIKE CONCAT('%',#{entity.createBy},'%')]]>
+			</if>
+			<if test="entity.gmtCreate != null  and entity.gmtCreate !=''">
+				<![CDATA[ and wms_goods_.gmt_create  LIKE CONCAT('%',#{entity.gmtCreate},'%')]]>
+			</if>
+			<if test="entity.lastModifiedBy != null  and entity.lastModifiedBy !=''">
+				<![CDATA[ and wms_goods_.last_modified_by  LIKE CONCAT('%',#{entity.lastModifiedBy},'%')]]>
+			</if>
+			<if test="entity.gmtModified != null  ">
+				<![CDATA[ and wms_goods_.gmt_modified  LIKE CONCAT('%',#{entity.gmtModified},'%')]]>
+			</if>
+			<if test="entity.activeFlag != null  and entity.activeFlag !=''">
+				<![CDATA[ and wms_goods_.active_flag  LIKE CONCAT('%',#{entity.activeFlag},'%')]]>
+			</if>
+		</if>
+	</sql>
+	
+	<sql id="where_any">
+		where 1=1
+		<if test="entity!=null">
+			<if test="entity.goodsId != null  and entity.goodsId !=''">
+				<![CDATA[ and wms_goods_.goods_id  = #{entity.goodsId}]]>
+			</if>
+			<if test="entity.owner != null  and entity.owner !=''">
+				<![CDATA[ and wms_goods_.owner  = #{entity.owner}]]>
+			</if>
+			<if test="entity.ownerName != null  and entity.ownerName !=''">
+				<![CDATA[ and wms_goods_.owner_name  = #{entity.ownerName}]]>
+			</if>
+			<if test="entity.goodsName != null  and entity.goodsName !=''">
+				<![CDATA[ and wms_goods_.goods_name  = #{entity.goodsName}]]>
+			</if>
+			<if test="entity.goodsDesc != null  and entity.goodsDesc !=''">
+				<![CDATA[ and wms_goods_.goods_desc  = #{entity.goodsDesc}]]>
+			</if>
+			<if test="entity.goodsCode != null  and entity.goodsCode !=''">
+				<![CDATA[ and wms_goods_.goods_code  = #{entity.goodsCode}]]>
+			</if>
+			<if test="entity.goodsAttr != null  and entity.goodsAttr !=''">
+				<![CDATA[ and wms_goods_.goods_attr  = #{entity.goodsAttr}]]>
+			</if>
+			<if test="entity.goodsType != null  and entity.goodsType !=''">
+				<![CDATA[ and wms_goods_.goods_type  = #{entity.goodsType}]]>
+			</if>
+			<if test="entity.unit != null  and entity.unit !=''">
+				<![CDATA[ and wms_goods_.unit  = #{entity.unit}]]>
+			</if>
+			<if test="entity.hasBoxCode != null  and entity.hasBoxCode !=''">
+				<![CDATA[ and wms_goods_.has_box_code  = #{entity.hasBoxCode}]]>
+			</if>
+			<if test="entity.layerQuantity != null  and entity.layerQuantity !=''">
+				<![CDATA[ and wms_goods_.layer_quantity  = #{entity.layerQuantity}]]>
+			</if>
+			<if test="entity.boxLength != null  and entity.boxLength !=''">
+				<![CDATA[ and wms_goods_.box_length  = #{entity.boxLength}]]>
+			</if>
+			<if test="entity.boxWidth != null  and entity.boxWidth !=''">
+				<![CDATA[ and wms_goods_.box_width  = #{entity.boxWidth}]]>
+			</if>
+			<if test="entity.boxHeight != null  and entity.boxHeight !=''">
+				<![CDATA[ and wms_goods_.box_height  = #{entity.boxHeight}]]>
+			</if>
+			<if test="entity.qualityGuaranteeDays != null  and entity.qualityGuaranteeDays !=''">
+				<![CDATA[ and wms_goods_.quality_guarantee_days  = #{entity.qualityGuaranteeDays}]]>
+			</if>
+			<if test="entity.splitUnit != null  and entity.splitUnit !=''">
+				<![CDATA[ and wms_goods_.split_unit  = #{entity.splitUnit}]]>
+			</if>
+			<if test="entity.splitCount != null  and entity.splitCount !=''">
+				<![CDATA[ and wms_goods_.split_count  = #{entity.splitCount}]]>
+			</if>
+			<if test="entity.grossWeight != null  and entity.grossWeight !=''">
+				<![CDATA[ and wms_goods_.gross_weight  = #{entity.grossWeight}]]>
+			</if>
+			<if test="entity.userDefined1 != null  and entity.userDefined1 !=''">
+				<![CDATA[ and wms_goods_.user_defined1  = #{entity.userDefined1}]]>
+			</if>
+			<if test="entity.userDefined2 != null  and entity.userDefined2 !=''">
+				<![CDATA[ and wms_goods_.user_defined2  = #{entity.userDefined2}]]>
+			</if>
+			<if test="entity.userDefined3 != null  and entity.userDefined3 !=''">
+				<![CDATA[ and wms_goods_.user_defined3  = #{entity.userDefined3}]]>
+			</if>
+			<if test="entity.userDefined4 != null  and entity.userDefined4 !=''">
+				<![CDATA[ and wms_goods_.user_defined4  = #{entity.userDefined4}]]>
+			</if>
+			<if test="entity.userDefined5 != null  and entity.userDefined5 !=''">
+				<![CDATA[ and wms_goods_.user_defined5  = #{entity.userDefined5}]]>
+			</if>
+			<if test="entity.createBy != null  and entity.createBy !=''">
+				<![CDATA[ and wms_goods_.create_by  = #{entity.createBy}]]>
+			</if>
+			<if test="entity.gmtCreate != null  and entity.gmtCreate !=''">
+				<![CDATA[ and wms_goods_.gmt_create  = #{entity.gmtCreate}]]>
+			</if>
+			<if test="entity.lastModifiedBy != null  and entity.lastModifiedBy !=''">
+				<![CDATA[ and wms_goods_.last_modified_by  = #{entity.lastModifiedBy}]]>
+			</if>
+			<if test="entity.gmtModified != null  ">
+				<![CDATA[ and wms_goods_.gmt_modified  = #{entity.gmtModified}]]>
+			</if>
+			<if test="entity.activeFlag != null  and entity.activeFlag !=''">
+				<![CDATA[ and wms_goods_.active_flag  = #{entity.activeFlag}]]>
+			</if>
+		</if>
+	</sql>
+	
+	<!-- =========================================================== -->
+    <!-- DAO方法中的基本增删改查方法                                                                                                                                                           -->
+    <!-- =========================================================== -->
+   <!-- 根据id查询 -->
+	<select id="queryById" resultMap="wmsGoodsMap" parameterType="java.lang.String">
+		select
+		<include refid="selectAllColumns" />
+		<![CDATA[
+		where wms_goods_.goods_id = #{id}
+		]]>
+	</select>
+	<select id="queryByCode" resultMap="wmsGoodsMap" parameterType="java.lang.String">
+		select
+		<include refid="selectAllColumns" />
+		<![CDATA[
+		where goods_code = #{goodsCode} and active_flag = '1'
+		]]>
+	</select>
+	
+	<!-- 分页查询 -->
+	<select id="queryList" resultMap="wmsGoodsMap" >
+		select
+		<if test="page!=null">
+			<include refid="pagination_tail" />
+		</if>
+		<include refid="selectAllColumns"/>
+		<include refid="where_fragement" />
+		order by goods_code
+
+	</select>
+	
+	<select id="queryCount" resultType="long">
+		<include refid="count_Tail" />
+		wms_goods wms_goods_
+		<include refid="where_fragement" />
+	</select>
+	
+	<!-- 插入记录 -->
+	<insert id="create" parameterType="com.penghaisoft.wms.basicmanagement.model.entity.WmsGoods">
+		<![CDATA[
+		insert into wms_goods (
+		    	 goods_id
+		    	 ,owner
+		    	 ,owner_name
+		    	 ,goods_name
+		    	 ,goods_desc
+		    	 ,goods_code
+		    	 ,goods_attr
+		    	 ,goods_type
+		    	 ,unit
+		    	 ,has_box_code
+		    	 ,layer_quantity
+		    	 ,box_length
+		    	 ,box_width
+		    	 ,box_height
+		    	 ,quality_guarantee_days
+		    	 ,split_unit
+		    	 ,split_count
+		    	 ,gross_weight
+		    	 ,user_defined1
+		    	 ,user_defined2
+		    	 ,user_defined3
+		    	 ,user_defined4
+		    	 ,user_defined5
+		    	 ,create_by
+		    	 ,gmt_create
+		    	 ,last_modified_by
+		    	 ,gmt_modified
+		    	 ,active_flag
+		   )values(
+		    	#{goodsId}
+		    	,#{owner}
+		    	,#{ownerName}
+		    	,#{goodsName}
+		    	,#{goodsDesc}
+		    	,#{goodsCode}
+		    	,#{goodsAttr}
+		    	,#{goodsType}
+		    	,#{unit}
+		    	,#{hasBoxCode}
+		    	,#{layerQuantity}
+		    	,#{boxLength}
+		    	,#{boxWidth}
+		    	,#{boxHeight}
+		    	,#{qualityGuaranteeDays}
+		    	,#{splitUnit}
+		    	,#{splitCount}
+		    	,#{grossWeight}
+		    	,#{userDefined1}
+		    	,#{userDefined2}
+		    	,#{userDefined3}
+		    	,#{userDefined4}
+		    	,#{userDefined5}
+		    	,#{createBy}
+		    	,#{gmtCreate}
+		    	,#{lastModifiedBy}
+		    	,#{gmtModified}
+		    	,#{activeFlag}
+		   )
+	    ]]>	
+	</insert>
+	
+	<!-- 批量插入记录 -->
+	<insert id="batchInsert" parameterType="java.util.List">
+		insert into wms_goods (
+		    	 goods_id
+		    	 ,owner
+		    	 ,owner_name
+		    	 ,goods_name
+		    	 ,goods_desc
+		    	 ,goods_code
+		    	 ,goods_attr
+		    	 ,goods_type
+		    	 ,unit
+		    	 ,has_box_code
+		    	 ,layer_quantity
+		    	 ,box_length
+		    	 ,box_width
+		    	 ,box_height
+		    	 ,quality_guarantee_days
+		    	 ,split_unit
+		    	 ,split_count
+		    	 ,gross_weight
+		    	 ,user_defined1
+		    	 ,user_defined2
+		    	 ,user_defined3
+		    	 ,user_defined4
+		    	 ,user_defined5
+		    	 ,create_by
+		    	 ,gmt_create
+		    	 ,last_modified_by
+		    	 ,gmt_modified
+		    	 ,active_flag
+		   )
+		   values
+		   <foreach collection="list" item="item" index="index" separator="," >
+		   (
+		    	#{item.goodsId}
+		    	,#{item.owner}
+		    	,#{item.ownerName}
+		    	,#{item.goodsName}
+		    	,#{item.goodsDesc}
+		    	,#{item.goodsCode}
+		    	,#{item.goodsAttr}
+		    	,#{item.goodsType}
+		    	,#{item.unit}
+		    	,#{item.hasBoxCode}
+		    	,#{item.layerQuantity}
+		    	,#{item.boxLength}
+		    	,#{item.boxWidth}
+		    	,#{item.boxHeight}
+		    	,#{item.qualityGuaranteeDays}
+		    	,#{item.splitUnit}
+		    	,#{item.splitCount}
+		    	,#{item.grossWeight}
+		    	,#{item.userDefined1}
+		    	,#{item.userDefined2}
+		    	,#{item.userDefined3}
+		    	,#{item.userDefined4}
+		    	,#{item.userDefined5}
+		    	,#{item.createBy}
+		    	,#{item.gmtCreate}
+		    	,#{item.lastModifiedBy}
+		    	,#{item.gmtModified}
+		    	,#{item.activeFlag}
+		   )
+		   </foreach>	
+	</insert>
+	
+	<!-- 根据id，修改记录 -->
+	<update id="update" parameterType="com.penghaisoft.wms.basicmanagement.model.entity.WmsGoods">
+		<![CDATA[
+		update wms_goods set
+   			
+   			owner = #{owner}
+   			,owner_name = #{ownerName}
+   			,goods_name = #{goodsName}
+   			,goods_desc = #{goodsDesc}
+   			,goods_code = #{goodsCode}
+   			,goods_attr = #{goodsAttr}
+   			,goods_type = #{goodsType}
+   			,unit = #{unit}
+   			,has_box_code = #{hasBoxCode}
+   			,layer_quantity = #{layerQuantity}
+   			,box_length = #{boxLength}
+   			,box_width = #{boxWidth}
+   			,box_height = #{boxHeight}
+   			,quality_guarantee_days = #{qualityGuaranteeDays}
+   			,split_unit = #{splitUnit}
+   			,split_count = #{splitCount}
+   			,gross_weight = #{grossWeight}
+   			,user_defined1 = #{userDefined1}
+   			,user_defined2 = #{userDefined2}
+   			,user_defined3 = #{userDefined3}
+   			,user_defined4 = #{userDefined4}
+   			,user_defined5 = #{userDefined5}
+   			,create_by = #{createBy}
+   			,gmt_create = #{gmtCreate}
+   			,last_modified_by = #{lastModifiedBy}
+   			,gmt_modified = #{gmtModified}
+   			,active_flag = #{activeFlag}
+		 where goods_id = #{goodsId}
+		]]>
+	</update>
+	
+	<!--  -->
+	<update id="updateBySelect" parameterType="com.penghaisoft.wms.basicmanagement.model.entity.WmsGoods">
+		update wms_goods <set>
+		<if test="entity!=null">
+				<if test="entity.goodsId != null  and entity.goodsId !=''">
+					
+				</if>
+				<if test="entity.owner != null  and entity.owner !=''">
+					<![CDATA[ owner = #{entity.owner}, ]]>
+				</if>
+				<if test="entity.ownerName != null  and entity.ownerName !=''">
+					<![CDATA[ owner_name = #{entity.ownerName}, ]]>
+				</if>
+				<if test="entity.goodsName != null  and entity.goodsName !=''">
+					<![CDATA[ goods_name = #{entity.goodsName}, ]]>
+				</if>
+				<if test="entity.goodsDesc != null  and entity.goodsDesc !=''">
+					<![CDATA[ goods_desc = #{entity.goodsDesc}, ]]>
+				</if>
+				<if test="entity.goodsCode != null  and entity.goodsCode !=''">
+					<![CDATA[ goods_code = #{entity.goodsCode}, ]]>
+				</if>
+				<if test="entity.goodsAttr != null  and entity.goodsAttr !=''">
+					<![CDATA[ goods_attr = #{entity.goodsAttr}, ]]>
+				</if>
+				<if test="entity.goodsType != null  and entity.goodsType !=''">
+					<![CDATA[ goods_type = #{entity.goodsType}, ]]>
+				</if>
+				<if test="entity.unit != null  and entity.unit !=''">
+					<![CDATA[ unit = #{entity.unit}, ]]>
+				</if>
+				<if test="entity.hasBoxCode != null  and entity.hasBoxCode !=''">
+					<![CDATA[ has_box_code = #{entity.hasBoxCode}, ]]>
+				</if>
+				<if test="entity.layerQuantity != null  and entity.layerQuantity !=''">
+					<![CDATA[ layer_quantity = #{entity.layerQuantity}, ]]>
+				</if>
+				<if test="entity.boxLength != null  and entity.boxLength !=''">
+					<![CDATA[ box_length = #{entity.boxLength}, ]]>
+				</if>
+				<if test="entity.boxWidth != null  and entity.boxWidth !=''">
+					<![CDATA[ box_width = #{entity.boxWidth}, ]]>
+				</if>
+				<if test="entity.boxHeight != null  and entity.boxHeight !=''">
+					<![CDATA[ box_height = #{entity.boxHeight}, ]]>
+				</if>
+				<if test="entity.qualityGuaranteeDays != null  and entity.qualityGuaranteeDays !=''">
+					<![CDATA[ quality_guarantee_days = #{entity.qualityGuaranteeDays}, ]]>
+				</if>
+				<if test="entity.splitUnit != null  and entity.splitUnit !=''">
+					<![CDATA[ split_unit = #{entity.splitUnit}, ]]>
+				</if>
+				<if test="entity.splitCount != null  and entity.splitCount !=''">
+					<![CDATA[ split_count = #{entity.splitCount}, ]]>
+				</if>
+				<if test="entity.grossWeight != null  and entity.grossWeight !=''">
+					<![CDATA[ gross_weight = #{entity.grossWeight}, ]]>
+				</if>
+				<if test="entity.userDefined1 != null  and entity.userDefined1 !=''">
+					<![CDATA[ user_defined1 = #{entity.userDefined1}, ]]>
+				</if>
+				<if test="entity.userDefined2 != null  and entity.userDefined2 !=''">
+					<![CDATA[ user_defined2 = #{entity.userDefined2}, ]]>
+				</if>
+				<if test="entity.userDefined3 != null  and entity.userDefined3 !=''">
+					<![CDATA[ user_defined3 = #{entity.userDefined3}, ]]>
+				</if>
+				<if test="entity.userDefined4 != null  and entity.userDefined4 !=''">
+					<![CDATA[ user_defined4 = #{entity.userDefined4}, ]]>
+				</if>
+				<if test="entity.userDefined5 != null  and entity.userDefined5 !=''">
+					<![CDATA[ user_defined5 = #{entity.userDefined5}, ]]>
+				</if>
+				<if test="entity.createBy != null  and entity.createBy !=''">
+					<![CDATA[ create_by = #{entity.createBy}, ]]>
+				</if>
+				<if test="entity.gmtCreate != null  and entity.gmtCreate !=''">
+					<![CDATA[ gmt_create = #{entity.gmtCreate}, ]]>
+				</if>
+				<if test="entity.lastModifiedBy != null  and entity.lastModifiedBy !=''">
+					<![CDATA[ last_modified_by = #{entity.lastModifiedBy}, ]]>
+				</if>
+				<if test="entity.gmtModified != null  ">
+					<![CDATA[ gmt_modified = #{entity.gmtModified}, ]]>
+				</if>
+				<if test="entity.activeFlag != null  and entity.activeFlag !=''">
+					<![CDATA[ active_flag = #{entity.activeFlag}, ]]>
+				</if>
+		</if>
+		</set>
+		 where goods_id = #{entity.goodsId}
+	</update>
+
+	   <!-- 逻辑删除,根据主键设置active_flag ='0' -->
+	  <update id="delete" parameterType="com.penghaisoft.wms.basicmanagement.model.entity.WmsGoods">
+	    UPDATE wms_goods
+	    SET active_flag = '0'
+	    ,last_modified_by = #{entity.lastModifiedBy}
+	    ,gmt_modified = #{entity.gmtModified}
+	     where goods_id = #{entity.goodsId}
+	  </update>
+	  
+	  <update id="batchDelete" parameterType="com.penghaisoft.wms.basicmanagement.model.entity.WmsGoods">
+	    DELETE FROM wms_goods
+	    where goods_id in 
+	    <foreach collection="entity.goodsIdList" index="index" item="item" open="(" separator="," close=")">
+	      #{item}
+	    </foreach>
+	  </update>
+
+	<!-- 任意字段全匹配 -->
+	<select id="queryByAny" resultMap="wmsGoodsMap" >
+		select
+		<include refid="selectAllColumns"/>
+		<include refid="where_any" />
+	</select>
+	<update id="deleteWmsGoods" parameterType="com.penghaisoft.wms.basicmanagement.model.entity.WmsGoods">
+		DELETE FROM wms_goods
+		where goods_id = #{entity.goodsId}
+	</update>
+
+	<select id="getGoodsCodeAllBatchNo" resultMap="wmsGoodsMap" >
+		SELECT
+			t.goods_code,
+			t.goods_name,
+			s.batch_no
+		FROM
+			wms_goods t
+		LEFT JOIN wms_pallet s ON t.goods_code = s.goods_code
+		AND s.active_flag = '1'
+		WHERE
+			t.active_flag = '1'
+		GROUP BY
+			t.goods_code,
+			t.goods_name,
+			s.batch_no
+	</select>
+	<!---根据商品编码分组，排重，获取商品编码，商品名称，批次号-->
+	<select id="getHBGoodsCodeAllBatchNo" resultMap="wmsGoodsMap" >
+		SELECT
+			t.goods_code,
+			t.goods_name
+		FROM
+			wms_goods t
+		LEFT JOIN wms_pallet s ON t.goods_code = s.goods_code
+		AND s.active_flag = '1'
+		WHERE
+			t.active_flag = '1'
+		GROUP BY
+			t.goods_code,
+			t.goods_name
+	</select>
+	<!-- - 根据商品编码，获取批次号-->
+	<select id="getHBBatchNo" resultMap="wmsGoodsMap" >
+		SELECT
+			s.batch_no
+		FROM
+			wms_pallet s
+		LEFT JOIN 	wms_goods t
+		ON t.goods_code = s.goods_code
+		AND s.active_flag = '1'
+		WHERE
+			t.active_flag = '1'
+		and
+			t.goods_code=#{entity.goodsCode}
+		GROUP BY
+			s.batch_no
+	</select>
+
+	<select id="queryBatch" resultMap="wmsGoodsMap">
+		select
+			wms_goods_.goods_id
+			 ,wms_goods_.owner
+			 ,wms_goods_.owner_name
+			 ,wms_goods_.goods_name
+			 ,wms_goods_.goods_desc
+			 ,wms_goods_.goods_code
+			 ,wms_goods_.goods_attr
+			 ,wms_goods_.goods_type
+			 ,wms_goods_.unit
+			 ,wms_goods_.has_box_code
+			 ,wms_goods_.layer_quantity
+			 ,wms_goods_.box_length
+			 ,wms_goods_.box_width
+			 ,wms_goods_.box_height
+			 ,wms_goods_.quality_guarantee_days
+			 ,wms_goods_.split_unit
+			 ,wms_goods_.split_count
+			 ,wms_goods_.gross_weight
+			 ,wms_goods_.user_defined1
+			 ,wms_goods_.user_defined2
+			 ,wms_goods_.user_defined3
+			 ,wms_goods_.user_defined4
+			 ,wms_goods_.user_defined5
+			 ,wms_goods_.create_by
+			 ,wms_goods_.gmt_create
+			 ,wms_goods_.last_modified_by
+			 ,wms_goods_.gmt_modified
+			 ,wms_goods_.active_flag
+		FROM
+			wms_goods  wms_goods_
+		where wms_goods_.goods_code in
+		<foreach collection="dataList" item="entity" open="(" separator=","
+				 close=")">
+			#{entity.goodsCode}
+		</foreach>
+	</select>
+</mapper>

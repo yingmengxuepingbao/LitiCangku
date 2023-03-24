@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>成品收货单据</title>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<link rel="stylesheet" href="../../css/bootstrap.css" type="text/css">
+	<link rel="stylesheet" href="../../css/zdialog.css">
+	<link rel="stylesheet" href="../../css/jedate.css" />
+	<link rel="stylesheet" href="../../css/font-awesome.min.css">
+	<link rel="stylesheet" href="../../css/layout.css" />
+	<link rel="stylesheet" href="css/order.css" />
+	<style>
+		.modal-container {
+			position: relative;
+			top: -100px;
+		}
+		.search-title{border-bottom:none;}
+		.hidden-search-type:after{display:block;clear:both;content:"";visibility:hidden;height:0}
+
+		.bt-and-search .btn-lists .btn{margin-right: 10px}
+		.bt-and-search .btn-lists .btn-add{
+			background: #1DBBF4 ;
+			color:#fff;
+			border:1px solid #1DBBF4;
+		}
+		/*按钮列表和搜索按钮在一行*/
+		.bt-and-search{
+			position: relative;
+			border-bottom: 1px solid #ECF0F1;
+			overflow: hidden;
+		}
+		.bt-and-search .btn-lists {border-bottom:none;}
+		.bt-and-search .hide-search {
+			width: 200px;
+		}
+		.bt-and-search .hide-search span{
+			color:  rgba(29,187,244,.8);
+			font-weight:bold;
+			display: inline-block;
+			padding:16px 0;
+		}
+		.bt-and-search .hide-search span .fa{color: rgba(29,187,244,1);
+			font-size:16px;}
+		.bt-and-search .hide-search span:hover{cursor:pointer;color: rgba(29,187,244,1)}
+		.bt-and-search .hide-search button{
+			background: rgba(29,187,244,.9);
+			color: #fff;
+			display: inline-block;
+			border: 1px solid #fff;
+			margin-top: 10px
+		}
+		.bt-and-search .hide-search button:hover{
+			background: rgba(29,187,244,1);
+			color: #fff;
+			border: 1px solid #1DBBF4;
+		}
+		/*隐藏的搜索条件*/
+		.hidden-search-type{
+			position: relative;
+			display: block;
+		}
+		.hidden-search-type .form-control,
+		.search-group .form-control{
+			width: 180px;
+			float: right;
+			margin-left: 10px
+		}
+		.hidden-search-type span{
+			float: right;
+			display: inline-block;
+			padding: 5px 2px 5px 10px;
+		}
+		.wrap-device-pop{margin-left: 15px;}
+		.a-orderNum:hover{cursor: pointer}
+		#deviceListTBPop tr td{
+			padding: 10px 0;
+			border-top:1px solid #ECF0F1;
+		}
+		.ul-top-text{overflow: hidden}
+		.ul-top-text li{float: left;margin-right: 15px}
+		.deviceList-wrap{height: 500px;overflow-y: auto}
+		.totalOrderNumP{text-align: right}
+		.left-group,.left-groupL{
+			width:252px;
+			float: left;
+		}
+		.left-groupL{
+			width: 466px;
+		}
+		.search-group{
+			float: right;
+			height: 35px;
+			width: 600px;
+			position: relative;
+		}
+		.search-group:after{
+			clear: both;
+			content: '';
+			height: 0;
+		}
+		.left-group span,
+		.left-groupL span{
+			display: inline-block;
+			width: 75px;
+			text-align: right;
+		}
+		.left-group input,
+		.left-group select,
+		.left-groupL input,
+		.left-groupL select{
+			width: 160px;
+		}
+		.left-groupL i{
+			width: 20px;
+			text-align: center;
+			display: inline-block;
+			font-style: normal;
+		}
+	</style>
+</head>
+<body>
+<div class="wrap" style="min-width: 1025px">
+	<ol class="breadcrumb">
+		<li><a href="#" class="link">成品收货管理</a></li>
+		<li class="active">成品收货单据</li>
+	</ol>
+	<div class="content" >
+		<div class="form-inline search-title">
+			<!--标题-->
+			<div class="title fl">单据列表</div>
+			<!--筛选条件-->
+			<div class="search-group">
+                <select class="form-control" id="taskStatusSelect">&nbsp;
+                    <option value="">单据状态</option>
+                    <option value="1">创建</option>
+                    <option value="2">分配</option>
+                    <option value="3">收货中</option>
+                    <option value="4">完成</option>
+                </select>
+				<input type="text" id="goodsCodeSearch" class="form-control" placeholder="商品编号"/>&nbsp;
+
+				<input type="text" id="orderNoSearch" class="form-control" placeholder="收货单号"/>
+			</div>
+		</div>
+		<div class="hidden-search-type" style="display: block;">
+			<div style="overflow: hidden">
+
+				<select id="orderTypeSearch" class="form-control">
+					<option value="" selected>单据类型</option>
+				</select>
+				<input type="text" id="installDate_end"  style="background-color: #fff; " class="form-control datainp wicon"  placeholder="选择结束日期" readonly="readonly"/>
+				<input type="text" id="installDate_begin"  style="background-color: #fff; " class="form-control datainp wicon"  placeholder="选择开始日期" readonly="readonly"/>
+			</div>
+		</div>
+		<div class="bt-and-search">
+			<div class="btn-lists lf">
+<!--				<button id="startTaskBtn" type="button" class="btn btn-default lf">启动 </button>-->
+<!--				<button id="endTaskBtn" type="button" class="btn btn-default  lf">停止 </button>-->
+				<button id="addTaskBtn" type="button" class="btn btn-default btn-add lf">新增 <i class="fa fa-plus"></i> </button>
+				<button type="button" class="btn btn-default btn-add taskStartList">任务明细 <i class="fa fa-circle-o"></i></button>
+			</div>
+			<div class="hide-search rt" id="more-search-condition">
+				<span>更多搜索 <i class="fa fa-angle-down"></i></span>
+				<button id="resetSearchConditions" type="button" class="btn btn-default rt">重置</button>
+				<button id="topSearchInfoList" type="button" class="btn btn-default rt ">搜索</button>
+			</div>
+		</div>
+		<table class=" table-hover table" id="taskLists">
+			<thead>
+			<tr>
+				<th style="width: 5%">
+					<div class="checkbox-custom checkbox-default">
+						<input type="checkbox" id="check-all">
+						<label></label>
+					</div>
+				</th>
+				<th data-sort="orderNo" >收货单号</th>
+				<th data-sort="orderItem" >行项目</th>
+				<th data-sort="goodsCode" >商品编码</th>
+				<th data-sort="goodsName" >商品名称</th>
+				<th data-sort="orderType" >单据类型</th>
+				<th data-sort="orderStatus" >单据状态</th>
+
+				<th data-sort="planAmount" >计划数量</th>
+				<th data-sort="realAmount" >实际数量</th>
+				<th data-sort="remark" >备注</th>
+				<th data-sort="createBy" >创建人员</th>
+				<th data-sort="gmtCreate">创建时间</th>
+<!--				<th data-sort="createTime" style="width: 10%">创建时间</th>-->
+				<th style="width: 10%">操作</th>
+			</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+		<div class="pagination-con">
+			<p class="listNumber rt">
+				<button class="btn btn-default btn-xs previousPage"><i class="fa fa-caret-left fa-lg"></i></button>
+				<span class="currentPage">1</span>/<span class="pageNumber">1</span>
+				<button class="btn btn-default btn-xs nextPage"><i class="fa fa-caret-right fa-lg"></i></button>
+				<input class="currentPageBtn" value="1" type="text"  onkeyup="this.value=this.value.replace(/[^0-9]+/g, '');"/>
+				<button type="button" id="pageJump"  data-loading-text="请求数据中..." class="btn btn-default pageJump" autocomplete="off">跳转</button>
+				每页<span class="pageOneNumber">10</span>条，共<span class="dataNumber">30</span>条记录
+			</p>
+		</div>
+	</div>
+</div>
+<div class="modal" id="formModel" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document" style="width: 700px;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel"></h4>
+			</div>
+			<div class="modal-body">
+				<form class="form-horizontal" id="formInfo">
+					<div class="form-group">
+						<input type="hidden" id="type">
+						<input type="hidden" id="orderInId">
+					</div>
+					<div class="form-group">
+						<label class="control-label col-sm-3"><i class="fa fa-asterisk"></i>收货单号:</label>
+						<div class="col-sm-9">
+							<input id="orderNo" type="text"  class="form-control" placeholder="请输入收货单号"/>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="control-label col-sm-3"><i class="fa fa-asterisk"></i>商品编码:</label>
+						<div class="col-sm-9">
+							<select id="goodsCode" class="form-control" placeholder=" 请选择商品">
+								<option value="">请选择商品</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-sm-3"><i class="fa fa-asterisk"></i>计划数量:</label>
+						<div class="col-sm-9">
+							<div class="row">
+								<div class="col-sm-4">
+									<input id="planAmount" type="number" value="1" min="1" class="form-control" placeholder="" onchange="checkStockNumber(this)" />
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+				<button type="button" id="saveButton" class="btn" data-dismiss="modal">保存</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!--设备列表 点击数量弹窗-->
+<!--<div class="cusPopover modal deviceType-modal" id="deviceNumberPop"-->
+<!--	 style="display: none;" >-->
+<!--	<div class="modal-container" style="width: 950px; height: 680px; overflow: hidden" >-->
+<!--		<div class="cusPopover-title" style="margin-bottom: 0;">-->
+<!--			<i id="deviceNumber-close" class="fa fa-close fa-lg popClose" title="关闭"></i>-->
+<!--			<span id="orderPopTitle"></span>-->
+<!--		</div>-->
+<!--		<div class="pop-body">-->
+<!--			<div class="pop-cont">-->
+<!--				<ul class="ul-top-text">-->
+<!--					<li>单据编号：<span id="orderIdLi"></span></li>-->
+<!--					<li>单据名称：<span id="orderTypeLi"></span></li>-->
+<!--					<li>单据状态：<span id="orderStatusLi"></span></li>-->
+<!--				</ul>-->
+<!--				<ul class="ul-top-text">-->
+<!--					<li>上次执行时间：<span id="lastExecutionTime"></span></li>-->
+<!--					<li>下次执行时间：<span id="nextExecutionTime"></span></li>-->
+<!--					<li>执行次数：<span id="planAmount"></span></li>-->
+<!--				</ul>-->
+<!--				<table class="table" style="margin-bottom: 0">-->
+<!--					<tr>-->
+<!--						<th style="width: 15%">商品名称</th>-->
+<!--						<th style="width: 15%">工单号</th>-->
+<!--						<th style="width: 15%">工单状态</th>-->
+<!--						<th style="width: 15%">维护人员</th>-->
+<!--						<th style="width: 15%">创建时间</th>-->
+<!--					</tr>-->
+<!--				</table>-->
+<!--				<div class="deviceList-wrap">-->
+<!--					<table class="table" id="deviceListTBPop">-->
+
+<!--					</table>-->
+<!--				</div>-->
+
+<!--				<p class="totalOrderNumP">共 <span></span> 条工单</p>-->
+<!--			</div>-->
+<!--		</div>-->
+<!--	</div>-->
+<!--</div>-->
+<!--单据详情-->
+<div class="cusPopover modal deviceType-modal" id="taskDetailPop"
+	 style="display: none;" >
+	<div class="modal-container" style="width: 950px; height: 680px; overflow: hidden" >
+		<div class="cusPopover-title" style="margin-bottom: 0;">
+			<i id="taskDetail-close" class="fa fa-close fa-lg popClose" title="关闭"></i>
+			<span>单据详情</span>
+		</div>
+		<div class="pop-body" style="height: 610px;overflow-y: auto">
+			<div class="pop-cont-title">
+				基本信息
+			</div>
+			<div class="pop-cont-box">
+				<div class="line-box">
+					<div class="lf-text"><i>单据编号：</i></div>
+					<div class="rt-text">
+						<span id="orderNoSpan"></span>
+					</div>
+				</div>
+				<div class="line-box">
+					<div class="lf-text"><i>单据名称：</i></div>
+					<div class="rt-text">
+						<span id="taskNameSpan"></span>
+					</div>
+				</div>
+				<div class="line-box">
+					<div class="lf-text"><i>单据描述：</i></div>
+					<div class="rt-text">
+						<span id="descriptionSpan"></span>
+					</div>
+				</div>
+				<div class="line-box">
+					<div class="lf-text"><i>单据状态：</i></div>
+					<div class="rt-text">
+						<span id="statusNameSpan"></span>
+					</div>
+				</div>
+				<div class="line-box">
+					<div class="lf-text"><i>创建人员：</i></div>
+					<div class="rt-text">
+						<span id="createNameSpan"></span>
+					</div>
+				</div>
+				<div class="line-box">
+					<div class="lf-text"><i>工单数量：</i></div>
+					<div class="rt-text">
+						<span id="orderNumSpan"></span>
+					</div>
+				</div>
+				<div class="line-box">
+					<div class="lf-text"><i>创建时间：</i></div>
+					<div class="rt-text">
+						<span id="createTimeSpan"></span>
+					</div>
+				</div>
+				<div class="line-box">
+					<div class="lf-text"><i>优先级：</i></div>
+					<div class="rt-text">
+						<span id="priorityNameSpan"></span>
+					</div>
+				</div>
+			</div>
+			<div class="pop-cont-box">
+				<div class="line-box">
+					<div class="lf-text"><i>维修方案：</i></div>
+					<div class="rt-text">
+						<span id="planSpan"></span>
+					</div>
+				</div>
+				<div class="line-box">
+					<div class="lf-text"><i>单据开始时间：</i></div>
+					<div class="rt-text">
+						<span id="startTimeSpan"></span>
+					</div>
+				</div>
+				<div class="line-box">
+					<div class="lf-text"><i>单据完成期限单位：</i></div>
+					<div class="rt-text">
+						<span id="timeLimitUnitSpan"></span>
+					</div>
+				</div>
+				<div class="line-box">
+					<div class="lf-text"><i>单据完成期限：</i></div>
+					<div class="rt-text">
+						<span id="timeLimitSpan"></span>
+					</div>
+				</div>
+				<div class="line-box">
+					<div class="lf-text"><i>单据间隔周期单位：</i></div>
+					<div class="rt-text">
+						<span id="intervalUnitSpan"></span>
+					</div>
+				</div>
+				<div class="line-box">
+					<div class="lf-text"><i>单据间隔周期：</i></div>
+					<div class="rt-text">
+						<span id="intervalSpan"></span>
+					</div>
+				</div>
+				<div class="line-box">
+					<div class="lf-text"><i>工单触发提前时间：</i></div>
+					<div class="rt-text">
+						<span id="triggerTimeSpan"></span>
+					</div>
+				</div>
+			</div>
+			<div class="pop-cont-title">
+				设备列表
+			</div>
+			<div class="wrap-device-pop">
+				<table class="table" id="deviceListPop">
+					<thead>
+					<th style="width: 20%">设备编号</th>
+					<th style="width: 20%">商品名称</th>
+					<th style="width: 10%">是否自动审核</th>
+					<th style="width: 20%">审核人员</th>
+					<th style="width: 10%">是否自动派工</th>
+					<th style="width: 20%">收货人员</th>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+
+			<div class="hide-num-img" id="hide-device-tips">
+				<img src="../../images/common/not-num-tip.png">
+				<p>没有设备列表~</p>
+			</div>
+
+			<p class="totalNumP">共 <span class="totalDeviceNum"></span> 台关联设备</p>
+		</div>
+	</div>
+</div>
+
+<!--<script type="text/javascript" src="../../js/jquery-3.3.1.min.js"></script>-->
+<script type="text/javascript" src="../../js/jquery.min.js" ></script>
+<script type="text/javascript" src="../../js/bootstrap.min.js" ></script>
+<script type="text/javascript" src="../../js/common.js"></script>
+<script type="text/javascript" src="../../js/chosen.jquery.js"></script>
+<script type="text/javascript" src="../../js/jquery.jedate.js"></script>
+<script type="text/javascript" src="../../js/zdialog.js"></script>
+<script type="text/javascript" src="js/orderCPInTask.js"></script>
+</body>
+</html>

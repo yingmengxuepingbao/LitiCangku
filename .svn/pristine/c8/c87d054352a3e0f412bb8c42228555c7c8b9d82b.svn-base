@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.penghaisoft.wms.basicmanagement.model.dao.BasePdaVersionMapper">
+	
+	<!-- =========================================================== -->
+    <!-- 定义resultMap                                                                                                                                                                             -->
+    <!-- =========================================================== -->
+	<resultMap id="basePdaVersionMap" type="com.penghaisoft.wms.basicmanagement.model.entity.BasePdaVersion">
+	    <result property="basePdaVersionId" column="base_pda_version_id"/>
+	    <result property="code" column="code"/>
+	    <result property="ip" column="ip"/>
+	    <result property="port" column="port"/>
+	    <result property="appName" column="app_name"/>
+	    <result property="url" column="url"/>
+	    <result property="version" column="version"/>
+	    <result property="wgtVersion" column="wgt_version"/>
+	    <result property="userDefined1" column="user_defined1"/>
+	    <result property="userDefined2" column="user_defined2"/>
+	    <result property="userDefined3" column="user_defined3"/>
+	    <result property="createBy" column="create_by"/>
+	    <result property="gmtCreate" column="gmt_create"/>
+	    <result property="lastModifiedBy" column="last_modified_by"/>
+	    <result property="gmtModified" column="gmt_modified"/>
+	    <result property="activeFlag" column="active_flag"/>
+	    <result property="remark" column="remark"/>
+	</resultMap>
+	
+	<!-- =========================================================== -->
+    <!-- 一些公共变量设置                                                                                                                                                                             -->
+    <!-- =========================================================== -->
+	<!-- mysql 分页 -->
+	<sql id="pagination_tail">
+		top ((#{page.pageOffset} +1)* #{page.rows})
+	</sql>
+	<!-- mysql 查询总数 -->
+	<sql id="count_Tail">
+		select count(1) from 
+	</sql>
+	
+	<sql id="selectAllColumns">
+		<![CDATA[
+ 			base_pda_version_id
+ 			,code
+ 			,ip
+ 			,port
+ 			,app_name
+ 			,url
+ 			,version
+ 			,wgt_version
+ 			,user_defined1
+ 			,user_defined2
+ 			,user_defined3
+ 			,create_by
+ 			,gmt_create
+ 			,last_modified_by
+ 			,gmt_modified
+ 			,active_flag
+ 			,remark
+		FROM 
+		base_pda_version base_pda_version_
+		]]>
+	</sql>
+	
+	<sql id="where_fragement">
+		where 1=1
+		<if test="entity!=null">
+			<if test="entity.basePdaVersionId != null and entity.basePdaVersionId !=''">
+				<![CDATA[ and base_pda_version_.base_pda_version_id LIKE CONCAT('%',#{entity.basePdaVersionId},'%')]]>
+			</if>
+			<if test="entity.code != null and entity.code !=''">
+				<![CDATA[ and base_pda_version_.code LIKE CONCAT('%',#{entity.code},'%')]]>
+			</if>
+			<if test="entity.ip != null and entity.ip !=''">
+				<![CDATA[ and base_pda_version_.ip LIKE CONCAT('%',#{entity.ip},'%')]]>
+			</if>
+			<if test="entity.port != null and entity.port !=''">
+				<![CDATA[ and base_pda_version_.port LIKE CONCAT('%',#{entity.port},'%')]]>
+			</if>
+			<if test="entity.appName != null and entity.appName !=''">
+				<![CDATA[ and base_pda_version_.app_name LIKE CONCAT('%',#{entity.appName},'%')]]>
+			</if>
+			<if test="entity.url != null and entity.url !=''">
+				<![CDATA[ and base_pda_version_.url LIKE CONCAT('%',#{entity.url},'%')]]>
+			</if>
+			<if test="entity.version != null and entity.version !=''">
+				<![CDATA[ and base_pda_version_.version LIKE CONCAT('%',#{entity.version},'%')]]>
+			</if>
+			<if test="entity.wgtVersion != null and entity.wgtVersion !=''">
+				<![CDATA[ and base_pda_version_.wgt_version LIKE CONCAT('%',#{entity.wgtVersion},'%')]]>
+			</if>
+			<if test="entity.userDefined1 != null and entity.userDefined1 !=''">
+				<![CDATA[ and base_pda_version_.user_defined1 LIKE CONCAT('%',#{entity.userDefined1},'%')]]>
+			</if>
+			<if test="entity.userDefined2 != null and entity.userDefined2 !=''">
+				<![CDATA[ and base_pda_version_.user_defined2 LIKE CONCAT('%',#{entity.userDefined2},'%')]]>
+			</if>
+			<if test="entity.userDefined3 != null and entity.userDefined3 !=''">
+				<![CDATA[ and base_pda_version_.user_defined3 LIKE CONCAT('%',#{entity.userDefined3},'%')]]>
+			</if>
+			<if test="entity.createBy != null and entity.createBy !=''">
+				<![CDATA[ and base_pda_version_.create_by LIKE CONCAT('%',#{entity.createBy},'%')]]>
+			</if>
+			<if test="entity.gmtCreate != null">
+				<![CDATA[ and base_pda_version_.gmt_create LIKE CONCAT('%',#{entity.gmtCreate},'%')]]>
+			</if>
+			<if test="entity.lastModifiedBy != null and entity.lastModifiedBy !=''">
+				<![CDATA[ and base_pda_version_.last_modified_by LIKE CONCAT('%',#{entity.lastModifiedBy},'%')]]>
+			</if>
+			<if test="entity.gmtModified != null">
+				<![CDATA[ and base_pda_version_.gmt_modified LIKE CONCAT('%',#{entity.gmtModified},'%')]]>
+			</if>
+			<if test="entity.activeFlag != null and entity.activeFlag !=''">
+				<![CDATA[ and base_pda_version_.active_flag LIKE CONCAT('%',#{entity.activeFlag},'%')]]>
+			</if>
+			<if test="entity.remark != null and entity.remark !=''">
+				<![CDATA[ and base_pda_version_.remark LIKE CONCAT('%',#{entity.remark},'%')]]>
+			</if>
+		</if>
+	</sql>
+	
+	<sql id="where_any">
+		where 1=1
+		<if test="entity!=null">
+			<if test="entity.basePdaVersionId != null and entity.basePdaVersionId !=''">
+				<![CDATA[ and base_pda_version_.base_pda_version_id = #{entity.basePdaVersionId}]]>
+			</if>
+			<if test="entity.code != null and entity.code !=''">
+				<![CDATA[ and base_pda_version_.code = #{entity.code}]]>
+			</if>
+			<if test="entity.ip != null and entity.ip !=''">
+				<![CDATA[ and base_pda_version_.ip = #{entity.ip}]]>
+			</if>
+			<if test="entity.port != null and entity.port !=''">
+				<![CDATA[ and base_pda_version_.port = #{entity.port}]]>
+			</if>
+			<if test="entity.appName != null and entity.appName !=''">
+				<![CDATA[ and base_pda_version_.app_name = #{entity.appName}]]>
+			</if>
+			<if test="entity.url != null and entity.url !=''">
+				<![CDATA[ and base_pda_version_.url = #{entity.url}]]>
+			</if>
+			<if test="entity.version != null and entity.version !=''">
+				<![CDATA[ and base_pda_version_.version = #{entity.version}]]>
+			</if>
+			<if test="entity.wgtVersion != null and entity.wgtVersion !=''">
+				<![CDATA[ and base_pda_version_.wgt_version = #{entity.wgtVersion}]]>
+			</if>
+			<if test="entity.userDefined1 != null and entity.userDefined1 !=''">
+				<![CDATA[ and base_pda_version_.user_defined1 = #{entity.userDefined1}]]>
+			</if>
+			<if test="entity.userDefined2 != null and entity.userDefined2 !=''">
+				<![CDATA[ and base_pda_version_.user_defined2 = #{entity.userDefined2}]]>
+			</if>
+			<if test="entity.userDefined3 != null and entity.userDefined3 !=''">
+				<![CDATA[ and base_pda_version_.user_defined3 = #{entity.userDefined3}]]>
+			</if>
+			<if test="entity.createBy != null and entity.createBy !=''">
+				<![CDATA[ and base_pda_version_.create_by = #{entity.createBy}]]>
+			</if>
+			<if test="entity.gmtCreate != null">
+				<![CDATA[ and base_pda_version_.gmt_create = #{entity.gmtCreate}]]>
+			</if>
+			<if test="entity.lastModifiedBy != null and entity.lastModifiedBy !=''">
+				<![CDATA[ and base_pda_version_.last_modified_by = #{entity.lastModifiedBy}]]>
+			</if>
+			<if test="entity.gmtModified != null">
+				<![CDATA[ and base_pda_version_.gmt_modified = #{entity.gmtModified}]]>
+			</if>
+			<if test="entity.activeFlag != null and entity.activeFlag !=''">
+				<![CDATA[ and base_pda_version_.active_flag = #{entity.activeFlag}]]>
+			</if>
+			<if test="entity.remark != null and entity.remark !=''">
+				<![CDATA[ and base_pda_version_.remark = #{entity.remark}]]>
+			</if>
+		</if>
+	</sql>
+	
+	<!-- =========================================================== -->
+    <!-- DAO方法中的基本增删改查方法                                                                                                                                                           -->
+    <!-- =========================================================== -->
+   <!-- 根据id查询 -->
+	<select id="queryById" resultMap="basePdaVersionMap" parameterType="java.lang.String">
+		select
+		<include refid="selectAllColumns" />
+		<![CDATA[
+		where base_pda_version_.base_pda_version_id = #{id}
+		]]>
+	</select>
+	
+	<!-- 分页查询 -->
+	<select id="queryList" resultMap="basePdaVersionMap" >
+		select
+		<if test="page!=null">
+			<include refid="pagination_tail" />
+		</if>
+		<include refid="selectAllColumns"/>
+		<include refid="where_fragement" />
+
+	</select>
+	
+	<select id="queryCount" resultType="long">
+		<include refid="count_Tail" />
+		base_pda_version base_pda_version_
+		<include refid="where_fragement" />
+	</select>
+	
+	<!-- 插入记录 -->
+	<insert id="create" parameterType="com.penghaisoft.wms.basicmanagement.model.entity.BasePdaVersion">
+		<![CDATA[
+		insert into base_pda_version (
+		    	 base_pda_version_id
+		    	 ,code
+		    	 ,ip
+		    	 ,port
+		    	 ,app_name
+		    	 ,url
+		    	 ,version
+		    	 ,wgt_version
+		    	 ,user_defined1
+		    	 ,user_defined2
+		    	 ,user_defined3
+		    	 ,create_by
+		    	 ,gmt_create
+		    	 ,last_modified_by
+		    	 ,gmt_modified
+		    	 ,active_flag
+		    	 ,remark
+		   )values(
+		    	#{basePdaVersionId}
+		    	,#{code}
+		    	,#{ip}
+		    	,#{port}
+		    	,#{appName}
+		    	,#{url}
+		    	,#{version}
+		    	,#{wgtVersion}
+		    	,#{userDefined1}
+		    	,#{userDefined2}
+		    	,#{userDefined3}
+		    	,#{createBy}
+		    	,#{gmtCreate}
+		    	,#{lastModifiedBy}
+		    	,#{gmtModified}
+		    	,#{activeFlag}
+		    	,#{remark}
+		   )
+	    ]]>	
+	</insert>
+	
+	<!-- 批量插入记录 -->
+	<insert id="batchInsert" parameterType="java.util.List">
+		insert into base_pda_version (
+		    	 base_pda_version_id
+		    	 ,code
+		    	 ,ip
+		    	 ,port
+		    	 ,app_name
+		    	 ,url
+		    	 ,version
+		    	 ,wgt_version
+		    	 ,user_defined1
+		    	 ,user_defined2
+		    	 ,user_defined3
+		    	 ,create_by
+		    	 ,gmt_create
+		    	 ,last_modified_by
+		    	 ,gmt_modified
+		    	 ,active_flag
+		    	 ,remark
+		   )
+		   values
+		   <foreach collection="list" item="item" index="index" separator="," >
+		   (
+		    	#{item.basePdaVersionId}
+		    	,#{item.code}
+		    	,#{item.ip}
+		    	,#{item.port}
+		    	,#{item.appName}
+		    	,#{item.url}
+		    	,#{item.version}
+		    	,#{item.wgtVersion}
+		    	,#{item.userDefined1}
+		    	,#{item.userDefined2}
+		    	,#{item.userDefined3}
+		    	,#{item.createBy}
+		    	,#{item.gmtCreate}
+		    	,#{item.lastModifiedBy}
+		    	,#{item.gmtModified}
+		    	,#{item.activeFlag}
+		    	,#{item.remark}
+		   )
+		   </foreach>	
+	</insert>
+	
+	<!-- 根据id，修改记录 -->
+	<update id="update" parameterType="com.penghaisoft.wms.basicmanagement.model.entity.BasePdaVersion">
+		<![CDATA[
+		update base_pda_version set
+   			
+   			code = #{code}
+   			,ip = #{ip}
+   			,port = #{port}
+   			,app_name = #{appName}
+   			,url = #{url}
+   			,version = #{version}
+   			,wgt_version = #{wgtVersion}
+   			,user_defined1 = #{userDefined1}
+   			,user_defined2 = #{userDefined2}
+   			,user_defined3 = #{userDefined3}
+   			,create_by = #{createBy}
+   			,gmt_create = #{gmtCreate}
+   			,last_modified_by = #{lastModifiedBy}
+   			,gmt_modified = #{gmtModified}
+   			,active_flag = #{activeFlag}
+   			,remark = #{remark}
+		 where base_pda_version_id = #{basePdaVersionId}
+		]]>
+	</update>
+	
+	<!--  -->
+	<update id="updateBySelect" parameterType="com.penghaisoft.wms.basicmanagement.model.entity.BasePdaVersion">
+		update base_pda_version <set>
+		<if test="entity!=null">
+				<if test="entity.basePdaVersionId != null and entity.basePdaVersionId !=''">
+					
+				</if>
+				<if test="entity.code != null and entity.code !=''">
+					<![CDATA[ code = #{entity.code}, ]]>
+				</if>
+				<if test="entity.ip != null and entity.ip !=''">
+					<![CDATA[ ip = #{entity.ip}, ]]>
+				</if>
+				<if test="entity.port != null and entity.port !=''">
+					<![CDATA[ port = #{entity.port}, ]]>
+				</if>
+				<if test="entity.appName != null and entity.appName !=''">
+					<![CDATA[ app_name = #{entity.appName}, ]]>
+				</if>
+				<if test="entity.url != null and entity.url !=''">
+					<![CDATA[ url = #{entity.url}, ]]>
+				</if>
+				<if test="entity.version != null and entity.version !=''">
+					<![CDATA[ version = #{entity.version}, ]]>
+				</if>
+				<if test="entity.wgtVersion != null and entity.wgtVersion !=''">
+					<![CDATA[ wgt_version = #{entity.wgtVersion}, ]]>
+				</if>
+				<if test="entity.userDefined1 != null and entity.userDefined1 !=''">
+					<![CDATA[ user_defined1 = #{entity.userDefined1}, ]]>
+				</if>
+				<if test="entity.userDefined2 != null and entity.userDefined2 !=''">
+					<![CDATA[ user_defined2 = #{entity.userDefined2}, ]]>
+				</if>
+				<if test="entity.userDefined3 != null and entity.userDefined3 !=''">
+					<![CDATA[ user_defined3 = #{entity.userDefined3}, ]]>
+				</if>
+				<if test="entity.createBy != null and entity.createBy !=''">
+					<![CDATA[ create_by = #{entity.createBy}, ]]>
+				</if>
+				<if test="entity.gmtCreate != null">
+					<![CDATA[ gmt_create = #{entity.gmtCreate}, ]]>
+				</if>
+				<if test="entity.lastModifiedBy != null and entity.lastModifiedBy !=''">
+					<![CDATA[ last_modified_by = #{entity.lastModifiedBy}, ]]>
+				</if>
+				<if test="entity.gmtModified != null">
+					<![CDATA[ gmt_modified = #{entity.gmtModified}, ]]>
+				</if>
+				<if test="entity.activeFlag != null and entity.activeFlag !=''">
+					<![CDATA[ active_flag = #{entity.activeFlag}, ]]>
+				</if>
+				<if test="entity.remark != null and entity.remark !=''">
+					<![CDATA[ remark = #{entity.remark}, ]]>
+				</if>
+		</if>
+		</set>
+		 where base_pda_version_id = #{entity.basePdaVersionId}
+	</update>
+
+	   <!-- 逻辑删除,根据主键设置active_flag ='0' -->
+	  <update id="delete" parameterType="com.penghaisoft.wms.basicmanagement.model.entity.BasePdaVersion">
+	    UPDATE base_pda_version
+	    SET active_flag = "0"
+	    ,last_modified_by = #{entity.lastModifiedBy}
+	    ,gmt_modified = #{entity.gmtModified}
+	     where base_pda_version_id = #{entity.basePdaVersionId}
+	  </update>
+	  
+	  <update id="batchDelete" parameterType="com.penghaisoft.wms.basicmanagement.model.entity.BasePdaVersion">
+	    DELETE FROM base_pda_version
+	    where base_pda_version_id in 
+	    <foreach collection="entity.basePdaVersionIdList" index="index" item="item" open="(" separator="," close=")">
+	      #{item}
+	    </foreach>
+	  </update>
+
+	<!-- 任意字段全匹配 -->
+	<select id="queryByAny" resultMap="basePdaVersionMap" >
+		select
+		<include refid="selectAllColumns"/>
+		<include refid="where_any" />
+	</select>
+	
+	<select id="queryByAnyCount" resultType="long">
+		<include refid="count_Tail" />
+		base_pda_version base_pda_version_
+		<include refid="where_any" />
+	</select>
+</mapper>

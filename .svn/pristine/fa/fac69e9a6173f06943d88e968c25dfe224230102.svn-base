@@ -1,0 +1,76 @@
+jobs:
+  pool: 4
+#  wcs-task完成后上传wms任务
+  uploadCompleteToWms:
+    cron: 0/8 * * * * *
+#    agv调度任务
+  agv-dispatch:
+    cron: 1/3 * * * * *
+#    agv调度任务【其它码垛线】
+  agv-other-dispatch:
+    cron: 1/2 * * * * *
+  fourwaycar-dispatch:
+    cron: 2/3 * * * * *
+#    码垛机连接任务
+  palletizer-connect:
+    cron: 0/5 * * * * *
+  open:
+    palletizer: false
+    agv: false
+    agv-other: false
+    conveyor: false
+    fourwaycar: false
+    upload: false
+    #   前期上线的演示
+    early-palletizer: false
+    early-agv: false
+wcs:
+  config:
+    #    是否开启tcp 客户端
+    tcp-client: false
+    tcp-server-ip: 10.10.7.90
+    tcp-server-port: 2000
+    applyfactory: BAOBO
+    ngx-path: http://192.168.0.30/
+
+#    设备列表，IP+端口
+device:
+  modbus: 127.0.0.1,127.0.0.1:503
+  default-port: 502
+
+notice:
+  other-sys-addr:
+    add-user: http://localhost:8090/wms/expose/inner/addUser
+    wms-base-url: http://localhost:8090/wms/
+#    这个是假的
+    agv-base-url: http://localhost:7070/rcs
+    fourwaycar-base-url: http://localhost:7070/fromWms
+#    agv-base-url: http://10.1.1.208:8182/rcs
+
+spring:
+  redis:
+    host: localhost
+    port: 35001
+    password: admin@redis
+    database: 0
+    timeout: 30000ms
+    lettuce:
+      pool:
+        max-active: 10
+        min-idle: 3
+        max-idle: 10
+  #        max-wait: -1
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/qxf_wcs?characterEncoding=utf8&serverTimezone=GMT%2B8
+      username: root
+      password: 123456
+      max-active: 20
+      initial-size: 2
+      max-wait: 60000
+
+#mybatis:
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

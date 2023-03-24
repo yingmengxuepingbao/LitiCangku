@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.penghaisoft.pda.inwarehouse.dao.WmsOrderInMapper">
+	
+	<!-- =========================================================== -->
+    <!-- 定义resultMap                                                                                                                                                                             -->
+    <!-- =========================================================== -->
+	<resultMap id="wmsOrderInMap" type="com.penghaisoft.pda.inwarehouse.model.WmsOrderIn">
+				<result property="orderInId" column="order_in_id"/>
+				<result property="orderNo" column="order_no"/>
+				<result property="orderItem" column="order_item"/>
+				<result property="orderType" column="order_type"/>
+				<result property="orderStatus" column="order_status"/>
+				<result property="goodsName" column="goods_name"/>
+				<result property="goodsCode" column="goods_code"/>
+				<result property="planAmount" column="plan_amount"/>
+				<result property="realAmount" column="real_amount"/>
+				<result property="remark" column="remark"/>
+				<result property="userDefined1" column="user_defined1"/>
+				<result property="userDefined2" column="user_defined2"/>
+				<result property="userDefined3" column="user_defined3"/>
+				<result property="userDefined4" column="user_defined4"/>
+				<result property="userDefined5" column="user_defined5"/>
+				<result property="createBy" column="create_by"/>
+				<result property="gmtCreate" column="gmt_create"/>
+				<result property="lastModifiedBy" column="last_modified_by"/>
+				<result property="gmtModified" column="gmt_modified"/>
+				<result property="activeFlag" column="active_flag"/>
+	</resultMap>
+	
+	<!-- =========================================================== -->
+    <!-- 一些公共变量设置                                                                                                                                                                             -->
+    <!-- =========================================================== -->
+	<!-- mysql 查询总数 -->
+	<sql id="count_Tail">
+		select count(1) from 
+	</sql>
+	
+	<sql id="selectAllColumns">
+		<![CDATA[
+		select
+ 			order_in_id
+ 			,order_no
+ 			,order_item
+ 			,order_type
+ 			,order_status
+ 			,goods_name
+ 			,goods_code
+ 			,plan_amount
+ 			,real_amount
+ 			,remark
+ 			,user_defined1
+ 			,user_defined2
+ 			,user_defined3
+ 			,user_defined4
+ 			,user_defined5
+ 			,create_by
+ 			,gmt_create
+ 			,last_modified_by
+ 			,gmt_modified
+ 			,active_flag
+		FROM 
+		wms_order_in
+		]]>
+	</sql>
+	<update id="updateOrderStatus">
+		update wms_order_in
+		set
+			order_status = #{orderStatus},
+			last_modified_by = #{account},
+			gmt_modified = NOW()
+		WHERE order_no = #{orderNo}
+	</update>
+	<update id="updateOrderAmount">
+		update wms_order_in
+		set
+			real_amount = real_amount + #{entity.realAmount},
+			order_status = #{entity.orderStatus},
+			last_modified_by = #{entity.lastModifiedBy},
+			<if test="entity.remark != null  and entity.remark !=''">
+				remark = #{entity.remark},
+			</if>
+			gmt_modified = NOW()
+		WHERE order_in_id = #{entity.orderInId}
+	</update>
+	<select id="queryOrderInListByNoAndStatus" resultMap="wmsOrderInMap">
+		<include refid="selectAllColumns"/>
+		WHERE
+		order_no = #{orderNo}
+		AND order_status IN
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">#{item}</foreach>
+		AND active_flag = '1'
+	</select>
+	<select id="queryOrderInListByNo" resultMap="wmsOrderInMap">
+		<include refid="selectAllColumns"/>
+		WHERE
+		order_no = #{orderNo}
+		AND active_flag = '1'
+	</select>
+
+
+</mapper>

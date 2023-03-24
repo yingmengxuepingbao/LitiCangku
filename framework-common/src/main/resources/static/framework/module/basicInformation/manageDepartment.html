@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>部门管理</title>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<link rel="stylesheet" href="../../css/bootstrap.css" type="text/css">
+	<link rel="stylesheet" href="../../css/font-awesome.min.css">
+	<link rel="stylesheet" href="../../css/zdialog.css">
+	<link rel="stylesheet" href="../../css/zTreeStyleOutLook.css" />
+	<link rel="stylesheet" href="../../css/detail.css" type="text/css">
+	<style>
+		.btn{
+			background:rgba(29,187,244,.9);
+			color: #fff;
+
+		}
+		.btn:hover{
+			background:rgba(29,187,244,1);
+			color: #fff;
+		}
+		.table > thead > tr > th {
+			vertical-align: bottom;
+			border-bottom: none;
+		}
+		.content{
+			background: #fff;
+		}
+		.tree{
+			min-height: 500px;
+			border-right:1px solid #ddd;
+			padding-left: 0px;
+			padding-right: 10px;
+			min-width:240px;
+		}
+		.tree .input-group{
+			margin:15px 0px 10px 15px;
+		}
+		.tree .tree-con{
+			min-width:240px;
+			overflow: auto;
+			margin-left: 15px;
+		}
+		.dpt-con{
+			margin-top: 15px;
+		}
+		.two-btn .cancel{
+			background:#fff;
+			color:#1DBBF4;
+			border:1px solid #1DBBF4;
+		}
+		.two-btn .cancel:hover{
+			background:#1DBBF4;
+			color:#fff;
+		}
+		.fa-exclamation-circle{
+			padding-left: 58px;
+			display: block;
+		}
+
+	</style>
+</head>
+<body >
+<div class="wrap">
+	<div class="content">
+		<div class="form-inline search-title">
+			<div class="title fl">部门列表</div>
+		</div>
+		<div class="col-xs-6 col-sm-3 tree border-rt" style="width: 335px;float:left;margin-right:30px">
+			<div class="input-group">
+				<div class="lbtn">
+					<input type="button" id="moveUp" class="btn moveUp" value="上移节点"  />
+					<input type="button" id="moveDown" class="btn moveDown" value="下移节点"  />
+					<input type="button" id="saveTree" class="btn saveTree" value="保存"  />
+					<input type="button" id="reductTree" class="btn reductTree" value="还原"  />
+				</div>
+			</div>
+			<div class="tree-con">
+				<ul id="treeListContainerUL" class="ztree">
+				</ul>
+			</div>
+		</div>
+		<!--右侧部门信息-->
+		<div class=" dpt " style="margin-left:375px">
+			<div class="dpt-con">
+				<input type="button" id="addDepartmentBtn" value="添加部门" class="btn" />
+				<input type="button" id="editDepartmentTypeBtn" value="维护属性" class="btn" />
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				<label for="departmentAttr">部门属性: </label>
+				<select class="form-control dpt-select" id="departmentAttr" style="width: 250px;display: inline">
+				</select>
+			</div>
+			<!--部门列表-->
+			<div class="dpt-info">
+				<table class="table" style="word-break:break-all">
+					<thead>
+					<tr>
+						<th style=" white-space:nowrap;padding-right: 5px">部门编码</th>
+						<th style=" white-space:nowrap;padding-right: 5px">部门名称</th>
+						<th style=" white-space:nowrap;padding-right: 5px">部门属性</th>
+						<th style=" white-space:nowrap;padding-right: 5px">部门描述</th>
+						<th>操作</th>
+					</tr>
+					</thead>
+					<tbody  id="dptInfoTb">
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<!--右侧部门信息  end-->
+</div>
+<!--<div id="mask"></div>-->
+<div id="dptPopover" class="cusPopover pw modal" >
+	<div class="modal-container">
+		<div class="cusPopover-title">
+			<i id="deptpopClose" class="fa fa-close fa-lg modal-close" title="关闭"></i>
+			<span></span>
+		</div>
+		<div class="pop-body">
+			<div class="form-group form-inline">
+				<label for="departmentCode"><i>*</i>部门编码：</label>
+				<input type="text" id="departmentCode" class="form-control" placeholder="允许输入字母、数字、_ - "
+					   maxlength="50"    onkeyup="this.value=this.value.replace(/[^\w_-]/g,'');"/>
+			</div>
+			<div class="form-group form-inline">
+				<label for="departmentName"><i>*</i>部门名称：</label>
+				<input type="text" id="departmentName" class="form-control"placeholder="请输入部门名称"
+					   maxlength="50"    onkeyup="this.value=this.value.replace(/[=\\=&? ？ *%]/,'')"/>
+			</div>
+			<div class="form-group form-inline">
+				<label for="attributeSelet"><i>*</i>部门属性：</label>
+				<select class="form-control" id="attributeSelet">
+				</select>
+			</div>
+			<div class="form-group form-inline">
+				<label for="departmtDecr">部门描述：</label>
+				<textarea class="form-control" id="departmtDecr" rows="4"
+						  maxlength="100" 	  onkeyup="this.value=this.value.replace(/[=\\=&? ？ *%]/,'')"></textarea>
+			</div>
+			<i class="fa fa-exclamation-circle fa-departmentPop"></i>
+			<input type="hidden" class="hideInputDepartmId"  />
+
+		</div>
+		<div class="two-btn">
+			<input type="button" class="btn cancel closeDepartmentInfo" value="关闭"  />
+			<input type="button" class="btn save saveDepartmentInfo" value="保存"  />
+		</div>
+	</div>
+</div>
+<div id="typePopover" class="cusPopover typew modal">
+	<div class="modal-container">
+		<div class="cusPopover-title">
+			<i id="popCloseType" class="fa fa-close fa-lg modal-close" title="关闭"></i>
+			<span></span>
+		</div>
+		<div class="pop-body">
+			<div class="pop-body-type">
+				<div class="type-con">
+
+				</div>
+			</div>
+			<div class="bot">
+				<div class="bott">
+					<input type="text" id="departmentTypeText" placeholder="请输入部门属性"  class="form-control"
+						   maxlength="50"    onkeyup="this.value=this.value.replace(/[=\\=&? ？ *%]/,'')"/>
+					<div class="bot-btns">
+						<div class="btns" id="animalBtn">
+							<input type="button" id="saveDepartmentType" class="btn" value="保存属性"/>
+							<input type="button" id="addDepartmentType" class="btn" value="新增属性"/>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript" src="../../js/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="../../js/zdialog.js"></script>
+<script type="text/javascript" src="../../js/common.js"></script>
+<script type="text/javascript" src="../../js/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../js/doAjax.js"></script>
+<script type="text/javascript" src="js/manageDepartment.js"></script>
+</body>
+</html>

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.penghaisoft.wms.basicmanagement.model.dao.WmsAddressTransformMapper">
+	
+	<!-- =========================================================== -->
+    <!-- 定义resultMap                                                                                                                                                                             -->
+    <!-- =========================================================== -->
+	<resultMap id="wmsAddressTransformMap" type="com.penghaisoft.wms.basicmanagement.model.entity.WmsAddressTransform">
+	    <result property="transformId" column="transform_id"/>
+	    <result property="addressType" column="address_type"/>
+	    <result property="relaId" column="rela_id"/>
+	</resultMap>
+	
+	<!-- =========================================================== -->
+    <!-- 一些公共变量设置                                                                                                                                                                             -->
+    <!-- =========================================================== -->
+	<!-- mysql 分页 -->
+	<sql id="pagination_tail">
+		top ((#{page.pageOffset} +1)* #{page.rows})
+	</sql>
+	<!-- mysql 查询总数 -->
+	<sql id="count_Tail">
+		select count(1) from 
+	</sql>
+	
+	<sql id="selectAllColumns">
+		<![CDATA[
+ 			transform_id
+ 			,address_type
+ 			,rela_id
+		FROM 
+		wms_address_transform wms_address_transform_
+		]]>
+	</sql>
+	
+	<sql id="where_fragement">
+		where 1=1
+		<if test="entity!=null">
+			<if test="entity.transformId != null and entity.transformId !=''">
+				<![CDATA[ and wms_address_transform_.transform_id LIKE CONCAT('%',#{entity.transformId},'%')]]>
+			</if>
+			<if test="entity.addressType != null and entity.addressType !=''">
+				<![CDATA[ and wms_address_transform_.address_type LIKE CONCAT('%',#{entity.addressType},'%')]]>
+			</if>
+			<if test="entity.relaId != null and entity.relaId !=''">
+				<![CDATA[ and wms_address_transform_.rela_id LIKE CONCAT('%',#{entity.relaId},'%')]]>
+			</if>
+		</if>
+	</sql>
+	
+	<sql id="where_any">
+		where 1=1
+		<if test="entity!=null">
+			<if test="entity.transformId != null and entity.transformId !=''">
+				<![CDATA[ and wms_address_transform_.transform_id = #{entity.transformId}]]>
+			</if>
+			<if test="entity.addressType != null and entity.addressType !=''">
+				<![CDATA[ and wms_address_transform_.address_type = #{entity.addressType}]]>
+			</if>
+			<if test="entity.relaId != null and entity.relaId !=''">
+				<![CDATA[ and wms_address_transform_.rela_id = #{entity.relaId}]]>
+			</if>
+		</if>
+	</sql>
+	
+	<!-- =========================================================== -->
+    <!-- DAO方法中的基本增删改查方法                                                                                                                                                           -->
+    <!-- =========================================================== -->
+   <!-- 根据id查询 -->
+	<select id="queryById" resultMap="wmsAddressTransformMap" parameterType="java.lang.String">
+		select
+		<include refid="selectAllColumns" />
+		<![CDATA[
+		where wms_address_transform_.transform_id = #{id}
+		]]>
+	</select>
+	
+	<!-- 分页查询 -->
+	<select id="queryList" resultMap="wmsAddressTransformMap" >
+		select
+		<if test="page!=null">
+			<include refid="pagination_tail" />
+		</if>
+		<include refid="selectAllColumns"/>
+		<include refid="where_fragement" />
+
+	</select>
+	
+	<select id="queryCount" resultType="long">
+		<include refid="count_Tail" />
+		wms_address_transform wms_address_transform_
+		<include refid="where_fragement" />
+	</select>
+	
+	<!-- 插入记录 -->
+	<insert id="create" parameterType="com.penghaisoft.wms.basicmanagement.model.entity.WmsAddressTransform"
+			useGeneratedKeys="true" keyProperty="transformId" keyColumn="transform_id" >
+		<![CDATA[
+		insert into wms_address_transform (
+		    	 address_type
+		    	 ,rela_id
+		   )values(
+		    	,#{addressType}
+		    	,#{relaId}
+		   )
+	    ]]>	
+	</insert>
+	
+	<!-- 批量插入记录 -->
+	<insert id="batchInsert" parameterType="java.util.List"
+			useGeneratedKeys="true" keyProperty="transformId" keyColumn="transform_id" >
+
+		insert into wms_address_transform (
+				address_type
+		    	 ,rela_id
+		   ) values
+		   <foreach collection="list" item="item" index="index" separator="," >
+		   (
+		    	#{item.addressType}
+		    	,#{item.relaId}
+		   )
+		   </foreach>
+
+	</insert>
+	
+	<!-- 根据id，修改记录 -->
+	<update id="update" parameterType="com.penghaisoft.wms.basicmanagement.model.entity.WmsAddressTransform">
+		<![CDATA[
+		update wms_address_transform set
+   			
+   			address_type = #{addressType}
+   			,rela_id = #{relaId}
+		 where transform_id = #{transformId}
+		]]>
+	</update>
+	
+	<!--  -->
+	<update id="updateBySelect" parameterType="com.penghaisoft.wms.basicmanagement.model.entity.WmsAddressTransform">
+		update wms_address_transform <set>
+		<if test="entity!=null">
+				<if test="entity.transformId != null and entity.transformId !=''">
+					
+				</if>
+				<if test="entity.addressType != null and entity.addressType !=''">
+					<![CDATA[ address_type = #{entity.addressType}, ]]>
+				</if>
+				<if test="entity.relaId != null and entity.relaId !=''">
+					<![CDATA[ rela_id = #{entity.relaId}, ]]>
+				</if>
+		</if>
+		</set>
+		 where transform_id = #{entity.transformId}
+	</update>
+
+	   <!-- 逻辑删除,根据主键设置active_flag ='0' -->
+	  <update id="delete" parameterType="com.penghaisoft.wms.basicmanagement.model.entity.WmsAddressTransform">
+	    UPDATE wms_address_transform
+	    SET active_flag = "0"
+	    ,last_modified_by = #{entity.lastModifiedBy}
+	    ,gmt_modified = #{entity.gmtModified}
+	     where transform_id = #{entity.transformId}
+	  </update>
+
+	  <update id="deleteByRelaId" parameterType="com.penghaisoft.wms.basicmanagement.model.entity.WmsAddressTransform">
+	    DELETE FROM wms_address_transform
+	     where rela_id = #{entity.relaId}
+	  </update>
+	  
+	  <update id="batchDelete" parameterType="com.penghaisoft.wms.basicmanagement.model.entity.WmsAddressTransform">
+	    DELETE FROM wms_address_transform
+	    where transform_id in 
+	    <foreach collection="entity.transformIdList" index="index" item="item" open="(" separator="," close=")">
+	      #{item}
+	    </foreach>
+	  </update>
+
+	<!-- 任意字段全匹配 -->
+	<select id="queryByAny" resultMap="wmsAddressTransformMap" >
+		select
+		<include refid="selectAllColumns"/>
+		<include refid="where_any" />
+	</select>
+	
+	<select id="queryByAnyCount" resultType="long">
+		<include refid="count_Tail" />
+		wms_address_transform wms_address_transform_
+		<include refid="where_any" />
+	</select>
+</mapper>

@@ -1,0 +1,361 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.penghaisoft.wcs.monitormanagement.model.dao.WcsErrorLogMapper">
+    <resultMap id="BaseResultMap" type="com.penghaisoft.wcs.monitormanagement.model.entity.WcsErrorLog">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="device_id" property="deviceId" jdbcType="SMALLINT"/>
+        <result column="device_type" property="deviceType" jdbcType="CHAR"/>
+        <result column="err_type" property="errType" jdbcType="CHAR"/>
+        <result column="err_code" property="errCode" jdbcType="SMALLINT"/>
+        <result column="level" property="level" jdbcType="SMALLINT"/>
+        <result column="fault_source" property="faultSource" jdbcType="VARCHAR"/>
+        <result column="instruction" property="instruction" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="user_defined1" property="userDefined1" jdbcType="VARCHAR"/>
+        <result column="user_defined2" property="userDefined2" jdbcType="VARCHAR"/>
+        <result column="user_defined3" property="userDefined3" jdbcType="VARCHAR"/>
+        <result column="user_defined4" property="userDefined4" jdbcType="VARCHAR"/>
+        <result column="user_defined5" property="userDefined5" jdbcType="VARCHAR"/>
+        <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, device_id, device_type, err_type, err_code, level, fault_source, instruction, 
+    description, user_defined1, user_defined2, user_defined3, user_defined4, user_defined5, 
+    gmt_create
+  </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from wcs_error_log
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from wcs_error_log
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.penghaisoft.wcs.monitormanagement.model.entity.WcsErrorLog">
+    insert into wcs_error_log (id, device_id, device_type, 
+      err_type, err_code, level, 
+      fault_source, instruction, description, 
+      user_defined1, user_defined2, user_defined3, 
+      user_defined4, user_defined5, gmt_create
+      )
+    values (#{id,jdbcType=INTEGER}, #{deviceId,jdbcType=SMALLINT}, #{deviceType,jdbcType=CHAR}, 
+      #{errType,jdbcType=CHAR}, #{errCode,jdbcType=SMALLINT}, #{level,jdbcType=SMALLINT}, 
+      #{faultSource,jdbcType=VARCHAR}, #{instruction,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
+      #{userDefined1,jdbcType=VARCHAR}, #{userDefined2,jdbcType=VARCHAR}, #{userDefined3,jdbcType=VARCHAR}, 
+      #{userDefined4,jdbcType=VARCHAR}, #{userDefined5,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+    <insert id="insertSelective" parameterType="com.penghaisoft.wcs.monitormanagement.model.entity.WcsErrorLog">
+        insert into wcs_error_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="deviceId != null">
+                device_id,
+            </if>
+            <if test="deviceType != null">
+                device_type,
+            </if>
+            <if test="errType != null">
+                err_type,
+            </if>
+            <if test="errCode != null">
+                err_code,
+            </if>
+            <if test="level != null">
+                level,
+            </if>
+            <if test="faultSource != null">
+                fault_source,
+            </if>
+            <if test="instruction != null">
+                instruction,
+            </if>
+            <if test="description != null">
+                description,
+            </if>
+            <if test="userDefined1 != null">
+                user_defined1,
+            </if>
+            <if test="userDefined2 != null">
+                user_defined2,
+            </if>
+            <if test="userDefined3 != null">
+                user_defined3,
+            </if>
+            <if test="userDefined4 != null">
+                user_defined4,
+            </if>
+            <if test="userDefined5 != null">
+                user_defined5,
+            </if>
+            <if test="gmtCreate != null">
+                gmt_create,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="deviceId != null">
+                #{deviceId,jdbcType=SMALLINT},
+            </if>
+            <if test="deviceType != null">
+                #{deviceType,jdbcType=CHAR},
+            </if>
+            <if test="errType != null">
+                #{errType,jdbcType=CHAR},
+            </if>
+            <if test="errCode != null">
+                #{errCode,jdbcType=SMALLINT},
+            </if>
+            <if test="level != null">
+                #{level,jdbcType=SMALLINT},
+            </if>
+            <if test="faultSource != null">
+                #{faultSource,jdbcType=VARCHAR},
+            </if>
+            <if test="instruction != null">
+                #{instruction,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="userDefined1 != null">
+                #{userDefined1,jdbcType=VARCHAR},
+            </if>
+            <if test="userDefined2 != null">
+                #{userDefined2,jdbcType=VARCHAR},
+            </if>
+            <if test="userDefined3 != null">
+                #{userDefined3,jdbcType=VARCHAR},
+            </if>
+            <if test="userDefined4 != null">
+                #{userDefined4,jdbcType=VARCHAR},
+            </if>
+            <if test="userDefined5 != null">
+                #{userDefined5,jdbcType=VARCHAR},
+            </if>
+            <if test="gmtCreate != null">
+                #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <insert id="insertList">
+        insert into wcs_error_log (
+        device_id, device_type,
+        err_type, err_code, level,
+        fault_source, instruction, description,
+        user_defined1, user_defined2, user_defined3,
+        user_defined4, user_defined5, gmt_create
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.deviceId,jdbcType=SMALLINT}, #{item.deviceType,jdbcType=CHAR},
+            #{item.errType,jdbcType=CHAR}, #{item.errCode,jdbcType=SMALLINT}, #{item.level,jdbcType=SMALLINT},
+            #{item.faultSource,jdbcType=VARCHAR}, #{item.instruction,jdbcType=VARCHAR}, #{item.description,jdbcType=VARCHAR},
+            #{item.userDefined1,jdbcType=VARCHAR}, #{item.userDefined2,jdbcType=VARCHAR}, #{item.userDefined3,jdbcType=VARCHAR},
+            #{item.userDefined4,jdbcType=VARCHAR}, #{item.userDefined5,jdbcType=VARCHAR}, #{item.gmtCreate,jdbcType=TIMESTAMP}
+            )
+        </foreach>
+    </insert>
+    <update id="updateByPrimaryKeySelective"
+            parameterType="com.penghaisoft.wcs.monitormanagement.model.entity.WcsErrorLog">
+        update wcs_error_log
+        <set>
+            <if test="deviceId != null">
+                device_id = #{deviceId,jdbcType=SMALLINT},
+            </if>
+            <if test="deviceType != null">
+                device_type = #{deviceType,jdbcType=CHAR},
+            </if>
+            <if test="errType != null">
+                err_type = #{errType,jdbcType=CHAR},
+            </if>
+            <if test="errCode != null">
+                err_code = #{errCode,jdbcType=SMALLINT},
+            </if>
+            <if test="level != null">
+                level = #{level,jdbcType=SMALLINT},
+            </if>
+            <if test="faultSource != null">
+                fault_source = #{faultSource,jdbcType=VARCHAR},
+            </if>
+            <if test="instruction != null">
+                instruction = #{instruction,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                description = #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="userDefined1 != null">
+                user_defined1 = #{userDefined1,jdbcType=VARCHAR},
+            </if>
+            <if test="userDefined2 != null">
+                user_defined2 = #{userDefined2,jdbcType=VARCHAR},
+            </if>
+            <if test="userDefined3 != null">
+                user_defined3 = #{userDefined3,jdbcType=VARCHAR},
+            </if>
+            <if test="userDefined4 != null">
+                user_defined4 = #{userDefined4,jdbcType=VARCHAR},
+            </if>
+            <if test="userDefined5 != null">
+                user_defined5 = #{userDefined5,jdbcType=VARCHAR},
+            </if>
+            <if test="gmtCreate != null">
+                gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.penghaisoft.wcs.monitormanagement.model.entity.WcsErrorLog">
+        update wcs_error_log
+        set device_id = #{deviceId,jdbcType=SMALLINT},
+          device_type = #{deviceType,jdbcType=CHAR},
+          err_type = #{errType,jdbcType=CHAR},
+          err_code = #{errCode,jdbcType=SMALLINT},
+          level = #{level,jdbcType=SMALLINT},
+          fault_source = #{faultSource,jdbcType=VARCHAR},
+          instruction = #{instruction,jdbcType=VARCHAR},
+          description = #{description,jdbcType=VARCHAR},
+          user_defined1 = #{userDefined1,jdbcType=VARCHAR},
+          user_defined2 = #{userDefined2,jdbcType=VARCHAR},
+          user_defined3 = #{userDefined3,jdbcType=VARCHAR},
+          user_defined4 = #{userDefined4,jdbcType=VARCHAR},
+          user_defined5 = #{userDefined5,jdbcType=VARCHAR},
+          gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <select id="queryList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from wcs_error_log
+        where 1 = 1
+        <if test="entity.id != null">
+            <![CDATA[ and id LIKE CONCAT('%',#{entity.id},'%')]]>
+        </if>
+        <if test="entity.deviceId != null">
+            <![CDATA[ and device_id LIKE CONCAT('%',#{entity.deviceId},'%')]]>
+        </if>
+        <if test="entity.deviceType != null and entity.deviceType !=''">
+            <![CDATA[ and device_type LIKE CONCAT('%',#{entity.deviceType},'%')]]>
+        </if>
+        <if test="entity.errType != null and entity.errType !=''">
+            <![CDATA[ and err_type LIKE CONCAT('%',#{entity.errType},'%')]]>
+        </if>
+        <if test="entity.errCode != null">
+            <![CDATA[ and err_code LIKE CONCAT('%',#{entity.errCode},'%')]]>
+        </if>
+        <if test="entity.level != null">
+            <![CDATA[ and level LIKE CONCAT('%',#{entity.level},'%')]]>
+        </if>
+        <if test="entity.faultSource != null and entity.faultSource !=''">
+            <![CDATA[ and fault_source LIKE CONCAT('%',#{entity.faultSource},'%')]]>
+        </if>
+        <if test="entity.instruction != null and entity.instruction !=''">
+            <![CDATA[ and instruction LIKE CONCAT('%',#{entity.instruction},'%')]]>
+        </if>
+        <if test="entity.description != null and entity.description !=''">
+            <![CDATA[ and description LIKE CONCAT('%',#{entity.description},'%')]]>
+        </if>
+        <if test="entity.userDefined1 != null and entity.userDefined1 !=''">
+            <![CDATA[ and user_defined1 LIKE CONCAT('%',#{entity.userDefined1},'%')]]>
+        </if>
+        <if test="entity.userDefined2 != null and entity.userDefined2 !=''">
+            <![CDATA[ and user_defined2 LIKE CONCAT('%',#{entity.userDefined2},'%')]]>
+        </if>
+        <if test="entity.userDefined3 != null and entity.userDefined3 !=''">
+            <![CDATA[ and user_defined3 LIKE CONCAT('%',#{entity.userDefined3},'%')]]>
+        </if>
+        <if test="entity.userDefined4 != null and entity.userDefined4 !=''">
+            <![CDATA[ and user_defined4 LIKE CONCAT('%',#{entity.userDefined4},'%')]]>
+        </if>
+        <if test="entity.userDefined5 != null and entity.userDefined5 !=''">
+            <![CDATA[ and user_defined5 LIKE CONCAT('%',#{entity.userDefined5},'%')]]>
+        </if>
+        <if test="entity.gmtCreate != null">
+            <![CDATA[ and gmt_create LIKE CONCAT('%',#{entity.gmtCreate},'%')]]>
+        </if>
+        <if test="entity.orderBy !=null and entity.orderBy != ''">
+            order by ${entity.orderBy}
+        </if>
+        <if test="entity.orderBy == null or entity.orderBy == ''">
+            order by gmt_create desc
+        </if>
+        <if test="page!=null">
+            limit #{page.pageOffset} , #{page.rows}
+        </if>
+    </select>
+
+    <select id="queryCount" resultType="long">
+        select count(1) from
+        wcs_error_log wcs_error_log_
+        where 1 = 1
+        <if test="id != null">
+            <![CDATA[ and id LIKE CONCAT('%',#{id},'%')]]>
+        </if>
+        <if test="deviceId != null">
+            <![CDATA[ and device_id LIKE CONCAT('%',#{deviceId},'%')]]>
+        </if>
+        <if test="deviceType != null and deviceType !=''">
+            <![CDATA[ and device_type LIKE CONCAT('%',#{deviceType},'%')]]>
+        </if>
+        <if test="errType != null and errType !=''">
+            <![CDATA[ and err_type LIKE CONCAT('%',#{errType},'%')]]>
+        </if>
+        <if test="errCode != null">
+            <![CDATA[ and err_code LIKE CONCAT('%',#{errCode},'%')]]>
+        </if>
+        <if test="level != null">
+            <![CDATA[ and level LIKE CONCAT('%',#{level},'%')]]>
+        </if>
+        <if test="faultSource != null and faultSource !=''">
+            <![CDATA[ and fault_source LIKE CONCAT('%',#{faultSource},'%')]]>
+        </if>
+        <if test="instruction != null and instruction !=''">
+            <![CDATA[ and instruction LIKE CONCAT('%',#{instruction},'%')]]>
+        </if>
+        <if test="description != null and description !=''">
+            <![CDATA[ and description LIKE CONCAT('%',#{description},'%')]]>
+        </if>
+        <if test="userDefined1 != null and userDefined1 !=''">
+            <![CDATA[ and user_defined1 LIKE CONCAT('%',#{userDefined1},'%')]]>
+        </if>
+        <if test="userDefined2 != null and userDefined2 !=''">
+            <![CDATA[ and user_defined2 LIKE CONCAT('%',#{userDefined2},'%')]]>
+        </if>
+        <if test="userDefined3 != null and userDefined3 !=''">
+            <![CDATA[ and user_defined3 LIKE CONCAT('%',#{userDefined3},'%')]]>
+        </if>
+        <if test="userDefined4 != null and userDefined4 !=''">
+            <![CDATA[ and user_defined4 LIKE CONCAT('%',#{userDefined4},'%')]]>
+        </if>
+        <if test="userDefined5 != null and userDefined5 !=''">
+            <![CDATA[ and user_defined5 LIKE CONCAT('%',#{userDefined5},'%')]]>
+        </if>
+        <if test="gmtCreate != null">
+            <![CDATA[ and gmt_create LIKE CONCAT('%',#{gmtCreate},'%')]]>
+        </if>
+    </select>
+
+    <select id="queryByGmtCreateMax" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from wcs_error_log
+        <![CDATA[
+        where gmt_create < #{gmtCreateMax,jdbcType=TIMESTAMP}
+        ]]>
+    </select>
+
+    <delete id="deleteErrorLogByIdList" parameterType="java.lang.Integer" >
+        delete from wcs_error_log
+        where id in
+        <foreach collection="idList" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

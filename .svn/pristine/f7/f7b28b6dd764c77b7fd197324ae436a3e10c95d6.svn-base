@@ -1,0 +1,473 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.penghaisoft.wms.logmanagement.model.dao.WmsMoveLogMapper">
+	
+	<!-- =========================================================== -->
+    <!-- 定义resultMap                                                                                                                                                                             -->
+    <!-- =========================================================== -->
+	<resultMap id="wmsMoveLogMap" type="com.penghaisoft.wms.logmanagement.model.entity.WmsMoveLog">
+				<result property="moveLogId" column="move_log_id"/>
+				<result property="palletCode" column="pallet_code"/>
+				<result property="goodsCode" column="goods_code"/>
+				<result property="amount" column="amount"/>
+				<result property="batchNo" column="batch_no"/>
+				<result property="warehouseCode" column="warehouse_code"/>
+				<result property="areaCode" column="area_code"/>
+				<result property="fromLocationCode" column="from_location_code"/>
+				<result property="toLocationCode" column="to_location_code"/>
+				<result property="moveResult" column="move_result"/>
+				<result property="errorMsg" column="error_msg"/>
+				<result property="userDefined1" column="user_defined1"/>
+				<result property="userDefined2" column="user_defined2"/>
+				<result property="userDefined3" column="user_defined3"/>
+				<result property="userDefined4" column="user_defined4"/>
+				<result property="userDefined5" column="user_defined5"/>
+				<result property="createBy" column="create_by"/>
+				<result property="gmtCreate" column="gmt_create"/>
+				<result property="lastModifiedBy" column="last_modified_by"/>
+				<result property="gmtModified" column="gmt_modified"/>
+				<result property="activeFlag" column="active_flag"/>
+	</resultMap>
+	
+	<!-- =========================================================== -->
+    <!-- 一些公共变量设置                                                                                                                                                                             -->
+    <!-- =========================================================== -->
+	<!-- mysql 分页 -->
+	<sql id="pagination_tail">
+		top ((#{page.pageOffset} +1)* #{page.rows})
+	</sql>
+	<!-- mysql 查询总数 -->
+	<sql id="count_Tail">
+		select count(1) from 
+	</sql>
+	
+	<sql id="selectAllColumns">
+		<![CDATA[
+ 			move_log_id
+ 			,pallet_code
+ 			,goods_code
+ 			,amount
+ 			,batch_no
+ 			,warehouse_code
+ 			,area_code
+ 			,from_location_code
+ 			,to_location_code
+ 			,move_result
+ 			,error_msg
+ 			,user_defined1
+ 			,user_defined2
+ 			,user_defined3
+ 			,user_defined4
+ 			,user_defined5
+ 			,create_by
+ 			,gmt_create
+ 			,last_modified_by
+ 			,gmt_modified
+ 			,active_flag
+		FROM 
+		wms_move_log wms_move_log_
+		]]>
+	</sql>
+	
+	<sql id="where_fragement">
+		where 1=1
+		<if test="entity!=null">
+			<if test="entity.moveLogId != null  and entity.moveLogId !=''">
+				<![CDATA[ and wms_move_log_.move_log_id  LIKE CONCAT('%',#{entity.moveLogId},'%')]]>
+			</if>
+			<if test="entity.palletCode != null  and entity.palletCode !=''">
+				<![CDATA[ and wms_move_log_.pallet_code  LIKE CONCAT('%',#{entity.palletCode},'%')]]>
+			</if>
+			<if test="entity.goodsCode != null  and entity.goodsCode !=''">
+				<![CDATA[ and wms_move_log_.goods_code  LIKE CONCAT('%',#{entity.goodsCode},'%')]]>
+			</if>
+			<if test="entity.amount != null  and entity.amount !=''">
+				<![CDATA[ and wms_move_log_.amount  LIKE CONCAT('%',#{entity.amount},'%')]]>
+			</if>
+			<if test="entity.batchNo != null  and entity.batchNo !=''">
+				<![CDATA[ and wms_move_log_.batch_no  LIKE CONCAT('%',#{entity.batchNo},'%')]]>
+			</if>
+			<if test="entity.warehouseCode != null  and entity.warehouseCode !=''">
+				<![CDATA[ and wms_move_log_.warehouse_code  LIKE CONCAT('%',#{entity.warehouseCode},'%')]]>
+			</if>
+			<if test="entity.areaCode != null  and entity.areaCode !=''">
+				<![CDATA[ and wms_move_log_.area_code  LIKE CONCAT('%',#{entity.areaCode},'%')]]>
+			</if>
+			<if test="entity.fromLocationCode != null  and entity.fromLocationCode !=''">
+				<![CDATA[ and wms_move_log_.from_location_code  LIKE CONCAT('%',#{entity.fromLocationCode},'%')]]>
+			</if>
+			<if test="entity.toLocationCode != null  and entity.toLocationCode !=''">
+				<![CDATA[ and wms_move_log_.to_location_code  LIKE CONCAT('%',#{entity.toLocationCode},'%')]]>
+			</if>
+			<if test="entity.moveResult != null  and entity.moveResult !=''">
+				<![CDATA[ and wms_move_log_.move_result  LIKE CONCAT('%',#{entity.moveResult},'%')]]>
+			</if>
+			<if test="entity.errorMsg != null  and entity.errorMsg !=''">
+				<![CDATA[ and wms_move_log_.error_msg  LIKE CONCAT('%',#{entity.errorMsg},'%')]]>
+			</if>
+			<if test="entity.userDefined1 != null  and entity.userDefined1 !=''">
+				<![CDATA[ and wms_move_log_.user_defined1  LIKE CONCAT('%',#{entity.userDefined1},'%')]]>
+			</if>
+			<if test="entity.userDefined2 != null  and entity.userDefined2 !=''">
+				<![CDATA[ and wms_move_log_.user_defined2  LIKE CONCAT('%',#{entity.userDefined2},'%')]]>
+			</if>
+			<if test="entity.userDefined3 != null  and entity.userDefined3 !=''">
+				<![CDATA[ and wms_move_log_.user_defined3  LIKE CONCAT('%',#{entity.userDefined3},'%')]]>
+			</if>
+			<if test="entity.userDefined4 != null  and entity.userDefined4 !=''">
+				<![CDATA[ and wms_move_log_.user_defined4  LIKE CONCAT('%',#{entity.userDefined4},'%')]]>
+			</if>
+			<if test="entity.userDefined5 != null  and entity.userDefined5 !=''">
+				<![CDATA[ and wms_move_log_.user_defined5  LIKE CONCAT('%',#{entity.userDefined5},'%')]]>
+			</if>
+			<if test="entity.createBy != null  and entity.createBy !=''">
+				<![CDATA[ and wms_move_log_.create_by  LIKE CONCAT('%',#{entity.createBy},'%')]]>
+			</if>
+			<if test="entity.gmtCreate != null">
+				<![CDATA[ and wms_move_log_.gmt_create = #{entity.gmtCreate}]]>
+			</if>
+			<if test="entity.gmtCreateMin != null">
+				<![CDATA[ and wms_move_log_.gmt_create >= #{entity.gmtCreateMin}]]>
+			</if>
+			<if test="entity.gmtCreateMax != null">
+				<![CDATA[ and wms_move_log_.gmt_create <= #{entity.gmtCreateMax}]]>
+			</if>
+			<if test="entity.lastModifiedBy != null  and entity.lastModifiedBy !=''">
+				<![CDATA[ and wms_move_log_.last_modified_by  LIKE CONCAT('%',#{entity.lastModifiedBy},'%')]]>
+			</if>
+			<if test="entity.gmtModified != null  ">
+				<![CDATA[ and wms_move_log_.gmt_modified  LIKE CONCAT('%',#{entity.gmtModified},'%')]]>
+			</if>
+			<if test="entity.activeFlag != null  and entity.activeFlag !=''">
+				<![CDATA[ and wms_move_log_.active_flag  LIKE CONCAT('%',#{entity.activeFlag},'%')]]>
+			</if>
+		</if>
+	</sql>
+	
+	<sql id="where_any">
+		where 1=1
+		<if test="entity!=null">
+			<if test="entity.moveLogId != null  and entity.moveLogId !=''">
+				<![CDATA[ and wms_move_log_.move_log_id  = #{entity.moveLogId}]]>
+			</if>
+			<if test="entity.palletCode != null  and entity.palletCode !=''">
+				<![CDATA[ and wms_move_log_.pallet_code  = #{entity.palletCode}]]>
+			</if>
+			<if test="entity.goodsCode != null  and entity.goodsCode !=''">
+				<![CDATA[ and wms_move_log_.goods_code  = #{entity.goodsCode}]]>
+			</if>
+			<if test="entity.amount != null  and entity.amount !=''">
+				<![CDATA[ and wms_move_log_.amount  = #{entity.amount}]]>
+			</if>
+			<if test="entity.batchNo != null  and entity.batchNo !=''">
+				<![CDATA[ and wms_move_log_.batch_no  = #{entity.batchNo}]]>
+			</if>
+			<if test="entity.warehouseCode != null  and entity.warehouseCode !=''">
+				<![CDATA[ and wms_move_log_.warehouse_code  = #{entity.warehouseCode}]]>
+			</if>
+			<if test="entity.areaCode != null  and entity.areaCode !=''">
+				<![CDATA[ and wms_move_log_.area_code  = #{entity.areaCode}]]>
+			</if>
+			<if test="entity.fromLocationCode != null  and entity.fromLocationCode !=''">
+				<![CDATA[ and wms_move_log_.from_location_code  = #{entity.fromLocationCode}]]>
+			</if>
+			<if test="entity.toLocationCode != null  and entity.toLocationCode !=''">
+				<![CDATA[ and wms_move_log_.to_location_code  = #{entity.toLocationCode}]]>
+			</if>
+			<if test="entity.moveResult != null  and entity.moveResult !=''">
+				<![CDATA[ and wms_move_log_.move_result  = #{entity.moveResult}]]>
+			</if>
+			<if test="entity.errorMsg != null  and entity.errorMsg !=''">
+				<![CDATA[ and wms_move_log_.error_msg  = #{entity.errorMsg}]]>
+			</if>
+			<if test="entity.userDefined1 != null  and entity.userDefined1 !=''">
+				<![CDATA[ and wms_move_log_.user_defined1  = #{entity.userDefined1}]]>
+			</if>
+			<if test="entity.userDefined2 != null  and entity.userDefined2 !=''">
+				<![CDATA[ and wms_move_log_.user_defined2  = #{entity.userDefined2}]]>
+			</if>
+			<if test="entity.userDefined3 != null  and entity.userDefined3 !=''">
+				<![CDATA[ and wms_move_log_.user_defined3  = #{entity.userDefined3}]]>
+			</if>
+			<if test="entity.userDefined4 != null  and entity.userDefined4 !=''">
+				<![CDATA[ and wms_move_log_.user_defined4  = #{entity.userDefined4}]]>
+			</if>
+			<if test="entity.userDefined5 != null  and entity.userDefined5 !=''">
+				<![CDATA[ and wms_move_log_.user_defined5  = #{entity.userDefined5}]]>
+			</if>
+			<if test="entity.createBy != null  and entity.createBy !=''">
+				<![CDATA[ and wms_move_log_.create_by  = #{entity.createBy}]]>
+			</if>
+			<if test="entity.gmtCreate != null  and entity.gmtCreate !=''">
+				<![CDATA[ and wms_move_log_.gmt_create  = #{entity.gmtCreate}]]>
+			</if>
+			<if test="entity.lastModifiedBy != null  and entity.lastModifiedBy !=''">
+				<![CDATA[ and wms_move_log_.last_modified_by  = #{entity.lastModifiedBy}]]>
+			</if>
+			<if test="entity.gmtModified != null  ">
+				<![CDATA[ and wms_move_log_.gmt_modified  = #{entity.gmtModified}]]>
+			</if>
+			<if test="entity.activeFlag != null  and entity.activeFlag !=''">
+				<![CDATA[ and wms_move_log_.active_flag  = #{entity.activeFlag}]]>
+			</if>
+		</if>
+	</sql>
+	
+	<!-- =========================================================== -->
+    <!-- DAO方法中的基本增删改查方法                                                                                                                                                           -->
+    <!-- =========================================================== -->
+   <!-- 根据id查询 -->
+	<select id="queryById" resultMap="wmsMoveLogMap" parameterType="java.lang.String">
+		select
+		<include refid="selectAllColumns" />
+		<![CDATA[
+		where wms_move_log_.move_log_id = #{id}
+		]]>
+	</select>
+	
+	<!-- 分页查询 -->
+	<select id="queryList" resultMap="wmsMoveLogMap" >
+		select
+		<if test="page!=null">
+			<include refid="pagination_tail" />
+		</if>
+		<include refid="selectAllColumns"/>
+		<include refid="where_fragement" />
+		<if test="entity.orderBy != null and entity.orderBy !=''">
+			order by ${entity.orderBy}
+		</if>
+
+	</select>
+	
+	<select id="queryCount" resultType="long">
+		<include refid="count_Tail" />
+		wms_move_log wms_move_log_
+		<include refid="where_fragement" />
+	</select>
+	
+	<!-- 插入记录 -->
+	<insert id="create" parameterType="com.penghaisoft.wms.logmanagement.model.entity.WmsMoveLog">
+		<![CDATA[
+		insert into wms_move_log (
+		    	 move_log_id
+		    	 ,pallet_code
+		    	 ,goods_code
+		    	 ,amount
+		    	 ,batch_no
+		    	 ,warehouse_code
+		    	 ,area_code
+		    	 ,from_location_code
+		    	 ,to_location_code
+		    	 ,move_result
+		    	 ,error_msg
+		    	 ,user_defined1
+		    	 ,user_defined2
+		    	 ,user_defined3
+		    	 ,user_defined4
+		    	 ,user_defined5
+		    	 ,create_by
+		    	 ,gmt_create
+		    	 ,last_modified_by
+		    	 ,gmt_modified
+		    	 ,active_flag
+		   )values(
+		    	#{moveLogId}
+		    	,#{palletCode}
+		    	,#{goodsCode}
+		    	,#{amount}
+		    	,#{batchNo}
+		    	,#{warehouseCode}
+		    	,#{areaCode}
+		    	,#{fromLocationCode}
+		    	,#{toLocationCode}
+		    	,#{moveResult}
+		    	,#{errorMsg}
+		    	,#{userDefined1}
+		    	,#{userDefined2}
+		    	,#{userDefined3}
+		    	,#{userDefined4}
+		    	,#{userDefined5}
+		    	,#{createBy}
+		    	,#{gmtCreate}
+		    	,#{lastModifiedBy}
+		    	,#{gmtModified}
+		    	,#{activeFlag}
+		   )
+	    ]]>	
+	</insert>
+	
+	<!-- 批量插入记录 -->
+	<insert id="batchInsert" parameterType="java.util.List">
+		insert into wms_move_log (
+		    	 move_log_id
+		    	 ,pallet_code
+		    	 ,goods_code
+		    	 ,amount
+		    	 ,batch_no
+		    	 ,warehouse_code
+		    	 ,area_code
+		    	 ,from_location_code
+		    	 ,to_location_code
+		    	 ,move_result
+		    	 ,error_msg
+		    	 ,user_defined1
+		    	 ,user_defined2
+		    	 ,user_defined3
+		    	 ,user_defined4
+		    	 ,user_defined5
+		    	 ,create_by
+		    	 ,gmt_create
+		    	 ,last_modified_by
+		    	 ,gmt_modified
+		    	 ,active_flag
+		   )
+		   values
+		   <foreach collection="list" item="item" index="index" separator="," >
+		   (
+		    	#{item.moveLogId}
+		    	,#{item.palletCode}
+		    	,#{item.goodsCode}
+		    	,#{item.amount}
+		    	,#{item.batchNo}
+		    	,#{item.warehouseCode}
+		    	,#{item.areaCode}
+		    	,#{item.fromLocationCode}
+		    	,#{item.toLocationCode}
+		    	,#{item.moveResult}
+		    	,#{item.errorMsg}
+		    	,#{item.userDefined1}
+		    	,#{item.userDefined2}
+		    	,#{item.userDefined3}
+		    	,#{item.userDefined4}
+		    	,#{item.userDefined5}
+		    	,#{item.createBy}
+		    	,#{item.gmtCreate}
+		    	,#{item.lastModifiedBy}
+		    	,#{item.gmtModified}
+		    	,#{item.activeFlag}
+		   )
+		   </foreach>	
+	</insert>
+	
+	<!-- 根据id，修改记录 -->
+	<update id="update" parameterType="com.penghaisoft.wms.logmanagement.model.entity.WmsMoveLog">
+		<![CDATA[
+		update wms_move_log set
+   			
+   			pallet_code = #{palletCode}
+   			,goods_code = #{goodsCode}
+   			,amount = #{amount}
+   			,batch_no = #{batchNo}
+   			,warehouse_code = #{warehouseCode}
+   			,area_code = #{areaCode}
+   			,from_location_code = #{fromLocationCode}
+   			,to_location_code = #{toLocationCode}
+   			,move_result = #{moveResult}
+   			,error_msg = #{errorMsg}
+   			,user_defined1 = #{userDefined1}
+   			,user_defined2 = #{userDefined2}
+   			,user_defined3 = #{userDefined3}
+   			,user_defined4 = #{userDefined4}
+   			,user_defined5 = #{userDefined5}
+   			,create_by = #{createBy}
+   			,gmt_create = #{gmtCreate}
+   			,last_modified_by = #{lastModifiedBy}
+   			,gmt_modified = #{gmtModified}
+   			,active_flag = #{activeFlag}
+		 where move_log_id = #{moveLogId}
+		]]>
+	</update>
+	
+	<!--  -->
+	<update id="updateBySelect" parameterType="com.penghaisoft.wms.logmanagement.model.entity.WmsMoveLog">
+		update wms_move_log <set>
+		<if test="entity!=null">
+				<if test="entity.moveLogId != null  and entity.moveLogId !=''">
+					
+				</if>
+				<if test="entity.palletCode != null  and entity.palletCode !=''">
+					<![CDATA[ pallet_code = #{entity.palletCode}, ]]>
+				</if>
+				<if test="entity.goodsCode != null  and entity.goodsCode !=''">
+					<![CDATA[ goods_code = #{entity.goodsCode}, ]]>
+				</if>
+				<if test="entity.amount != null  and entity.amount !=''">
+					<![CDATA[ amount = #{entity.amount}, ]]>
+				</if>
+				<if test="entity.batchNo != null  and entity.batchNo !=''">
+					<![CDATA[ batch_no = #{entity.batchNo}, ]]>
+				</if>
+				<if test="entity.warehouseCode != null  and entity.warehouseCode !=''">
+					<![CDATA[ warehouse_code = #{entity.warehouseCode}, ]]>
+				</if>
+				<if test="entity.areaCode != null  and entity.areaCode !=''">
+					<![CDATA[ area_code = #{entity.areaCode}, ]]>
+				</if>
+				<if test="entity.fromLocationCode != null  and entity.fromLocationCode !=''">
+					<![CDATA[ from_location_code = #{entity.fromLocationCode}, ]]>
+				</if>
+				<if test="entity.toLocationCode != null  and entity.toLocationCode !=''">
+					<![CDATA[ to_location_code = #{entity.toLocationCode}, ]]>
+				</if>
+				<if test="entity.moveResult != null  and entity.moveResult !=''">
+					<![CDATA[ move_result = #{entity.moveResult}, ]]>
+				</if>
+				<if test="entity.errorMsg != null  and entity.errorMsg !=''">
+					<![CDATA[ error_msg = #{entity.errorMsg}, ]]>
+				</if>
+				<if test="entity.userDefined1 != null  and entity.userDefined1 !=''">
+					<![CDATA[ user_defined1 = #{entity.userDefined1}, ]]>
+				</if>
+				<if test="entity.userDefined2 != null  and entity.userDefined2 !=''">
+					<![CDATA[ user_defined2 = #{entity.userDefined2}, ]]>
+				</if>
+				<if test="entity.userDefined3 != null  and entity.userDefined3 !=''">
+					<![CDATA[ user_defined3 = #{entity.userDefined3}, ]]>
+				</if>
+				<if test="entity.userDefined4 != null  and entity.userDefined4 !=''">
+					<![CDATA[ user_defined4 = #{entity.userDefined4}, ]]>
+				</if>
+				<if test="entity.userDefined5 != null  and entity.userDefined5 !=''">
+					<![CDATA[ user_defined5 = #{entity.userDefined5}, ]]>
+				</if>
+				<if test="entity.createBy != null  and entity.createBy !=''">
+					<![CDATA[ create_by = #{entity.createBy}, ]]>
+				</if>
+				<if test="entity.gmtCreate != null  and entity.gmtCreate !=''">
+					<![CDATA[ gmt_create = #{entity.gmtCreate}, ]]>
+				</if>
+				<if test="entity.lastModifiedBy != null  and entity.lastModifiedBy !=''">
+					<![CDATA[ last_modified_by = #{entity.lastModifiedBy}, ]]>
+				</if>
+				<if test="entity.gmtModified != null  ">
+					<![CDATA[ gmt_modified = #{entity.gmtModified}, ]]>
+				</if>
+				<if test="entity.activeFlag != null  and entity.activeFlag !=''">
+					<![CDATA[ active_flag = #{entity.activeFlag}, ]]>
+				</if>
+		</if>
+		</set>
+		 where move_log_id = #{entity.moveLogId}
+	</update>
+
+	   <!-- 物理删除 -->
+	  <update id="delete" parameterType="com.penghaisoft.wms.logmanagement.model.entity.WmsMoveLog">
+	    DELETE FROM wms_move_log
+	    where move_log_id = #{entity.moveLogId}
+	  </update>
+	  
+	  <update id="batchDelete" parameterType="com.penghaisoft.wms.logmanagement.model.entity.WmsMoveLog">
+	    DELETE FROM wms_move_log
+	    where move_log_id in 
+	    <foreach collection="entity.moveLogIdList" index="index" item="item" open="(" separator="," close=")">
+	      #{item}
+	    </foreach>
+	  </update>
+
+	<!-- 任意字段全匹配 -->
+	<select id="queryByAny" resultMap="wmsMoveLogMap" >
+		select
+		<include refid="selectAllColumns"/>
+		<include refid="where_any" />
+	</select>
+</mapper>

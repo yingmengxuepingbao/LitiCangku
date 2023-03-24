@@ -1,0 +1,1468 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.penghaisoft.wms.basicmanagement.model.dao.WmsLocationStereoscopicMapper">
+	
+	<!-- =========================================================== -->
+    <!-- 定义resultMap                                                                                                                                                                             -->
+    <!-- =========================================================== -->
+	<resultMap id="wmsLocationStereoscopicMap" type="com.penghaisoft.wms.basicmanagement.model.entity.WmsLocationStereoscopic">
+				<result property="locationId" column="location_id"/>
+				<result property="warehouseCode" column="warehouse_code"/>
+				<result property="areaCode" column="area_code"/>
+				<result property="locationCode" column="location_code"/>
+				<result property="locationAttr" column="location_attr"/>
+				<result property="locationDesc" column="location_desc"/>
+				<result property="palletCode" column="pallet_code"/>
+				<result property="inSeq" column="in_seq"/>
+				<result property="outSeq" column="out_seq"/>
+				<result property="floorNumber" column="floor_number"/>
+				<result property="shelvesNumber" column="shelves_number"/>
+				<result property="layerNumber" column="layer_number"/>
+				<result property="columnNumber" column="column_number"/>
+				<result property="useStatus" column="use_status"/>
+				<result property="allowMix" column="allow_mix"/>
+				<result property="userDefined1" column="user_defined1"/>
+				<result property="userDefined2" column="user_defined2"/>
+				<result property="userDefined3" column="user_defined3"/>
+				<result property="userDefined4" column="user_defined4"/>
+				<result property="userDefined5" column="user_defined5"/>
+				<result property="createBy" column="create_by"/>
+				<result property="gmtCreate" column="gmt_create"/>
+				<result property="lastModifiedBy" column="last_modified_by"/>
+				<result property="gmtModified" column="gmt_modified"/>
+				<result property="activeFlag" column="active_flag"/>
+
+				<result property="stacker" column="stacker"/>
+				<result property="stackerRunTaskAmount" column="stackerRunTaskAmount"/>
+				<result property="goodsCode" column="goods_code"/>
+				<result property="goodsName" column="goods_name"/>
+				<result property="batchNo" column="batch_no"/>
+				<result property="amount" column="amount"/>
+				<result property="useAbleAmount" column="useAbleAmount"/>
+	</resultMap>
+	
+	<!-- =========================================================== -->
+    <!-- 一些公共变量设置                                                                                                                                                                             -->
+    <!-- =========================================================== -->
+	<!-- mysql 分页 -->
+	<sql id="pagination_tail">
+		top ((#{page.pageOffset} +1)* #{page.rows})
+	</sql>
+	<!-- mysql 查询总数 -->
+	<sql id="count_Tail">
+		select count(1) from 
+	</sql>
+	
+	<sql id="selectAllColumns">
+		<![CDATA[
+			wms_location_stereoscopic_.location_id,
+			wms_location_stereoscopic_.warehouse_code,
+			wms_location_stereoscopic_.area_code,
+			wms_location_stereoscopic_.location_code,
+			wms_location_stereoscopic_.location_attr,
+			wms_location_stereoscopic_.location_desc,
+			wms_location_stereoscopic_.pallet_code,
+			wms_pallet_.amount,
+			wms_pallet_.goods_code,
+			wms_goods_.goods_name,
+			wms_pallet_.batch_no,
+			wms_location_stereoscopic_.in_seq,
+			wms_location_stereoscopic_.out_seq,
+			wms_location_stereoscopic_.floor_number,
+			wms_location_stereoscopic_.shelves_number,
+			wms_location_stereoscopic_.layer_number,
+			wms_location_stereoscopic_.column_number,
+			wms_location_stereoscopic_.use_status,
+			wms_location_stereoscopic_.allow_mix,
+			wms_location_stereoscopic_.user_defined1,
+			wms_location_stereoscopic_.user_defined2,
+			wms_location_stereoscopic_.user_defined3,
+			wms_location_stereoscopic_.user_defined4,
+			wms_location_stereoscopic_.user_defined5,
+			wms_location_stereoscopic_.create_by,
+			wms_location_stereoscopic_.gmt_create,
+			wms_location_stereoscopic_.last_modified_by,
+			wms_location_stereoscopic_.gmt_modified,
+			wms_location_stereoscopic_.active_flag
+		FROM
+			wms_location_stereoscopic wms_location_stereoscopic_
+		LEFT JOIN wms_pallet wms_pallet_ ON wms_location_stereoscopic_.pallet_code = wms_pallet_.pallet_code
+		AND wms_pallet_.active_flag = '1'
+		AND wms_location_stereoscopic_.active_flag = '1'
+		LEFT JOIN wms_goods wms_goods_ ON wms_pallet_.goods_code = wms_goods_.goods_code
+		AND wms_goods_.active_flag = '1'
+		]]>
+	</sql>
+	
+	<sql id="where_fragement">
+		where 1=1
+		<if test="entity!=null">
+			<if test="entity.locationId != null  and entity.locationId !=''">
+				<![CDATA[ and wms_location_stereoscopic_.location_id  LIKE CONCAT('%',#{entity.locationId},'%')]]>
+			</if>
+			<if test="entity.goodsCode != null  and entity.goodsCode !=''">
+				<![CDATA[ and wms_pallet_.goods_code  LIKE CONCAT('%',#{entity.goodsCode},'%')]]>
+			</if>
+			<if test="entity.warehouseCode != null  and entity.warehouseCode !=''">
+				<![CDATA[ and wms_location_stereoscopic_.warehouse_code  LIKE CONCAT('%',#{entity.warehouseCode},'%')]]>
+			</if>
+			<if test="entity.areaCode != null  and entity.areaCode !=''">
+				<![CDATA[ and wms_location_stereoscopic_.area_code  LIKE CONCAT('%',#{entity.areaCode},'%')]]>
+			</if>
+			<if test="entity.locationCode != null  and entity.locationCode !=''">
+				<![CDATA[ and wms_location_stereoscopic_.location_code  LIKE CONCAT('%',#{entity.locationCode},'%')]]>
+			</if>
+			<if test="entity.locationAttr != null  and entity.locationAttr !=''">
+				<![CDATA[ and wms_location_stereoscopic_.location_attr  LIKE CONCAT('%',#{entity.locationAttr},'%')]]>
+			</if>
+			<if test="entity.locationDesc != null  and entity.locationDesc !=''">
+				<![CDATA[ and wms_location_stereoscopic_.location_desc  LIKE CONCAT('%',#{entity.locationDesc},'%')]]>
+			</if>
+			<if test="entity.palletCode != null  and entity.palletCode !=''">
+				<![CDATA[ and wms_location_stereoscopic_.pallet_code  LIKE CONCAT('%',#{entity.palletCode},'%')]]>
+			</if>
+			<if test="entity.inSeq != null  and entity.inSeq !=''">
+				<![CDATA[ and wms_location_stereoscopic_.in_seq  LIKE CONCAT('%',#{entity.inSeq},'%')]]>
+			</if>
+			<if test="entity.outSeq != null  and entity.outSeq !=''">
+				<![CDATA[ and wms_location_stereoscopic_.out_seq  LIKE CONCAT('%',#{entity.outSeq},'%')]]>
+			</if>
+			<if test="entity.shelvesNumber != null  and entity.shelvesNumber !=''">
+				<![CDATA[ and wms_location_stereoscopic_.shelves_number = #{entity.shelvesNumber}]]>
+			</if>
+			<if test="entity.layerNumber != null  and entity.layerNumber !=''">
+				<![CDATA[ and wms_location_stereoscopic_.layer_number = #{entity.layerNumber}]]>
+			</if>
+			<if test="entity.columnNumber != null  and entity.columnNumber !=''">
+				<![CDATA[ and wms_location_stereoscopic_.column_number = #{entity.columnNumber}]]>
+			</if>
+			<if test="entity.useStatus != null  and entity.useStatus !=''">
+				<![CDATA[ and wms_location_stereoscopic_.use_status  LIKE CONCAT('%',#{entity.useStatus},'%')]]>
+			</if>
+			<if test="entity.allowMix != null  and entity.allowMix !=''">
+				<![CDATA[ and wms_location_stereoscopic_.allow_mix  LIKE CONCAT('%',#{entity.allowMix},'%')]]>
+			</if>
+			<if test="entity.userDefined1 != null  and entity.userDefined1 !=''">
+				<![CDATA[ and wms_location_stereoscopic_.user_defined1  LIKE CONCAT('%',#{entity.userDefined1},'%')]]>
+			</if>
+			<if test="entity.userDefined2 != null  and entity.userDefined2 !=''">
+				<![CDATA[ and wms_location_stereoscopic_.user_defined2  LIKE CONCAT('%',#{entity.userDefined2},'%')]]>
+			</if>
+			<if test="entity.userDefined3 != null  and entity.userDefined3 !=''">
+				<![CDATA[ and wms_location_stereoscopic_.user_defined3  LIKE CONCAT('%',#{entity.userDefined3},'%')]]>
+			</if>
+			<if test="entity.userDefined4 != null  and entity.userDefined4 !=''">
+				<![CDATA[ and wms_location_stereoscopic_.user_defined4  LIKE CONCAT('%',#{entity.userDefined4},'%')]]>
+			</if>
+			<if test="entity.userDefined5 != null  and entity.userDefined5 !=''">
+				<![CDATA[ and wms_location_stereoscopic_.user_defined5  LIKE CONCAT('%',#{entity.userDefined5},'%')]]>
+			</if>
+			<if test="entity.createBy != null  and entity.createBy !=''">
+				<![CDATA[ and wms_location_stereoscopic_.create_by  LIKE CONCAT('%',#{entity.createBy},'%')]]>
+			</if>
+			<if test="entity.gmtCreate != null">
+				<![CDATA[ and wms_location_stereoscopic_.gmt_create  LIKE CONCAT('%',#{entity.gmtCreate},'%')]]>
+			</if>
+			<if test="entity.lastModifiedBy != null  and entity.lastModifiedBy !=''">
+				<![CDATA[ and wms_location_stereoscopic_.last_modified_by  LIKE CONCAT('%',#{entity.lastModifiedBy},'%')]]>
+			</if>
+			<if test="entity.gmtModified != null">
+				<![CDATA[ and wms_location_stereoscopic_.gmt_modified  LIKE CONCAT('%',#{entity.gmtModified},'%')]]>
+			</if>
+			<if test="entity.activeFlag != null  and entity.activeFlag !=''">
+				<![CDATA[ and wms_location_stereoscopic_.active_flag  LIKE CONCAT('%',#{entity.activeFlag},'%')]]>
+			</if>
+		</if>
+	</sql>
+	
+	<sql id="where_any">
+		where 1=1
+		<if test="entity!=null">
+			<if test="entity.locationId != null  and entity.locationId !=''">
+				<![CDATA[ and wms_location_stereoscopic_.location_id  = #{entity.locationId}]]>
+			</if>
+			<if test="entity.warehouseCode != null  and entity.warehouseCode !=''">
+				<![CDATA[ and wms_location_stereoscopic_.warehouse_code  = #{entity.warehouseCode}]]>
+			</if>
+			<if test="entity.areaCode != null  and entity.areaCode !=''">
+				<![CDATA[ and wms_location_stereoscopic_.area_code  = #{entity.areaCode}]]>
+			</if>
+			<if test="entity.locationCode != null  and entity.locationCode !=''">
+				<![CDATA[ and wms_location_stereoscopic_.location_code  = #{entity.locationCode}]]>
+			</if>
+			<if test="entity.locationAttr != null  and entity.locationAttr !=''">
+				<![CDATA[ and wms_location_stereoscopic_.location_attr  = #{entity.locationAttr}]]>
+			</if>
+			<if test="entity.locationDesc != null  and entity.locationDesc !=''">
+				<![CDATA[ and wms_location_stereoscopic_.location_desc  = #{entity.locationDesc}]]>
+			</if>
+			<if test="entity.palletCode != null  and entity.palletCode !=''">
+				<![CDATA[ and wms_location_stereoscopic_.pallet_code  = #{entity.palletCode}]]>
+			</if>
+			<if test="entity.inSeq != null  and entity.inSeq !=''">
+				<![CDATA[ and wms_location_stereoscopic_.in_seq  = #{entity.inSeq}]]>
+			</if>
+			<if test="entity.outSeq != null  and entity.outSeq !=''">
+				<![CDATA[ and wms_location_stereoscopic_.out_seq  = #{entity.outSeq}]]>
+			</if>
+			<if test="entity.shelvesNumber != null  and entity.shelvesNumber !=''">
+				<![CDATA[ and wms_location_stereoscopic_.shelves_number  = #{entity.shelvesNumber}]]>
+			</if>
+			<if test="entity.layerNumber != null  and entity.layerNumber !=''">
+				<![CDATA[ and wms_location_stereoscopic_.layer_number  = #{entity.layerNumber}]]>
+			</if>
+			<if test="entity.columnNumber != null  and entity.columnNumber !=''">
+				<![CDATA[ and wms_location_stereoscopic_.column_number  = #{entity.columnNumber}]]>
+			</if>
+			<if test="entity.useStatus != null  and entity.useStatus !=''">
+				<![CDATA[ and wms_location_stereoscopic_.use_status  = #{entity.useStatus}]]>
+			</if>
+			<if test="entity.allowMix != null  and entity.allowMix !=''">
+				<![CDATA[ and wms_location_stereoscopic_.allow_mix  = #{entity.allowMix}]]>
+			</if>
+			<if test="entity.userDefined1 != null  and entity.userDefined1 !=''">
+				<![CDATA[ and wms_location_stereoscopic_.user_defined1  = #{entity.userDefined1}]]>
+			</if>
+			<if test="entity.userDefined2 != null  and entity.userDefined2 !=''">
+				<![CDATA[ and wms_location_stereoscopic_.user_defined2  = #{entity.userDefined2}]]>
+			</if>
+			<if test="entity.userDefined3 != null  and entity.userDefined3 !=''">
+				<![CDATA[ and wms_location_stereoscopic_.user_defined3  = #{entity.userDefined3}]]>
+			</if>
+			<if test="entity.userDefined4 != null  and entity.userDefined4 !=''">
+				<![CDATA[ and wms_location_stereoscopic_.user_defined4  = #{entity.userDefined4}]]>
+			</if>
+			<if test="entity.userDefined5 != null  and entity.userDefined5 !=''">
+				<![CDATA[ and wms_location_stereoscopic_.user_defined5  = #{entity.userDefined5}]]>
+			</if>
+			<if test="entity.createBy != null  and entity.createBy !=''">
+				<![CDATA[ and wms_location_stereoscopic_.create_by  = #{entity.createBy}]]>
+			</if>
+			<if test="entity.gmtCreate != null">
+				<![CDATA[ and wms_location_stereoscopic_.gmt_create  = #{entity.gmtCreate}]]>
+			</if>
+			<if test="entity.lastModifiedBy != null  and entity.lastModifiedBy !=''">
+				<![CDATA[ and wms_location_stereoscopic_.last_modified_by  = #{entity.lastModifiedBy}]]>
+			</if>
+			<if test="entity.gmtModified != null">
+				<![CDATA[ and wms_location_stereoscopic_.gmt_modified  = #{entity.gmtModified}]]>
+			</if>
+			<if test="entity.activeFlag != null  and entity.activeFlag !=''">
+				<![CDATA[ and wms_location_stereoscopic_.active_flag  = #{entity.activeFlag}]]>
+			</if>
+		</if>
+	</sql>
+	
+	<!-- =========================================================== -->
+    <!-- DAO方法中的基本增删改查方法                                                                                                                                                           -->
+    <!-- =========================================================== -->
+   <!-- 根据id查询 -->
+	<select id="queryById" resultMap="wmsLocationStereoscopicMap" parameterType="java.lang.String">
+		SELECT
+		<include refid="selectAllColumns" />
+		<![CDATA[
+		where wms_location_stereoscopic_.location_id = #{id}
+		]]>
+	</select>
+
+	
+	<!-- 分页查询 -->
+	<select id="queryList" resultMap="wmsLocationStereoscopicMap" >
+		SELECT
+		<if test="page!=null">
+			<include refid="pagination_tail" />
+		</if>
+		<include refid="selectAllColumns"/>
+		<include refid="where_fragement" />
+		<if test="entity.orderBy!=null and entity.orderBy!=''">
+			order by ${entity.orderBy}
+		</if>
+
+	</select>
+	
+	<select id="queryCount" resultType="long">
+		<include refid="count_Tail" />
+		wms_location_stereoscopic wms_location_stereoscopic_
+		LEFT JOIN wms_pallet wms_pallet_ ON wms_location_stereoscopic_.pallet_code = wms_pallet_.pallet_code
+		AND wms_pallet_.active_flag = '1'
+		AND wms_location_stereoscopic_.active_flag = '1'
+		<include refid="where_fragement" />
+	</select>
+	
+	<!-- 插入记录 -->
+	<insert id="create" parameterType="com.penghaisoft.wms.basicmanagement.model.entity.WmsLocationStereoscopic">
+		<![CDATA[
+		insert into wms_location_stereoscopic (
+		    	 location_id
+		    	 ,warehouse_code
+		    	 ,area_code
+		    	 ,location_code
+		    	 ,location_attr
+		    	 ,location_desc
+		    	 ,pallet_code
+		    	 ,in_seq
+		    	 ,out_seq
+		    	 ,shelves_number
+		    	 ,layer_number
+		    	 ,column_number
+		    	 ,use_status
+		    	 ,allow_mix
+		    	 ,user_defined1
+		    	 ,user_defined2
+		    	 ,user_defined3
+		    	 ,user_defined4
+		    	 ,user_defined5
+		    	 ,create_by
+		    	 ,gmt_create
+		    	 ,last_modified_by
+		    	 ,gmt_modified
+		    	 ,active_flag
+		   )values(
+		    	#{locationId}
+		    	,#{warehouseCode}
+		    	,#{areaCode}
+		    	,#{locationCode}
+		    	,#{locationAttr}
+		    	,#{locationDesc}
+		    	,#{palletCode}
+		    	,#{inSeq}
+		    	,#{outSeq}
+		    	,#{shelvesNumber}
+		    	,#{layerNumber}
+		    	,#{columnNumber}
+		    	,#{useStatus}
+		    	,#{allowMix}
+		    	,#{userDefined1}
+		    	,#{userDefined2}
+		    	,#{userDefined3}
+		    	,#{userDefined4}
+		    	,#{userDefined5}
+		    	,#{createBy}
+		    	,#{gmtCreate}
+		    	,#{lastModifiedBy}
+		    	,#{gmtModified}
+		    	,#{activeFlag}
+		   )
+	    ]]>	
+	</insert>
+	
+	<!-- 批量插入记录 -->
+	<insert id="batchInsert" parameterType="java.util.List">
+		insert into wms_location_stereoscopic (
+		    	 location_id
+		    	 ,warehouse_code
+		    	 ,area_code
+		    	 ,location_code
+		    	 ,location_attr
+		    	 ,location_desc
+		    	 ,pallet_code
+		    	 ,in_seq
+		    	 ,out_seq
+		    	 ,floor_number
+		    	 ,shelves_number
+		    	 ,layer_number
+		    	 ,column_number
+		    	 ,use_status
+		    	 ,allow_mix
+		    	 ,user_defined1
+		    	 ,user_defined2
+		    	 ,user_defined3
+		    	 ,user_defined4
+		    	 ,user_defined5
+		    	 ,create_by
+		    	 ,gmt_create
+		    	 ,last_modified_by
+		    	 ,gmt_modified
+		    	 ,active_flag
+		   )
+		   values
+		   <foreach collection="list" item="item" index="index" separator="," >
+		   (
+		    	#{item.locationId}
+		    	,#{item.warehouseCode}
+		    	,#{item.areaCode}
+		    	,#{item.locationCode}
+		    	,#{item.locationAttr}
+		    	,#{item.locationDesc}
+		    	,#{item.palletCode}
+		    	,#{item.inSeq}
+		    	,#{item.outSeq}
+			    ,#{item.floorNumber}
+		    	,#{item.shelvesNumber}
+		    	,#{item.layerNumber}
+		    	,#{item.columnNumber}
+		    	,#{item.useStatus}
+		    	,#{item.allowMix}
+		    	,#{item.userDefined1}
+		    	,#{item.userDefined2}
+		    	,#{item.userDefined3}
+		    	,#{item.userDefined4}
+		    	,#{item.userDefined5}
+		    	,#{item.createBy}
+		    	,#{item.gmtCreate}
+		    	,#{item.lastModifiedBy}
+		    	,#{item.gmtModified}
+		    	,#{item.activeFlag}
+		   )
+		   </foreach>	
+	</insert>
+	
+	<!-- 根据id，修改记录 -->
+	<update id="update" parameterType="com.penghaisoft.wms.basicmanagement.model.entity.WmsLocationStereoscopic">
+		<![CDATA[
+		update wms_location_stereoscopic set
+   			
+   			warehouse_code = #{warehouseCode}
+   			,area_code = #{areaCode}
+   			,location_code = #{locationCode}
+   			,location_attr = #{locationAttr}
+   			,location_desc = #{locationDesc}
+   			,pallet_code = #{palletCode}
+   			,in_seq = #{inSeq}
+   			,out_seq = #{outSeq}
+   			,shelves_number = #{shelvesNumber}
+   			,layer_number = #{layerNumber}
+   			,column_number = #{columnNumber}
+   			,use_status = #{useStatus}
+   			,allow_mix = #{allowMix}
+   			,user_defined1 = #{userDefined1}
+   			,user_defined2 = #{userDefined2}
+   			,user_defined3 = #{userDefined3}
+   			,user_defined4 = #{userDefined4}
+   			,user_defined5 = #{userDefined5}
+   			,create_by = #{createBy}
+   			,gmt_create = #{gmtCreate}
+   			,last_modified_by = #{lastModifiedBy}
+   			,gmt_modified = #{gmtModified}
+   			,active_flag = #{activeFlag}
+		 where location_id = #{locationId}
+		]]>
+	</update>
+	
+	<!--  -->
+	<update id="updateBySelect" parameterType="com.penghaisoft.wms.basicmanagement.model.entity.WmsLocationStereoscopic">
+		update wms_location_stereoscopic <set>
+		<if test="entity!=null">
+				<if test="entity.locationId != null  and entity.locationId !=''">
+					
+				</if>
+				<if test="entity.warehouseCode != null  and entity.warehouseCode !=''">
+					<![CDATA[ warehouse_code = #{entity.warehouseCode}, ]]>
+				</if>
+				<if test="entity.areaCode != null  and entity.areaCode !=''">
+					<![CDATA[ area_code = #{entity.areaCode}, ]]>
+				</if>
+				<if test="entity.locationCode != null  and entity.locationCode !=''">
+					<![CDATA[ location_code = #{entity.locationCode}, ]]>
+				</if>
+				<if test="entity.locationAttr != null  and entity.locationAttr !=''">
+					<![CDATA[ location_attr = #{entity.locationAttr}, ]]>
+				</if>
+				<if test="entity.locationDesc != null  and entity.locationDesc !=''">
+					<![CDATA[ location_desc = #{entity.locationDesc}, ]]>
+				</if>
+				<if test="entity.palletCode != null  and entity.palletCode !=''">
+					<![CDATA[ pallet_code = #{entity.palletCode}, ]]>
+				</if>
+				<if test="entity.inSeq != null  and entity.inSeq !=''">
+					<![CDATA[ in_seq = #{entity.inSeq}, ]]>
+				</if>
+				<if test="entity.outSeq != null  and entity.outSeq !=''">
+					<![CDATA[ out_seq = #{entity.outSeq}, ]]>
+				</if>
+				<if test="entity.shelvesNumber != null  and entity.shelvesNumber !=''">
+					<![CDATA[ shelves_number = #{entity.shelvesNumber}, ]]>
+				</if>
+				<if test="entity.layerNumber != null  and entity.layerNumber !=''">
+					<![CDATA[ layer_number = #{entity.layerNumber}, ]]>
+				</if>
+				<if test="entity.columnNumber != null  and entity.columnNumber !=''">
+					<![CDATA[ column_number = #{entity.columnNumber}, ]]>
+				</if>
+				<if test="entity.useStatus != null  and entity.useStatus !=''">
+					<![CDATA[ use_status = #{entity.useStatus}, ]]>
+				</if>
+				<if test="entity.allowMix != null  and entity.allowMix !=''">
+					<![CDATA[ allow_mix = #{entity.allowMix}, ]]>
+				</if>
+				<if test="entity.userDefined1 != null  and entity.userDefined1 !=''">
+					<![CDATA[ user_defined1 = #{entity.userDefined1}, ]]>
+				</if>
+				<if test="entity.userDefined2 != null  and entity.userDefined2 !=''">
+					<![CDATA[ user_defined2 = #{entity.userDefined2}, ]]>
+				</if>
+				<if test="entity.userDefined3 != null  and entity.userDefined3 !=''">
+					<![CDATA[ user_defined3 = #{entity.userDefined3}, ]]>
+				</if>
+				<if test="entity.userDefined4 != null  and entity.userDefined4 !=''">
+					<![CDATA[ user_defined4 = #{entity.userDefined4}, ]]>
+				</if>
+				<if test="entity.userDefined5 != null  and entity.userDefined5 !=''">
+					<![CDATA[ user_defined5 = #{entity.userDefined5}, ]]>
+				</if>
+				<if test="entity.createBy != null  and entity.createBy !=''">
+					<![CDATA[ create_by = #{entity.createBy}, ]]>
+				</if>
+				<if test="entity.gmtCreate != null">
+					<![CDATA[ gmt_create = #{entity.gmtCreate}, ]]>
+				</if>
+				<if test="entity.lastModifiedBy != null  and entity.lastModifiedBy !=''">
+					<![CDATA[ last_modified_by = #{entity.lastModifiedBy}, ]]>
+				</if>
+				<if test="entity.gmtModified != null">
+					<![CDATA[ gmt_modified = #{entity.gmtModified}, ]]>
+				</if>
+				<if test="entity.activeFlag != null  and entity.activeFlag !=''">
+					<![CDATA[ active_flag = #{entity.activeFlag}, ]]>
+				</if>
+		</if>
+		</set>
+		 where location_id = #{entity.locationId}
+	</update>
+
+	   <!-- 物理删除 -->
+	  <update id="delete" parameterType="com.penghaisoft.wms.basicmanagement.model.entity.WmsLocationStereoscopic">
+	    DELETE FROM wms_location_stereoscopic
+	    where location_id = #{entity.locationId}
+	  </update>
+	  
+	  <update id="batchDelete" parameterType="com.penghaisoft.wms.basicmanagement.model.entity.WmsLocationStereoscopic">
+	    DELETE FROM wms_location_stereoscopic
+	    where location_id in 
+	    <foreach collection="entity.locationIdList" index="index" item="item" open="(" separator="," close=")">
+	      #{item}
+	    </foreach>
+	  </update>
+
+	<!-- 任意字段全匹配 -->
+	<select id="queryByAny" resultMap="wmsLocationStereoscopicMap" >
+		select
+		<include refid="selectAllColumns"/>
+		<include refid="where_any" />
+	</select>
+
+	<!-- 根据库位编码和激活标记，修改数据 -->
+	<update id="updateByLocationCode" parameterType="com.penghaisoft.wms.basicmanagement.model.entity.WmsLocationStereoscopic">
+		update wms_location_stereoscopic <set>
+		<if test="entity!=null">
+			<if test="entity.locationId != null  and entity.locationId !=''">
+
+			</if>
+			<if test="entity.warehouseCode != null  and entity.warehouseCode !=''">
+				<![CDATA[ warehouse_code = #{entity.warehouseCode}, ]]>
+			</if>
+			<if test="entity.areaCode != null  and entity.areaCode !=''">
+				<![CDATA[ area_code = #{entity.areaCode}, ]]>
+			</if>
+			<if test="entity.locationCode != null  and entity.locationCode !=''">
+				<![CDATA[ location_code = #{entity.locationCode}, ]]>
+			</if>
+			<if test="entity.locationAttr != null  and entity.locationAttr !=''">
+				<![CDATA[ location_attr = #{entity.locationAttr}, ]]>
+			</if>
+			<if test="entity.locationDesc != null  and entity.locationDesc !=''">
+				<![CDATA[ location_desc = #{entity.locationDesc}, ]]>
+			</if>
+			<if test="entity.palletCode != null  and entity.palletCode !=''">
+				<![CDATA[ pallet_code = #{entity.palletCode}, ]]>
+			</if>
+			<if test="entity.palletCodeNull != null  and entity.palletCodeNull !=''">
+				<![CDATA[ pallet_code = null, ]]>
+			</if>
+			<if test="entity.inSeq != null  and entity.inSeq !=''">
+				<![CDATA[ in_seq = #{entity.inSeq}, ]]>
+			</if>
+			<if test="entity.outSeq != null  and entity.outSeq !=''">
+				<![CDATA[ out_seq = #{entity.outSeq}, ]]>
+			</if>
+			<if test="entity.shelvesNumber != null  and entity.shelvesNumber !=''">
+				<![CDATA[ shelves_number = #{entity.shelvesNumber}, ]]>
+			</if>
+			<if test="entity.layerNumber != null  and entity.layerNumber !=''">
+				<![CDATA[ layer_number = #{entity.layerNumber}, ]]>
+			</if>
+			<if test="entity.columnNumber != null  and entity.columnNumber !=''">
+				<![CDATA[ column_number = #{entity.columnNumber}, ]]>
+			</if>
+			<if test="entity.useStatus != null  and entity.useStatus !=''">
+				<![CDATA[ use_status = #{entity.useStatus}, ]]>
+			</if>
+			<if test="entity.allowMix != null  and entity.allowMix !=''">
+				<![CDATA[ allow_mix = #{entity.allowMix}, ]]>
+			</if>
+			<if test="entity.userDefined1 != null  and entity.userDefined1 !=''">
+				<![CDATA[ user_defined1 = #{entity.userDefined1}, ]]>
+			</if>
+			<if test="entity.userDefined2 != null  and entity.userDefined2 !=''">
+				<![CDATA[ user_defined2 = #{entity.userDefined2}, ]]>
+			</if>
+			<if test="entity.userDefined3 != null  and entity.userDefined3 !=''">
+				<![CDATA[ user_defined3 = #{entity.userDefined3}, ]]>
+			</if>
+			<if test="entity.userDefined4 != null  and entity.userDefined4 !=''">
+				<![CDATA[ user_defined4 = #{entity.userDefined4}, ]]>
+			</if>
+			<if test="entity.userDefined5 != null  and entity.userDefined5 !=''">
+				<![CDATA[ user_defined5 = #{entity.userDefined5}, ]]>
+			</if>
+			<if test="entity.createBy != null  and entity.createBy !=''">
+				<![CDATA[ create_by = #{entity.createBy}, ]]>
+			</if>
+			<if test="entity.gmtCreate != null">
+				<![CDATA[ gmt_create = #{entity.gmtCreate}, ]]>
+			</if>
+			<if test="entity.lastModifiedBy != null  and entity.lastModifiedBy !=''">
+				<![CDATA[ last_modified_by = #{entity.lastModifiedBy}, ]]>
+			</if>
+			<if test="entity.gmtModified != null">
+				<![CDATA[ gmt_modified = #{entity.gmtModified}, ]]>
+			</if>
+			<if test="entity.activeFlag != null  and entity.activeFlag !=''">
+				<![CDATA[ active_flag = #{entity.activeFlag}, ]]>
+			</if>
+		</if>
+	</set>
+		where location_code = #{entity.locationCode} and active_flag = '1'
+	</update>
+
+	<update id="updateByLocationCodeBatch" parameterType="com.penghaisoft.wms.basicmanagement.model.entity.WmsLocationStereoscopic">
+		update wms_location_stereoscopic <set>
+		<if test="entity!=null">
+			<if test="entity.locationId != null  and entity.locationId !=''">
+
+			</if>
+			<if test="entity.warehouseCode != null  and entity.warehouseCode !=''">
+				<![CDATA[ warehouse_code = #{entity.warehouseCode}, ]]>
+			</if>
+			<if test="entity.areaCode != null  and entity.areaCode !=''">
+				<![CDATA[ area_code = #{entity.areaCode}, ]]>
+			</if>
+			<if test="entity.locationCode != null  and entity.locationCode !=''">
+				<![CDATA[ location_code = #{entity.locationCode}, ]]>
+			</if>
+			<if test="entity.locationAttr != null  and entity.locationAttr !=''">
+				<![CDATA[ location_attr = #{entity.locationAttr}, ]]>
+			</if>
+			<if test="entity.locationDesc != null  and entity.locationDesc !=''">
+				<![CDATA[ location_desc = #{entity.locationDesc}, ]]>
+			</if>
+			<if test="entity.PalletCodeNull != null  and entity.PalletCodeNull !=''">
+				<![CDATA[ pallet_code = null , ]]>
+			</if>
+			<if test="entity.palletCode != null  and entity.palletCode !=''">
+				<![CDATA[ pallet_code = #{entity.palletCode}, ]]>
+			</if>
+			<if test="entity.inSeq != null  and entity.inSeq !=''">
+				<![CDATA[ in_seq = #{entity.inSeq}, ]]>
+			</if>
+			<if test="entity.outSeq != null  and entity.outSeq !=''">
+				<![CDATA[ out_seq = #{entity.outSeq}, ]]>
+			</if>
+			<if test="entity.shelvesNumber != null  and entity.shelvesNumber !=''">
+				<![CDATA[ shelves_number = #{entity.shelvesNumber}, ]]>
+			</if>
+			<if test="entity.layerNumber != null  and entity.layerNumber !=''">
+				<![CDATA[ layer_number = #{entity.layerNumber}, ]]>
+			</if>
+			<if test="entity.columnNumber != null  and entity.columnNumber !=''">
+				<![CDATA[ column_number = #{entity.columnNumber}, ]]>
+			</if>
+			<if test="entity.useStatus != null  and entity.useStatus !=''">
+				<![CDATA[ use_status = #{entity.useStatus}, ]]>
+			</if>
+			<if test="entity.allowMix != null  and entity.allowMix !=''">
+				<![CDATA[ allow_mix = #{entity.allowMix}, ]]>
+			</if>
+			<if test="entity.userDefined1 != null  and entity.userDefined1 !=''">
+				<![CDATA[ user_defined1 = #{entity.userDefined1}, ]]>
+			</if>
+			<if test="entity.userDefined2 != null  and entity.userDefined2 !=''">
+				<![CDATA[ user_defined2 = #{entity.userDefined2}, ]]>
+			</if>
+			<if test="entity.userDefined3 != null  and entity.userDefined3 !=''">
+				<![CDATA[ user_defined3 = #{entity.userDefined3}, ]]>
+			</if>
+			<if test="entity.userDefined4 != null  and entity.userDefined4 !=''">
+				<![CDATA[ user_defined4 = #{entity.userDefined4}, ]]>
+			</if>
+			<if test="entity.userDefined5 != null  and entity.userDefined5 !=''">
+				<![CDATA[ user_defined5 = #{entity.userDefined5}, ]]>
+			</if>
+			<if test="entity.createBy != null  and entity.createBy !=''">
+				<![CDATA[ create_by = #{entity.createBy}, ]]>
+			</if>
+			<if test="entity.gmtCreate != null">
+				<![CDATA[ gmt_create = #{entity.gmtCreate}, ]]>
+			</if>
+			<if test="entity.lastModifiedBy != null  and entity.lastModifiedBy !=''">
+				<![CDATA[ last_modified_by = #{entity.lastModifiedBy}, ]]>
+			</if>
+			<if test="entity.gmtModified != null">
+				<![CDATA[ gmt_modified = #{entity.gmtModified}, ]]>
+			</if>
+			<if test="entity.activeFlag != null  and entity.activeFlag !=''">
+				<![CDATA[ active_flag = #{entity.activeFlag}, ]]>
+			</if>
+		</if>
+	</set>
+		where active_flag = '1' and location_code in
+		<foreach collection="entity.locationCodeList" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</update>
+
+	<!-- 根据商品编号、批次号 查询满足条件【1、从浅库位（非混合库位）取 2、对应的深库位是要放对应的商品 3、入库中、发货中、异常的库位 深浅都不能推荐】的浅库位 并按照库位号从小到大排序 -->
+	<select id="queryShallowLocationCode" resultMap="wmsLocationStereoscopicMap" >
+		SELECT
+			location_id,
+			warehouse_code,
+			area_code,
+			location_code,
+			location_attr,
+			location_desc,
+			pallet_code,
+			in_seq,
+			out_seq,
+			shelves_number,
+			layer_number,
+			column_number,
+			use_status,
+			allow_mix,
+			user_defined1,
+			user_defined2,
+			user_defined3,
+			user_defined4,
+			user_defined5,
+			create_by,
+			gmt_create,
+			last_modified_by,
+			gmt_modified,
+			active_flag
+		FROM
+			wms_location_stereoscopic t
+		WHERE
+			t.active_flag = '1'
+		AND t.use_status = '0'
+		AND t.allow_mix = '0'
+		AND t.shelves_number in
+		<foreach collection="entity.shelvesNumberList" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		AND RIGHT (t.location_code, 1) = #{entity.shallowLocationFlag}
+		AND LEFT (t.location_code, 4) IN (
+			SELECT
+				LEFT (t.location_code, 4)
+			FROM
+				wms_location_stereoscopic t
+			LEFT JOIN wms_pallet p ON p.active_flag = '1'
+			AND t.pallet_code = p.pallet_code
+			WHERE
+				t.active_flag = '1'
+			AND t.use_status = '3'
+			AND t.allow_mix = '0'
+			AND t.shelves_number in
+			<foreach collection="entity.shelvesNumberList" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+			AND RIGHT (t.location_code, 1) = #{entity.deepLocationFlag}
+			<if test="entity.batchNo != null and entity.batchNo !=''">
+				<![CDATA[ AND p.batch_no = #{entity.batchNo}]]>
+			</if>
+			AND p.goods_code = #{entity.goodsCode}
+		)
+		ORDER BY
+			t.location_code ASC
+	</select>
+
+	<!-- 查询满足条件【1、从深库位（非混合库位）取可用的 2、未保险起见，对应的浅库位必须也是可用的】的深库位 并按照库位号从小到大排序 -->
+	<select id="queryDeepLocationCode" resultMap="wmsLocationStereoscopicMap" >
+		SELECT
+			location_id,
+			warehouse_code,
+			area_code,
+			location_code,
+			location_attr,
+			location_desc,
+			pallet_code,
+			in_seq,
+			out_seq,
+			shelves_number,
+			layer_number,
+			column_number,
+			use_status,
+			allow_mix,
+			user_defined1,
+			user_defined2,
+			user_defined3,
+			user_defined4,
+			user_defined5,
+			create_by,
+			gmt_create,
+			last_modified_by,
+			gmt_modified,
+			active_flag
+		FROM
+			wms_location_stereoscopic t
+		WHERE
+			t.active_flag = '1'
+		AND t.use_status = '0'
+		AND t.allow_mix = '0'
+		AND t.shelves_number in
+		<foreach collection="entity.shelvesNumberList" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		AND RIGHT (t.location_code, 1) = #{entity.deepLocationFlag}
+		AND LEFT (t.location_code, 4) IN (
+			SELECT
+				LEFT (t.location_code, 4)
+			FROM
+				wms_location_stereoscopic t
+			WHERE
+				t.active_flag = '1'
+			AND t.use_status = '0'
+			AND t.allow_mix = '0'
+			AND t.shelves_number in
+			<foreach collection="entity.shelvesNumberList" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+			AND RIGHT (t.location_code, 1) = #{entity.shallowLocationFlag}
+		)
+		ORDER BY
+			t.location_code ASC
+	</select>
+
+	<!-- 根据商品编号、批次号 查询满足条件【1、从浅库位（混合库位）取 2、对应的深库位是要放对应的商品 3、入库中、发货中、异常的库位 深浅都不能推荐】的浅库位 并按照库位号从小到大排序 -->
+	<select id="queryShallowLocationCodeMix" resultMap="wmsLocationStereoscopicMap" >
+		SELECT
+			location_id,
+			warehouse_code,
+			area_code,
+			location_code,
+			location_attr,
+			location_desc,
+			pallet_code,
+			in_seq,
+			out_seq,
+			shelves_number,
+			layer_number,
+			column_number,
+			use_status,
+			allow_mix,
+			user_defined1,
+			user_defined2,
+			user_defined3,
+			user_defined4,
+			user_defined5,
+			create_by,
+			gmt_create,
+			last_modified_by,
+			gmt_modified,
+			active_flag
+		FROM
+			wms_location_stereoscopic t
+		WHERE
+			t.active_flag = '1'
+		AND t.use_status = '0'
+		AND t.allow_mix = '1'
+		AND RIGHT (t.location_code, 1) = #{entity.shallowLocationFlag}
+		AND LEFT (t.location_code, 4) IN (
+			SELECT
+				LEFT (t.location_code, 4)
+			FROM
+				wms_location_stereoscopic t
+			WHERE
+				t.active_flag = '1'
+			AND t.use_status = '3'
+			AND t.allow_mix = '1'
+			AND RIGHT (t.location_code, 1) = #{entity.deepLocationFlag}
+		)
+		ORDER BY
+			t.location_code ASC
+	</select>
+
+	<!-- 查询满足条件【1、从深库位（混合库位）取可用的 2、未保险起见，对应的浅库位必须也是可用的】的深库位 并按照库位号从小到大排序 -->
+	<select id="queryDeepLocationCodeMix" resultMap="wmsLocationStereoscopicMap" >
+		SELECT
+			location_id,
+			warehouse_code,
+			area_code,
+			location_code,
+			location_attr,
+			location_desc,
+			pallet_code,
+			in_seq,
+			out_seq,
+			shelves_number,
+			layer_number,
+			column_number,
+			use_status,
+			allow_mix,
+			user_defined1,
+			user_defined2,
+			user_defined3,
+			user_defined4,
+			user_defined5,
+			create_by,
+			gmt_create,
+			last_modified_by,
+			gmt_modified,
+			active_flag
+		FROM
+			wms_location_stereoscopic t
+		WHERE
+			t.active_flag = '1'
+		AND t.use_status = '0'
+		AND t.allow_mix = '1'
+		AND RIGHT (t.location_code, 1) = #{entity.deepLocationFlag}
+		AND LEFT (t.location_code, 4) IN (
+			SELECT
+				LEFT (t.location_code, 4)
+			FROM
+				wms_location_stereoscopic t
+			WHERE
+				t.active_flag = '1'
+			AND t.use_status = '0'
+			AND t.allow_mix = '1'
+			AND RIGHT (t.location_code, 1) = #{entity.shallowLocationFlag}
+		)
+		ORDER BY
+			t.location_code ASC
+	</select>
+
+	<!-- 查询堆垛机对应的运行中的任务数量 -->
+	<select id="queryStackerRunTaskNum" resultMap="wmsLocationStereoscopicMap" >
+		SELECT
+			CEILING(t.shelves_number/2) stacker,
+			sum(
+				CASE t.use_status
+				WHEN '1' THEN
+					1
+				WHEN '2' THEN
+					1
+				ELSE
+					0
+				END
+			) stackerRunTaskAmount
+		FROM
+			wms_location_stereoscopic t
+		WHERE
+			t.active_flag = '1'
+		AND t.area_code  = #{entity.areaCode}
+		GROUP BY
+			CEILING(t.shelves_number/2)
+	</select>
+
+	<select id="getUseAbleAmount" resultMap="wmsLocationStereoscopicMap" >
+		SELECT
+			s.goods_code,
+			s.batch_no,
+			sum(s.amount) useAbleAmount
+		FROM
+			wms_location_stereoscopic t
+		JOIN wms_pallet s ON t.pallet_code = s.pallet_code
+		AND t.active_flag = '1'
+		AND s.active_flag = '1'
+		WHERE
+			t.use_status = '3'
+		<if test="entity.batchNo != null and entity.batchNo !=''">
+			<![CDATA[ AND s.batch_no = #{entity.batchNo}]]>
+		</if>
+		AND s.goods_code = #{entity.goodsCode}
+		GROUP BY
+			s.goods_code,
+			s.batch_no
+	</select>
+
+	<!--  - 查询商品对应的商品编码、可用数量/重量 -->
+	<select id="getHBUseAbleAmount" resultMap="wmsLocationStereoscopicMap" >
+		SELECT
+		s.goods_code,
+		sum(amount) useAbleAmount
+		FROM
+		wms_location_stereoscopic t
+		JOIN wms_pallet s ON t.pallet_code = s.pallet_code
+		AND t.active_flag = '1'
+		AND s.user_defined3='0'
+		AND s.active_flag = '1'
+		WHERE
+		t.use_status = '3'
+		<if test="entity.batchNo != null and entity.batchNo !=''">
+			<![CDATA[ AND s.batch_no = #{entity.batchNo}]]>
+		</if>
+		AND s.goods_code = #{entity.goodsCode}
+		GROUP BY s.goods_code
+	</select>
+
+	<select id="queryLocationCode1" resultMap="wmsLocationStereoscopicMap" >
+		SELECT
+			t.location_code,
+			t.pallet_code,
+			s.goods_code,
+			s.batch_no,
+			s.amount
+		FROM
+			wms_location_stereoscopic t
+		JOIN wms_pallet s ON t.pallet_code = s.pallet_code
+		AND t.active_flag = '1'
+		AND s.active_flag = '1'
+		WHERE
+			s.goods_code = #{entity.goodsCode}
+		<if test="entity.batchNo != null and entity.batchNo !=''">
+			<![CDATA[ AND s.batch_no = #{entity.batchNo}]]>
+		</if>
+		AND t.use_status = '3'
+		AND t.shelves_number in
+		<foreach collection="entity.shelvesNumberList" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		AND t.allow_mix = '0'
+		AND RIGHT (t.location_code, 1) = #{entity.deepLocationFlag}
+		AND LEFT (t.location_code, 4) IN (
+			SELECT
+				LEFT (t.location_code, 4)
+			FROM
+				wms_location_stereoscopic t
+			WHERE
+				t.active_flag = '1'
+			AND t.use_status = '0'
+			AND t.shelves_number in
+			<foreach collection="entity.shelvesNumberList" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+			AND t.allow_mix = '0'
+			AND RIGHT (t.location_code, 1) = #{entity.shallowLocationFlag}
+		)
+		ORDER BY
+			t.column_number ASC,
+			t.layer_number DESC,
+			t.shelves_number ASC
+	</select>
+
+	<select id="queryLocationCode2" resultMap="wmsLocationStereoscopicMap" >
+		SELECT
+			t.location_code,
+			t.pallet_code,
+			s.goods_code,
+			s.batch_no,
+			s.amount
+		FROM
+			wms_location_stereoscopic t
+		JOIN wms_pallet s ON t.pallet_code = s.pallet_code
+		AND t.active_flag = '1'
+		AND s.active_flag = '1'
+		WHERE
+			s.goods_code = #{entity.goodsCode}
+		<if test="entity.batchNo != null and entity.batchNo !=''">
+			<![CDATA[ AND s.batch_no = #{entity.batchNo}]]>
+		</if>
+		AND t.use_status = '3'
+		AND t.shelves_number in
+		<foreach collection="entity.shelvesNumberList" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		AND t.allow_mix = '0'
+		AND LEFT (t.location_code, 4) IN (
+			SELECT
+				LEFT (t.location_code, 4)
+			FROM
+				wms_location_stereoscopic t
+			JOIN wms_pallet s ON t.pallet_code = s.pallet_code
+			AND t.active_flag = '1'
+			AND s.active_flag = '1'
+			WHERE
+				s.goods_code = #{entity.goodsCode}
+			<if test="entity.batchNo != null and entity.batchNo !=''">
+				<![CDATA[ AND s.batch_no = #{entity.batchNo}]]>
+			</if>
+			AND	t.use_status = '3'
+			AND t.shelves_number in
+			<foreach collection="entity.shelvesNumberList" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+			AND t.allow_mix = '0'
+			GROUP BY
+				LEFT (t.location_code, 4)
+			HAVING
+				count(1) = 2
+		)
+		ORDER BY
+			t.column_number ASC,
+			t.layer_number DESC,
+			t.shelves_number ASC,
+			RIGHT (t.location_code, 1) ASC
+	</select>
+
+	<select id="queryLocationCode3" resultMap="wmsLocationStereoscopicMap" >
+		SELECT
+			t.location_code,
+			t.pallet_code,
+			s.goods_code,
+			s.batch_no,
+			s.amount
+		FROM
+			wms_location_stereoscopic t
+		JOIN wms_pallet s ON t.pallet_code = s.pallet_code
+		AND t.active_flag = '1'
+		AND s.active_flag = '1'
+		WHERE
+			s.goods_code = #{entity.goodsCode}
+		<if test="entity.batchNo != null and entity.batchNo !=''">
+			<![CDATA[ AND s.batch_no = #{entity.batchNo}]]>
+		</if>
+		AND t.use_status = '3'
+		AND t.shelves_number in
+		<foreach collection="entity.shelvesNumberList" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		AND t.allow_mix = '1'
+		AND RIGHT (t.location_code, 1) = #{entity.deepLocationFlag}
+		AND LEFT (t.location_code, 4) IN (
+			SELECT
+				LEFT (t.location_code, 4)
+			FROM
+				wms_location_stereoscopic t
+			WHERE
+				t.active_flag = '1'
+			AND t.use_status = '0'
+			AND t.shelves_number in
+			<foreach collection="entity.shelvesNumberList" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+			AND t.allow_mix = '1'
+			AND RIGHT (t.location_code, 1) = #{entity.shallowLocationFlag}
+		)
+		ORDER BY
+			t.column_number ASC,
+			t.layer_number DESC,
+			t.shelves_number ASC
+	</select>
+
+	<select id="queryLocationCode4" resultMap="wmsLocationStereoscopicMap" >
+		SELECT
+			t.location_code,
+			t.pallet_code,
+			s.goods_code,
+			s.batch_no,
+			s.amount
+		FROM
+			wms_location_stereoscopic t
+		JOIN wms_pallet s ON t.pallet_code = s.pallet_code
+		AND t.active_flag = '1'
+		AND s.active_flag = '1'
+		WHERE
+			s.goods_code = #{entity.goodsCode}
+		<if test="entity.batchNo != null and entity.batchNo !=''">
+			<![CDATA[ AND s.batch_no = #{entity.batchNo}]]>
+		</if>
+		AND t.use_status = '3'
+		AND t.shelves_number in
+		<foreach collection="entity.shelvesNumberList" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		AND t.allow_mix = '1'
+		AND RIGHT (t.location_code, 1) = #{entity.shallowLocationFlag}
+		ORDER BY
+			t.column_number ASC,
+			t.layer_number DESC,
+			t.shelves_number ASC
+	</select>
+
+	<select id="queryLocationCode5" resultMap="wmsLocationStereoscopicMap" >
+		SELECT
+			t.location_code,
+			t.pallet_code,
+			s.goods_code,
+			s.batch_no,
+			s.amount
+		FROM
+			wms_location_stereoscopic t
+		JOIN wms_pallet s ON t.pallet_code = s.pallet_code
+		AND t.active_flag = '1'
+		AND s.active_flag = '1'
+		WHERE
+			s.goods_code = #{entity.goodsCode}
+		<if test="entity.batchNo != null and entity.batchNo !=''">
+			<![CDATA[ AND s.batch_no = #{entity.batchNo}]]>
+		</if>
+		AND t.use_status = '3'
+		AND t.shelves_number in
+		<foreach collection="entity.shelvesNumberList" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		AND t.allow_mix = '1'
+		AND RIGHT (t.location_code, 1) = #{entity.deepLocationFlag}
+		AND LEFT (t.location_code, 4) IN (
+			SELECT
+				LEFT (t.location_code, 4)
+			FROM
+				wms_location_stereoscopic t
+			JOIN wms_pallet s ON t.pallet_code = s.pallet_code
+			AND t.active_flag = '1'
+			AND s.active_flag = '1'
+			WHERE
+				s.goods_code = #{entity.goodsCode}
+			<if test="entity.batchNo != null and entity.batchNo !=''">
+				<![CDATA[ AND s.batch_no = #{entity.batchNo}]]>
+			</if>
+			AND t.use_status = '3'
+			AND t.shelves_number in
+			<foreach collection="entity.shelvesNumberList" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+			AND t.allow_mix = '1'
+			AND RIGHT (t.location_code, 1) = #{entity.shallowLocationFlag}
+		)
+		ORDER BY
+			t.column_number ASC,
+			t.layer_number DESC,
+			t.shelves_number ASC
+	</select>
+
+	<select id="queryLocationCode6" resultMap="wmsLocationStereoscopicMap" >
+		SELECT
+			t.location_code,
+			t.pallet_code,
+			s.goods_code,
+			s.batch_no,
+			s.amount
+		FROM
+			wms_location_stereoscopic t
+		JOIN wms_pallet s ON t.pallet_code = s.pallet_code
+		AND t.active_flag = '1'
+		AND s.active_flag = '1'
+		WHERE
+			s.goods_code = #{entity.goodsCode}
+		<if test="entity.batchNo != null and entity.batchNo !=''">
+			<![CDATA[ AND s.batch_no = #{entity.batchNo}]]>
+		</if>
+		AND t.use_status = '3'
+		AND t.shelves_number in
+		<foreach collection="entity.shelvesNumberList" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		AND t.allow_mix = '1'
+		AND RIGHT (t.location_code, 1) = #{entity.deepLocationFlag}
+		AND LEFT (t.location_code, 4) IN (
+			SELECT
+				LEFT (t.location_code, 4)
+			FROM
+				wms_location_stereoscopic t
+			JOIN wms_pallet s ON t.pallet_code = s.pallet_code
+			AND t.active_flag = '1'
+			AND s.active_flag = '1'
+			WHERE
+				s.goods_code = #{entity.goodsCode}
+			<if test="entity.batchNo != null and entity.batchNo !=''">
+				<![CDATA[ AND s.batch_no = #{entity.batchNo}]]>
+			</if>
+			AND t.use_status = '3'
+			AND t.shelves_number in
+			<foreach collection="entity.shelvesNumberList" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+			AND t.allow_mix = '1'
+			GROUP BY
+				LEFT (t.location_code, 4)
+			HAVING
+				count(1) = 1
+		)
+		ORDER BY
+			t.column_number ASC,
+			t.layer_number DESC,
+			t.shelves_number ASC
+	</select>
+
+	<select id="queryShallowMix" resultMap="wmsLocationStereoscopicMap" >
+		SELECT
+			location_id,
+			warehouse_code,
+			area_code,
+			location_code,
+			location_attr,
+			location_desc,
+			pallet_code,
+			in_seq,
+			out_seq,
+			shelves_number,
+			layer_number,
+			column_number,
+			use_status,
+			allow_mix,
+			user_defined1,
+			user_defined2,
+			user_defined3,
+			user_defined4,
+			user_defined5,
+			create_by,
+			gmt_create,
+			last_modified_by,
+			gmt_modified,
+			active_flag
+		FROM
+			wms_location_stereoscopic t
+		WHERE
+			t.active_flag = '1'
+		AND t.use_status = '0'
+		AND t.allow_mix = '1'
+		AND t.shelves_number  = #{entity.shelvesNumber}
+		AND RIGHT (t.location_code, 1) = #{entity.shallowLocationFlag}
+		AND LEFT (t.location_code, 4) IN (
+			SELECT
+				LEFT (t.location_code, 4)
+			FROM
+				wms_location_stereoscopic t
+			JOIN wms_pallet s ON t.pallet_code = s.pallet_code
+			AND t.active_flag = '1'
+			AND s.active_flag = '1'
+			WHERE
+				t.use_status = '3'
+			AND t.allow_mix = '1'
+			AND (
+				s.goods_code != #{entity.goodsCode}
+				<if test="entity.batchNo != null and entity.batchNo !=''">
+					<![CDATA[ AND or.batch_no = #{entity.batchNo}]]>
+				</if>
+			)
+			AND RIGHT (t.location_code, 1) = #{entity.deepLocationFlag}
+		)
+		ORDER BY
+			t.location_code ASC
+	</select>
+
+	<select id="queryDeepMix" resultMap="wmsLocationStereoscopicMap" >
+		SELECT
+			location_id,
+			warehouse_code,
+			area_code,
+			location_code,
+			location_attr,
+			location_desc,
+			pallet_code,
+			in_seq,
+			out_seq,
+			shelves_number,
+			layer_number,
+			column_number,
+			use_status,
+			allow_mix,
+			user_defined1,
+			user_defined2,
+			user_defined3,
+			user_defined4,
+			user_defined5,
+			create_by,
+			gmt_create,
+			last_modified_by,
+			gmt_modified,
+			active_flag
+		FROM
+			wms_location_stereoscopic t
+		WHERE
+			t.active_flag = '1'
+		AND t.use_status = '0'
+		AND t.allow_mix = '1'
+		AND t.shelves_number  = #{entity.shelvesNumber}
+		AND RIGHT (t.location_code, 1) = #{entity.deepLocationFlag}
+		AND LEFT (t.location_code, 4) IN (
+			SELECT
+				LEFT (t.location_code, 4)
+			FROM
+				wms_location_stereoscopic t
+			WHERE
+				t.active_flag = '1'
+			AND t.use_status = '0'
+			AND t.allow_mix = '1'
+			AND RIGHT (t.location_code, 1) = #{entity.shallowLocationFlag}
+		)
+		ORDER BY
+			t.location_code ASC
+	</select>
+
+	<select id="queryBatch" resultMap="wmsLocationStereoscopicMap" >
+		SELECT
+			wms_location_stereoscopic_.location_id,
+			wms_location_stereoscopic_.warehouse_code,
+			wms_location_stereoscopic_.area_code,
+			wms_location_stereoscopic_.location_code,
+			wms_location_stereoscopic_.location_attr,
+			wms_location_stereoscopic_.location_desc,
+			wms_location_stereoscopic_.pallet_code,
+			wms_location_stereoscopic_.in_seq,
+			wms_location_stereoscopic_.out_seq,
+			wms_location_stereoscopic_.shelves_number,
+			wms_location_stereoscopic_.layer_number,
+			wms_location_stereoscopic_.column_number,
+			wms_location_stereoscopic_.use_status,
+			wms_location_stereoscopic_.allow_mix,
+			wms_location_stereoscopic_.user_defined1,
+			wms_location_stereoscopic_.user_defined2,
+			wms_location_stereoscopic_.user_defined3,
+			wms_location_stereoscopic_.user_defined4,
+			wms_location_stereoscopic_.user_defined5,
+			wms_location_stereoscopic_.create_by,
+			wms_location_stereoscopic_.gmt_create,
+			wms_location_stereoscopic_.last_modified_by,
+			wms_location_stereoscopic_.gmt_modified,
+			wms_location_stereoscopic_.active_flag
+		FROM
+			wms_location_stereoscopic wms_location_stereoscopic_
+		where wms_location_stereoscopic_.location_code in
+		<foreach collection="dataList" item="entity" open="(" separator=","
+				 close=")">
+			#{entity.locationCode}
+		</foreach>
+	</select>
+	<select id="queryNotEmptyLocationList" resultMap="wmsLocationStereoscopicMap">
+		SELECT
+			wms_location_stereoscopic_.location_id,
+			wms_location_stereoscopic_.warehouse_code,
+			wms_location_stereoscopic_.area_code,
+			wms_location_stereoscopic_.location_code,
+			wms_location_stereoscopic_.location_attr,
+			wms_location_stereoscopic_.location_desc,
+			wms_location_stereoscopic_.pallet_code,
+			wms_location_stereoscopic_.in_seq,
+			wms_location_stereoscopic_.out_seq,
+			wms_location_stereoscopic_.shelves_number,
+			wms_location_stereoscopic_.layer_number,
+			wms_location_stereoscopic_.column_number,
+			wms_location_stereoscopic_.use_status,
+			wms_location_stereoscopic_.allow_mix,
+			wms_location_stereoscopic_.user_defined1,
+			wms_location_stereoscopic_.user_defined2,
+			wms_location_stereoscopic_.user_defined3,
+			wms_location_stereoscopic_.user_defined4,
+			wms_location_stereoscopic_.user_defined5,
+			wms_location_stereoscopic_.create_by,
+			wms_location_stereoscopic_.gmt_create,
+			wms_location_stereoscopic_.last_modified_by,
+			wms_location_stereoscopic_.gmt_modified,
+			wms_location_stereoscopic_.active_flag
+		FROM
+			wms_location_stereoscopic wms_location_stereoscopic_
+		where wms_location_stereoscopic_.use_status != 0
+	</select>
+    <select id="groupByUseStatus" resultMap="wmsLocationStereoscopicMap">
+		SELECT
+			use_status,
+			count( 1 ) as user_defined1
+		FROM
+			wms_location_stereoscopic
+		WHERE
+			active_flag = '1'
+		GROUP BY
+			use_status
+	</select>
+<!--	批量修改active_flag标志位状态-->
+	<update id="upActiveFlag" parameterType="java.lang.String">
+		update wms_location_stereoscopic
+		set
+   			active_flag = #{flag}
+		 where location_id in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</update>
+
+
+</mapper>

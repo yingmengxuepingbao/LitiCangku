@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.penghaisoft.pda.storage.dao.WmsPalletMapper" >
+  <resultMap id="BaseResultMap" type="com.penghaisoft.pda.storage.model.WmsPallet" >
+    <id column="pallet_id" property="palletId" jdbcType="VARCHAR" />
+    <result column="pallet_code" property="palletCode" jdbcType="VARCHAR" />
+    <result column="goods_code" property="goodsCode" jdbcType="VARCHAR" />
+    <result column="amount" property="amount" jdbcType="INTEGER" />
+    <result column="batch_no" property="batchNo" jdbcType="VARCHAR" />
+    <result column="warehouse_code" property="warehouseCode" jdbcType="VARCHAR" />
+    <result column="area_code" property="areaCode" jdbcType="VARCHAR" />
+    <result column="location_code" property="locationCode" jdbcType="VARCHAR" />
+    <result column="lock_by" property="lockBy" jdbcType="VARCHAR" />
+    <result column="channel_location" property="channelLocation" jdbcType="VARCHAR" />
+    <result column="user_defined1" property="userDefined1" jdbcType="VARCHAR" />
+    <result column="user_defined2" property="userDefined2" jdbcType="VARCHAR" />
+    <result column="user_defined3" property="userDefined3" jdbcType="VARCHAR" />
+    <result column="user_defined4" property="userDefined4" jdbcType="VARCHAR" />
+    <result column="user_defined5" property="userDefined5" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="last_modified_by" property="lastModifiedBy" jdbcType="VARCHAR" />
+    <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+    <result column="active_flag" property="activeFlag" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    pallet_id, pallet_code, goods_code, amount, batch_no, warehouse_code, area_code, 
+    location_code, lock_by, channel_location, user_defined1, user_defined2, user_defined3, 
+    user_defined4, user_defined5, create_by, gmt_create, last_modified_by, gmt_modified, 
+    active_flag
+  </sql>
+  <select id="selectByCode" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from wms_pallet
+    where pallet_code = #{palletCode,jdbcType=VARCHAR} and active_flag = '1'
+  </select>
+  <insert id="insertSelective" parameterType="com.penghaisoft.pda.storage.model.WmsPallet" >
+    insert into wms_pallet
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="palletId != null" >
+        pallet_id,
+      </if>
+      <if test="palletCode != null" >
+        pallet_code,
+      </if>
+      <if test="goodsCode != null" >
+        goods_code,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="batchNo != null" >
+        batch_no,
+      </if>
+      <if test="warehouseCode != null" >
+        warehouse_code,
+      </if>
+      <if test="areaCode != null" >
+        area_code,
+      </if>
+      <if test="locationCode != null" >
+        location_code,
+      </if>
+      <if test="lockBy != null" >
+        lock_by,
+      </if>
+      <if test="channelLocation != null" >
+        channel_location,
+      </if>
+      <if test="userDefined1 != null" >
+        user_defined1,
+      </if>
+      <if test="userDefined2 != null" >
+        user_defined2,
+      </if>
+      <if test="userDefined3 != null" >
+        user_defined3,
+      </if>
+      <if test="userDefined4 != null" >
+        user_defined4,
+      </if>
+      <if test="userDefined5 != null" >
+        user_defined5,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create,
+      </if>
+      <if test="lastModifiedBy != null" >
+        last_modified_by,
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified,
+      </if>
+      <if test="activeFlag != null" >
+        active_flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="palletId != null" >
+        #{palletId,jdbcType=VARCHAR},
+      </if>
+      <if test="palletCode != null" >
+        #{palletCode,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsCode != null" >
+        #{goodsCode,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=INTEGER},
+      </if>
+      <if test="batchNo != null" >
+        #{batchNo,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseCode != null" >
+        #{warehouseCode,jdbcType=VARCHAR},
+      </if>
+      <if test="areaCode != null" >
+        #{areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="locationCode != null" >
+        #{locationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="lockBy != null" >
+        #{lockBy,jdbcType=VARCHAR},
+      </if>
+      <if test="channelLocation != null" >
+        #{channelLocation,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined1 != null" >
+        #{userDefined1,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined2 != null" >
+        #{userDefined2,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined3 != null" >
+        #{userDefined3,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined4 != null" >
+        #{userDefined4,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined5 != null" >
+        #{userDefined5,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifiedBy != null" >
+        #{lastModifiedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtModified != null" >
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activeFlag != null" >
+        #{activeFlag,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByCode" parameterType="com.penghaisoft.pda.storage.model.WmsPallet" >
+    update wms_pallet
+    <set >
+      <if test="palletCode != null" >
+        pallet_code = #{palletCode,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsCode != null" >
+        goods_code = #{goodsCode,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsCodeNull != null" >
+        goods_code = null,
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=INTEGER},
+      </if>
+      <if test="amountDel != null" >
+        amount = IFNULL(amount, 0) - #{amountDel,jdbcType=INTEGER},
+      </if>
+      <if test="amountNull != null" >
+        amount = null,
+      </if>
+      <if test="batchNo != null" >
+        batch_no = #{batchNo,jdbcType=VARCHAR},
+      </if>
+      <if test="batchNoNull != null" >
+        batch_no = null,
+      </if>
+      <if test="warehouseCode != null" >
+        warehouse_code = #{warehouseCode,jdbcType=VARCHAR},
+      </if>
+      <if test="areaCode != null" >
+        area_code = #{areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="locationCode != null" >
+        location_code = #{locationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="locationCodeNull != null" >
+        location_code = null,
+      </if>
+      <if test="lockBy != null" >
+        lock_by = #{lockBy,jdbcType=VARCHAR},
+      </if>
+      <if test="lockByNull != null" >
+        lock_by = null,
+      </if>
+      <if test="channelLocation != null" >
+        channel_location = #{channelLocation,jdbcType=VARCHAR},
+      </if>
+      <if test="channelLocationNull != null" >
+        channel_location = null,
+      </if>
+      <if test="userDefined1 != null" >
+        user_defined1 = #{userDefined1,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined2 != null" >
+        user_defined2 = #{userDefined2,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined3 != null" >
+        user_defined3 = #{userDefined3,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined4 != null" >
+        user_defined4 = #{userDefined4,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined5 != null" >
+        user_defined5 = #{userDefined5,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifiedBy != null" >
+        last_modified_by = #{lastModifiedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activeFlag != null" >
+        active_flag = #{activeFlag,jdbcType=CHAR},
+      </if>
+    </set>
+    where pallet_code = #{palletCode,jdbcType=VARCHAR} and active_flag = '1'
+  </update>
+  <update id="palletCleanByCode" parameterType="java.lang.String" >
+    UPDATE wms_pallet
+    SET
+     goods_code = NULL,
+     amount = 0,
+     batch_no = NULL,
+     warehouse_code = NULL,
+     area_code = NULL,
+     location_code = NULL
+    WHERE
+        pallet_code = #{palletCode,jdbcType=VARCHAR}
+    AND active_flag = '1'
+  </update>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from wms_pallet
+    where pallet_id = #{palletId,jdbcType=VARCHAR}
+  </delete>
+
+
+  <update id="palletUnbind" parameterType="java.lang.String" >
+    UPDATE wms_pallet
+    SET
+      goods_code = NULL,
+      amount = 0,
+      batch_no = NULL
+    WHERE
+      pallet_code = #{palletCode}
+      AND active_flag = '1'
+  </update>
+</mapper>

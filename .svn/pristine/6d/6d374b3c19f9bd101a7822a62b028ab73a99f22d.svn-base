@@ -1,0 +1,774 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.penghaisoft.wms.storagemanagement.model.dao.WmsTaskExecutionLogMapper">
+	
+	<!-- =========================================================== -->
+    <!-- 定义resultMap                                                                                                                                                                             -->
+    <!-- =========================================================== -->
+	<resultMap id="wmsTaskExecutionLogMap" type="com.penghaisoft.wms.storagemanagement.model.entity.WmsTaskExecutionLog">
+		<result property="id" column="id"/>
+		<result property="taskId" column="task_id"/>
+		<result property="orderNo" column="order_no"/>
+		<result property="taskType" column="task_type"/>
+		<result property="taskStatus" column="task_status"/>
+		<result property="inAddress" column="in_address"/>
+		<result property="outAddress" column="out_address"/>
+		<result property="goodsCode" column="goods_code"/>
+		<result property="batchNo" column="batch_no"/>
+		<result property="warehouseCode" column="warehouse_code"/>
+		<result property="areaCode" column="area_code"/>
+		<result property="locationCode" column="location_code"/>
+		<result property="palletCode" column="pallet_code"/>
+		<result property="errorMsg" column="error_msg"/>
+		<result property="userDefined1" column="user_defined1"/>
+		<result property="userDefined2" column="user_defined2"/>
+		<result property="userDefined3" column="user_defined3"/>
+		<result property="userDefined4" column="user_defined4"/>
+		<result property="userDefined5" column="user_defined5"/>
+		<result property="createBy" column="create_by"/>
+		<result property="gmtCreate" column="gmt_create"/>
+		<result property="lastModifiedBy" column="last_modified_by"/>
+		<result property="gmtModified" column="gmt_modified"/>
+		<result property="activeFlag" column="active_flag"/>
+	</resultMap>
+	
+	<!-- =========================================================== -->
+    <!-- 一些公共变量设置                                                                                                                                                                             -->
+    <!-- =========================================================== -->
+	<!-- mysql 分页 -->
+	<sql id="pagination_tail">
+	<!--limit #{page.pageOffset} , #{page.rows}-->
+		top ((#{page.pageOffset} +1)* #{page.rows})
+  </sql>
+  <!-- mysql 查询总数 -->
+	<sql id="count_Tail">
+		select count(1) from 
+	</sql>
+
+	<sql id="Base_Column_List" >
+		id, task_id, order_no, task_type, task_status, error_msg, in_address, out_address, goods_code,
+    batch_no, warehouse_code, area_code, location_code, pallet_code, user_defined1, user_defined2,
+    user_defined3, user_defined4, user_defined5, create_by, gmt_create, last_modified_by,
+    gmt_modified, active_flag
+	</sql>
+
+	<sql id="selectAllColumns">
+		<![CDATA[
+ 			id
+ 			,task_id
+ 			,order_no
+ 			,task_type
+ 			,task_status
+ 			,in_address
+ 			,out_address
+ 			,goods_code
+ 			,batch_no
+ 			,warehouse_code
+ 			,area_code
+ 			,location_code
+ 			,pallet_code
+ 			,error_msg
+ 			,user_defined1
+ 			,user_defined2
+ 			,user_defined3
+ 			,user_defined4
+ 			,user_defined5
+ 			,create_by
+ 			,gmt_create
+ 			,last_modified_by
+ 			,gmt_modified
+ 			,active_flag
+		FROM 
+		wms_task_execution_log wms_task_execution_log_
+		]]>
+	</sql>
+	
+	<sql id="where_fragement">
+		where 1=1
+		<if test="entity!=null">
+			<if test="entity.id != null and entity.id !=''">
+				<![CDATA[ and wms_task_execution_log_.id LIKE CONCAT('%',#{entity.id},'%')]]>
+			</if>
+			<if test="entity.taskId != null">
+				<![CDATA[ and wms_task_execution_log_.task_id = #{entity.taskId}]]>
+			</if>
+			<if test="entity.orderNo != null and entity.orderNo !=''">
+				<![CDATA[ and wms_task_execution_log_.order_no LIKE CONCAT('%',#{entity.orderNo},'%')]]>
+			</if>
+			<if test="entity.taskType != null and entity.taskType !=''">
+				<![CDATA[ and wms_task_execution_log_.task_type LIKE CONCAT('%',#{entity.taskType},'%')]]>
+			</if>
+			<if test="entity.taskStatus != null and entity.taskStatus !=''">
+				<![CDATA[ and wms_task_execution_log_.task_status LIKE CONCAT('%',#{entity.taskStatus},'%')]]>
+			</if>
+			<if test="entity.inAddress != null and entity.inAddress !=''">
+				<![CDATA[ and wms_task_execution_log_.in_address LIKE CONCAT('%',#{entity.inAddress},'%')]]>
+			</if>
+			<if test="entity.outAddress != null and entity.outAddress !=''">
+				<![CDATA[ and wms_task_execution_log_.out_address LIKE CONCAT('%',#{entity.outAddress},'%')]]>
+			</if>
+			<if test="entity.goodsCode != null and entity.goodsCode !=''">
+				<![CDATA[ and wms_task_execution_log_.goods_code LIKE CONCAT('%',#{entity.goodsCode},'%')]]>
+			</if>
+			<if test="entity.batchNo != null and entity.batchNo !=''">
+				<![CDATA[ and wms_task_execution_log_.batch_no LIKE CONCAT('%',#{entity.batchNo},'%')]]>
+			</if>
+			<if test="entity.warehouseCode != null and entity.warehouseCode !=''">
+				<![CDATA[ and wms_task_execution_log_.warehouse_code LIKE CONCAT('%',#{entity.warehouseCode},'%')]]>
+			</if>
+			<if test="entity.areaCode != null and entity.areaCode !=''">
+				<![CDATA[ and wms_task_execution_log_.area_code LIKE CONCAT('%',#{entity.areaCode},'%')]]>
+			</if>
+			<if test="entity.locationCode != null and entity.locationCode !=''">
+				<![CDATA[ and wms_task_execution_log_.location_code LIKE CONCAT('%',#{entity.locationCode},'%')]]>
+			</if>
+			<if test="entity.palletCode != null and entity.palletCode !=''">
+				<![CDATA[ and wms_task_execution_log_.pallet_code LIKE CONCAT('%',#{entity.palletCode},'%')]]>
+			</if>
+			<if test="entity.errorMsg != null and entity.errorMsg !=''">
+				<![CDATA[ and wms_task_execution_log_.error_msg LIKE CONCAT('%',#{entity.errorMsg},'%')]]>
+			</if>
+			<if test="entity.userDefined1 != null and entity.userDefined1 !=''">
+				<![CDATA[ and wms_task_execution_log_.user_defined1 LIKE CONCAT('%',#{entity.userDefined1},'%')]]>
+			</if>
+			<if test="entity.userDefined2 != null and entity.userDefined2 !=''">
+				<![CDATA[ and wms_task_execution_log_.user_defined2 LIKE CONCAT('%',#{entity.userDefined2},'%')]]>
+			</if>
+			<if test="entity.userDefined3 != null and entity.userDefined3 !=''">
+				<![CDATA[ and wms_task_execution_log_.user_defined3 LIKE CONCAT('%',#{entity.userDefined3},'%')]]>
+			</if>
+			<if test="entity.userDefined4 != null and entity.userDefined4 !=''">
+				<![CDATA[ and wms_task_execution_log_.user_defined4 LIKE CONCAT('%',#{entity.userDefined4},'%')]]>
+			</if>
+			<if test="entity.userDefined5 != null and entity.userDefined5 !=''">
+				<![CDATA[ and wms_task_execution_log_.user_defined5 LIKE CONCAT('%',#{entity.userDefined5},'%')]]>
+			</if>
+			<if test="entity.createBy != null and entity.createBy !=''">
+				<![CDATA[ and wms_task_execution_log_.create_by LIKE CONCAT('%',#{entity.createBy},'%')]]>
+			</if>
+			<if test="entity.gmtCreate != null">
+				<![CDATA[ and wms_task_execution_log_.gmt_create LIKE CONCAT('%',#{entity.gmtCreate},'%')]]>
+			</if>
+			<if test="entity.lastModifiedBy != null and entity.lastModifiedBy !=''">
+				<![CDATA[ and wms_task_execution_log_.last_modified_by LIKE CONCAT('%',#{entity.lastModifiedBy},'%')]]>
+			</if>
+			<if test="entity.gmtModified != null">
+				<![CDATA[ and wms_task_execution_log_.gmt_modified LIKE CONCAT('%',#{entity.gmtModified},'%')]]>
+			</if>
+			<if test="entity.activeFlag != null and entity.activeFlag !=''">
+				<![CDATA[ and wms_task_execution_log_.active_flag LIKE CONCAT('%',#{entity.activeFlag},'%')]]>
+			</if>
+		</if>
+	</sql>
+	
+	<sql id="where_any">
+		where 1=1
+		<if test="entity!=null">
+			<if test="entity.id != null and entity.id !=''">
+				<![CDATA[ and wms_task_execution_log_.id = #{entity.id}]]>
+			</if>
+			<if test="entity.taskId != null and entity.taskId !=''">
+				<![CDATA[ and wms_task_execution_log_.task_id = #{entity.taskId}]]>
+			</if>
+			<if test="entity.orderNo != null and entity.orderNo !=''">
+				<![CDATA[ and wms_task_execution_log_.order_no = #{entity.orderNo}]]>
+			</if>
+			<if test="entity.taskType != null and entity.taskType !=''">
+				<![CDATA[ and wms_task_execution_log_.task_type = #{entity.taskType}]]>
+			</if>
+			<if test="entity.taskStatus != null and entity.taskStatus !=''">
+				<![CDATA[ and wms_task_execution_log_.task_status = #{entity.taskStatus}]]>
+			</if>
+			<if test="entity.inAddress != null and entity.inAddress !=''">
+				<![CDATA[ and wms_task_execution_log_.in_address = #{entity.inAddress}]]>
+			</if>
+			<if test="entity.outAddress != null and entity.outAddress !=''">
+				<![CDATA[ and wms_task_execution_log_.out_address = #{entity.outAddress}]]>
+			</if>
+			<if test="entity.goodsCode != null and entity.goodsCode !=''">
+				<![CDATA[ and wms_task_execution_log_.goods_code = #{entity.goodsCode}]]>
+			</if>
+			<if test="entity.batchNo != null and entity.batchNo !=''">
+				<![CDATA[ and wms_task_execution_log_.batch_no = #{entity.batchNo}]]>
+			</if>
+			<if test="entity.warehouseCode != null and entity.warehouseCode !=''">
+				<![CDATA[ and wms_task_execution_log_.warehouse_code = #{entity.warehouseCode}]]>
+			</if>
+			<if test="entity.areaCode != null and entity.areaCode !=''">
+				<![CDATA[ and wms_task_execution_log_.area_code = #{entity.areaCode}]]>
+			</if>
+			<if test="entity.locationCode != null and entity.locationCode !=''">
+				<![CDATA[ and wms_task_execution_log_.location_code = #{entity.locationCode}]]>
+			</if>
+			<if test="entity.palletCode != null and entity.palletCode !=''">
+				<![CDATA[ and wms_task_execution_log_.pallet_code = #{entity.palletCode}]]>
+			</if>
+			<if test="entity.errorMsg != null and entity.errorMsg !=''">
+				<![CDATA[ and wms_task_execution_log_.error_msg = #{entity.errorMsg}]]>
+			</if>
+			<if test="entity.userDefined1 != null and entity.userDefined1 !=''">
+				<![CDATA[ and wms_task_execution_log_.user_defined1 = #{entity.userDefined1}]]>
+			</if>
+			<if test="entity.userDefined2 != null and entity.userDefined2 !=''">
+				<![CDATA[ and wms_task_execution_log_.user_defined2 = #{entity.userDefined2}]]>
+			</if>
+			<if test="entity.userDefined3 != null and entity.userDefined3 !=''">
+				<![CDATA[ and wms_task_execution_log_.user_defined3 = #{entity.userDefined3}]]>
+			</if>
+			<if test="entity.userDefined4 != null and entity.userDefined4 !=''">
+				<![CDATA[ and wms_task_execution_log_.user_defined4 = #{entity.userDefined4}]]>
+			</if>
+			<if test="entity.userDefined5 != null and entity.userDefined5 !=''">
+				<![CDATA[ and wms_task_execution_log_.user_defined5 = #{entity.userDefined5}]]>
+			</if>
+			<if test="entity.createBy != null and entity.createBy !=''">
+				<![CDATA[ and wms_task_execution_log_.create_by = #{entity.createBy}]]>
+			</if>
+			<if test="entity.gmtCreate != null">
+				<![CDATA[ and wms_task_execution_log_.gmt_create = #{entity.gmtCreate}]]>
+			</if>
+			<if test="entity.lastModifiedBy != null and entity.lastModifiedBy !=''">
+				<![CDATA[ and wms_task_execution_log_.last_modified_by = #{entity.lastModifiedBy}]]>
+			</if>
+			<if test="entity.gmtModified != null ">
+				<![CDATA[ and wms_task_execution_log_.gmt_modified = #{entity.gmtModified}]]>
+			</if>
+			<if test="entity.activeFlag != null and entity.activeFlag !=''">
+				<![CDATA[ and wms_task_execution_log_.active_flag = #{entity.activeFlag}]]>
+			</if>
+		</if>
+	</sql>
+	
+	<!-- =========================================================== -->
+    <!-- DAO方法中的基本增删改查方法                                                                                                                                                           -->
+    <!-- =========================================================== -->
+   <!-- 根据id查询 -->
+	<select id="queryById" resultMap="wmsTaskExecutionLogMap" parameterType="java.lang.String">
+		select
+		<include refid="selectAllColumns" />
+		<![CDATA[
+		where wms_task_execution_log_.id = #{id}
+		]]>
+	</select>
+	
+	<!-- 分页查询 -->
+	<select id="queryList" resultMap="wmsTaskExecutionLogMap" >
+		select
+		<if test="page!=null">
+			<include refid="pagination_tail" />
+		</if>
+		<include refid="selectAllColumns"/>
+		<include refid="where_fragement" />
+		<if test="entity.orderBy != null and entity.orderBy !=''">
+			order by ${entity.orderBy}
+		</if>
+
+	</select>
+	
+	<select id="queryCount" resultType="long">
+		<include refid="count_Tail" />
+		wms_task_execution_log wms_task_execution_log_
+		<include refid="where_fragement" />
+	</select>
+	
+	<!-- 插入记录 -->
+	<insert id="create" parameterType="com.penghaisoft.wms.storagemanagement.model.entity.WmsTaskExecutionLog">
+		<![CDATA[
+		insert into wms_task_execution_log (
+		    	 task_id
+		    	 ,order_no
+		    	 ,task_type
+		    	 ,task_status
+		    	 ,in_address
+		    	 ,out_address
+		    	 ,goods_code
+		    	 ,batch_no
+		    	 ,warehouse_code
+		    	 ,area_code
+		    	 ,location_code
+		    	 ,pallet_code
+		    	 ,error_msg
+		    	 ,user_defined1
+		    	 ,user_defined2
+		    	 ,user_defined3
+		    	 ,user_defined4
+		    	 ,user_defined5
+		    	 ,create_by
+		    	 ,gmt_create
+		    	 ,last_modified_by
+		    	 ,gmt_modified
+		    	 ,active_flag
+		   )values(
+		    	#{taskId}
+		    	,#{orderNo}
+		    	,#{taskType}
+		    	,#{taskStatus}
+		    	,#{inAddress}
+		    	,#{outAddress}
+		    	,#{goodsCode}
+		    	,#{batchNo}
+		    	,#{warehouseCode}
+		    	,#{areaCode}
+		    	,#{locationCode}
+		    	,#{palletCode}
+		    	,#{errorMsg}
+		    	,#{userDefined1}
+		    	,#{userDefined2}
+		    	,#{userDefined3}
+		    	,#{userDefined4}
+		    	,#{userDefined5}
+		    	,#{createBy}
+		    	,#{gmtCreate}
+		    	,#{lastModifiedBy}
+		    	,#{gmtModified}
+		    	,#{activeFlag}
+		   )
+	    ]]>	
+	</insert>
+	
+	<!-- 批量插入记录 -->
+	<insert id="batchInsert" parameterType="java.util.List">
+		insert into wms_task_execution_log (
+		    	 task_id
+		    	 ,order_no
+		    	 ,task_type
+		    	 ,task_status
+		    	 ,in_address
+		    	 ,out_address
+		    	 ,goods_code
+		    	 ,batch_no
+		    	 ,warehouse_code
+		    	 ,area_code
+		    	 ,location_code
+		    	 ,pallet_code
+		    	 ,error_msg
+		    	 ,user_defined1
+		    	 ,user_defined2
+		    	 ,user_defined3
+		    	 ,user_defined4
+		    	 ,user_defined5
+		    	 ,create_by
+		    	 ,gmt_create
+		    	 ,last_modified_by
+		    	 ,gmt_modified
+		    	 ,active_flag
+		   )
+		   values
+		   <foreach collection="list" item="item" index="index" separator="," >
+		   (
+		    	 #{item.taskId}
+			    ,#{item.orderNo}
+		    	,#{item.taskType}
+		    	,#{item.taskStatus}
+		    	,#{item.inAddress}
+		    	,#{item.outAddress}
+		    	,#{item.goodsCode}
+		    	,#{item.batchNo}
+		    	,#{item.warehouseCode}
+		    	,#{item.areaCode}
+		    	,#{item.locationCode}
+		    	,#{item.palletCode}
+		    	,#{item.errorMsg}
+		    	,#{item.userDefined1}
+		    	,#{item.userDefined2}
+		    	,#{item.userDefined3}
+		    	,#{item.userDefined4}
+		    	,#{item.userDefined5}
+		    	,#{item.createBy}
+		    	,#{item.gmtCreate}
+		    	,#{item.lastModifiedBy}
+		    	,#{item.gmtModified}
+		    	,#{item.activeFlag}
+		   )
+		   </foreach>	
+	</insert>
+	
+	<!-- 根据id，修改记录 -->
+	<update id="update" parameterType="com.penghaisoft.wms.storagemanagement.model.entity.WmsTaskExecutionLog">
+		<![CDATA[
+		update wms_task_execution_log set
+   			
+   			task_id = #{taskId}
+   			order_no = #{orderNo}
+   			,task_type = #{taskType}
+   			,task_status = #{taskStatus}
+   			,in_address = #{inAddress}
+   			,out_address = #{outAddress}
+   			,goods_code = #{goodsCode}
+   			,batch_no = #{batchNo}
+   			,warehouse_code = #{warehouseCode}
+   			,area_code = #{areaCode}
+   			,location_code = #{locationCode}
+   			,pallet_code = #{palletCode}
+   			,error_msg = #{errorMsg}
+   			,user_defined1 = #{userDefined1}
+   			,user_defined2 = #{userDefined2}
+   			,user_defined3 = #{userDefined3}
+   			,user_defined4 = #{userDefined4}
+   			,user_defined5 = #{userDefined5}
+   			,create_by = #{createBy}
+   			,gmt_create = #{gmtCreate}
+   			,last_modified_by = #{lastModifiedBy}
+   			,gmt_modified = #{gmtModified}
+   			,active_flag = #{activeFlag}
+		 where id = #{id}
+		]]>
+	</update>
+	
+	<!--  -->
+	<update id="updateBySelect" parameterType="com.penghaisoft.wms.storagemanagement.model.entity.WmsTaskExecutionLog">
+		update wms_task_execution_log <set>
+		<if test="entity!=null">
+				<if test="entity.id != null and entity.id !=''">
+					
+				</if>
+				<if test="entity.taskId != null and entity.taskId !=''">
+					<![CDATA[ task_id = #{entity.taskId}, ]]>
+				</if>
+				<if test="entity.orderNo != null and entity.orderNo !=''">
+					<![CDATA[ order_no = #{entity.orderNo}, ]]>
+				</if>
+				<if test="entity.taskType != null and entity.taskType !=''">
+					<![CDATA[ task_type = #{entity.taskType}, ]]>
+				</if>
+				<if test="entity.taskStatus != null and entity.taskStatus !=''">
+					<![CDATA[ task_status = #{entity.taskStatus}, ]]>
+				</if>
+				<if test="entity.inAddress != null and entity.inAddress !=''">
+					<![CDATA[ in_address = #{entity.inAddress}, ]]>
+				</if>
+				<if test="entity.outAddress != null and entity.outAddress !=''">
+					<![CDATA[ out_address = #{entity.outAddress}, ]]>
+				</if>
+				<if test="entity.goodsCode != null and entity.goodsCode !=''">
+					<![CDATA[ goods_code = #{entity.goodsCode}, ]]>
+				</if>
+				<if test="entity.batchNo != null and entity.batchNo !=''">
+					<![CDATA[ batch_no = #{entity.batchNo}, ]]>
+				</if>
+				<if test="entity.warehouseCode != null and entity.warehouseCode !=''">
+					<![CDATA[ warehouse_code = #{entity.warehouseCode}, ]]>
+				</if>
+				<if test="entity.areaCode != null and entity.areaCode !=''">
+					<![CDATA[ area_code = #{entity.areaCode}, ]]>
+				</if>
+				<if test="entity.locationCode != null and entity.locationCode !=''">
+					<![CDATA[ location_code = #{entity.locationCode}, ]]>
+				</if>
+				<if test="entity.palletCode != null and entity.palletCode !=''">
+					<![CDATA[ pallet_code = #{entity.palletCode}, ]]>
+				</if>
+				<if test="entity.errorMsg != null and entity.errorMsg !=''">
+					<![CDATA[ error_msg = #{entity.errorMsg}, ]]>
+				</if>
+				<if test="entity.userDefined1 != null and entity.userDefined1 !=''">
+					<![CDATA[ user_defined1 = #{entity.userDefined1}, ]]>
+				</if>
+				<if test="entity.userDefined2 != null and entity.userDefined2 !=''">
+					<![CDATA[ user_defined2 = #{entity.userDefined2}, ]]>
+				</if>
+				<if test="entity.userDefined3 != null and entity.userDefined3 !=''">
+					<![CDATA[ user_defined3 = #{entity.userDefined3}, ]]>
+				</if>
+				<if test="entity.userDefined4 != null and entity.userDefined4 !=''">
+					<![CDATA[ user_defined4 = #{entity.userDefined4}, ]]>
+				</if>
+				<if test="entity.userDefined5 != null and entity.userDefined5 !=''">
+					<![CDATA[ user_defined5 = #{entity.userDefined5}, ]]>
+				</if>
+				<if test="entity.createBy != null and entity.createBy !=''">
+					<![CDATA[ create_by = #{entity.createBy}, ]]>
+				</if>
+				<if test="entity.gmtCreate != null">
+					<![CDATA[ gmt_create = #{entity.gmtCreate}, ]]>
+				</if>
+				<if test="entity.lastModifiedBy != null and entity.lastModifiedBy !=''">
+					<![CDATA[ last_modified_by = #{entity.lastModifiedBy}, ]]>
+				</if>
+				<if test="entity.gmtModified != null ">
+					<![CDATA[ gmt_modified = #{entity.gmtModified}, ]]>
+				</if>
+				<if test="entity.activeFlag != null and entity.activeFlag !=''">
+					<![CDATA[ active_flag = #{entity.activeFlag}, ]]>
+				</if>
+		</if>
+		</set>
+		 where id = #{entity.id}
+	</update>
+
+	<!--  根据任务单号，修改数据 -->
+	<update id="updateByTaskId" parameterType="com.penghaisoft.wms.storagemanagement.model.entity.WmsTaskExecutionLog">
+		update wms_task_execution_log <set>
+		<if test="entity!=null">
+			<if test="entity.id != null and entity.id !=''">
+
+			</if>
+			<if test="entity.taskId != null and entity.taskId !=''">
+				<![CDATA[ task_id = #{entity.taskId}, ]]>
+			</if>
+			<if test="entity.orderNo != null and entity.orderNo !=''">
+				<![CDATA[ order_no = #{entity.orderNo}, ]]>
+			</if>
+			<if test="entity.taskType != null and entity.taskType !=''">
+				<![CDATA[ task_type = #{entity.taskType}, ]]>
+			</if>
+			<if test="entity.taskStatus != null and entity.taskStatus !=''">
+				<![CDATA[ task_status = #{entity.taskStatus}, ]]>
+			</if>
+			<if test="entity.inAddress != null and entity.inAddress !=''">
+				<![CDATA[ in_address = #{entity.inAddress}, ]]>
+			</if>
+			<if test="entity.outAddress != null and entity.outAddress !=''">
+				<![CDATA[ out_address = #{entity.outAddress}, ]]>
+			</if>
+			<if test="entity.goodsCode != null and entity.goodsCode !=''">
+				<![CDATA[ goods_code = #{entity.goodsCode}, ]]>
+			</if>
+			<if test="entity.batchNo != null and entity.batchNo !=''">
+				<![CDATA[ batch_no = #{entity.batchNo}, ]]>
+			</if>
+			<if test="entity.warehouseCode != null and entity.warehouseCode !=''">
+				<![CDATA[ warehouse_code = #{entity.warehouseCode}, ]]>
+			</if>
+			<if test="entity.areaCode != null and entity.areaCode !=''">
+				<![CDATA[ area_code = #{entity.areaCode}, ]]>
+			</if>
+			<if test="entity.locationCode != null and entity.locationCode !=''">
+				<![CDATA[ location_code = #{entity.locationCode}, ]]>
+			</if>
+			<if test="entity.palletCode != null and entity.palletCode !=''">
+				<![CDATA[ pallet_code = #{entity.palletCode}, ]]>
+			</if>
+			<if test="entity.errorMsg != null and entity.errorMsg !=''">
+				<![CDATA[ error_msg = #{entity.errorMsg}, ]]>
+			</if>
+			<if test="entity.userDefined1 != null and entity.userDefined1 !=''">
+				<![CDATA[ user_defined1 = #{entity.userDefined1}, ]]>
+			</if>
+			<if test="entity.userDefined2 != null and entity.userDefined2 !=''">
+				<![CDATA[ user_defined2 = #{entity.userDefined2}, ]]>
+			</if>
+			<if test="entity.userDefined3 != null and entity.userDefined3 !=''">
+				<![CDATA[ user_defined3 = #{entity.userDefined3}, ]]>
+			</if>
+			<if test="entity.userDefined4 != null and entity.userDefined4 !=''">
+				<![CDATA[ user_defined4 = #{entity.userDefined4}, ]]>
+			</if>
+			<if test="entity.userDefined5 != null and entity.userDefined5 !=''">
+				<![CDATA[ user_defined5 = #{entity.userDefined5}, ]]>
+			</if>
+			<if test="entity.createBy != null and entity.createBy !=''">
+				<![CDATA[ create_by = #{entity.createBy}, ]]>
+			</if>
+			<if test="entity.gmtCreate != null">
+				<![CDATA[ gmt_create = #{entity.gmtCreate}, ]]>
+			</if>
+			<if test="entity.lastModifiedBy != null and entity.lastModifiedBy !=''">
+				<![CDATA[ last_modified_by = #{entity.lastModifiedBy}, ]]>
+			</if>
+			<if test="entity.gmtModified != null ">
+				<![CDATA[ gmt_modified = #{entity.gmtModified}, ]]>
+			</if>
+			<if test="entity.activeFlag != null and entity.activeFlag !=''">
+				<![CDATA[ active_flag = #{entity.activeFlag}, ]]>
+			</if>
+		</if>
+	</set>
+		where task_id = #{entity.taskId} and active_flag = '1'
+	</update>
+
+	   <!-- 逻辑删除,根据主键设置active_flag ='0' -->
+	  <update id="delete" parameterType="com.penghaisoft.wms.storagemanagement.model.entity.WmsTaskExecutionLog">
+	    UPDATE wms_task_execution_log
+	    SET active_flag = "0"
+	    ,last_modified_by = #{entity.lastModifiedBy}
+	    ,gmt_modified = #{entity.gmtModified}
+	     where id = #{entity.id}
+	  </update>
+	  
+	  <update id="batchDelete" parameterType="com.penghaisoft.wms.storagemanagement.model.entity.WmsTaskExecutionLog">
+	    DELETE FROM wms_task_execution_log
+	    where id in 
+	    <foreach collection="entity.idList" index="index" item="item" open="(" separator="," close=")">
+	      #{item}
+	    </foreach>
+	  </update>
+
+	<!-- 任意字段全匹配 -->
+	<select id="queryByAny" resultMap="wmsTaskExecutionLogMap" >
+		select
+		<include refid="selectAllColumns"/>
+		<include refid="where_any" />
+	</select>
+	
+	<select id="queryByAnyCount" resultType="long">
+		<include refid="count_Tail" />
+		wms_task_execution_log wms_task_execution_log_
+		<include refid="where_any" />
+	</select>
+
+	<select id="queryInAndOut" resultType="com.penghaisoft.wms.storagemanagement.model.entity.TurnoverDTO" >
+		SELECT
+		wms_task_execution_log_.goods_code goodsCode
+		,wms_goods_.goods_name goodsName
+		,wms_task_execution_log_.batch_no batchNo
+		,SUM(CASE wms_task_execution_log_.task_type WHEN '10' THEN 1 ELSE 0 END ) inBoundCount
+		,SUM(CASE wms_task_execution_log_.task_type WHEN '10' THEN IFNULL(wms_task_execution_log_.user_defined1,0) ELSE 0 END ) inBoundBoxCount
+		,SUM(CASE wms_task_execution_log_.task_type WHEN '20' THEN 1 WHEN '26' THEN 1 ELSE 0 END ) outBoundCount
+		,SUM(CASE wms_task_execution_log_.task_type WHEN '20' THEN IFNULL(wms_task_execution_log_.user_defined1,0) WHEN '26' THEN IFNULL(wms_task_execution_log_.user_defined1,0) ELSE 0 END ) outBoundBoxCount
+		,SUM(CASE wms_task_execution_log_.task_type WHEN '16' THEN 1 ELSE 0 END ) outInBoundCount
+		,SUM(CASE wms_task_execution_log_.task_type WHEN '16' THEN ISNULL(wms_task_execution_log_.user_defined1,0) ELSE 0 END ) outInBoundBoxCount
+		FROM wms_task_execution_log wms_task_execution_log_
+		LEFT JOIN wms_goods wms_goods_
+		ON wms_task_execution_log_.goods_code = wms_goods_.goods_code
+		WHERE 1=1
+		AND task_type in ('10', '20', '26')
+		AND task_status = '3'
+		<if test="entity!=null">
+			<if test="entity.goodsCode != null and entity.goodsCode !=''">
+				<![CDATA[ and wms_task_execution_log_.goods_code = #{entity.goodsCode}]]>
+			</if>
+			<if test="entity.batchNo != null and entity.batchNo !=''">
+				<![CDATA[ and wms_task_execution_log_.batch_no = #{entity.batchNo}]]>
+			</if>
+			<if test="entity.orderNo != null and entity.orderNo !=''">
+				<![CDATA[ and wms_task_execution_log_.order_no = #{entity.orderNo}]]>
+			</if>
+			<if test="entity.gmtCreate != null">
+				<![CDATA[ and wms_task_execution_log_.gmt_create = #{entity.gmtCreate}]]>
+			</if>
+			<if test="entity.gmtCreateMin != null">
+				<![CDATA[ and wms_task_execution_log_.gmt_create >= #{entity.gmtCreateMin}]]>
+			</if>
+			<if test="entity.gmtCreateMax != null">
+				<![CDATA[ and wms_task_execution_log_.gmt_create <= #{entity.gmtCreateMax}]]>
+			</if>
+		</if>
+		GROUP BY
+		wms_task_execution_log_.goods_code,
+		wms_task_execution_log_.batch_no
+		<if test="page!=null">
+			<include refid="pagination_tail" />
+		</if>
+	</select>
+
+	<select id="queryCountInAndOut" resultType="long" >
+		<include refid="count_Tail" />
+		(
+		SELECT goods_code goodsCode
+		,batch_no batchNo
+		,SUM(CASE task_type WHEN '10' THEN 1 ELSE 0 END ) inBoundCount
+		,SUM(CASE task_type WHEN '20' THEN 1 ELSE 0 END ) outBoundCount
+		FROM wms_task_execution_log
+		WHERE 1=1
+		AND task_type in ('10', '20', '26')
+		AND task_status = '3'
+		<if test="entity!=null">
+			<if test="entity.goodsCode != null and entity.goodsCode !=''">
+				<![CDATA[ and goods_code = #{entity.goodsCode}]]>
+			</if>
+			<if test="entity.batchNo != null and entity.batchNo !=''">
+				<![CDATA[ and batch_no = #{entity.batchNo}]]>
+			</if>
+			<if test="entity.orderNo != null and entity.orderNo !=''">
+				<![CDATA[ and order_no = #{entity.orderNo}]]>
+			</if>
+			<if test="entity.gmtCreate != null">
+				<![CDATA[ and gmt_create = #{entity.gmtCreate}]]>
+			</if>
+			<if test="entity.gmtCreateMin != null">
+				<![CDATA[ and gmt_create >= #{entity.gmtCreateMin}]]>
+			</if>
+			<if test="entity.gmtCreateMax != null">
+				<![CDATA[ and gmt_create <= #{entity.gmtCreateMax}]]>
+			</if>
+		</if>
+		GROUP BY
+		goods_code,
+		batch_no
+		) t
+	</select>
+
+	<select id="queryRunInWhTask" resultMap="wmsTaskExecutionLogMap" >
+		SELECT
+			id,
+			task_id,
+			order_no,
+			task_type,
+			task_status,
+			in_address,
+			out_address,
+			goods_code,
+			batch_no,
+			warehouse_code,
+			area_code,
+			location_code,
+			pallet_code,
+			error_msg,
+			user_defined1,
+			user_defined2,
+			user_defined3,
+			user_defined4,
+			user_defined5,
+			create_by,
+			gmt_create,
+			last_modified_by,
+			gmt_modified,
+			active_flag
+		FROM
+			wms_task_execution_log
+		WHERE
+			task_status = '1'
+		AND active_flag = '1'
+		AND task_type = '10'
+		AND task_id IN (
+			SELECT
+				t.task_id
+			FROM
+				wms_task_execution_log t
+			GROUP BY
+				t.task_id
+			HAVING
+				count(1) = 1
+		)
+	</select>
+	<select id="queryTaskDays" resultType="com.penghaisoft.wms.reportmanagement.model.dto.InOutSummaryDto">
+		SELECT
+		    top  7
+			count( 1 ) as count,
+			LEFT ( gmt_create, 10 )
+		FROM
+			wms_task_execution_log
+		WHERE
+			task_type = #{taskType}
+			AND task_status = '3'
+		GROUP BY
+			gmt_create
+		ORDER BY
+			gmt_create DESC
+
+
+	</select>
+	<!--根据任务状态，查询正在执行或异常的任务执行信息-->
+	<select id="selectByTaskStatus" resultMap="wmsTaskExecutionLogMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM
+		wms_task_execution_log
+		WHERE
+		task_status IN (1, 2, 4 )
+	</select>
+
+	<!-- 根据任务号查询数据 -->
+	<select id="queryByTask" resultMap="wmsTaskExecutionLogMap" parameterType="com.penghaisoft.wms.storagemanagement.model.entity.WmsTaskExecutionLog">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM
+		wms_task_execution_log
+		WHERE
+		task_id = #{taskId}
+	</select>
+
+
+
+</mapper>

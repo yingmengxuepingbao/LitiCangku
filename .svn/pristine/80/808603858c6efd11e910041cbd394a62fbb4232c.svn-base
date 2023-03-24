@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.penghaisoft.framework.log.model.dao.IOperationLogDao" >
+  
+  <resultMap id="BaseResultMap" type="com.penghaisoft.framework.log.model.entity.OperationLog" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="user_ccount" property="userAccount" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="operation_time" property="operationTime" jdbcType="TIMESTAMP" />
+    <result column="description" property="operationName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="selectInfo">
+  		ol.id,
+		ol.user_id userId,
+		ol.description operationName,
+		ol.operation_time operationTime,
+		u.nickname name,
+		u.account userAccount 
+  </sql>
+  
+  <sql id="selectCondition">
+  	<if test="startTime != null and startTime != ''">
+		AND ol.operation_time &gt; #{startTime,jdbcType=DATE}
+	</if>
+	<if test="endTime != null and endTime != ''">
+		AND ol.operation_time &lt; #{endTime,jdbcType=DATE} 
+	</if>
+	<if test="userId != null and userId != '' and userId != 'null'">
+		AND ol.user_id = #{userId,jdbcType=VARCHAR} 
+	</if>
+	<if test="userName != null and userName != '' and userName != 'null'">
+		AND u.nickname LIKE CONCAT('%',#{userName},'%')
+	</if>
+  </sql>
+  
+  <sql id="selectLimit">
+  	<if test="startNumber != null and numberOnePage != null and numberOnePage != 0" >
+		top ((#{startNumber} +1)* #{numberOnePage})
+	   <!--LIMIT
+		#{startNumber},#{numberOnePage}-->
+  	</if>
+  </sql>
+  
+  <select id="getOperationLogList" resultType="com.penghaisoft.framework.log.model.entity.OperationLog" parameterType="com.penghaisoft.framework.log.model.entity.LogSelectCondition">
+    SELECT
+	  <include refid="selectLimit"/>
+	  <include refid="selectInfo"/>
+	FROM
+		operation_log ol 
+	left join [user] u on ol.user_id = u.id
+ 	WHERE 
+		1 = 1 
+		<include refid="selectCondition"/>
+	ORDER BY
+		ol.operation_time DESC 
+
+  </select>
+
+  <select id="getOperationLogTotalCount" resultType="int" parameterType="com.penghaisoft.framework.log.model.entity.LogSelectCondition">
+  	SELECT
+		count(0) 
+	FROM
+		operation_log ol 
+	left join [user] u on ol.user_id = u.id
+	WHERE 
+		1 = 1 
+		<include refid="selectCondition"/>
+  </select>
+
+  <insert id="insert" parameterType="com.penghaisoft.framework.log.model.entity.OperationLog">
+  	insert into operation_log
+  	<trim prefix="(" suffix=")" suffixOverrides="," >
+  		<if test="userId != null and userId !='' " >
+  			user_id,
+  		</if>
+  		<if test="operationTime != null and operationTime != ''" >
+	  		operation_time,
+  		</if>
+  		<if test="operationName != null and operationName != ''" >
+	  		description,
+  		</if>
+  	</trim>
+  	<trim prefix="values (" suffix=")" suffixOverrides="," >
+  		<if test="userId != null" >
+	  		#{userId,jdbcType=INTEGER},
+  		</if>
+  		<if test="operationTime != null and operationTime != ''" >
+	  		#{operationTime,jdbcType=TIMESTAMP},
+  		</if>
+  		<if test="operationName != null and operationName != ''" >
+	  		#{operationName,jdbcType=VARCHAR},
+  		</if>
+  	</trim>
+  </insert>
+</mapper>

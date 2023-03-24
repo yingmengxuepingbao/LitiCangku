@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.penghaisoft.pda.inwarehouse.dao.WmsOrderCrossInDeailMapper" >
+  <resultMap id="BaseResultMap" type="com.penghaisoft.pda.inwarehouse.model.WmsOrderCrossInDeail" >
+    <id column="order_cross_in_detail_id" property="orderCrossInDetailId" jdbcType="VARCHAR" />
+    <result column="order_cross_in_id" property="orderCrossInId" jdbcType="VARCHAR" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="goods_name" property="goodsName" jdbcType="VARCHAR" />
+    <result column="goods_code" property="goodsCode" jdbcType="VARCHAR" />
+    <result column="plan_amount" property="planAmount" jdbcType="INTEGER" />
+    <result column="real_amount" property="realAmount" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="user_defined1" property="userDefined1" jdbcType="VARCHAR" />
+    <result column="user_defined2" property="userDefined2" jdbcType="VARCHAR" />
+    <result column="user_defined3" property="userDefined3" jdbcType="VARCHAR" />
+    <result column="user_defined4" property="userDefined4" jdbcType="VARCHAR" />
+    <result column="user_defined5" property="userDefined5" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="last_modified_by" property="lastModifiedBy" jdbcType="VARCHAR" />
+    <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+    <result column="active_flag" property="activeFlag" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    order_cross_in_detail_id, order_cross_in_id, order_no, goods_name, goods_code, plan_amount, 
+    real_amount, remark, user_defined1, user_defined2, user_defined3, user_defined4, 
+    user_defined5, create_by, gmt_create, last_modified_by, gmt_modified, active_flag
+  </sql>
+  <select id="selectByOrderNo" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from wms_order_cross_in_deail
+    where order_no = #{orderNo,jdbcType=VARCHAR}
+  </select>
+  <update id="updateAmountByOrderNoAndGoods" parameterType="com.penghaisoft.pda.inwarehouse.model.WmsOrderCrossInDeail" >
+    update wms_order_cross_in_deail
+    set
+      real_amount = real_amount + #{realAmount,jdbcType=INTEGER},
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined1 != null" >
+        user_defined1 = #{userDefined1,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined2 != null" >
+        user_defined2 = #{userDefined2,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined3 != null" >
+        user_defined3 = #{userDefined3,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined4 != null" >
+        user_defined4 = #{userDefined4,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined5 != null" >
+        user_defined5 = #{userDefined5,jdbcType=VARCHAR},
+      </if>
+      last_modified_by = #{lastModifiedBy,jdbcType=VARCHAR},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+    where order_no = #{orderNo,jdbcType=VARCHAR}
+    and goods_code = #{goodsCode,jdbcType=VARCHAR}
+  </update>
+</mapper>

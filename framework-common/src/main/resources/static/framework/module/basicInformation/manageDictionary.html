@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>字典维护</title>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<link rel="stylesheet" href="../../css/bootstrap.css" type="text/css">
+	<link rel="stylesheet" href="../../css/font-awesome.min.css">
+	<link rel="stylesheet" href="../../css/zTreeStyleOutLook.css" />
+	<link rel="stylesheet" href="../../css/zdialog.css">
+	<link rel="stylesheet" href="../../css/jedate.css" />
+	<link rel="stylesheet" href="../../css/detail.css" type="text/css">
+	<link rel="stylesheet" href="../../css/layout.css">
+	<style>
+		.table > thead > tr > th {
+			vertical-align: bottom;
+			border-bottom: none;
+		}
+		#treePopContainerUL a .button,
+		#treeSearchContainerUL a .button{
+			display: none;
+		}
+		.departSearchTree {
+			display: none;
+			position: absolute;
+			top: 37px;
+			left: 64px;
+			width: 180px;
+			max-height: 432px;
+			overflow: auto;
+			background: #fff;
+			padding: 0px;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+			box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(0, 0, 0, 0.3);
+		}
+		.form-treel .departSpan{
+			display: block;
+			position: absolute;
+			left: 74px;
+			top: 7px;
+		}
+		.form-treel .popDepartSpan{
+			display: block;
+			position: absolute;
+			left: 119px;
+			top: 7px;
+			width: 250px;
+			overflow: hidden;
+			white-space: nowrap;/*强制不换行*/
+		}
+		.form-treel .popDepartSpan:hover{
+			cursor: pointer;
+		}
+		.person-con {
+			padding-top: 15px;
+		}
+		.breadcrumb a,#dictionaryListTb a{
+			text-decoration: none;
+		}
+		.btn-modal{
+			background: #1DBBF4;
+			color: #fff;
+		}
+	</style>
+</head>
+<body>
+<div class="wrap">
+	<div class="form-inline search-title">
+		<ol class="breadcrumb">
+			<li>基础数据管理</li>
+			<!--<li><a id="0" href="#" class="tabLink" data-id="0">字典维护</a></li>-->
+			<li class="active">字典维护</li>
+		</ol>
+	</div>
+	<div class="person content">
+		<!--面包屑-->
+		<div class="person-con" style="border-bottom: 1px solid #ECF0F1">
+			<div class="form-group form-inline">
+				<label for="dictionaryName">名称:</label>
+				<input type="text" id="dictionaryName" class="form-control" maxlength="50" />
+			</div>
+			<div class="form-group form-inline">
+				<label for="dictionaryCode">编码:</label>
+				<input type="text" id="dictionaryCode" class="form-control" maxlength="50" />
+			</div>
+			<div class="form-group form-inline">
+				<input type="button" id="dictionaryInfoS" class="btn" value="搜索" />
+				<input type="button" id="addDictionaryBtn" class="btn"  value="新增"/>
+				<input type="button" id="returnBtn" class="btn"  value="返回"/>
+			</div>
+		</div>
+		<!--字典列表-->
+		<div class="employee-info">
+			<table class="table-hover table" id="dictionaryListTb"  style="word-break:break-all">
+				<thead>
+				<tr>
+<!--					<th style=" white-space:nowrap;padding-right: 5px">序号</th>-->
+					<th style=" white-space:nowrap;padding-right: 5px">名称</th>
+					<th style=" white-space:nowrap;padding-right: 5px">编码</th>
+					<th style=" white-space:nowrap;padding-right: 5px">级别</th>
+					<th style=" white-space:nowrap;padding-right: 5px">组合编码</th>
+					<th class="sequenceNumber" style=" white-space:nowrap;padding-right: 5px">序号</th>
+					<th class="createBy" style=" white-space:nowrap;padding-right: 5px">创建人</th>
+					<th style=" white-space:nowrap;padding-right: 5px">创建时间</th>
+					<th>操作</th></tr>
+				</thead>
+				<tbody id="dictionaryList-table">
+				</tbody>
+			</table>
+			<div class="pagination-con">
+				<p class="listNumber rt">
+					<button class="btn btn-default btn-xs previousPage"><i class="fa fa-caret-left fa-lg"></i></button>
+					<span class="currentPage">1</span>/<span class="pageNumber">1</span>
+					<button class="btn btn-default btn-xs nextPage"><i class="fa fa-caret-right fa-lg"></i></button>
+					<input class="currentPageBtn" value="1" type="text"  onkeyup="this.value=this.value.replace(/[^0-9]+/g, '');"/>
+					<button type="button" id="pageJump"  data-loading-text="请求数据中..." class="btn btn-default pageJump" autocomplete="off">跳转</button>
+					每页<span class="pageOneNumber"></span>条，共<span class="dataNumber"></span>条记录
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
+<!--新增-->
+<div class="modal personw" id="personPopover" data-backdrop="false" tabindex="-1" role="dialog" aria-labelledby="moTitle">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content modal-container" style="height: 320px">
+			<div class="modal-header">
+				<button type="button" class="close" aria-label="Close" data-dismiss="modal"><span aria-hidden="true" id="popClose" >&times;</span></button>
+				<h4 class="modal-title" id="moTitle">编辑字典信息</h4>
+			</div>
+			<div class="modal-body">
+				<div class="pop-body">
+					<div class="form-group form-inline">
+						<label for="dictionaryNamePop"><i>*</i>名称：</label>
+						<input type="text" id="dictionaryNamePop" class="form-control" maxlength="100"  placeholder="请输入名称" />
+					</div>
+					<div class="form-group form-inline">
+						<label for="dictionaryCodePop"><i>*</i>编码：</label>
+						<input type="text" id="dictionaryCodePop" class="form-control" maxlength="50"  placeholder="请输入编码" onkeyup="this.value=this.value.replace(/[=\\=&? ？ *%]/,'')"/>
+					</div>
+					<div class="form-group form-inline" id="sequenceNumberPoPHidden">
+						<label for="sequenceNumberPop">序号：</label>
+						<input type="number" id="sequenceNumberPop" class="form-control" maxlength="50"  placeholder="请输入序号" min="1"/>
+					</div>
+					<i class="fa fa-exclamation-circle fa-personInfoPop"></i>
+					<input type="hidden" id="hideDictionaryIdPop" value="" />
+
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default clear" id="cancelDictionaryBtn">取消</button>
+				<button type="button" class="btn btn-modal save" id="saveDictionaryBtn">保存</button>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript" src="../../js/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="../../js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../js/zdialog.js"></script>
+<script type="text/javascript" src="../../js/jquery.jedate.js"></script>
+<script type="text/javascript" src="../../js/common.js"></script>
+<script type="text/javascript" src="../../js/jquery.ztree.core.min.js"></script>
+<script type="text/javascript" src="js/manageDictionary.js"></script>
+</body>
+</html>

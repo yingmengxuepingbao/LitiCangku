@@ -1,0 +1,358 @@
+li{
+    list-style: none;
+}
+.btn-primary{
+    color: #09AAFF;
+    background-color: #fff !important;
+    border-color: #09AAFF;
+}
+.btn-primary:hover {
+    color: #fff;
+    background-color: #09AAFF !important;
+    border-color: #09AAFF;
+}
+.btn-primary:focus {
+    color: #fff;
+    background-color: #09AAFF !important;
+    border-color: #09AAFF;
+}
+
+/*//面包屑目录*/
+.bread-crumbs{
+    padding: 15px 0 0 15px;
+}
+.bread-crumbs li a{
+    width: 100px;
+    overflow: hidden;
+    font-size: 12px;
+}
+.bread-crumbs li .a-link{
+    color:#09aaff;
+    cursor: pointer;
+}
+.bread-crumbs li .backup{
+    color:#09aaff;
+    cursor: pointer;
+}
+.bread-crumbs li .a-unlink{
+    color:#666;
+}
+.head_{
+    padding:0 15px;
+}
+.head_search{
+    width: 300px;
+    float: right;
+}
+.head_search .search-file-input{
+    border-radius: 20px;
+    background-color: #eee;
+    border: none;
+    font-size: 12px;
+}
+.head_search .search-file-input:focus{
+    border: 1px solid #daebfe;
+}
+.head_search .fa{
+    position: absolute;
+    right: 30px;
+    top:25px;
+    color: #999;
+}
+.head_search .fa:hover{
+    cursor: pointer;
+    color:#09AAFF;
+}
+.file-list{
+    position: relative;
+    height: calc(100% - 0px);
+}
+
+.head_th,.file-item{
+    position: relative;
+    height: 44px;
+    width: 100%;
+    clear: both;
+    line-height: 40px;
+    border-bottom:1px solid #f2f6fd;
+    padding: 0px 15px;
+}
+.head_th{
+    border-bottom:1px solid #daebfe;
+}
+.file-list .th{
+    height: 44px;
+    line-height: 44px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color:#424e67;
+    float: left;
+    font-size: 12px;
+}
+.file-list .ck-box{
+    width:2%;
+}
+.file-list .name{
+    width:51% ;
+    padding-right: 10px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.file-list .modify-name{
+    width: 13%;
+    font-size: 12px;
+}
+.file-list .size{
+    width: 10%;
+    font-size: 12px;
+}
+.file-list  .modify-time{
+    width: 20%;
+    font-size: 12px;
+}
+/*.file-list .parent-path{
+    width:10%;
+    font-size: 12px;
+}*/
+.file-list .parent-path:hover{
+    cursor: pointer;
+    color: #09AAFF;
+}
+.file-item:hover{
+    background-color: #f4fbff ;
+}
+.file_active{
+    background-color: #f4fbff ;
+}
+.file-item:hover:before ,.file_active:before{
+    content: "";
+    border-top: 1px solid #daebfe;
+    position: absolute;
+    top: -1px;
+    display: block;
+    width: 100%;
+    z-index: 1;
+    visibility: visible;
+    left: 0;
+}
+.file-item:hover:after , .file_active:after{
+    content: "";
+    border-bottom: 1px solid #daebfe;
+    position: absolute;
+    bottom: -1px;
+    display: block;
+    width: 100%;
+    z-index: 2;
+    visibility: visible;
+    left: 0;
+}
+.file-item .name .file-operate{
+    position: relative;
+    display:none;
+    float: right;
+    padding-right: 20px;
+    z-index: 10;
+}
+.file-item .name .file-operate .fa{
+    font-size: 16px;
+    padding-left: 15px;
+    height: 40px;
+    line-height: 44px;
+    color: #09AAFF;
+    cursor: pointer;
+    display: inline-block;
+}
+.file-item:hover  .file-operate{
+    display:inline-block;
+}
+.files{
+    height:calc(100% - 0px);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.file-item .fName{
+    display: inline-block;
+    padding-left: 15px;
+    font-size: 12px;
+}
+.preview-name:hover{
+    cursor: pointer;
+    color: #09AAFF;
+}
+.cursor-folder:hover{
+    cursor: pointer;
+    color: #09AAFF;
+}
+.file-item .name i{
+    width: 27px;
+    height: 26px;
+    display: inline-block;
+    background-image: url("../images/img/icons_all.png");
+    margin-top: 9px;
+    float: left;
+}
+.add-folder-input{
+    width: 200px;
+    margin-top: 6px;
+    padding: 0px 11px;
+    height: 30px;
+    line-height: 30px;
+}
+.fa-check-btn{
+    padding: 5px;
+    border: 1px solid #09AAFF;
+    border-radius: 4px;
+    color: #09AAFF;
+    float: left;
+    margin: 8px;
+    font-size: 14px;
+}
+.folder_{
+    background-position: -592px -588px;
+    margin-top: 7px !important;
+}
+.img_{
+    background-position: -596px -305px;
+}
+.doc_{
+    background-position: -596px -170px;
+}
+.xls_{
+    background-position: -596px -238px;
+}
+.pdf_{
+    background-position: -596px -136px;
+}
+.ppt_{
+    background-position: -596px -204px;
+}
+.txt_{
+    background-position: -596px -102px;
+}
+.psd_{
+    background-position: -596px -476px;
+}
+.rarzip_{
+    background-position: -596px -170px;
+}
+.html_{
+    background-position: -593px 307px;
+}
+.torrent_{
+    background-position: -596px 0px;
+}
+.video_{
+    background-position: -593px 135px;
+}
+.audio_{
+    background-position: -596px -442px;
+}
+.flash_{
+    background-position: -596px 170px;
+}
+.default_{
+    background-position: -595px -509px;
+}
+.modal-dialog {
+    width: auto;
+    margin: 10px;
+}
+@media (min-width: 768px) {
+    .modal-dialog {
+        width: auto;
+        margin: 10px;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.custom-scroll::-webkit-scrollbar {
+    height: 9px;
+    width: 9px;
+}
+.custom-scroll::-webkit-scrollbar-thumb {
+    background: #999;
+    border-radius: 9px;
+}
+.custom-scroll::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 9px;
+}
+.checkbox-custom{
+    position: relative;
+    line-height: 43px;
+    width: 32px;
+    margin-left: 8px;
+    float: left;
+    height: 45px;
+}
+.checkbox-custom input[type="checkbox"] {
+    opacity: 0;
+    position: absolute;
+    cursor: pointer;
+    z-index: 2;
+    left: 2px;
+    top:20px;
+}
+.checkbox-custom label {
+    margin-left: 31px;
+    font-weight: normal;
+    margin-bottom: 0;
+    cursor: pointer;
+    width: 40px;
+}
+.checkbox-custom label:before {
+    content: '';
+    width: 16px;
+    height: 16px;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    margin-top: -9px;
+    display: inline-block;
+    border: 1px solid #ced9e4;
+    background: #fff;
+    border-radius: 3px;
+}
+.checkbox-custom input[type="checkbox"]:checked  +label:after {
+    position: absolute;
+    display: inline-block;
+    font-family: 'FontAwesome';
+    content: '\f00c';
+    top: 50%;
+    left: 0px;
+    margin-top: -9px;
+    font-size: 12px;
+    line-height: 16px;
+    width: 16px;
+    height: 16px;
+    color: #22acfc;
+    background: #fff;
+    padding: 0px;
+    border-radius: 3px;
+    text-align: center;
+    border: 1px solid #ced9e4;
+}

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>员工管理</title>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<link rel="stylesheet" href="../../css/bootstrap.css" type="text/css">
+	<link rel="stylesheet" href="../../css/font-awesome.min.css">
+	<link rel="stylesheet" href="../../css/zTreeStyleOutLook.css" />
+	<link rel="stylesheet" href="../../css/zdialog.css">
+	<link rel="stylesheet" href="../../css/jedate.css" />
+	<link rel="stylesheet" href="../../css/detail.css" type="text/css">
+	<style>
+		.table > thead > tr > th {
+			vertical-align: bottom;
+			border-bottom: none;
+		}
+		#treePopContainerUL a .button,
+		#treeSearchContainerUL a .button{
+			display: none;
+		}
+		.departSearchTree {
+			display: none;
+			position: absolute;
+			top: 37px;
+			left: 64px;
+			width: 180px;
+			max-height: 432px;
+			overflow: auto;
+			background: #fff;
+			padding: 0px;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+			box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(0, 0, 0, 0.3);
+		}
+		.form-treel .departSpan{
+			display: block;
+			position: absolute;
+			left: 74px;
+			top: 7px;
+		}
+		.departPopTree{
+			display: none;
+			position: absolute;
+			top: 37px;
+			left: 103px;
+			width: 238px;
+			max-height: 332px;
+			overflow: auto;
+			background: #fff;
+			padding: 0px;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+			z-index: 1;
+		}
+		.form-treel .popDepartSpan{
+			display: block;
+			position: absolute;
+			left: 119px;
+			top: 7px;
+			width: 250px;
+			overflow: hidden;
+			white-space: nowrap;/*强制不换行*/
+		}
+		.form-treel .popDepartSpan:hover{
+			cursor: pointer;
+		}
+		.form-treel{
+			position: relative;
+		}
+		.person-con {
+			padding-top: 15px;
+		}
+		.personw .modal-container {
+			position: relative;
+			height:500px;
+			top: -44px;
+			width: 450px;
+		}
+		.select-roles{position: absolute;left: 30px;top: 0;width: 286px;}
+		.select-roles .selectRoles{left:105px ; display: block;margin-bottom: 10px;background: #fff;
+			border: 1px solid #1DBBF4;
+			color: #1DBBF4;}
+		.select-roles .selectRoles:hover{background: #1DBBF4;color: #FFF;}
+		.row-left, .row-right{width: 320px;}
+		.row-left{float: left;}
+		.row-right{float: right;}
+		.r-list{background: #eff3f6;padding:5px 10px;height:275px;border-radius: 7px;overflow-y: auto}
+		.r-list p{margin-bottom: 5px}
+
+		.checkbox-custom{width:244px;}
+		.checkbox-custom label{text-align: left !important; width: 205px}
+		.list-top{padding-bottom: 5px;margin-bottom: 10px;}
+	</style>
+</head>
+<body>
+<div class="wrap">
+	<div class="form-inline search-title">
+		<div class="title fl">计量单位</div>
+	</div>
+	<div class="person content">
+		<!--面包屑-->
+		<div class="person-con" style="border-bottom: 1px solid #ECF0F1">
+			<div class="form-group form-inline">
+				<label for="employeeNameS">单位代码:</label>
+				<input type="text" id="unitCodeS" class="form-control" maxlength="50" />
+			</div>
+			<div class="form-group form-inline">
+				<label for="employeeNameS">单位名称:</label>
+				<input type="text" id="employeeNameS" class="form-control" maxlength="50" />
+			</div>
+<!--			<div class="form-group form-inline">-->
+<!--				<label for="employeeTelS">手机号码:</label>-->
+<!--				<input type="text" id="employeeTelS" class="form-control" maxlength="11" />-->
+<!--			</div>-->
+<!--			<div class="form-group form-inline form-treel">-->
+<!--				<label for="belongDeptNameS">所属部门:</label>-->
+<!--				<span  class="departSpan" data-id="">选择部门</span>-->
+<!--				<select class="form-control" id="belongDeptNameS" style="width: 210px">-->
+<!--				</select>-->
+<!--				<div class="departSearchTree">-->
+<!--					<ul id="treeSearchContainerUL" class="ztree"></ul>-->
+<!--				</div>-->
+<!--			</div>-->
+<!--			<div class="form-group form-inline" >-->
+<!--				<label for="belongPostNameS">所属岗位:</label>-->
+<!--				<select class="form-control" id="belongPostNameS">-->
+<!--				</select>-->
+<!--			</div>-->
+<!--			<div class="form-group form-inline" >-->
+<!--				<label for="userStatus">用户状态:</label>-->
+<!--				<select class="form-control" id="userStatus">-->
+<!--					<option value="">请选择用户状态</option>-->
+<!--					<option value="0">正常使用</option>-->
+<!--					<option value="1">已停用</option>-->
+<!--				</select>-->
+<!--			</div>-->
+			<div class="form-group form-inline">
+				<input type="button" id="employeeInfoS" class="btn" value="搜索" />
+				<input type="button" id="addEmployeeBtn" class="btn"  value="新增单位"/>
+			</div>
+		</div>
+		<!--计量单位-->
+		<div class="employee-info">
+			<table class="table-hover table" id="employeeListTb"  style="word-break:break-all">
+				<thead>
+				<tr>
+					<th style=" white-space:nowrap;padding-right: 5px">单位代码</th>
+					<th style=" white-space:nowrap;padding-right: 5px">单位名称</th>
+					<th style=" white-space:nowrap;padding-right: 5px">英文名称</th>
+					<th style=" white-space:nowrap;padding-right: 5px">国际度量衡换算值</th>
+					<th style=" white-space:nowrap;padding-right: 5px">单位类型</th>
+<!--					<th style=" white-space:nowrap;padding-right: 5px">办公电话</th>-->
+<!--					<th style=" white-space:nowrap;padding-right: 5px">个人电话</th>-->
+<!--					<th style=" white-space:nowrap;padding-right: 5px">邮箱</th>-->
+					<th>操作</th></tr>
+				</thead>
+				<tbody id="personList-table">
+				</tbody>
+			</table>
+			<div class="pagination-con">
+				<p class="listNumber rt">
+					<button class="btn btn-default btn-xs previousPage"><i class="fa fa-caret-left fa-lg"></i></button>
+					<span class="currentPage">1</span>/<span class="pageNumber">1</span>
+					<button class="btn btn-default btn-xs nextPage"><i class="fa fa-caret-right fa-lg"></i></button>
+					<input class="currentPageBtn" value="1" type="text"  onkeyup="this.value=this.value.replace(/[^0-9]+/g, '');"/>
+					<button type="button" id="pageJump"  data-loading-text="请求数据中..." class="btn btn-default pageJump" autocomplete="off">跳转</button>
+					每页<span class="pageOneNumber"></span>条，共<span class="dataNumber"></span>条记录
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="personPopover" class="cusPopover personw" style="display: none;">
+	<div class="modal-container">
+		<div class="cusPopover-title">
+			<i id="popClose" class="fa fa-close fa-lg popClose" title="关闭"></i>
+			<span>单位信息编辑</span>
+		</div>
+		<div class="pop-body">
+			<div class="row-left">
+				<div class="form-group form-inline">
+					<label for="unitCodePop"><i>*</i>单位代码：</label>
+					<input type="text" id="unitCodePop" class="form-control" maxlength="50"  placeholder="允许输入字母、数字、_ -"  onkeyup="this.value=this.value.replace(/[^\w_-]/g,'');"/>
+				</div>
+				<div class="form-group form-inline">
+					<label for="unitZhNamePop"><i>*</i>单位名称：</label>
+					<input type="text" id="unitZhNamePop" class="form-control" maxlength="50"  placeholder="请输入单位名称" onkeyup="this.value=this.value.replace(/[=\\=&? ？ *%]/,'')"/>
+				</div>
+				<div class="form-group form-inline">
+					<label for="unitEnNamePop"><i></i>英文名称：</label>
+					<input type="text" id="unitEnNamePop" class="form-control" maxlength="50"  placeholder="请输入英文名称" onkeyup="this.value=this.value.replace(/[=\\=&? ？ *%]/,'')"/>
+				</div>
+				<div class="form-group form-inline">
+					<label for="unitChangePop"><i></i>换算值：</label>
+					<input type="text" id="unitChangePop" class="form-control" maxlength="50"  placeholder="请输入国际度量衡换算值" onkeyup="this.value=this.value.replace(/[=\\=&? ？ *%]/,'')"/>
+				</div>
+				<div class="form-group form-inline">
+					<label for="unitTypePop">单位类型:</label>
+					<select class="form-control" id="unitTypePop">
+						<option value=""></option>
+						<option value="1">长度</option>
+						<option value="2">质量</option>
+						<option value="3">温度</option>
+						<option value="4">面积</option>
+						<option value="5">体积</option>
+						<option value="6">压力</option>
+						<option value="7">力</option>
+						<option value="8">密度</option>
+						<option value="9">湿度</option>
+
+					</select>
+				</div>
+			<i class="fa fa-exclamation-circle fa-personInfoPop" style="position: absolute;top: 400px;left: 30px;"></i>
+			<input type="hidden" id="hideUnitIdPop" value="" />
+			</div>
+			<div class="two-btn">
+				<input type="button" id="cancelPersonBtn" class="btn cancel" value="取消"/>
+				<input type="button" id="savePersonBtn" class="btn save" value="保存"/>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript" src="../../js/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="../../js/zdialog.js"></script>
+<script type="text/javascript" src="../../js/jquery.jedate.js"></script>
+<script type="text/javascript" src="../../js/common.js"></script>
+<script type="text/javascript" src="../../js/jquery.ztree.core.min.js"></script>
+<script type="text/javascript" src="../../js/doAjax.js"></script>
+<script type="text/javascript" src="js/baseUnit.js"></script>
+</body>
+</html>

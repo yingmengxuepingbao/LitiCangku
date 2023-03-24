@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>PDA版本管理</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="../../css/bootstrap.css" type="text/css">
+    <link rel="stylesheet" href="../../css/layout.css" type="text/css">
+    <link rel="stylesheet" href="css/device.css" />
+    <style type="text/css">
+        a{text-decoration: none !important;}
+        .category .form-control{width: 180px}
+        .category-con:after{display:block;clear:both;content:"";visibility:hidden;height:0}
+        #baseEquipmentList:after{display:block;clear:both;content:"";visibility:hidden;height:0}
+        .pagination-con{overflow: inherit;}
+        .pagination-con:after{display:block;clear:both;content:"";visibility:hidden;height:0}
+        .search-title{overflow:inherit;}
+        .search-title:after{display:block;clear:both;content:"";visibility:hidden;height:0}
+        .btn-blue{ background:#1DBBF4 ;border: 1px solid #fff; color: #fff}
+        .btn-blue:hover{
+            background:#1DBBF4 ;border: 1px solid #fff; color: #fff
+        }
+        .file-border{
+            border: 1px solid #eee;
+            padding: 15px;
+        }
+    </style>
+</head>
+<body>
+<div class="wrap" style="min-width: 1154px;height: 100%">
+    <ol class="breadcrumb">
+        <li><a href="#" class="link">基础数据</a></li>
+        <li class="active">PDA版本管理</li>
+    </ol>
+    <div class="content" style="min-height: 500px">
+        <div class="form-inline search-title">
+<!--            <div class="title fl">EdgeBox列表</div>-->
+        </div>
+        <div class="margin320 category">
+            <div class="form-inline search-title" style="border-bottom:none">
+                <div class="form-inline rt icon-search">
+                    <input type="text" class="form-control search-border-reset" id="base_pda_version_id_search"
+                           placeholder="请输入版本编号" onkeyup="this.value=this.value.replace(/[=\\=&? ？ *%]/,'')">
+                    <img src="../../images/common/search_icon_grey.png">
+                </div>
+            </div>
+            <div class="bt-and-search">
+                <div class="btn-lists lf">
+<!--                    <button type="button" class="btn btn-default multiDelete">出库</button>-->
+<!--                    <button type="button" class="btn btn-default multiDelete1">合并出库</button>-->
+                    <!--<button type="button" class="btn btn-default" id="exportBtn">导出</button>
+                    <button type="button" class="btn btn-default" id="importBtn">导入</button>-->
+<!--                    <button id="addEquipment" type="button" class="btn btn-default btn-add">新增 <i class="fa fa-plus"></i></button>-->
+                </div>
+                <div class="hide-search rt" id="more-search-condition">
+                    <button id="resetSearchConditions" type="button" class="btn btn-default rt">重置</button>
+                    <button id="topSearchInfoList" type="button" class="btn btn-default rt ">搜索</button>
+                </div>
+            </div>
+
+            <div class="category-con">
+                <table class="table-hover table col-xs-12 col-sm-12 " id="edgeBoxList">
+                    <thead class="head-sort">
+                    <tr>
+                        <th data-sort="base_pda_version_id" >版本编号<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="ip" >服务器IP<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="port" >服务器端口<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="app_name" >应用名称<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="url" >初始APK<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="version" >初始版本<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="wgt_version" >更新版本<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="last_modified_by" >更新人<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="gmt_modified" >更新时间<i class="fa fa-sort-amount-asc"></i></th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody class="tbody-load">
+                    </tbody>
+                </table>
+                <div class="pagination-con" style="display: block">
+                    <p class="listNumber rt">
+                        <button class="btn btn-default btn-xs previousPage"><i class="fa fa-caret-left fa-lg"></i></button>
+                        <span class="currentPage">1</span>/<span class="pageNumber">1</span>
+                        <button class="btn btn-default btn-xs nextPage"><i class="fa fa-caret-right fa-lg"></i></button>
+                        <input class="currentPageBtn" value="1" type="text"  onkeyup="this.value=this.value.replace(/[^0-9]+/g, '');"/>
+                        <button type="button" id="pageJump"  data-loading-text="请求数据中..." class="btn btn-default pageJump" autocomplete="off">跳转</button>
+                        每页<span class="pageOneNumber">15</span>条，共<span class="dataNumber">30</span>条记录
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--新增修改出库-->
+    <div class="modal" id="formModel" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="moTitle">PDA版本信息</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" id="formInfo">
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">版本编号:</label>
+                            <div class="col-sm-8">
+                                <input id="basePdaVersionId" type="text" disabled class="form-control" placeholder="请输入版本编号"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">服务器IP:</label>
+                            <div class="col-sm-8">
+                                <input id="ip" type="text" class="form-control" placeholder="请输入服务器IP"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">服务器端口:</label>
+                            <div class="col-sm-8">
+                                <input id="port" type="text" class="form-control" placeholder="请输入服务器端口"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">应用名称:</label>
+                            <div class="col-sm-8">
+                                <input id="appName" type="text" class="form-control" placeholder="请输入应用名称"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">初始APK:</label>
+                            <div class="col-sm-8">
+                                <input id="url" type="text" class="form-control" placeholder="请输入初始APK"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">初始版本:</label>
+                            <div class="col-sm-8">
+                                <input id="version" type="text" class="form-control" placeholder="请输入初始版本"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">更新版本:</label>
+                            <div class="col-sm-8">
+                                <input id="wgtVersion" type="text" class="form-control" placeholder="请输入更新版本"/>
+                            </div>
+                        </div>
+                    </form>
+                    <i class="fa fa-exclamation-circle fa-deviceInfoPop"></i>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="modalCancelButton" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" id="modalSaveButton" class="btn btn-modal" data-dismiss="modal">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--二维码展示-->
+    <div class="modal" id="barModel" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="width: 285px;">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="moTitle1">初始APK下载地址二维码</h4>
+                </div>
+                <div class="modal-body">
+<!--                    <img id="bar" src="http://localhost:8090/wms/expose/basePdaVersion/qrCode/1001"/>-->
+                    <img id="bar" src=""/>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="barCancelButton" class="btn btn-default" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="../../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../js/bootstrap.min.js" ></script>
+    <script type="text/javascript" src="../../js/jquery.jedate.js"></script>
+    <script type="text/javascript" src="../../js/zdialog.js"></script>
+    <script type="text/javascript" src="../../js/jquery.ztree.all.min.js"></script>
+    <script type="text/javascript" src="../../js/chosen.jquery.js"></script>
+    <script type="text/javascript" src="../../js/common.js"></script>
+    <script type="text/javascript" src="js/basePdaVersionList.js"></script>
+    <script type="text/javascript">
+
+        var config = {
+
+            '.chosen-select'           : {},
+
+            '.chosen-select-deselect'  : {allow_single_deselect:true},
+
+            '.chosen-select-no-single' : {disable_search_threshold:10},
+
+            '.chosen-select-no-results': {no_results_text:'Oops, nothing found!'},
+
+            '.chosen-select-width'     : {width:"95%"}
+
+        }
+
+        for (var selector in config) {
+
+            $(selector).chosen(config[selector]);
+
+        }
+
+    </script>
+</div>
+</body>
+</html>

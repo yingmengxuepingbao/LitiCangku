@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.penghaisoft.pda.basic.dao.WmsAddressRealRelaMapper" >
+  <resultMap id="BaseResultMap" type="com.penghaisoft.pda.basic.model.WmsAddressRealRela" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="address_code" property="addressCode" jdbcType="VARCHAR" />
+    <result column="address_name" property="addressName" jdbcType="VARCHAR" />
+    <result column="real_address" property="realAddress" jdbcType="INTEGER" />
+    <result column="address_type" property="addressType" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="user_defined1" property="userDefined1" jdbcType="VARCHAR" />
+    <result column="user_defined2" property="userDefined2" jdbcType="VARCHAR" />
+    <result column="user_defined3" property="userDefined3" jdbcType="VARCHAR" />
+    <result column="user_defined4" property="userDefined4" jdbcType="VARCHAR" />
+    <result column="user_defined5" property="userDefined5" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="last_modified_by" property="lastModifiedBy" jdbcType="VARCHAR" />
+    <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+    <result column="active_flag" property="activeFlag" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, address_code, address_name, real_address, remark, user_defined1, user_defined2, 
+    user_defined3, user_defined4, user_defined5, create_by, gmt_create, last_modified_by, 
+    gmt_modified, active_flag
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from wms_address_real_rela
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from wms_address_real_rela
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insertSelective" parameterType="com.penghaisoft.pda.basic.model.WmsAddressRealRela" >
+    insert into wms_address_real_rela
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="addressCode != null" >
+        address_code,
+      </if>
+      <if test="addressName != null" >
+        address_name,
+      </if>
+      <if test="realAddress != null" >
+        real_address,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="userDefined1 != null" >
+        user_defined1,
+      </if>
+      <if test="userDefined2 != null" >
+        user_defined2,
+      </if>
+      <if test="userDefined3 != null" >
+        user_defined3,
+      </if>
+      <if test="userDefined4 != null" >
+        user_defined4,
+      </if>
+      <if test="userDefined5 != null" >
+        user_defined5,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create,
+      </if>
+      <if test="lastModifiedBy != null" >
+        last_modified_by,
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified,
+      </if>
+      <if test="activeFlag != null" >
+        active_flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="addressCode != null" >
+        #{addressCode,jdbcType=VARCHAR},
+      </if>
+      <if test="addressName != null" >
+        #{addressName,jdbcType=VARCHAR},
+      </if>
+      <if test="realAddress != null" >
+        #{realAddress,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined1 != null" >
+        #{userDefined1,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined2 != null" >
+        #{userDefined2,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined3 != null" >
+        #{userDefined3,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined4 != null" >
+        #{userDefined4,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined5 != null" >
+        #{userDefined5,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifiedBy != null" >
+        #{lastModifiedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtModified != null" >
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activeFlag != null" >
+        #{activeFlag,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.penghaisoft.pda.basic.model.WmsAddressRealRela" >
+    update wms_address_real_rela
+    <set >
+      <if test="addressCode != null" >
+        address_code = #{addressCode,jdbcType=VARCHAR},
+      </if>
+      <if test="addressName != null" >
+        address_name = #{addressName,jdbcType=VARCHAR},
+      </if>
+      <if test="realAddress != null" >
+        real_address = #{realAddress,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined1 != null" >
+        user_defined1 = #{userDefined1,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined2 != null" >
+        user_defined2 = #{userDefined2,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined3 != null" >
+        user_defined3 = #{userDefined3,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined4 != null" >
+        user_defined4 = #{userDefined4,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined5 != null" >
+        user_defined5 = #{userDefined5,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifiedBy != null" >
+        last_modified_by = #{lastModifiedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activeFlag != null" >
+        active_flag = #{activeFlag,jdbcType=CHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="queryOutAddress" resultMap="BaseResultMap" >
+    SELECT
+    wms_address_real_rela_.id,
+    wms_address_real_rela_.address_code,
+    wms_address_real_rela_.address_name,
+    wms_address_real_rela_.real_address,
+    wms_address_real_rela_.remark,
+    wms_address_real_rela_.user_defined1,
+    wms_address_real_rela_.user_defined2,
+    wms_address_real_rela_.user_defined3,
+    wms_address_real_rela_.user_defined4,
+    wms_address_real_rela_.user_defined5,
+    wms_address_real_rela_.create_by,
+    wms_address_real_rela_.gmt_create,
+    wms_address_real_rela_.last_modified_by,
+    wms_address_real_rela_.gmt_modified,
+    wms_address_real_rela_.active_flag
+    FROM
+    wms_address_real_rela wms_address_real_rela_
+    JOIN (
+    SELECT DISTINCT
+    rela_id
+    FROM
+    wms_address_transform
+    WHERE
+    address_type in
+    <foreach collection="addressTypeList" index="index" item="item" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+    ) a ON wms_address_real_rela_.id = a.rela_id
+  </select>
+
+  <select id="queryByAddressCode" resultMap="BaseResultMap" >
+		SELECT
+			t.address_code,
+			t.address_name,
+			t.real_address,
+			s.address_type
+		FROM
+		wms_address_real_rela t
+		JOIN wms_address_transform s ON t.id = s.rela_id
+		WHERE t.address_code = #{addressCode}
+	</select>
+</mapper>

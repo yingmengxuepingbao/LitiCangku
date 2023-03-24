@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>立库移库任务</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="../../css/bootstrap.css" type="text/css">
+    <link rel="stylesheet" href="../../css/font-awesome.min.css">
+    <link rel="stylesheet" href="../../css/zdialog.css">
+    <link rel="stylesheet" href="../../css/zTreeStyleOutLook.css" />
+    <link rel="stylesheet" href="../../css/layout.css" type="text/css">
+    <link rel="stylesheet" href="../../css/jedate.css" />
+    <link rel="stylesheet" href="../../css/chosen.css">
+    <link rel="stylesheet" href="css/device.css" />
+    <link rel="stylesheet" href="../../js/chosen-1.8.7/chosen.min.css"  type="text/css" />
+    <style type="text/css">
+        a{text-decoration: none !important;}
+        .category .form-control{width: 180px}
+        .category-con:after{display:block;clear:both;content:"";visibility:hidden;height:0}
+        #baseEquipmentList:after{display:block;clear:both;content:"";visibility:hidden;height:0}
+        .pagination-con{overflow: inherit;}
+        .pagination-con:after{display:block;clear:both;content:"";visibility:hidden;height:0}
+        .search-title{overflow:inherit;}
+        .search-title:after{display:block;clear:both;content:"";visibility:hidden;height:0}
+        .btn-blue{ background:#1DBBF4 ;border: 1px solid #fff; color: #fff}
+        .btn-blue:hover{
+            background:#1DBBF4 ;border: 1px solid #fff; color: #fff
+        }
+        .file-border{
+            border: 1px solid #eee;
+            padding: 15px;
+        }
+    </style>
+</head>
+<body>
+<div class="wrap" style="min-width: 1154px;height: 100%">
+    <ol class="breadcrumb">
+        <li><a href="#" class="link">基础管理</a></li>
+        <li class="active">地址关系维护</li>
+    </ol>
+    <div class="content" style="min-height: 500px">
+        <div class="form-inline search-title">
+<!--            <div class="title fl">EdgeBox列表</div>-->
+        </div>
+        <div class="margin320 category">
+            <div class="form-inline search-title" style="border-bottom:none">
+                <div class="form-inline rt icon-search">
+                    <select class="form-control search-border-reset" id="addressTypeSelect">&nbsp;
+                    </select>
+                </div>
+                <div class="form-inline rt icon-search">
+                    <input type="text" class="form-control search-border-reset" id="realAddress_search"
+                           placeholder="请输入实际物理地址" onkeyup="this.value=this.value.replace(/[=\\=&? ？ *%]/,'')">
+                    <img src="../../images/common/search_icon_grey.png">
+                </div>
+                <div class="form-inline rt icon-search">
+                    <input type="text" class="form-control search-border-reset" id="addressName_search"
+                           placeholder="请输入地址名称" onkeyup="this.value=this.value.replace(/[=\\=&? ？ *%]/,'')">
+                    <img src="../../images/common/search_icon_grey.png">
+                </div>
+                <div class="form-inline rt icon-search">
+                    <input type="text" class="form-control search-border-reset" id="addressCode_search"
+                           placeholder="请输入地址编码" onkeyup="this.value=this.value.replace(/[=\\=&? ？ *%]/,'')">
+                    <img src="../../images/common/search_icon_grey.png">
+                </div>
+            </div>
+            <div class="bt-and-search">
+                <div class="btn-lists lf">
+<!--                    <button type="button" class="btn btn-default multiDelete">出库</button>-->
+<!--                    <button type="button" class="btn btn-default multiDelete1">合并出库</button>-->
+                    <!--<button type="button" class="btn btn-default" id="exportBtn">导出</button>
+                    <button type="button" class="btn btn-default" id="importBtn">导入</button>-->
+                    <button id="addEquipment" type="button" class="btn btn-default btn-add">新增 <i class="fa fa-plus"></i></button>
+                </div>
+                <div class="hide-search rt" id="more-search-condition">
+                    <button id="resetSearchConditions" type="button" class="btn btn-default rt">重置</button>
+                    <button id="topSearchInfoList" type="button" class="btn btn-default rt ">搜索</button>
+                </div>
+            </div>
+
+            <div class="category-con">
+                <table class="table-hover table col-xs-12 col-sm-12 " id="edgeBoxList">
+                    <thead class="head-sort">
+                    <tr>
+                        <th style="width: 50px">
+                            <div class="checkbox-custom checkbox-default">
+                                <input type="checkbox" id="check-all">
+                                <label></label>
+                            </div>
+                        </th>
+                        <th data-sort="address_code" >地址编码<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="address_name" >地址名称<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="address_type" >地址类型<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="real_address" >实际物理地址<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="create_by" >创建人<i class="fa fa-sort-amount-asc"></i></th>
+                        <th data-sort="gmt_create" >创建时间<i class="fa fa-sort-amount-asc"></i></th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody class="tbody-load">
+                    </tbody>
+                </table>
+                <div class="pagination-con" style="display: block">
+                    <p class="listNumber rt">
+                        <button class="btn btn-default btn-xs previousPage"><i class="fa fa-caret-left fa-lg"></i></button>
+                        <span class="currentPage">1</span>/<span class="pageNumber">1</span>
+                        <button class="btn btn-default btn-xs nextPage"><i class="fa fa-caret-right fa-lg"></i></button>
+                        <input class="currentPageBtn" value="1" type="text"  onkeyup="this.value=this.value.replace(/[^0-9]+/g, '');"/>
+                        <button type="button" id="pageJump"  data-loading-text="请求数据中..." class="btn btn-default pageJump" autocomplete="off">跳转</button>
+                        每页<span class="pageOneNumber">15</span>条，共<span class="dataNumber">30</span>条记录
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--新增修改出库-->
+    <div class="modal" id="formModel" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document" style="width: 700px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="moTitle">地址信息</h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" id="formInfo">
+                        <div class="form-group">
+                            <input type="hidden" id="id">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3"><i class="fa fa-asterisk"></i>地址编码:</label>
+                            <div class="col-sm-8">
+                                <input id="addressCode" type="text" class="form-control" placeholder="请输入地址编码"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3"><i class="fa fa-asterisk"></i>地址名称:</label>
+                            <div class="col-sm-8">
+                                <input id="addressName" type="text" class="form-control" placeholder="请输入地址名称"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3"><i class="fa fa-asterisk"></i>实际物理地址:</label>
+                            <div class="col-sm-8">
+                                <input id="realAddress" type="text" class="form-control" placeholder="请输入实际物理地址"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3"><i class="fa fa-asterisk"></i>地址类型:</label>
+                            <div class="col-sm-8">
+                                <select id="addressType" class="form-control" multiple>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3">备注:</label>
+                            <div class="col-sm-8">
+                                <input id="remark" type="text"  class="form-control" placeholder="请输入备注"/>
+                            </div>
+                        </div>
+                    </form>
+                    <i class="fa fa-exclamation-circle fa-deviceInfoPop"></i>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="modalCancelButton" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" id="modalSaveButton" class="btn" data-dismiss="modal">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="../../js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../js/bootstrap.min.js" ></script>
+    <script type="text/javascript" src="../../js/jquery.jedate.js"></script>
+    <script type="text/javascript" src="../../js/zdialog.js"></script>
+    <script type="text/javascript" src="../../js/jquery.ztree.all.min.js"></script>
+    <script type="text/javascript" src="../../js/chosen-1.8.7/chosen.jquery.min.js"></script>
+    <script type="text/javascript" src="../../js/common.js"></script>
+    <script type="text/javascript" src="js/wmsAddressTransformList.js"></script>
+    <script type="text/javascript">
+
+        var config = {
+
+            '.chosen-select'           : {},
+
+            '.chosen-select-deselect'  : {allow_single_deselect:true},
+
+            '.chosen-select-no-single' : {disable_search_threshold:10},
+
+            '.chosen-select-no-results': {no_results_text:'Oops, nothing found!'},
+
+            '.chosen-select-width'     : {width:"95%"}
+
+        }
+
+        for (var selector in config) {
+
+            $(selector).chosen(config[selector]);
+
+        }
+
+    </script>
+</div>
+</body>
+</html>

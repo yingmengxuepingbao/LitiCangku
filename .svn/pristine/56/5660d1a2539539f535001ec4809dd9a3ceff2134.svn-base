@@ -1,0 +1,480 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.penghaisoft.wms.storagemanagement.model.dao.WmsOrderCheckPalletBoxBarcodeMapper">
+	
+	<!-- =========================================================== -->
+    <!-- 定义resultMap                                                                                                                                                                             -->
+    <!-- =========================================================== -->
+	<resultMap id="wmsOrderCheckPalletBoxBarcodeMap" type="com.penghaisoft.wms.storagemanagement.model.entity.WmsOrderCheckPalletBoxBarcode">
+	    <result property="checkPalletBoxBarcodeId" column="check_pallet_box_barcode_id"/>
+	    <result property="orderNo" column="order_no"/>
+	    <result property="diffFlag" column="diff_flag"/>
+	    <result property="palletCode" column="pallet_code"/>
+	    <result property="boxBarcode" column="box_barcode"/>
+	    <result property="realBoxBarcode" column="real_box_barcode"/>
+	    <result property="remark" column="remark"/>
+	    <result property="userDefined1" column="user_defined1"/>
+	    <result property="userDefined2" column="user_defined2"/>
+	    <result property="userDefined3" column="user_defined3"/>
+	    <result property="userDefined4" column="user_defined4"/>
+	    <result property="userDefined5" column="user_defined5"/>
+	    <result property="createBy" column="create_by"/>
+	    <result property="gmtCreate" column="gmt_create"/>
+	    <result property="lastModifiedBy" column="last_modified_by"/>
+	    <result property="gmtModified" column="gmt_modified"/>
+	    <result property="activeFlag" column="active_flag"/>
+	</resultMap>
+	
+	<!-- =========================================================== -->
+    <!-- 一些公共变量设置                                                                                                                                                                             -->
+    <!-- =========================================================== -->
+	<!-- mysql 分页 -->
+	<sql id="pagination_tail">
+		top ((#{page.pageOffset} +1)* #{page.rows})
+	</sql>
+	<!-- mysql 查询总数 -->
+	<sql id="count_Tail">
+		select count(1) from 
+	</sql>
+	
+	<sql id="selectAllColumns">
+		<![CDATA[
+ 			check_pallet_box_barcode_id
+ 			,order_no
+ 			,diff_flag
+ 			,pallet_code
+ 			,box_barcode
+ 			,real_box_barcode
+ 			,remark
+ 			,user_defined1
+ 			,user_defined2
+ 			,user_defined3
+ 			,user_defined4
+ 			,user_defined5
+ 			,create_by
+ 			,gmt_create
+ 			,last_modified_by
+ 			,gmt_modified
+ 			,active_flag
+		FROM 
+		wms_order_check_pallet_box_barcode wms_order_check_pallet_box_barcode_
+		]]>
+	</sql>
+	
+	<sql id="where_fragement">
+		where 1=1
+		<if test="entity!=null">
+			<if test="entity.checkPalletBoxBarcodeId != null and entity.checkPalletBoxBarcodeId !=''">
+				<![CDATA[ and wms_order_check_pallet_box_barcode_.check_pallet_box_barcode_id LIKE CONCAT('%',#{entity.checkPalletBoxBarcodeId},'%')]]>
+			</if>
+			<if test="entity.orderNo != null and entity.orderNo !=''">
+				<![CDATA[ and wms_order_check_pallet_box_barcode_.order_no LIKE CONCAT('%',#{entity.orderNo},'%')]]>
+			</if>
+			<if test="entity.diffFlag != null and entity.diffFlag !=''">
+				<![CDATA[ and wms_order_check_pallet_box_barcode_.diff_flag LIKE CONCAT('%',#{entity.diffFlag},'%')]]>
+			</if>
+			<if test="entity.palletCode != null and entity.palletCode !=''">
+				<![CDATA[ and wms_order_check_pallet_box_barcode_.pallet_code LIKE CONCAT('%',#{entity.palletCode},'%')]]>
+			</if>
+			<if test="entity.boxBarcode != null and entity.boxBarcode !=''">
+				<![CDATA[ and wms_order_check_pallet_box_barcode_.box_barcode LIKE CONCAT('%',#{entity.boxBarcode},'%')]]>
+			</if>
+			<if test="entity.realBoxBarcode != null and entity.realBoxBarcode !=''">
+				<![CDATA[ and wms_order_check_pallet_box_barcode_.real_box_barcode LIKE CONCAT('%',#{entity.realBoxBarcode},'%')]]>
+			</if>
+			<if test="entity.remark != null and entity.remark !=''">
+				<![CDATA[ and wms_order_check_pallet_box_barcode_.remark LIKE CONCAT('%',#{entity.remark},'%')]]>
+			</if>
+			<if test="entity.userDefined1 != null and entity.userDefined1 !=''">
+				<![CDATA[ and wms_order_check_pallet_box_barcode_.user_defined1 LIKE CONCAT('%',#{entity.userDefined1},'%')]]>
+			</if>
+			<if test="entity.userDefined2 != null and entity.userDefined2 !=''">
+				<![CDATA[ and wms_order_check_pallet_box_barcode_.user_defined2 LIKE CONCAT('%',#{entity.userDefined2},'%')]]>
+			</if>
+			<if test="entity.userDefined3 != null and entity.userDefined3 !=''">
+				<![CDATA[ and wms_order_check_pallet_box_barcode_.user_defined3 LIKE CONCAT('%',#{entity.userDefined3},'%')]]>
+			</if>
+			<if test="entity.userDefined4 != null and entity.userDefined4 !=''">
+				<![CDATA[ and wms_order_check_pallet_box_barcode_.user_defined4 LIKE CONCAT('%',#{entity.userDefined4},'%')]]>
+			</if>
+			<if test="entity.userDefined5 != null and entity.userDefined5 !=''">
+				<![CDATA[ and wms_order_check_pallet_box_barcode_.user_defined5 LIKE CONCAT('%',#{entity.userDefined5},'%')]]>
+			</if>
+			<if test="entity.createBy != null and entity.createBy !=''">
+				<![CDATA[ and wms_order_check_pallet_box_barcode_.create_by LIKE CONCAT('%',#{entity.createBy},'%')]]>
+			</if>
+			<if test="entity.gmtCreate != null">
+				<![CDATA[ and wms_order_check_pallet_box_barcode_.gmt_create LIKE CONCAT('%',#{entity.gmtCreate},'%')]]>
+			</if>
+			<if test="entity.lastModifiedBy != null and entity.lastModifiedBy !=''">
+				<![CDATA[ and wms_order_check_pallet_box_barcode_.last_modified_by LIKE CONCAT('%',#{entity.lastModifiedBy},'%')]]>
+			</if>
+			<if test="entity.gmtModified != null">
+				<![CDATA[ and wms_order_check_pallet_box_barcode_.gmt_modified LIKE CONCAT('%',#{entity.gmtModified},'%')]]>
+			</if>
+			<if test="entity.activeFlag != null and entity.activeFlag !=''">
+				<![CDATA[ and wms_order_check_pallet_box_barcode_.active_flag LIKE CONCAT('%',#{entity.activeFlag},'%')]]>
+			</if>
+		</if>
+	</sql>
+	
+	<sql id="where_any">
+		where 1=1
+		<if test="entity!=null">
+			<if test="entity.checkPalletBoxBarcodeId != null and entity.checkPalletBoxBarcodeId !=''">
+				<![CDATA[ and wms_order_check_pallet_box_barcode_.check_pallet_box_barcode_id = #{entity.checkPalletBoxBarcodeId}]]>
+			</if>
+			<if test="entity.orderNo != null and entity.orderNo !=''">
+				<![CDATA[ and wms_order_check_pallet_box_barcode_.order_no = #{entity.orderNo}]]>
+			</if>
+			<if test="entity.diffFlag != null and entity.diffFlag !=''">
+				<![CDATA[ and wms_order_check_pallet_box_barcode_.diff_flag = #{entity.diffFlag}]]>
+			</if>
+			<if test="entity.palletCode != null and entity.palletCode !=''">
+				<![CDATA[ and wms_order_check_pallet_box_barcode_.pallet_code = #{entity.palletCode}]]>
+			</if>
+			<if test="entity.boxBarcode != null and entity.boxBarcode !=''">
+				<![CDATA[ and wms_order_check_pallet_box_barcode_.box_barcode = #{entity.boxBarcode}]]>
+			</if>
+			<if test="entity.realBoxBarcode != null and entity.realBoxBarcode !=''">
+				<![CDATA[ and wms_order_check_pallet_box_barcode_.real_box_barcode = #{entity.realBoxBarcode}]]>
+			</if>
+			<if test="entity.remark != null and entity.remark !=''">
+				<![CDATA[ and wms_order_check_pallet_box_barcode_.remark = #{entity.remark}]]>
+			</if>
+			<if test="entity.userDefined1 != null and entity.userDefined1 !=''">
+				<![CDATA[ and wms_order_check_pallet_box_barcode_.user_defined1 = #{entity.userDefined1}]]>
+			</if>
+			<if test="entity.userDefined2 != null and entity.userDefined2 !=''">
+				<![CDATA[ and wms_order_check_pallet_box_barcode_.user_defined2 = #{entity.userDefined2}]]>
+			</if>
+			<if test="entity.userDefined3 != null and entity.userDefined3 !=''">
+				<![CDATA[ and wms_order_check_pallet_box_barcode_.user_defined3 = #{entity.userDefined3}]]>
+			</if>
+			<if test="entity.userDefined4 != null and entity.userDefined4 !=''">
+				<![CDATA[ and wms_order_check_pallet_box_barcode_.user_defined4 = #{entity.userDefined4}]]>
+			</if>
+			<if test="entity.userDefined5 != null and entity.userDefined5 !=''">
+				<![CDATA[ and wms_order_check_pallet_box_barcode_.user_defined5 = #{entity.userDefined5}]]>
+			</if>
+			<if test="entity.createBy != null and entity.createBy !=''">
+				<![CDATA[ and wms_order_check_pallet_box_barcode_.create_by = #{entity.createBy}]]>
+			</if>
+			<if test="entity.gmtCreate != null">
+				<![CDATA[ and wms_order_check_pallet_box_barcode_.gmt_create = #{entity.gmtCreate}]]>
+			</if>
+			<if test="entity.lastModifiedBy != null and entity.lastModifiedBy !=''">
+				<![CDATA[ and wms_order_check_pallet_box_barcode_.last_modified_by = #{entity.lastModifiedBy}]]>
+			</if>
+			<if test="entity.gmtModified != null">
+				<![CDATA[ and wms_order_check_pallet_box_barcode_.gmt_modified = #{entity.gmtModified}]]>
+			</if>
+			<if test="entity.activeFlag != null and entity.activeFlag !=''">
+				<![CDATA[ and wms_order_check_pallet_box_barcode_.active_flag = #{entity.activeFlag}]]>
+			</if>
+		</if>
+	</sql>
+	
+	<!-- =========================================================== -->
+    <!-- DAO方法中的基本增删改查方法                                                                                                                                                           -->
+    <!-- =========================================================== -->
+   <!-- 根据id查询 -->
+	<select id="queryById" resultMap="wmsOrderCheckPalletBoxBarcodeMap" parameterType="java.lang.String">
+		select
+		<include refid="selectAllColumns" />
+		<![CDATA[
+		where wms_order_check_pallet_box_barcode_.check_pallet_box_barcode_id = #{id}
+		]]>
+	</select>
+	
+	<!-- 分页查询 -->
+	<select id="queryList" resultMap="wmsOrderCheckPalletBoxBarcodeMap" >
+		select
+		<if test="page!=null">
+			<include refid="pagination_tail" />
+		</if>
+		<include refid="selectAllColumns"/>
+		<include refid="where_fragement" />
+		<if test="entity.orderBy != null and entity.orderBy !=''">
+			<![CDATA[ order by ${entity.orderBy}]]>
+		</if>
+	</select>
+	
+	<select id="queryCount" resultType="long">
+		<include refid="count_Tail" />
+		wms_order_check_pallet_box_barcode wms_order_check_pallet_box_barcode_
+		<include refid="where_fragement" />
+	</select>
+	
+	<!-- 插入记录 -->
+	<insert id="create" parameterType="com.penghaisoft.wms.storagemanagement.model.entity.WmsOrderCheckPalletBoxBarcode">
+		<![CDATA[
+		insert into wms_order_check_pallet_box_barcode (
+		    	 check_pallet_box_barcode_id
+		    	 ,order_no
+		    	 ,diff_flag
+		    	 ,pallet_code
+		    	 ,box_barcode
+		    	 ,real_box_barcode
+		    	 ,remark
+		    	 ,user_defined1
+		    	 ,user_defined2
+		    	 ,user_defined3
+		    	 ,user_defined4
+		    	 ,user_defined5
+		    	 ,create_by
+		    	 ,gmt_create
+		    	 ,last_modified_by
+		    	 ,gmt_modified
+		    	 ,active_flag
+		   )values(
+		    	#{checkPalletBoxBarcodeId}
+		    	,#{orderNo}
+		    	,#{diffFlag}
+		    	,#{palletCode}
+		    	,#{boxBarcode}
+		    	,#{realBoxBarcode}
+		    	,#{remark}
+		    	,#{userDefined1}
+		    	,#{userDefined2}
+		    	,#{userDefined3}
+		    	,#{userDefined4}
+		    	,#{userDefined5}
+		    	,#{createBy}
+		    	,#{gmtCreate}
+		    	,#{lastModifiedBy}
+		    	,#{gmtModified}
+		    	,#{activeFlag}
+		   )
+	    ]]>	
+	</insert>
+	
+	<!-- 批量插入记录 -->
+	<insert id="batchInsert" parameterType="java.util.List">
+		insert into wms_order_check_pallet_box_barcode (
+		    	 check_pallet_box_barcode_id
+		    	 ,order_no
+		    	 ,diff_flag
+		    	 ,pallet_code
+		    	 ,box_barcode
+		    	 ,real_box_barcode
+		    	 ,remark
+		    	 ,user_defined1
+		    	 ,user_defined2
+		    	 ,user_defined3
+		    	 ,user_defined4
+		    	 ,user_defined5
+		    	 ,create_by
+		    	 ,gmt_create
+		    	 ,last_modified_by
+		    	 ,gmt_modified
+		    	 ,active_flag
+		   )
+		   values
+		   <foreach collection="list" item="item" index="index" separator="," >
+		   (
+		    	#{item.checkPalletBoxBarcodeId}
+		    	,#{item.orderNo}
+		    	,#{item.diffFlag}
+		    	,#{item.palletCode}
+		    	,#{item.boxBarcode}
+		    	,#{item.realBoxBarcode}
+		    	,#{item.remark}
+		    	,#{item.userDefined1}
+		    	,#{item.userDefined2}
+		    	,#{item.userDefined3}
+		    	,#{item.userDefined4}
+		    	,#{item.userDefined5}
+		    	,#{item.createBy}
+		    	,#{item.gmtCreate}
+		    	,#{item.lastModifiedBy}
+		    	,#{item.gmtModified}
+		    	,#{item.activeFlag}
+		   )
+		   </foreach>	
+	</insert>
+
+	<insert id="batchInsertByCheck" parameterType="com.penghaisoft.wms.storagemanagement.model.entity.WmsOrderCheckPalletBoxBarcode">
+		INSERT INTO wms_order_check_pallet_box_barcode (
+			order_no,
+			diff_flag,
+			pallet_code,
+			box_barcode,
+			remark,
+			create_by,
+			gmt_create,
+			active_flag
+		) SELECT
+			#{entity.orderNo},
+			'1',
+			t.pallet_code,
+			t.box_barcode,
+			#{entity.remark},
+			#{entity.createBy},
+			#{entity.gmtCreate},
+			'1'
+		FROM
+			wms_box_barcode t
+		JOIN wms_pallet s ON t.pallet_code = s.pallet_code
+		WHERE
+			t.active_flag = '1'
+		AND s.active_flag = '1'
+		AND s.lock_by IS NULL
+		<if test="entity.gmtModified != null">
+			<![CDATA[ AND s.gmt_modified > #{entity.gmtModified} ]]>
+		</if>
+		<if test="entity.locationCode != null and entity.locationCode !=''">
+			<![CDATA[ AND s.location_code = #{entity.locationCode} ]]>
+		</if>
+		<if test="entity.goodsCode != null and entity.goodsCode !=''">
+			<![CDATA[ AND s.goods_code = #{entity.goodsCode} ]]>
+		</if>
+		<if test="entity.areaCode != null and entity.areaCode !=''">
+			<![CDATA[ AND s.area_code = #{entity.areaCode} ]]>
+		</if>
+	</insert>
+	
+	<!-- 根据id，修改记录 -->
+	<update id="update" parameterType="com.penghaisoft.wms.storagemanagement.model.entity.WmsOrderCheckPalletBoxBarcode">
+		<![CDATA[
+		update wms_order_check_pallet_box_barcode set
+   			
+   			order_no = #{orderNo}
+   			,diff_flag = #{diffFlag}
+   			,pallet_code = #{palletCode}
+   			,box_barcode = #{boxBarcode}
+   			,real_box_barcode = #{realBoxBarcode}
+   			,remark = #{remark}
+   			,user_defined1 = #{userDefined1}
+   			,user_defined2 = #{userDefined2}
+   			,user_defined3 = #{userDefined3}
+   			,user_defined4 = #{userDefined4}
+   			,user_defined5 = #{userDefined5}
+   			,create_by = #{createBy}
+   			,gmt_create = #{gmtCreate}
+   			,last_modified_by = #{lastModifiedBy}
+   			,gmt_modified = #{gmtModified}
+   			,active_flag = #{activeFlag}
+		 where check_pallet_box_barcode_id = #{checkPalletBoxBarcodeId}
+		]]>
+	</update>
+	
+	<!--  -->
+	<update id="updateBySelect" parameterType="com.penghaisoft.wms.storagemanagement.model.entity.WmsOrderCheckPalletBoxBarcode">
+		update wms_order_check_pallet_box_barcode <set>
+		<if test="entity!=null">
+				<if test="entity.checkPalletBoxBarcodeId != null and entity.checkPalletBoxBarcodeId !=''">
+					
+				</if>
+				<if test="entity.orderNo != null and entity.orderNo !=''">
+					<![CDATA[ order_no = #{entity.orderNo}, ]]>
+				</if>
+				<if test="entity.diffFlag != null and entity.diffFlag !=''">
+					<![CDATA[ diff_flag = #{entity.diffFlag}, ]]>
+				</if>
+				<if test="entity.palletCode != null and entity.palletCode !=''">
+					<![CDATA[ pallet_code = #{entity.palletCode}, ]]>
+				</if>
+				<if test="entity.boxBarcode != null and entity.boxBarcode !=''">
+					<![CDATA[ box_barcode = #{entity.boxBarcode}, ]]>
+				</if>
+				<if test="entity.realBoxBarcode != null and entity.realBoxBarcode !=''">
+					<![CDATA[ real_box_barcode = #{entity.realBoxBarcode}, ]]>
+				</if>
+				<if test="entity.remark != null and entity.remark !=''">
+					<![CDATA[ remark = #{entity.remark}, ]]>
+				</if>
+				<if test="entity.userDefined1 != null and entity.userDefined1 !=''">
+					<![CDATA[ user_defined1 = #{entity.userDefined1}, ]]>
+				</if>
+				<if test="entity.userDefined2 != null and entity.userDefined2 !=''">
+					<![CDATA[ user_defined2 = #{entity.userDefined2}, ]]>
+				</if>
+				<if test="entity.userDefined3 != null and entity.userDefined3 !=''">
+					<![CDATA[ user_defined3 = #{entity.userDefined3}, ]]>
+				</if>
+				<if test="entity.userDefined4 != null and entity.userDefined4 !=''">
+					<![CDATA[ user_defined4 = #{entity.userDefined4}, ]]>
+				</if>
+				<if test="entity.userDefined5 != null and entity.userDefined5 !=''">
+					<![CDATA[ user_defined5 = #{entity.userDefined5}, ]]>
+				</if>
+				<if test="entity.createBy != null and entity.createBy !=''">
+					<![CDATA[ create_by = #{entity.createBy}, ]]>
+				</if>
+				<if test="entity.gmtCreate != null">
+					<![CDATA[ gmt_create = #{entity.gmtCreate}, ]]>
+				</if>
+				<if test="entity.lastModifiedBy != null and entity.lastModifiedBy !=''">
+					<![CDATA[ last_modified_by = #{entity.lastModifiedBy}, ]]>
+				</if>
+				<if test="entity.gmtModified != null">
+					<![CDATA[ gmt_modified = #{entity.gmtModified}, ]]>
+				</if>
+				<if test="entity.activeFlag != null and entity.activeFlag !=''">
+					<![CDATA[ active_flag = #{entity.activeFlag}, ]]>
+				</if>
+		</if>
+		</set>
+		 where check_pallet_box_barcode_id = #{entity.checkPalletBoxBarcodeId}
+	</update>
+
+	   <!-- 逻辑删除,根据主键设置active_flag ='0' -->
+	  <update id="delete" parameterType="com.penghaisoft.wms.storagemanagement.model.entity.WmsOrderCheckPalletBoxBarcode">
+	    UPDATE wms_order_check_pallet_box_barcode
+	    SET active_flag = "0"
+	    ,last_modified_by = #{entity.lastModifiedBy}
+	    ,gmt_modified = #{entity.gmtModified}
+	     where check_pallet_box_barcode_id = #{entity.checkPalletBoxBarcodeId}
+	  </update>
+
+	  <delete id="deleteByCheckId" parameterType="com.penghaisoft.wms.storagemanagement.model.entity.WmsOrderCheckPalletBoxBarcode">
+	        DELETE
+			FROM
+				wms_order_check_pallet_box_barcode
+			WHERE
+				active_flag = '1'
+			AND (order_no) IN (
+				SELECT
+					t.order_no
+				FROM
+					wms_order_check_pallet t
+				WHERE
+					t.check_id = #{entity.checkId} and t.active_flag = '1'
+			)
+			AND (pallet_code) IN (
+				SELECT
+					t.pallet_code
+				FROM
+					wms_order_check_pallet t
+				WHERE
+					t.check_id = #{entity.checkId} and t.active_flag = '1'
+			)
+	  </delete>
+
+	  <delete id="deleteByOrderNo" parameterType="com.penghaisoft.wms.storagemanagement.model.entity.WmsOrderCheckPalletBoxBarcode">
+	     delete from wms_order_check_pallet_box_barcode
+	     where order_no = #{entity.orderNo} and active_flag = '1'
+	  </delete>
+	  
+	  <update id="batchDelete" parameterType="com.penghaisoft.wms.storagemanagement.model.entity.WmsOrderCheckPalletBoxBarcode">
+	    DELETE FROM wms_order_check_pallet_box_barcode
+	    where check_pallet_box_barcode_id in 
+	    <foreach collection="entity.checkPalletBoxBarcodeIdList" index="index" item="item" open="(" separator="," close=")">
+	      #{item}
+	    </foreach>
+	  </update>
+
+	<!-- 任意字段全匹配 -->
+	<select id="queryByAny" resultMap="wmsOrderCheckPalletBoxBarcodeMap" >
+		select
+		<include refid="selectAllColumns"/>
+		<include refid="where_any" />
+	</select>
+	
+	<select id="queryByAnyCount" resultType="long">
+		<include refid="count_Tail" />
+		wms_order_check_pallet_box_barcode wms_order_check_pallet_box_barcode_
+		<include refid="where_any" />
+	</select>
+</mapper>

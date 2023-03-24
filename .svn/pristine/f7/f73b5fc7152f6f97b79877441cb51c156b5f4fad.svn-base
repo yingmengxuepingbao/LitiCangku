@@ -1,0 +1,1240 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.penghaisoft.wms.basicmanagement.model.dao.WmsHBLocationStereoscopicMapper">
+
+	<!-- =========================================================== -->
+    <!-- 定义resultMap                                                                                                                                                                             -->
+    <!-- =========================================================== -->
+	<resultMap id="wmsLocationStereoscopicMap" type="com.penghaisoft.wms.basicmanagement.model.entity.WmsLocationStereoscopic">
+		<result property="locationId" column="location_id"/>
+		<result property="warehouseCode" column="warehouse_code"/>
+		<result property="areaCode" column="area_code"/>
+		<result property="locationCode" column="location_code"/>
+		<result property="locationAttr" column="location_attr"/>
+		<result property="locationDesc" column="location_desc"/>
+		<result property="palletCode" column="pallet_code"/>
+		<result property="inSeq" column="in_seq"/>
+		<result property="outSeq" column="out_seq"/>
+		<result property="floorNumber" column="floor_number"/>
+		<result property="shelvesNumber" column="shelves_number"/>
+		<result property="layerNumber" column="layer_number"/>
+		<result property="columnNumber" column="column_number"/>
+		<result property="useStatus" column="use_status"/>
+		<result property="allowMix" column="allow_mix"/>
+		<result property="userDefined1" column="user_defined1"/>
+		<result property="userDefined2" column="user_defined2"/>
+		<result property="userDefined3" column="user_defined3"/>
+		<result property="userDefined4" column="user_defined4"/>
+		<result property="userDefined5" column="user_defined5"/>
+		<result property="createBy" column="create_by"/>
+		<result property="gmtCreate" column="gmt_create"/>
+		<result property="lastModifiedBy" column="last_modified_by"/>
+		<result property="gmtModified" column="gmt_modified"/>
+		<result property="activeFlag" column="active_flag"/>
+		<result property="stacker" column="stacker"/>
+		<result property="stackerRunTaskAmount" column="stackerRunTaskAmount"/>
+		<result property="goodsCode" column="goods_code"/>
+		<result property="goodsName" column="goods_name"/>
+		<result property="batchNo" column="batch_no"/>
+		<result property="amount" column="amount"/>
+		<result property="useAbleAmount" column="useAbleAmount"/>
+		<result property="lockBy" column="lock_by"/>
+	</resultMap>
+
+	<sql id="allColumns">
+		location_id,warehouse_code,area_code,location_code,location_attr,location_desc,pallet_code,
+		in_seq,
+		out_seq,floor_number,shelves_number,layer_number,column_number,use_status,allow_mix,user_defined1,
+		user_defined2,user_defined3,user_defined4,user_defined5,create_by,gmt_create,last_modified_by,
+		gmt_modified,active_flag
+		/*wms_pallet_.amount,wms_pallet_.goods_code,wms_goods_.goods_name,wms_pallet_.batch_no,*/
+	</sql>
+
+	<!--推荐货位查询 右连接-->
+	<select id="getRightRecommendLocation" resultMap="wmsLocationStereoscopicMap">
+		SELECT
+			l.floor_number,
+			l.shelves_number,
+			l.layer_number,
+			MIN(l.location_code) location_code
+		FROM
+			wms_location_stereoscopic l
+		JOIN (
+			SELECT
+				t.floor_number,
+				t.shelves_number,
+				t.layer_number,
+				MAX(t.location_code) location_code_max
+			FROM
+				wms_location_stereoscopic t
+			JOIN wms_pallet s ON t.pallet_code = s.pallet_code
+			AND t.active_flag = '1'
+			AND s.active_flag = '1'
+			<if test="entity.goodsCode != null and entity.goodsCode !=''">
+				<![CDATA[ AND s.goods_code = #{entity.goodsCode}]]>
+			</if>
+			<if test="entity.batchNo != null and entity.batchNo !=''">
+				<![CDATA[ AND s.batch_no = #{entity.batchNo}]]>
+			</if>
+			WHERE
+				t.floor_number = #{entity.floorNumber}
+			AND t.use_status = '3'
+			GROUP BY
+				t.floor_number,
+				t.shelves_number,
+				t.layer_number
+		) m ON l.floor_number = m.floor_number
+		AND l.shelves_number = m.shelves_number
+		AND l.layer_number = m.layer_number
+		<![CDATA[AND l.location_code > m.location_code_max]]>
+		GROUP BY
+			l.floor_number,
+			l.shelves_number,
+			l.layer_number
+		HAVING
+			sum(l.use_status = '0') = count(1)
+		ORDER BY
+			l.shelves_number,
+			l.layer_number
+	</select>
+	<!--推荐货位查询 左连接-->
+	<select id="getLeftRecommendLocation" resultMap="wmsLocationStereoscopicMap">
+			SELECT
+				l.floor_number,
+				l.shelves_number,
+				l.layer_number,
+				MAX(l.location_code) location_code
+			FROM
+				wms_location_stereoscopic l
+			JOIN (
+				SELECT
+					t.floor_number,
+					t.shelves_number,
+					t.layer_number,
+					MIN(t.location_code) location_code_min
+				FROM
+					wms_location_stereoscopic t
+				JOIN wms_pallet s ON t.pallet_code = s.pallet_code
+				AND t.active_flag = '1'
+				AND s.active_flag = '1'
+				<if test="entity.goodsCode != null and entity.goodsCode !=''">
+					<![CDATA[ AND s.goods_code = #{entity.goodsCode}]]>
+				</if>
+				<if test="entity.batchNo != null and entity.batchNo !=''">
+					<![CDATA[ AND s.batch_no = #{entity.batchNo}]]>
+				</if>
+				WHERE
+					t.floor_number = #{entity.floorNumber}
+				AND t.use_status = '3'
+				GROUP BY
+					t.floor_number,
+					t.shelves_number,
+					t.layer_number
+			) m ON l.floor_number = m.floor_number
+			AND l.shelves_number = m.shelves_number
+			AND l.layer_number = m.layer_number
+			<![CDATA[AND l.location_code < m.location_code_min]]>
+			GROUP BY
+				l.floor_number,
+				l.shelves_number,
+				l.layer_number
+			HAVING
+				sum(l.use_status = '0') = count(1)
+			ORDER BY
+				l.shelves_number,
+				l.layer_number
+	</select>
+
+<select id="getMixRightRecommendLocation" resultMap="wmsLocationStereoscopicMap">
+		SELECT
+			l.floor_number,
+			l.shelves_number,
+			l.layer_number,
+			MIN(l.location_code) location_code
+		FROM
+			wms_location_stereoscopic l
+		JOIN (
+			SELECT
+				t.floor_number,
+				t.shelves_number,
+				t.layer_number,
+				MAX(t.location_code) location_code_max
+			FROM
+				wms_location_stereoscopic t
+			JOIN wms_pallet s ON t.pallet_code = s.pallet_code
+			AND t.active_flag = '1'
+			AND s.active_flag = '1'
+			<if test="entity.goodsCode != null and entity.goodsCode !=''">
+				<![CDATA[ AND s.goods_code = #{entity.goodsCode}]]>
+			</if>
+			<if test="entity.batchNo != null and entity.batchNo !=''">
+				<![CDATA[ AND s.batch_no = #{entity.batchNo}]]>
+			</if>
+			WHERE
+				t.floor_number = #{entity.floorNumber}
+			AND t.use_status = '3'
+			GROUP BY
+				t.floor_number,
+				t.shelves_number,
+				t.layer_number
+            HAVING count(DISTINCT s.goods_code, s.batch_no) = 1
+		) m ON l.floor_number = m.floor_number
+		AND l.shelves_number = m.shelves_number
+		AND l.layer_number = m.layer_number
+		<![CDATA[AND l.location_code > m.location_code_max]]>
+		GROUP BY
+			l.floor_number,
+			l.shelves_number,
+			l.layer_number
+		HAVING
+			sum(l.use_status = '0') = count(1)
+		ORDER BY
+			l.shelves_number,
+			l.layer_number
+	</select>
+
+	<select id="getMixLeftRecommendLocation" resultMap="wmsLocationStereoscopicMap">
+			SELECT
+				l.floor_number,
+				l.shelves_number,
+				l.layer_number,
+				MAX(l.location_code) location_code
+			FROM
+				wms_location_stereoscopic l
+			JOIN (
+				SELECT
+					t.floor_number,
+					t.shelves_number,
+					t.layer_number,
+					MIN(t.location_code) location_code_min
+				FROM
+					wms_location_stereoscopic t
+				JOIN wms_pallet s ON t.pallet_code = s.pallet_code
+				AND t.active_flag = '1'
+				AND s.active_flag = '1'
+				<if test="entity.goodsCode != null and entity.goodsCode !=''">
+					<![CDATA[ AND s.goods_code = #{entity.goodsCode}]]>
+				</if>
+				<if test="entity.batchNo != null and entity.batchNo !=''">
+					<![CDATA[ AND s.batch_no = #{entity.batchNo}]]>
+				</if>
+				WHERE
+					t.floor_number = #{entity.floorNumber}
+				AND t.use_status = '3'
+				GROUP BY
+					t.floor_number,
+					t.shelves_number,
+					t.layer_number
+                HAVING count(DISTINCT s.goods_code, s.batch_no) = 1
+			) m ON l.floor_number = m.floor_number
+			AND l.shelves_number = m.shelves_number
+			AND l.layer_number = m.layer_number
+			<![CDATA[AND l.location_code < m.location_code_min]]>
+			GROUP BY
+				l.floor_number,
+				l.shelves_number,
+				l.layer_number
+			HAVING
+				sum(l.use_status = '0') = count(1)
+			ORDER BY
+				l.shelves_number,
+				l.layer_number
+	</select>
+	
+	<select id="getEmptyRecommendLocation" resultMap="wmsLocationStereoscopicMap">
+		SELECT
+			l.location_code,
+			l.floor_number,
+			l.shelves_number,
+			l.layer_number,
+			l.column_number
+		FROM
+			wms_location_stereoscopic l
+		JOIN (
+			SELECT
+			    top 1
+				t.floor_number,
+				t.shelves_number,
+				t.layer_number
+			FROM
+				wms_location_stereoscopic t
+			GROUP BY
+				t.floor_number,
+				t.shelves_number,
+				t.layer_number
+			HAVING
+				sum(t.use_status = '0') = count(1)
+			ORDER BY
+				t.shelves_number,
+				t.layer_number
+		) s ON l.floor_number = s.floor_number
+		AND l.shelves_number = s.shelves_number
+		AND l.layer_number = s.layer_number
+		ORDER BY
+			l.shelves_number,
+			l.layer_number,
+			l.column_number
+	</select>
+
+    <select id="getTotalRowLocation" resultMap="wmsLocationStereoscopicMap">
+			SELECT
+				t.location_id,
+				t.warehouse_code,
+				t.area_code,
+				t.location_code,
+				t.location_attr,
+				t.location_desc,
+				t.pallet_code,
+				t.in_seq,
+				t.out_seq,
+				t.floor_number,
+				t.shelves_number,
+				t.layer_number,
+				t.column_number,
+				t.use_status,
+				t.allow_mix,
+				t.user_defined1,
+				t.user_defined2,
+				t.user_defined3,
+				t.user_defined4,
+				t.user_defined5,
+				t.create_by,
+				t.gmt_create,
+				t.last_modified_by,
+				t.gmt_modified,
+				t.active_flag,
+				s.goods_code,
+				s.lock_by
+			FROM
+				wms_location_stereoscopic t LEFT JOIN wms_pallet s ON t.pallet_code = s.pallet_code
+			AND s.active_flag = '1'
+			WHERE
+			t.active_flag = '1' AND
+				(
+				t.floor_number,
+				t.shelves_number,
+				t.layer_number
+			) IN (
+				SELECT
+					floor_number,
+					shelves_number,
+					layer_number
+				FROM
+					wms_location_stereoscopic
+				WHERE
+					active_flag = '1'
+				AND location_code = #{entity.locationCode}
+			)
+			ORDER BY location_code ASC
+	</select>
+
+	<!--移库-根据库位编码，查询信息-->
+	<select id="getHBTotalRowLocation" resultMap="wmsLocationStereoscopicMap">
+		SELECT
+			t.location_id,
+			t.warehouse_code,
+			t.area_code,
+			t.location_code,
+			t.location_attr,
+			t.location_desc,
+			t.pallet_code,
+			t.in_seq,
+			t.out_seq,
+			t.floor_number,
+			t.shelves_number,
+			t.layer_number,
+			t.column_number,
+			t.use_status,
+			t.allow_mix,
+			t.user_defined1,
+			t.user_defined2,
+			t.user_defined3,
+			t.user_defined4,
+			t.user_defined5,
+			t.create_by,
+			t.gmt_create,
+			t.last_modified_by,
+			t.gmt_modified,
+			t.active_flag,
+			s.goods_code,
+			s.lock_by
+		FROM
+			wms_location_stereoscopic t LEFT JOIN wms_pallet s ON t.pallet_code = s.pallet_code
+				AND s.active_flag = '1'
+		WHERE
+			t.active_flag = '1'
+		  AND
+				(
+				 t.floor_number
+					) IN (
+					SELECT
+						floor_number
+					FROM
+						wms_location_stereoscopic
+					WHERE
+						active_flag = '1'
+					  AND location_code = #{entity.locationCode}
+				)
+		  AND
+				(
+				 t.column_number
+					) IN (
+					SELECT
+						column_number
+					FROM
+						wms_location_stereoscopic
+					WHERE
+						active_flag = '1'
+					  AND location_code = #{entity.locationCode}
+				)
+		  AND
+				(
+				 t.layer_number
+					) IN (
+					SELECT
+						layer_number
+					FROM
+						wms_location_stereoscopic
+					WHERE
+						active_flag = '1'
+					  AND location_code = #{entity.locationCode}
+				)
+		ORDER BY location_code ASC
+	</select>
+	<!--查询可用商品数量-->
+	<select id="queryUseableGoodsAmount" resultType="long">
+		SELECT
+		SUM(s.amount)
+		FROM
+		wms_location_stereoscopic t
+		JOIN wms_pallet s ON t.pallet_code = s.pallet_code
+		AND t.active_flag = '1'
+		AND s.active_flag = '1'
+		WHERE
+		t.use_status = '3'
+		<if test="entity.floorNumber != null and entity.floorNumber !=''">
+			<![CDATA[ AND t.floor_number = #{entity.floorNumber}]]>
+		</if>
+		<if test="entity.goodsCode != null and entity.goodsCode !=''">
+			<![CDATA[ AND s.goods_code = #{entity.goodsCode}]]>
+		</if>
+		<if test="entity.batchNo != null and entity.batchNo !=''">
+			<![CDATA[ AND s.batch_no = #{entity.batchNo}]]>
+		</if>
+	</select>
+
+	<select id="queryUseablePalletAmount" resultType="long">
+		SELECT
+		count(1)
+		FROM
+		wms_location_stereoscopic t
+		JOIN wms_pallet s ON t.pallet_code = s.pallet_code
+		AND t.active_flag = '1'
+		AND s.active_flag = '1'
+		WHERE
+		t.use_status = '3'
+		<if test="entity.floorNumber != null and entity.floorNumber !=''">
+			<![CDATA[ AND t.floor_number = #{entity.floorNumber}]]>
+		</if>
+		<if test="entity.floorNumberList != null and entity.floorNumberList.size() > 0">
+			AND t.floor_number in
+			<foreach collection="entity.floorNumberList" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="entity.goodsCode != null and entity.goodsCode !=''">
+			<![CDATA[ AND s.goods_code = #{entity.goodsCode}]]>
+		</if>
+		<if test="entity.batchNo != null and entity.batchNo !=''">
+			<![CDATA[ AND s.batch_no = #{entity.batchNo}]]>
+		</if>
+	</select>
+
+	<select id="getOutRihtLocation" resultMap="wmsLocationStereoscopicMap">
+		SELECT
+			m.location_code,
+			m.floor_number,
+			m.shelves_number,
+			m.layer_number,
+			m.column_number,
+			m.use_status
+		FROM
+			wms_location_stereoscopic m
+		JOIN wms_pallet n ON m.pallet_code = n.pallet_code
+		AND m.active_flag = '1'
+		AND n.active_flag = '1'
+		AND n.goods_code = #{entity.goodsCode}
+		AND n.batch_no = #{entity.batchNo}
+		AND m.use_status = '3'
+		WHERE
+			(
+				m.floor_number,
+				m.shelves_number,
+				m.layer_number
+			) IN (
+				SELECT
+					l.floor_number,
+					l.shelves_number,
+					l.layer_number
+				FROM
+					wms_location_stereoscopic l
+				JOIN (
+					SELECT
+						t.floor_number,
+						t.shelves_number,
+						t.layer_number,
+						MAX(t.location_code) location_code_max
+					FROM
+						wms_location_stereoscopic t
+					JOIN wms_pallet s ON t.pallet_code = s.pallet_code
+					AND t.active_flag = '1'
+					AND s.active_flag = '1'
+					<if test="entity.goodsCode != null and entity.goodsCode !=''">
+						<![CDATA[ AND s.goods_code = #{entity.goodsCode}]]>
+					</if>
+					<if test="entity.batchNo != null and entity.batchNo !=''">
+						<![CDATA[ AND s.batch_no = #{entity.batchNo}]]>
+					</if>
+					WHERE
+						t.floor_number = #{entity.floorNumber}
+					AND t.use_status = '3'
+					<if test="entity.shelvesNumberList != null and entity.shelvesNumberList.size() > 0">
+						AND t.shelves_number in
+						<foreach collection="entity.shelvesNumberList" index="index" item="item" open="(" separator="," close=")">
+							#{item}
+						</foreach>
+					</if>
+					GROUP BY
+						t.floor_number,
+						t.shelves_number,
+						t.layer_number
+				) m ON l.floor_number = m.floor_number
+				AND l.shelves_number = m.shelves_number
+				AND l.layer_number = m.layer_number
+				<![CDATA[ AND l.location_code >= m.location_code_max]]>
+				GROUP BY
+					l.floor_number,
+					l.shelves_number,
+					l.layer_number
+				HAVING
+					sum(
+						l.use_status = '0'
+						OR l.use_status = '2'
+					) + 1 = count(1)
+			)
+		ORDER BY
+			m.shelves_number DESC,
+			m.layer_number DESC,
+			m.column_number DESC
+	</select>
+
+	<select id="getOutLeftLocation" resultMap="wmsLocationStereoscopicMap">
+		SELECT
+			m.location_code
+		FROM
+			wms_location_stereoscopic m
+		JOIN wms_pallet n ON m.pallet_code = n.pallet_code
+		AND m.active_flag = '1'
+		AND n.active_flag = '1'
+		AND n.goods_code = #{entity.goodsCode}
+		AND n.batch_no = #{entity.batchNo}
+		AND m.use_status = '3'
+		WHERE
+			(
+				m.floor_number,
+				m.shelves_number,
+				m.layer_number
+			) IN (
+				SELECT
+					l.floor_number,
+					l.shelves_number,
+					l.layer_number
+				FROM
+					wms_location_stereoscopic l
+				JOIN (
+					SELECT
+						t.floor_number,
+						t.shelves_number,
+						t.layer_number,
+						MIN(t.location_code) location_code_min
+					FROM
+						wms_location_stereoscopic t
+					JOIN wms_pallet s ON t.pallet_code = s.pallet_code
+					AND t.active_flag = '1'
+					AND s.active_flag = '1'
+					<if test="entity.goodsCode != null and entity.goodsCode !=''">
+						<![CDATA[ AND s.goods_code = #{entity.goodsCode}]]>
+					</if>
+					<if test="entity.batchNo != null and entity.batchNo !=''">
+						<![CDATA[ AND s.batch_no = #{entity.batchNo}]]>
+					</if>
+					WHERE
+						t.floor_number = #{entity.floorNumber}
+					AND t.use_status = '3'
+					<if test="entity.shelvesNumberList != null and entity.shelvesNumberList.size() > 0">
+						AND t.shelves_number in
+						<foreach collection="entity.shelvesNumberList" index="index" item="item" open="(" separator="," close=")">
+							#{item}
+						</foreach>
+					</if>
+					GROUP BY
+						t.floor_number,
+						t.shelves_number,
+						t.layer_number
+				) m ON l.floor_number = m.floor_number
+				AND l.shelves_number = m.shelves_number
+				AND l.layer_number = m.layer_number
+				<![CDATA[ AND l.location_code <= m.location_code_min]]>
+				GROUP BY
+					l.floor_number,
+					l.shelves_number,
+					l.layer_number
+				HAVING
+					sum(
+						l.use_status = '0'
+						OR l.use_status = '2'
+					) + 1 = count(1)
+			)
+		ORDER BY
+			m.shelves_number DESC,
+			m.layer_number DESC,
+			m.column_number ASC
+	</select>
+
+	<select id="getOutRihtSimpleLocation" resultMap="wmsLocationStereoscopicMap">
+		SELECT
+			m.location_code,
+			m.pallet_code,
+			m.floor_number,
+			m.shelves_number,
+			m.layer_number,
+			m.column_number,
+			m.use_status,
+			n.goods_code,
+			n.batch_no,
+			n.amount
+		FROM
+			wms_location_stereoscopic m
+		LEFT JOIN wms_pallet n ON m.pallet_code = n.pallet_code
+		AND n.active_flag = '1'
+		WHERE
+			m.active_flag = '1'
+		AND
+		m.floor_number IN (
+			SELECT
+			m.floor_number
+			FROM
+			wms_location_stereoscopic m
+			JOIN wms_pallet n ON m.pallet_code = n.pallet_code
+			AND m.active_flag = '1'
+			AND n.active_flag = '1'
+			<if test="entity.goodsCode != null and entity.goodsCode !=''">
+				<![CDATA[ AND n.goods_code = #{entity.goodsCode}]]>
+			</if>
+			<if test="entity.batchNo != null and entity.batchNo !=''">
+				<![CDATA[ AND n.batch_no = #{entity.batchNo}]]>
+			</if>
+			<if test="entity.floorNumberList != null and entity.floorNumberList.size() > 0">
+				AND m.floor_number in
+				<foreach collection="entity.floorNumberList" index="index" item="item" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+			GROUP BY
+			m.floor_number,
+			m.column_number,
+			m.layer_number
+			)
+		AND
+		m.column_number IN (
+			SELECT
+			m.column_number
+			FROM
+			wms_location_stereoscopic m
+			JOIN wms_pallet n ON m.pallet_code = n.pallet_code
+			AND m.active_flag = '1'
+			AND n.active_flag = '1'
+			<if test="entity.goodsCode != null and entity.goodsCode !=''">
+				<![CDATA[ AND n.goods_code = #{entity.goodsCode}]]>
+			</if>
+			<if test="entity.batchNo != null and entity.batchNo !=''">
+				<![CDATA[ AND n.batch_no = #{entity.batchNo}]]>
+			</if>
+			<if test="entity.floorNumberList != null and entity.floorNumberList.size() > 0">
+				AND m.floor_number in
+				<foreach collection="entity.floorNumberList" index="index" item="item" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+			GROUP BY
+			m.floor_number,
+			m.column_number,
+			m.layer_number
+		)
+		AND
+		m.layer_number IN (
+			SELECT
+			m.layer_number
+			FROM
+			wms_location_stereoscopic m
+			JOIN wms_pallet n ON m.pallet_code = n.pallet_code
+			AND m.active_flag = '1'
+			AND n.active_flag = '1'
+			<if test="entity.goodsCode != null and entity.goodsCode !=''">
+				<![CDATA[ AND n.goods_code = #{entity.goodsCode}]]>
+			</if>
+			<if test="entity.batchNo != null and entity.batchNo !=''">
+				<![CDATA[ AND n.batch_no = #{entity.batchNo}]]>
+			</if>
+			<if test="entity.floorNumberList != null and entity.floorNumberList.size() > 0">
+				AND m.floor_number in
+				<foreach collection="entity.floorNumberList" index="index" item="item" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			</if>
+			GROUP BY
+			m.floor_number,
+			m.column_number,
+			m.layer_number
+		)
+		ORDER BY
+			m.floor_number ASC,
+			m.layer_number DESC,
+			m.column_number DESC
+	</select>
+	
+	<select id="getOutLeftSimpleLocation" resultMap="wmsLocationStereoscopicMap">
+		SELECT
+			m.location_code,
+			m.floor_number,
+			m.shelves_number,
+			m.layer_number,
+			m.column_number,
+			m.use_status,
+			n.goods_code,
+			n.batch_no,
+			n.amount
+		FROM
+			wms_location_stereoscopic m
+		LEFT JOIN wms_pallet n ON m.pallet_code = n.pallet_code
+		AND m.active_flag = '1'
+		AND n.active_flag = '1'
+		WHERE
+			(
+				m.floor_number,
+				m.shelves_number,
+				m.layer_number
+			) IN (
+				SELECT
+					m.floor_number,
+					m.shelves_number,
+					m.layer_number
+				FROM
+					wms_location_stereoscopic m
+				JOIN wms_pallet n ON m.pallet_code = n.pallet_code
+				AND m.active_flag = '1'
+				AND n.active_flag = '1'
+				AND m.floor_number = #{entity.floorNumber}
+				<if test="entity.goodsCode != null and entity.goodsCode !=''">
+					<![CDATA[ AND n.goods_code = #{entity.goodsCode}]]>
+				</if>
+				<if test="entity.batchNo != null and entity.batchNo !=''">
+					<![CDATA[ AND n.batch_no = #{entity.batchNo}]]>
+				</if>
+				<if test="entity.shelvesNumberList != null and entity.shelvesNumberList.size() > 0">
+					AND m.shelves_number in
+					<foreach collection="entity.shelvesNumberList" index="index" item="item" open="(" separator="," close=")">
+						#{item}
+					</foreach>
+				</if>
+				GROUP BY
+					m.floor_number,
+					m.shelves_number,
+					m.layer_number
+			)
+		ORDER BY
+			m.shelves_number DESC,
+			m.layer_number DESC,
+			m.column_number ASC
+	</select>
+
+	<!--查询所有可用货位-->
+	<select id="getAllLocationInfo" resultMap="wmsLocationStereoscopicMap">
+		SELECT
+			m.location_code,
+			m.pallet_code,
+			m.floor_number,
+			m.shelves_number,
+			m.layer_number,
+			m.column_number,
+			m.use_status,
+			n.goods_code,
+			n.batch_no,
+			n.amount
+		FROM
+			wms_location_stereoscopic m
+		LEFT JOIN wms_pallet n
+		ON m.pallet_code = n.pallet_code AND n.active_flag = '1'
+		where m.active_flag = '1'
+		ORDER BY
+			m.floor_number ASC,
+			m.layer_number ASC,
+			m.column_number ASC,
+			m.shelves_number ASC
+	</select>
+
+	<!---查询所有可用货位-->
+	<select id="getLocationInfoBylocationCodeList" resultMap="wmsLocationStereoscopicMap">
+		SELECT
+			m.location_code,
+			m.pallet_code,
+			m.floor_number,
+			m.shelves_number,
+			m.layer_number,
+			m.column_number,
+			m.use_status,
+			n.goods_code,
+			n.batch_no,
+			n.amount
+		FROM
+			wms_location_stereoscopic m
+		LEFT JOIN wms_pallet n
+		ON m.pallet_code = n.pallet_code AND n.active_flag = '1'
+		where m.active_flag = '1'
+		  and m.use_status ='0'
+		<if test="entity.locationCodeList != null and entity.locationCodeList.size() > 0">
+			<foreach collection="entity.locationCodeList" index="index" item="item">
+				<![CDATA[  AND	m.location_code not like CONCAT('__', #{item})]]>
+			</foreach>
+		</if>
+		ORDER BY
+			m.floor_number ASC,
+			m.column_number ASC,
+			m.layer_number ASC,
+			m.shelves_number ASC
+	</select>
+
+	<!-- 根据指定层查找可用库位 编号小的-->
+	<select id="getLocationInfoByFloor" resultMap="wmsLocationStereoscopicMap">
+		SELECT
+			m.location_code,
+			m.pallet_code,
+			m.floor_number,
+			m.shelves_number,
+			m.layer_number,
+			m.column_number,
+			m.use_status,
+			n.goods_code,
+			n.batch_no,
+			n.amount
+		FROM
+			wms_location_stereoscopic m
+		LEFT JOIN wms_pallet n
+		ON m.pallet_code = n.pallet_code
+		       AND n.active_flag = '1'
+		<if test="entity.goodsCode != null and entity.goodsCode !=''">
+			<![CDATA[ AND n.goods_code = #{entity.goodsCode}]]>
+		</if>
+		<if test="entity.batchNo != null and entity.batchNo !=''">
+			<![CDATA[ AND  n.batch_no = #{entity.batchNo}]]>
+		</if>
+		where m.active_flag = '1'
+		  	and  m.use_status='0'
+		<if test="entity.floorNumberList != null and entity.floorNumberList.size() > 0">
+			AND m.floor_number in
+			<foreach collection="entity.floorNumberList" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="entity.locationCodeList != null and entity.locationCodeList.size() > 0">
+			<foreach collection="entity.locationCodeList" index="index" item="item">
+				<![CDATA[  AND	m.location_code not like CONCAT('__', #{item})]]>
+			</foreach>
+
+		</if>
+		ORDER BY
+			m.floor_number ASC,
+			m.layer_number ASC,
+			m.column_number ASC
+	</select>
+	<!-- 根据指定层查找可用库位 编号大的-->
+	<select id="getLocationInfoByFloorMax" resultMap="wmsLocationStereoscopicMap">
+		SELECT
+		m.location_code,
+		m.pallet_code,
+		m.floor_number,
+		m.shelves_number,
+		m.layer_number,
+		m.column_number,
+		m.use_status,
+		n.goods_code,
+		n.batch_no,
+		n.amount
+		FROM
+		wms_location_stereoscopic m
+		LEFT JOIN wms_pallet n
+		ON m.pallet_code = n.pallet_code
+		AND n.active_flag = '1'
+		<if test="entity.goodsCode != null and entity.goodsCode !=''">
+			<![CDATA[ AND n.goods_code = #{entity.goodsCode}]]>
+		</if>
+		<if test="entity.batchNo != null and entity.batchNo !=''">
+			<![CDATA[ AND  n.batch_no = #{entity.batchNo}]]>
+		</if>
+		where m.active_flag = '1'
+		and  m.use_status='0'
+		<if test="entity.floorNumberList != null and entity.floorNumberList.size() > 0">
+			AND m.floor_number in
+			<foreach collection="entity.floorNumberList" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<if test="entity.locationCodeList != null and entity.locationCodeList.size() > 0">
+			<foreach collection="entity.locationCodeList" index="index" item="item">
+				<![CDATA[  AND	m.location_code not like CONCAT('__', #{item})]]>
+			</foreach>
+		</if>
+		<if test="entity.layerNumber != null and entity.layerNumber !=''">
+			<![CDATA[ AND  m.layer_number = #{entity.layerNumber}]]>
+		</if>
+		<if test="entity.columnNumber != null and entity.columnNumber !=''">
+			<![CDATA[ AND  m.column_number = #{entity.columnNumber}]]>
+		</if>
+		ORDER BY
+		m.floor_number ASC,
+		m.layer_number DESC,
+		m.column_number DESC
+	</select>
+	<!-- - 根据 z层,x行，y列，查找是否有货位阻碍通道 可用状态不为0-->
+	<select id="getLocationPass" resultMap="wmsLocationStereoscopicMap">
+		SELECT
+		m.location_code,
+		m.pallet_code,
+		m.floor_number,
+		m.shelves_number,
+		m.layer_number,
+		m.column_number,
+		m.use_status,
+		n.goods_code,
+		n.batch_no,
+		n.amount
+		FROM
+		wms_location_stereoscopic m
+		LEFT JOIN wms_pallet n
+		ON m.pallet_code = n.pallet_code
+		AND n.active_flag = '1'
+		<if test="entity.goodsCode != null and entity.goodsCode !=''">
+			<![CDATA[ AND n.goods_code = #{entity.goodsCode}]]>
+		</if>
+		<if test="entity.batchNo != null and entity.batchNo !=''">
+			<![CDATA[ AND  n.batch_no = #{entity.batchNo}]]>
+		</if>
+		where m.active_flag = '1'
+		and  m.use_status !='0'
+
+		<if test="entity.floorNumberList != null and entity.floorNumberList.size() > 0">
+			AND m.floor_number in
+			<foreach collection="entity.floorNumberList" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		  <!--4个空货位-->
+		<if test="entity.locationCodeList != null and entity.locationCodeList.size() > 0">
+			<foreach collection="entity.locationCodeList" index="index" item="item">
+				<![CDATA[  AND	m.location_code not like CONCAT('__', #{item})]]>
+			</foreach>
+		</if>
+		<if test="entity.layerNumber != null and entity.layerNumber !=''">
+			<choose>
+				<when test="entity.layerNumber > 15">
+					<![CDATA[ AND  m.layer_number > 15 and m.layer_number < #{entity.layerNumber}]]>
+				</when>
+				<otherwise>
+					<![CDATA[ AND  m.layer_number > #{entity.layerNumber} and  m.layer_number < 15]]>
+				</otherwise>
+			</choose>
+		</if>
+		<if test="entity.columnNumber != null and entity.columnNumber !=''">
+			<![CDATA[ AND  m.column_number = #{entity.columnNumber}]]>
+		</if>
+	</select>
+	<!-- - 根据 z层,x行，y列，查找是否有库位被锁-->
+	<select id="getLocationorlockBy" resultMap="wmsLocationStereoscopicMap">
+		SELECT
+		m.location_code,
+		m.pallet_code,
+		m.floor_number,
+		m.shelves_number,
+		m.layer_number,
+		m.column_number,
+		m.use_status,
+		n.goods_code,
+		n.batch_no,
+		n.amount
+		FROM
+		wms_location_stereoscopic m
+		LEFT JOIN wms_pallet n
+		ON m.pallet_code = n.pallet_code
+		AND n.active_flag = '1'
+		<if test="entity.goodsCode != null and entity.goodsCode !=''">
+			<![CDATA[ AND n.goods_code = #{entity.goodsCode}]]>
+		</if>
+		<if test="entity.batchNo != null and entity.batchNo !=''">
+			<![CDATA[ AND  n.batch_no = #{entity.batchNo}]]>
+		</if>
+		where m.active_flag = '1'
+		and  m.use_status !='0'
+		and  n.lock_by!=''
+		<if test="entity.floorNumberList != null and entity.floorNumberList.size() > 0">
+			AND m.floor_number in
+			<foreach collection="entity.floorNumberList" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		  <!--4个空货位-->
+		<if test="entity.locationCodeList != null and entity.locationCodeList.size() > 0">
+			<foreach collection="entity.locationCodeList" index="index" item="item">
+				<![CDATA[  AND	m.location_code not like CONCAT('__', #{item})]]>
+			</foreach>
+		</if>
+
+		<if test="entity.columnNumber != null and entity.columnNumber !=''">
+			<![CDATA[ AND  m.column_number = #{entity.columnNumber}]]>
+		</if>
+	</select>
+	<!--根据商品编码，批次号，查找同一批次,都放在哪些向道里 状态 3：占用-->
+	<select id="getLayerByGoodsAndBatch" resultMap="wmsLocationStereoscopicMap">
+		SELECT
+		m.location_code,
+		m.pallet_code,
+		m.floor_number,
+		m.shelves_number,
+		m.layer_number,
+		m.column_number,
+		m.use_status,
+		n.goods_code,
+		n.batch_no,
+		n.amount
+		FROM
+		wms_location_stereoscopic m
+		LEFT JOIN wms_pallet n
+		ON m.pallet_code = n.pallet_code
+		AND n.active_flag = '1'
+		<if test="entity.goodsCode != null and entity.goodsCode !=''">
+			<![CDATA[ AND n.goods_code = #{entity.goodsCode}]]>
+		</if>
+		<if test="entity.batchNo != null and entity.batchNo !=''">
+			<![CDATA[ AND  n.batch_no = #{entity.batchNo}]]>
+		</if>
+		where m.active_flag = '1'
+		and  m.use_status ='3'
+		<if test="entity.floorNumberList != null and entity.floorNumberList.size() > 0">
+			AND m.floor_number in
+			<foreach collection="entity.floorNumberList" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<!--4个空货位-->
+		<if test="entity.locationCodeList != null and entity.locationCodeList.size() > 0">
+			<foreach collection="entity.locationCodeList" index="index" item="item">
+				<![CDATA[  AND	m.location_code not like CONCAT('__', #{item})]]>
+			</foreach>
+		</if>
+		GROUP by
+		m.floor_number,
+		m.column_number
+	</select>
+
+	<!--根据商品编码，批次号，查询同层的，同批次的，可用货位的 状态 0：可用-->
+	<select id="getLocationCodeByUseStatus" resultMap="wmsLocationStereoscopicMap">
+	SELECT
+	m.location_code,
+	m.pallet_code,
+	m.floor_number,
+	m.shelves_number,
+	m.layer_number,
+	m.column_number,
+	m.use_status,
+	n.goods_code,
+	n.batch_no,
+	n.amount
+	FROM
+	wms_location_stereoscopic m
+	LEFT JOIN wms_pallet n
+	ON m.pallet_code = n.pallet_code
+	WHERE
+	1=1
+	AND m.use_status='0'
+	AND	(m.floor_number) IN
+	(SELECT
+	t.floor_number
+	FROM
+	wms_location_stereoscopic t
+	JOIN wms_pallet s ON t.pallet_code = s.pallet_code
+	AND t.active_flag = '1'
+	AND s.active_flag = '1'
+	<if test="entity.goodsCode != null and entity.goodsCode !=''">
+		<![CDATA[ AND s.goods_code = #{entity.goodsCode}]]>
+	</if>
+	<if test="entity.batchNo != null and entity.batchNo !=''">
+		<![CDATA[ AND  s.batch_no = #{entity.batchNo}]]>
+	</if>
+	WHERE
+	1=1
+	AND t.use_status = '3'
+	<if test="entity.floorNumberList != null and entity.floorNumberList.size() > 0">
+		AND t.floor_number in
+		<foreach collection="entity.floorNumberList" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</if>
+	<!--4个空货位-->
+	<if test="entity.locationCodeList != null and entity.locationCodeList.size() > 0">
+		<foreach collection="entity.locationCodeList" index="index" item="item">
+			<![CDATA[  AND	t.location_code not like CONCAT('__', #{item})]]>
+		</foreach>
+	</if>
+	GROUP BY
+	t.floor_number,
+	t.column_number
+	)
+	AND	(m.column_number) IN
+	(SELECT
+	t.column_number
+	FROM
+	wms_location_stereoscopic t
+	JOIN wms_pallet s ON t.pallet_code = s.pallet_code
+	AND t.active_flag = '1'
+	AND s.active_flag = '1'
+	AND s.lock_by = null
+	<if test="entity.goodsCode != null and entity.goodsCode !=''">
+		<![CDATA[ AND s.goods_code = #{entity.goodsCode}]]>
+	</if>
+	<if test="entity.batchNo != null and entity.batchNo !=''">
+		<![CDATA[ AND  s.batch_no = #{entity.batchNo}]]>
+	</if>
+	WHERE
+	1=1
+	AND t.use_status = '3'
+	<if test="entity.floorNumberList != null and entity.floorNumberList.size() > 0">
+		AND t.floor_number in
+		<foreach collection="entity.floorNumberList" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</if>
+	<!--4个空货位-->
+	<if test="entity.locationCodeList != null and entity.locationCodeList.size() > 0">
+		<foreach collection="entity.locationCodeList" index="index" item="item">
+			<![CDATA[  AND	t.location_code not like CONCAT('__', #{item})]]>
+		</foreach>
+	</if>
+	GROUP BY
+	t.floor_number,
+	t.column_number
+	)
+	ORDER BY
+		m.floor_number ASC,
+		m.column_number ASC,
+		m.layer_number ASC
+	</select>
+	<!--查询备用库位的可用库位-->
+	<select id="getBeiYongLocation" resultMap="wmsLocationStereoscopicMap">
+		SELECT
+		m.location_code,
+		m.pallet_code,
+		m.floor_number,
+		m.shelves_number,
+		m.layer_number,
+		m.column_number,
+		m.use_status,
+		n.goods_code,
+		n.batch_no,
+		n.amount
+		FROM
+		wms_location_stereoscopic m
+		LEFT JOIN wms_pallet n
+		ON m.pallet_code = n.pallet_code
+		AND n.active_flag = '1'
+
+		where m.active_flag = '1'
+		and  m.use_status ='0'
+		<if test="entity.floorNumberList != null and entity.floorNumberList.size() > 0">
+			AND m.floor_number in
+			<foreach collection="entity.floorNumberList" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		<!--4个空货位-->
+		<if test="entity.locationCodeList != null and entity.locationCodeList.size() > 0">
+			<foreach collection="entity.locationCodeList" index="index" item="item">
+				<![CDATA[  AND	m.location_code like CONCAT('__', #{item})]]>
+			</foreach>
+		</if>
+	</select>
+
+	<!--查询空巷道的可用库位-->
+	<select id="getKongLocation" resultMap="wmsLocationStereoscopicMap">
+		SELECT
+		m.location_code,
+		m.pallet_code,
+		m.floor_number,
+		m.shelves_number,
+		m.layer_number,
+		m.column_number,
+		m.use_status
+		FROM
+		wms_location_stereoscopic m
+		WHERE
+		m.use_status='0'
+		AND	(m.floor_number)  IN
+		(
+		SELECT
+		t.floor_number
+		FROM
+		wms_location_stereoscopic t
+		WHERE
+		t.active_flag = '1'
+		AND t.use_status = '0'
+		AND t.layer_number not in ( select layer_number from wms_location_stereoscopic  WHERE  use_status != '0')
+		<if test="entity.floorNumberList != null and entity.floorNumberList.size() > 0">
+			AND t.floor_number in
+			<foreach collection="entity.floorNumberList" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		GROUP BY
+		t.floor_number,
+		t.column_number
+		)
+		AND	(m.column_number)  IN
+		(
+		SELECT
+		t.column_number
+		FROM
+		wms_location_stereoscopic t
+		WHERE
+		t.active_flag = '1'
+		AND t.use_status = '0'
+		AND t.layer_number not in ( select layer_number from wms_location_stereoscopic  WHERE  use_status != '0')
+		<if test="entity.floorNumberList != null and entity.floorNumberList.size() > 0">
+			AND t.floor_number in
+			<foreach collection="entity.floorNumberList" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		GROUP BY
+		t.floor_number,
+		t.column_number
+		)
+		<!--4个空货位-->
+		<if test="entity.locationCodeList != null and entity.locationCodeList.size() > 0">
+			<foreach collection="entity.locationCodeList" index="index" item="item">
+				<![CDATA[  AND	t.location_code like CONCAT('__', #{item})]]>
+			</foreach>
+		</if>
+		ORDER BY
+		m.floor_number ASC,
+		m.column_number ASC,
+		m.layer_number ASC
+	</select>
+</mapper>

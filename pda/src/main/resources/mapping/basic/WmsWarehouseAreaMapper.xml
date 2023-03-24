@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.penghaisoft.pda.basic.dao.WmsWarehouseAreaMapper" >
+  <resultMap id="BaseResultMap" type="com.penghaisoft.pda.basic.model.WmsWarehouseArea" >
+    <id column="area_id" property="areaId" jdbcType="VARCHAR" />
+    <result column="warehouse_code" property="warehouseCode" jdbcType="VARCHAR" />
+    <result column="is_root" property="isRoot" jdbcType="CHAR" />
+    <result column="area_name" property="areaName" jdbcType="VARCHAR" />
+    <result column="area_code" property="areaCode" jdbcType="VARCHAR" />
+    <result column="area_type" property="areaType" jdbcType="CHAR" />
+    <result column="area_attr" property="areaAttr" jdbcType="VARCHAR" />
+    <result column="max_capacity" property="maxCapacity" jdbcType="INTEGER" />
+    <result column="area_desc" property="areaDesc" jdbcType="VARCHAR" />
+    <result column="user_defined1" property="userDefined1" jdbcType="VARCHAR" />
+    <result column="user_defined2" property="userDefined2" jdbcType="VARCHAR" />
+    <result column="user_defined3" property="userDefined3" jdbcType="VARCHAR" />
+    <result column="user_defined4" property="userDefined4" jdbcType="VARCHAR" />
+    <result column="user_defined5" property="userDefined5" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="last_modified_by" property="lastModifiedBy" jdbcType="VARCHAR" />
+    <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+    <result column="active_flag" property="activeFlag" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    area_id, warehouse_code, is_root, area_name, area_code, area_type, area_attr, max_capacity, 
+    area_desc, user_defined1, user_defined2, user_defined3, user_defined4, user_defined5, 
+    create_by, gmt_create, last_modified_by, gmt_modified, active_flag
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from wms_warehouse_area
+    where area_id = #{areaId,jdbcType=VARCHAR}
+  </select>
+  <select id="selectRootAreaCodeByWarehouse" resultMap="BaseResultMap">
+    SELECT
+        warehouse_code,
+        GROUP_CONCAT( area_code ) AS area_code
+    FROM
+        wms_warehouse_area
+    WHERE
+        is_root = '1'
+    GROUP BY
+        warehouse_code
+  </select>
+
+  <select id="queryAreaInfoByCode" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from wms_warehouse_area
+    where area_code = #{areaCode,jdbcType=VARCHAR}
+  </select>
+
+
+</mapper>

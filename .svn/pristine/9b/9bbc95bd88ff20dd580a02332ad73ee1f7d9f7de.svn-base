@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.penghaisoft.pda.basic.dao.ResourcesMapper" >
+  <resultMap id="BaseResultMap" type="com.penghaisoft.pda.basic.model.Resources" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="parent_id" property="parentId" jdbcType="INTEGER" />
+    <result column="level" property="level" jdbcType="INTEGER" />
+    <result column="sequence" property="sequence" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="res_code" property="resCode" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="icon" property="icon" jdbcType="VARCHAR" />
+    <result column="is_modifiable" property="isModifiable" jdbcType="TINYINT" />
+    <result column="res_type" property="resType" jdbcType="CHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, parent_id, level, sequence, title, res_code, description, icon, is_modifiable, 
+    res_type, url
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from resources
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectHandUserResources" resultMap="BaseResultMap">
+    SELECT
+      <include refid="Base_Column_List" />
+    FROM
+        resources
+    WHERE
+        res_type = '4'
+        AND level=1
+        AND id IN (
+            SELECT res_id FROM role_res WHERE role_id IN (
+              SELECT role_id FROM user_role WHERE user_id = #{userId,jdbcType=INTEGER}
+            )
+        )
+    ORDER BY sequence
+  </select>
+</mapper>

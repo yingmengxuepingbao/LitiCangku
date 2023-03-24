@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.penghaisoft.pda.storage.dao.WmsGoodsMapper" >
+  <resultMap id="BaseResultMap" type="com.penghaisoft.pda.storage.model.WmsGoods" >
+    <id column="goods_id" property="goodsId" jdbcType="VARCHAR" />
+    <result column="owner" property="owner" jdbcType="VARCHAR" />
+    <result column="owner_name" property="ownerName" jdbcType="VARCHAR" />
+    <result column="goods_name" property="goodsName" jdbcType="VARCHAR" />
+    <result column="goods_desc" property="goodsDesc" jdbcType="VARCHAR" />
+    <result column="goods_code" property="goodsCode" jdbcType="VARCHAR" />
+    <result column="goods_attr" property="goodsAttr" jdbcType="VARCHAR" />
+    <result column="goods_type" property="goodsType" jdbcType="CHAR" />
+    <result column="unit" property="unit" jdbcType="VARCHAR" />
+    <result column="has_box_code" property="hasBoxCode" jdbcType="CHAR" />
+    <result column="layer_quantity" property="layerQuantity" jdbcType="INTEGER" />
+    <result column="box_length" property="boxLength" jdbcType="INTEGER" />
+    <result column="box_width" property="boxWidth" jdbcType="INTEGER" />
+    <result column="box_height" property="boxHeight" jdbcType="INTEGER" />
+    <result column="quality_guarantee_days" property="qualityGuaranteeDays" jdbcType="INTEGER" />
+    <result column="split_unit" property="splitUnit" jdbcType="VARCHAR" />
+    <result column="split_count" property="splitCount" jdbcType="INTEGER" />
+    <result column="gross_weight" property="grossWeight" jdbcType="INTEGER" />
+    <result column="user_defined1" property="userDefined1" jdbcType="VARCHAR" />
+    <result column="user_defined2" property="userDefined2" jdbcType="VARCHAR" />
+    <result column="user_defined3" property="userDefined3" jdbcType="VARCHAR" />
+    <result column="user_defined4" property="userDefined4" jdbcType="VARCHAR" />
+    <result column="user_defined5" property="userDefined5" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="last_modified_by" property="lastModifiedBy" jdbcType="VARCHAR" />
+    <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+    <result column="active_flag" property="activeFlag" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    goods_id, owner, owner_name, goods_name, goods_desc, goods_code, goods_attr, goods_type, 
+    unit, has_box_code, layer_quantity, box_length, box_width, box_height, quality_guarantee_days, 
+    split_unit, split_count, gross_weight, user_defined1, user_defined2, user_defined3, 
+    user_defined4, user_defined5, create_by, gmt_create, last_modified_by, gmt_modified, 
+    active_flag
+  </sql>
+  <select id="selectByGoodsCode" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from wms_goods
+    where goods_code = #{goodsCode,jdbcType=VARCHAR}
+  </select>
+
+  <insert id="insertSelective" parameterType="com.penghaisoft.pda.storage.model.WmsGoods" >
+    insert into wms_goods
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="goodsId != null" >
+        goods_id,
+      </if>
+      <if test="owner != null" >
+        owner,
+      </if>
+      <if test="ownerName != null" >
+        owner_name,
+      </if>
+      <if test="goodsName != null" >
+        goods_name,
+      </if>
+      <if test="goodsDesc != null" >
+        goods_desc,
+      </if>
+      <if test="goodsCode != null" >
+        goods_code,
+      </if>
+      <if test="goodsAttr != null" >
+        goods_attr,
+      </if>
+      <if test="goodsType != null" >
+        goods_type,
+      </if>
+      <if test="unit != null" >
+        unit,
+      </if>
+      <if test="hasBoxCode != null" >
+        has_box_code,
+      </if>
+      <if test="layerQuantity != null" >
+        layer_quantity,
+      </if>
+      <if test="boxLength != null" >
+        box_length,
+      </if>
+      <if test="boxWidth != null" >
+        box_width,
+      </if>
+      <if test="boxHeight != null" >
+        box_height,
+      </if>
+      <if test="qualityGuaranteeDays != null" >
+        quality_guarantee_days,
+      </if>
+      <if test="splitUnit != null" >
+        split_unit,
+      </if>
+      <if test="splitCount != null" >
+        split_count,
+      </if>
+      <if test="grossWeight != null" >
+        gross_weight,
+      </if>
+      <if test="userDefined1 != null" >
+        user_defined1,
+      </if>
+      <if test="userDefined2 != null" >
+        user_defined2,
+      </if>
+      <if test="userDefined3 != null" >
+        user_defined3,
+      </if>
+      <if test="userDefined4 != null" >
+        user_defined4,
+      </if>
+      <if test="userDefined5 != null" >
+        user_defined5,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create,
+      </if>
+      <if test="lastModifiedBy != null" >
+        last_modified_by,
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified,
+      </if>
+      <if test="activeFlag != null" >
+        active_flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="goodsId != null" >
+        #{goodsId,jdbcType=VARCHAR},
+      </if>
+      <if test="owner != null" >
+        #{owner,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerName != null" >
+        #{ownerName,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsName != null" >
+        #{goodsName,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsDesc != null" >
+        #{goodsDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsCode != null" >
+        #{goodsCode,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsAttr != null" >
+        #{goodsAttr,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsType != null" >
+        #{goodsType,jdbcType=CHAR},
+      </if>
+      <if test="unit != null" >
+        #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="hasBoxCode != null" >
+        #{hasBoxCode,jdbcType=CHAR},
+      </if>
+      <if test="layerQuantity != null" >
+        #{layerQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="boxLength != null" >
+        #{boxLength,jdbcType=INTEGER},
+      </if>
+      <if test="boxWidth != null" >
+        #{boxWidth,jdbcType=INTEGER},
+      </if>
+      <if test="boxHeight != null" >
+        #{boxHeight,jdbcType=INTEGER},
+      </if>
+      <if test="qualityGuaranteeDays != null" >
+        #{qualityGuaranteeDays,jdbcType=INTEGER},
+      </if>
+      <if test="splitUnit != null" >
+        #{splitUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="splitCount != null" >
+        #{splitCount,jdbcType=INTEGER},
+      </if>
+      <if test="grossWeight != null" >
+        #{grossWeight,jdbcType=INTEGER},
+      </if>
+      <if test="userDefined1 != null" >
+        #{userDefined1,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined2 != null" >
+        #{userDefined2,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined3 != null" >
+        #{userDefined3,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined4 != null" >
+        #{userDefined4,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined5 != null" >
+        #{userDefined5,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifiedBy != null" >
+        #{lastModifiedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtModified != null" >
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activeFlag != null" >
+        #{activeFlag,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.penghaisoft.pda.storage.model.WmsGoods" >
+    update wms_goods
+    <set >
+      <if test="owner != null" >
+        owner = #{owner,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerName != null" >
+        owner_name = #{ownerName,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsName != null" >
+        goods_name = #{goodsName,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsDesc != null" >
+        goods_desc = #{goodsDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsCode != null" >
+        goods_code = #{goodsCode,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsAttr != null" >
+        goods_attr = #{goodsAttr,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsType != null" >
+        goods_type = #{goodsType,jdbcType=CHAR},
+      </if>
+      <if test="unit != null" >
+        unit = #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="hasBoxCode != null" >
+        has_box_code = #{hasBoxCode,jdbcType=CHAR},
+      </if>
+      <if test="layerQuantity != null" >
+        layer_quantity = #{layerQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="boxLength != null" >
+        box_length = #{boxLength,jdbcType=INTEGER},
+      </if>
+      <if test="boxWidth != null" >
+        box_width = #{boxWidth,jdbcType=INTEGER},
+      </if>
+      <if test="boxHeight != null" >
+        box_height = #{boxHeight,jdbcType=INTEGER},
+      </if>
+      <if test="qualityGuaranteeDays != null" >
+        quality_guarantee_days = #{qualityGuaranteeDays,jdbcType=INTEGER},
+      </if>
+      <if test="splitUnit != null" >
+        split_unit = #{splitUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="splitCount != null" >
+        split_count = #{splitCount,jdbcType=INTEGER},
+      </if>
+      <if test="grossWeight != null" >
+        gross_weight = #{grossWeight,jdbcType=INTEGER},
+      </if>
+      <if test="userDefined1 != null" >
+        user_defined1 = #{userDefined1,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined2 != null" >
+        user_defined2 = #{userDefined2,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined3 != null" >
+        user_defined3 = #{userDefined3,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined4 != null" >
+        user_defined4 = #{userDefined4,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined5 != null" >
+        user_defined5 = #{userDefined5,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifiedBy != null" >
+        last_modified_by = #{lastModifiedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activeFlag != null" >
+        active_flag = #{activeFlag,jdbcType=CHAR},
+      </if>
+    </set>
+    where goods_id = #{goodsId,jdbcType=VARCHAR}
+  </update>
+</mapper>

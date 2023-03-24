@@ -1,0 +1,171 @@
+.menu-ms .logo .logoImg{
+	width: 100%;
+}
+.messageRg{
+	position: relative;
+	display: block;
+	width: 60px;
+	cursor: pointer;
+}
+.messageRg .message-hover{
+	position: relative;
+}
+.messageRg  .message-hover span{
+	display: block;
+	width: 20px;
+	height: 23px;
+	background: url("../images/default/messageRg.png");
+	margin-top: 15px;
+}
+.messageRg .message-hover i{
+	display: none;
+	position: absolute;
+	top:-8px;
+	left:10px;
+	width:20px ;
+	height: 20px;
+	border-radius: 20px;
+	background: #EF4836;
+	color: #fff;
+	font-style:normal;
+	text-align: center;
+	line-height: 20px;
+	font-size: 12px;
+}
+.messageRg  .message-list-hide{
+	position: absolute;
+	top: 32px;
+	width: 260px;
+	display: block;
+	background: #fff;
+	left: -110px;
+	padding-bottom: 10px;
+	-moz-box-shadow: 0px 0px 5px #ccc;
+	-webkit-box-shadow: 0px 0px 5px #ccc;
+	box-shadow: 0px 0px 5px #ccc;
+	border-radius: 6px;
+	padding-top: 10px;
+	z-index: 1000;
+}
+.messageRg  .message-list-hide ul li{
+	border-bottom: 1px solid #ECF0F1 ;
+	background: #fff;
+	line-height: 36px;
+	height: 36px;
+	padding: 0 8px 0 12px;
+	word-break:keep-all;           /* 不换行 */
+	white-space:nowrap;          /* 不换行 */
+	overflow:hidden;               /* 内容超出宽度时隐藏超出部分的内容 */
+	text-overflow:ellipsis;
+	color: #444;/* 当对象内文本溢出时显示省略标记(...) ；需与overflow:hidden;一起使用。*/
+}
+.messageRg .message-list-hide ul li:hover{
+	background: #F1F4F4;
+	cursor: pointer;
+}
+.call-police{
+	float: right;
+	width: 60px;
+	line-height: 60px;
+	display: inline-block;
+}
+.call-police .call-hover{
+	position: relative;
+}
+.call-police  .call-hover span{
+	display: block;
+	width: 30px;
+	height: 28px;
+	background: url("../images/common/call-police.png");
+	margin-top: 11px;
+}
+.call-police .call-hover i{
+	display: none;
+	position: absolute;
+	top:-8px;
+	left:10px;
+	width:20px ;
+	height: 20px;
+	border-radius: 20px;
+	background: #EF4836;
+	color: #fff;
+	font-style:normal;
+	text-align: center;
+	line-height: 20px;
+	font-size: 12px;
+}
+.call-police  .call-list-hide{
+	position: absolute;
+	top: 32px;
+	width: 260px;
+	display: block;
+	background: #fff;
+	left: -110px;
+	padding-bottom: 10px;
+	-moz-box-shadow: 0px 0px 5px #ccc;
+	-webkit-box-shadow: 0px 0px 5px #ccc;
+	box-shadow: 0px 0px 5px #ccc;
+	border-radius: 6px;
+	padding-top: 10px;
+	z-index: 1000;
+}
+.call-police  .call-list-hide ul li{
+	border-bottom: 1px solid #ECF0F1 ;
+	background: #fff;
+	line-height: 36px;
+	height: 36px;
+	padding: 0 8px 0 12px;
+	word-break:keep-all;           /* 不换行 */
+	white-space:nowrap;          /* 不换行 */
+	overflow:hidden;               /* 内容超出宽度时隐藏超出部分的内容 */
+	text-overflow:ellipsis;
+	color: #444;/* 当对象内文本溢出时显示省略标记(...) ；需与overflow:hidden;一起使用。*/
+}
+.call-police  .call-list-hide ul li:hover{
+	background: #F1F4F4;
+	cursor: pointer;
+}
+.dropdown-call{
+	width: 225px;
+	position: absolute;
+	left: -94px;
+	top:49px;
+}
+.dropdown-call li{
+	padding-left: 5px;
+	height: 40px;
+	line-height: 40px;
+	word-break:keep-all;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	color: #444;
+	border-bottom: 1px solid #eee;
+}
+.btn-self{
+	background: #fff;
+	margin-left: 74px;
+	padding: 0;
+	border:1px #fff solid;
+	outline:none;
+}
+.btn-self:hover{
+	color:#1DBBF4;
+}
+.full-screen{
+	float: right;
+	margin: 8px 16px;
+	width:60px;
+	height: 40px;
+	border-radius: 5px;
+	cursor: pointer;
+	padding: 2px 5px;
+}
+.full-screen img{
+	width: 30px;
+	height: 30px;
+}
+.modal-title{color: #444;
+	font-weight: 600;
+	font-size: 15px;
+}

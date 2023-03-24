@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.penghaisoft.pda.storage.dao.WmsOrderCheckPalletMapper" >
+  <resultMap id="BaseResultMap" type="com.penghaisoft.pda.storage.model.WmsOrderCheckPallet" >
+    <id column="check_pallet_id" property="checkPalletId" jdbcType="INTEGER" />
+    <result column="check_id" property="checkId" jdbcType="VARCHAR" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="goods_name" property="goodsName" jdbcType="VARCHAR" />
+    <result column="goods_code" property="goodsCode" jdbcType="VARCHAR" />
+    <result column="location_code" property="locationCode" jdbcType="VARCHAR" />
+    <result column="diff_flag" property="diffFlag" jdbcType="CHAR" />
+    <result column="batch_no" property="batchNo" jdbcType="VARCHAR" />
+    <result column="pallet_code" property="palletCode" jdbcType="VARCHAR" />
+    <result column="amount" property="amount" jdbcType="INTEGER" />
+    <result column="real_amount" property="realAmount" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="user_defined1" property="userDefined1" jdbcType="VARCHAR" />
+    <result column="user_defined2" property="userDefined2" jdbcType="VARCHAR" />
+    <result column="user_defined3" property="userDefined3" jdbcType="VARCHAR" />
+    <result column="user_defined4" property="userDefined4" jdbcType="VARCHAR" />
+    <result column="user_defined5" property="userDefined5" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="last_modified_by" property="lastModifiedBy" jdbcType="VARCHAR" />
+    <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+    <result column="active_flag" property="activeFlag" jdbcType="CHAR" />
+    <result column="pallet_amount" property="palletAmount" jdbcType="INTEGER" />
+    <result column="pallet_scan_amount" property="palletScanAmount" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    check_pallet_id, check_id, order_no, goods_name, goods_code, location_code, diff_flag, 
+    batch_no, pallet_code, amount, real_amount, remark, user_defined1, user_defined2, 
+    user_defined3, user_defined4, user_defined5, create_by, gmt_create, last_modified_by, 
+    gmt_modified, active_flag
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from wms_order_check_pallet
+    where check_pallet_id = #{checkPalletId,jdbcType=INTEGER}
+  </select>
+
+  <select id="queryByAny" resultMap="BaseResultMap"  parameterType="com.penghaisoft.pda.storage.model.WmsOrderCheckPallet" >
+    select
+    <include refid="Base_Column_List" />
+    from wms_order_check_pallet
+    where 1=1
+    <if test="checkId != null" >
+     and check_id = #{checkId,jdbcType=VARCHAR}
+    </if>
+    <if test="orderNo != null" >
+      and order_no = #{orderNo,jdbcType=VARCHAR}
+    </if>
+    <if test="goodsName != null" >
+      and goods_name = #{goodsName,jdbcType=VARCHAR}
+    </if>
+    <if test="goodsCode != null" >
+      and goods_code = #{goodsCode,jdbcType=VARCHAR}
+    </if>
+    <if test="locationCode != null" >
+      and location_code = #{locationCode,jdbcType=VARCHAR}
+    </if>
+    <if test="diffFlag != null" >
+      and diff_flag = #{diffFlag,jdbcType=CHAR}
+    </if>
+    <if test="batchNo != null" >
+      and batch_no = #{batchNo,jdbcType=VARCHAR}
+    </if>
+    <if test="palletCode != null" >
+      and pallet_code = #{palletCode,jdbcType=VARCHAR}
+    </if>
+    <if test="amount != null" >
+      and amount = #{amount,jdbcType=INTEGER}
+    </if>
+    <if test="realAmount != null" >
+      and real_amount = #{realAmount,jdbcType=INTEGER}
+    </if>
+    <if test="remark != null" >
+      and remark = #{remark,jdbcType=VARCHAR}
+    </if>
+    <if test="userDefined1 != null" >
+      and user_defined1 = #{userDefined1,jdbcType=VARCHAR}
+    </if>
+    <if test="userDefined2 != null" >
+      and user_defined2 = #{userDefined2,jdbcType=VARCHAR}
+    </if>
+    <if test="userDefined3 != null" >
+      and user_defined3 = #{userDefined3,jdbcType=VARCHAR}
+    </if>
+    <if test="userDefined4 != null" >
+      and user_defined4 = #{userDefined4,jdbcType=VARCHAR}
+    </if>
+    <if test="userDefined5 != null" >
+      and user_defined5 = #{userDefined5,jdbcType=VARCHAR}
+    </if>
+    <if test="createBy != null" >
+      and create_by = #{createBy,jdbcType=VARCHAR}
+    </if>
+    <if test="gmtCreate != null" >
+      and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+    </if>
+    <if test="lastModifiedBy != null" >
+      and last_modified_by = #{lastModifiedBy,jdbcType=VARCHAR}
+    </if>
+    <if test="gmtModified != null" >
+      and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+    </if>
+    <if test="activeFlag != null" >
+      and active_flag = #{activeFlag,jdbcType=CHAR}
+    </if>
+  </select>
+
+  <select id="collectByOrderNo" resultMap="BaseResultMap" parameterType="com.penghaisoft.pda.storage.model.WmsOrderCheckPallet" >
+    SELECT
+        order_no,
+        goods_code,
+        goods_name,
+        location_code,
+        SUM(amount) amount,
+        SUM(real_amount) real_amount,
+        COUNT(pallet_code) pallet_amount,
+        SUM(user_defined1) pallet_scan_amount
+    FROM
+        wms_order_check_pallet
+    WHERE
+        order_no = #{orderNo,jdbcType=VARCHAR}
+        AND active_flag = '1'
+    GROUP BY
+        goods_code,
+        location_code;
+  </select>
+
+  <select id="collectGroupBYGoods" resultMap="BaseResultMap" parameterType="com.penghaisoft.pda.storage.model.WmsOrderCheckPallet" >
+    SELECT
+        order_no,
+        goods_code,
+        goods_name,
+        location_code,
+        SUM(amount) amount,
+        SUM(real_amount) real_amount,
+        COUNT(pallet_code) pallet_amount,
+        SUM(user_defined1) pallet_scan_amount
+    FROM
+        `wms_order_check_pallet`
+    WHERE
+        order_no = #{orderNo,jdbcType=VARCHAR}
+        AND active_flag = '1'
+    GROUP BY
+        goods_code
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from wms_order_check_pallet
+    where check_pallet_id = #{checkPalletId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.penghaisoft.pda.storage.model.WmsOrderCheckPallet" >
+    insert into wms_order_check_pallet (check_pallet_id, check_id, order_no, 
+      goods_name, goods_code, location_code, 
+      diff_flag, batch_no, pallet_code, 
+      amount, real_amount, remark, 
+      user_defined1, user_defined2, user_defined3, 
+      user_defined4, user_defined5, create_by, 
+      gmt_create, last_modified_by, gmt_modified, 
+      active_flag)
+    values (#{checkPalletId,jdbcType=INTEGER}, #{checkId,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR}, 
+      #{goodsName,jdbcType=VARCHAR}, #{goodsCode,jdbcType=VARCHAR}, #{locationCode,jdbcType=VARCHAR}, 
+      #{diffFlag,jdbcType=CHAR}, #{batchNo,jdbcType=VARCHAR}, #{palletCode,jdbcType=VARCHAR}, 
+      #{amount,jdbcType=INTEGER}, #{realAmount,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
+      #{userDefined1,jdbcType=VARCHAR}, #{userDefined2,jdbcType=VARCHAR}, #{userDefined3,jdbcType=VARCHAR}, 
+      #{userDefined4,jdbcType=VARCHAR}, #{userDefined5,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{lastModifiedBy,jdbcType=VARCHAR}, #{gmtModified,jdbcType=TIMESTAMP}, 
+      #{activeFlag,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.penghaisoft.pda.storage.model.WmsOrderCheckPallet" >
+    insert into wms_order_check_pallet
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="checkPalletId != null" >
+        check_pallet_id,
+      </if>
+      <if test="checkId != null" >
+        check_id,
+      </if>
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="goodsName != null" >
+        goods_name,
+      </if>
+      <if test="goodsCode != null" >
+        goods_code,
+      </if>
+      <if test="locationCode != null" >
+        location_code,
+      </if>
+      <if test="diffFlag != null" >
+        diff_flag,
+      </if>
+      <if test="batchNo != null" >
+        batch_no,
+      </if>
+      <if test="palletCode != null" >
+        pallet_code,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="realAmount != null" >
+        real_amount,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="userDefined1 != null" >
+        user_defined1,
+      </if>
+      <if test="userDefined2 != null" >
+        user_defined2,
+      </if>
+      <if test="userDefined3 != null" >
+        user_defined3,
+      </if>
+      <if test="userDefined4 != null" >
+        user_defined4,
+      </if>
+      <if test="userDefined5 != null" >
+        user_defined5,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create,
+      </if>
+      <if test="lastModifiedBy != null" >
+        last_modified_by,
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified,
+      </if>
+      <if test="activeFlag != null" >
+        active_flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="checkPalletId != null" >
+        #{checkPalletId,jdbcType=INTEGER},
+      </if>
+      <if test="checkId != null" >
+        #{checkId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsName != null" >
+        #{goodsName,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsCode != null" >
+        #{goodsCode,jdbcType=VARCHAR},
+      </if>
+      <if test="locationCode != null" >
+        #{locationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="diffFlag != null" >
+        #{diffFlag,jdbcType=CHAR},
+      </if>
+      <if test="batchNo != null" >
+        #{batchNo,jdbcType=VARCHAR},
+      </if>
+      <if test="palletCode != null" >
+        #{palletCode,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=INTEGER},
+      </if>
+      <if test="realAmount != null" >
+        #{realAmount,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined1 != null" >
+        #{userDefined1,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined2 != null" >
+        #{userDefined2,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined3 != null" >
+        #{userDefined3,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined4 != null" >
+        #{userDefined4,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined5 != null" >
+        #{userDefined5,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifiedBy != null" >
+        #{lastModifiedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtModified != null" >
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activeFlag != null" >
+        #{activeFlag,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.penghaisoft.pda.storage.model.WmsOrderCheckPallet" >
+    update wms_order_check_pallet
+    <set >
+      <if test="checkId != null" >
+        check_id = #{checkId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNo != null" >
+        order_no = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsName != null" >
+        goods_name = #{goodsName,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsCode != null" >
+        goods_code = #{goodsCode,jdbcType=VARCHAR},
+      </if>
+      <if test="locationCode != null" >
+        location_code = #{locationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="diffFlag != null" >
+        diff_flag = #{diffFlag,jdbcType=CHAR},
+      </if>
+      <if test="batchNo != null" >
+        batch_no = #{batchNo,jdbcType=VARCHAR},
+      </if>
+      <if test="palletCode != null" >
+        pallet_code = #{palletCode,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=INTEGER},
+      </if>
+      <if test="realAmount != null" >
+        real_amount = #{realAmount,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined1 != null" >
+        user_defined1 = #{userDefined1,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined2 != null" >
+        user_defined2 = #{userDefined2,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined3 != null" >
+        user_defined3 = #{userDefined3,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined4 != null" >
+        user_defined4 = #{userDefined4,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined5 != null" >
+        user_defined5 = #{userDefined5,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifiedBy != null" >
+        last_modified_by = #{lastModifiedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activeFlag != null" >
+        active_flag = #{activeFlag,jdbcType=CHAR},
+      </if>
+    </set>
+    where check_pallet_id = #{checkPalletId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.penghaisoft.pda.storage.model.WmsOrderCheckPallet" >
+    update wms_order_check_pallet
+    set check_id = #{checkId,jdbcType=VARCHAR},
+      order_no = #{orderNo,jdbcType=VARCHAR},
+      goods_name = #{goodsName,jdbcType=VARCHAR},
+      goods_code = #{goodsCode,jdbcType=VARCHAR},
+      location_code = #{locationCode,jdbcType=VARCHAR},
+      diff_flag = #{diffFlag,jdbcType=CHAR},
+      batch_no = #{batchNo,jdbcType=VARCHAR},
+      pallet_code = #{palletCode,jdbcType=VARCHAR},
+      amount = #{amount,jdbcType=INTEGER},
+      real_amount = #{realAmount,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      user_defined1 = #{userDefined1,jdbcType=VARCHAR},
+      user_defined2 = #{userDefined2,jdbcType=VARCHAR},
+      user_defined3 = #{userDefined3,jdbcType=VARCHAR},
+      user_defined4 = #{userDefined4,jdbcType=VARCHAR},
+      user_defined5 = #{userDefined5,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      last_modified_by = #{lastModifiedBy,jdbcType=VARCHAR},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      active_flag = #{activeFlag,jdbcType=CHAR}
+    where check_pallet_id = #{checkPalletId,jdbcType=INTEGER}
+  </update>
+</mapper>

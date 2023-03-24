@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.penghaisoft.pda.outwarehouse.dao.WmsOrderOutPlaneMapper" >
+  <resultMap id="BaseResultMap" type="com.penghaisoft.pda.outwarehouse.model.WmsOrderOutPlane" >
+    <id column="order_out_id" property="orderOutId" jdbcType="VARCHAR" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="order_type" property="orderType" jdbcType="VARCHAR" />
+    <result column="order_status" property="orderStatus" jdbcType="CHAR" />
+    <result column="cancel_flag" property="cancelFlag" jdbcType="CHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="user_defined1" property="userDefined1" jdbcType="VARCHAR" />
+    <result column="user_defined2" property="userDefined2" jdbcType="VARCHAR" />
+    <result column="user_defined3" property="userDefined3" jdbcType="VARCHAR" />
+    <result column="user_defined4" property="userDefined4" jdbcType="VARCHAR" />
+    <result column="user_defined5" property="userDefined5" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="last_modified_by" property="lastModifiedBy" jdbcType="VARCHAR" />
+    <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+    <result column="active_flag" property="activeFlag" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    order_out_id, order_no, order_type, order_status, cancel_flag, remark, user_defined1, 
+    user_defined2, user_defined3, user_defined4, user_defined5, create_by, gmt_create, 
+    last_modified_by, gmt_modified, active_flag
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from wms_order_out_plane
+    where order_out_id = #{orderOutId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from wms_order_out_plane
+    where order_out_id = #{orderOutId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.penghaisoft.pda.outwarehouse.model.WmsOrderOutPlane" >
+    insert into wms_order_out_plane (order_out_id, order_no, order_type, 
+      order_status, cancel_flag, remark, 
+      user_defined1, user_defined2, user_defined3, 
+      user_defined4, user_defined5, create_by, 
+      gmt_create, last_modified_by, gmt_modified, 
+      active_flag)
+    values (#{orderOutId,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR}, #{orderType,jdbcType=VARCHAR}, 
+      #{orderStatus,jdbcType=CHAR}, #{cancelFlag,jdbcType=CHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{userDefined1,jdbcType=VARCHAR}, #{userDefined2,jdbcType=VARCHAR}, #{userDefined3,jdbcType=VARCHAR}, 
+      #{userDefined4,jdbcType=VARCHAR}, #{userDefined5,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, 
+      #{gmtCreate,jdbcType=TIMESTAMP}, #{lastModifiedBy,jdbcType=VARCHAR}, #{gmtModified,jdbcType=TIMESTAMP}, 
+      #{activeFlag,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.penghaisoft.pda.outwarehouse.model.WmsOrderOutPlane" >
+    insert into wms_order_out_plane
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="orderOutId != null" >
+        order_out_id,
+      </if>
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="orderType != null" >
+        order_type,
+      </if>
+      <if test="orderStatus != null" >
+        order_status,
+      </if>
+      <if test="cancelFlag != null" >
+        cancel_flag,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="userDefined1 != null" >
+        user_defined1,
+      </if>
+      <if test="userDefined2 != null" >
+        user_defined2,
+      </if>
+      <if test="userDefined3 != null" >
+        user_defined3,
+      </if>
+      <if test="userDefined4 != null" >
+        user_defined4,
+      </if>
+      <if test="userDefined5 != null" >
+        user_defined5,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create,
+      </if>
+      <if test="lastModifiedBy != null" >
+        last_modified_by,
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified,
+      </if>
+      <if test="activeFlag != null" >
+        active_flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="orderOutId != null" >
+        #{orderOutId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orderType != null" >
+        #{orderType,jdbcType=VARCHAR},
+      </if>
+      <if test="orderStatus != null" >
+        #{orderStatus,jdbcType=CHAR},
+      </if>
+      <if test="cancelFlag != null" >
+        #{cancelFlag,jdbcType=CHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined1 != null" >
+        #{userDefined1,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined2 != null" >
+        #{userDefined2,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined3 != null" >
+        #{userDefined3,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined4 != null" >
+        #{userDefined4,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined5 != null" >
+        #{userDefined5,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifiedBy != null" >
+        #{lastModifiedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtModified != null" >
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activeFlag != null" >
+        #{activeFlag,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.penghaisoft.pda.outwarehouse.model.WmsOrderOutPlane" >
+    update wms_order_out_plane
+    <set >
+      <if test="orderNo != null" >
+        order_no = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="orderType != null" >
+        order_type = #{orderType,jdbcType=VARCHAR},
+      </if>
+      <if test="orderStatus != null" >
+        order_status = #{orderStatus,jdbcType=CHAR},
+      </if>
+      <if test="cancelFlag != null" >
+        cancel_flag = #{cancelFlag,jdbcType=CHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined1 != null" >
+        user_defined1 = #{userDefined1,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined2 != null" >
+        user_defined2 = #{userDefined2,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined3 != null" >
+        user_defined3 = #{userDefined3,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined4 != null" >
+        user_defined4 = #{userDefined4,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined5 != null" >
+        user_defined5 = #{userDefined5,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifiedBy != null" >
+        last_modified_by = #{lastModifiedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activeFlag != null" >
+        active_flag = #{activeFlag,jdbcType=CHAR},
+      </if>
+    </set>
+    where order_out_id = #{orderOutId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.penghaisoft.pda.outwarehouse.model.WmsOrderOutPlane" >
+    update wms_order_out_plane
+    set order_no = #{orderNo,jdbcType=VARCHAR},
+      order_type = #{orderType,jdbcType=VARCHAR},
+      order_status = #{orderStatus,jdbcType=CHAR},
+      cancel_flag = #{cancelFlag,jdbcType=CHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      user_defined1 = #{userDefined1,jdbcType=VARCHAR},
+      user_defined2 = #{userDefined2,jdbcType=VARCHAR},
+      user_defined3 = #{userDefined3,jdbcType=VARCHAR},
+      user_defined4 = #{userDefined4,jdbcType=VARCHAR},
+      user_defined5 = #{userDefined5,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      last_modified_by = #{lastModifiedBy,jdbcType=VARCHAR},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      active_flag = #{activeFlag,jdbcType=CHAR}
+    where order_out_id = #{orderOutId,jdbcType=VARCHAR}
+  </update>
+  <select id="queryByAny" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from wms_order_out_plane
+    where 1 = 1
+    <if test="orderOutId != null" >
+      and order_out_id = #{orderOutId,jdbcType=VARCHAR}
+    </if>
+    <if test="orderNo != null" >
+      and order_no = #{orderNo,jdbcType=VARCHAR}
+    </if>
+    <if test="orderType != null" >
+      and order_type = #{orderType,jdbcType=VARCHAR}
+    </if>
+    <if test="orderStatus != null" >
+      and order_status = #{orderStatus,jdbcType=CHAR}
+    </if>
+    <if test="cancelFlag != null" >
+      and cancel_flag = #{cancelFlag,jdbcType=CHAR}
+    </if>
+    <if test="remark != null" >
+      and remark = #{remark,jdbcType=VARCHAR}
+    </if>
+    <if test="userDefined1 != null" >
+      and user_defined1 = #{userDefined1,jdbcType=VARCHAR}
+    </if>
+    <if test="userDefined2 != null" >
+      and user_defined2 = #{userDefined2,jdbcType=VARCHAR}
+    </if>
+    <if test="userDefined3 != null" >
+      and user_defined3 = #{userDefined3,jdbcType=VARCHAR}
+    </if>
+    <if test="userDefined4 != null" >
+      and user_defined4 = #{userDefined4,jdbcType=VARCHAR}
+    </if>
+    <if test="userDefined5 != null" >
+      and user_defined5 = #{userDefined5,jdbcType=VARCHAR}
+    </if>
+    <if test="createBy != null" >
+      and create_by = #{createBy,jdbcType=VARCHAR}
+    </if>
+    <if test="gmtCreate != null" >
+      and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+    </if>
+    <if test="lastModifiedBy != null" >
+      and last_modified_by = #{lastModifiedBy,jdbcType=VARCHAR}
+    </if>
+    <if test="gmtModified != null" >
+      and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+    </if>
+    <if test="activeFlag != null" >
+      and active_flag = #{activeFlag,jdbcType=CHAR}
+    </if>
+  </select>
+</mapper>

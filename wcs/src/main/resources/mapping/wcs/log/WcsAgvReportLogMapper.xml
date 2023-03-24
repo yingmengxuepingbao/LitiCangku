@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.penghaisoft.wcs.log.model.dao.WcsAgvReportLogMapper" >
+  <resultMap id="BaseResultMap" type="com.penghaisoft.wcs.log.model.entity.WcsAgvReportLog" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="task_code" property="taskCode" jdbcType="INTEGER" />
+    <result column="req_code" property="reqCode" jdbcType="VARCHAR" />
+    <result column="wb_code" property="wbCode" jdbcType="VARCHAR" />
+    <result column="method" property="method" jdbcType="VARCHAR" />
+    <result column="current_position_code" property="currentPositionCode" jdbcType="VARCHAR" />
+    <result column="robot_code" property="robotCode" jdbcType="VARCHAR" />
+    <result column="user_defined1" property="userDefined1" jdbcType="VARCHAR" />
+    <result column="user_defined2" property="userDefined2" jdbcType="VARCHAR" />
+    <result column="user_defined3" property="userDefined3" jdbcType="VARCHAR" />
+    <result column="user_defined4" property="userDefined4" jdbcType="VARCHAR" />
+    <result column="user_defined5" property="userDefined5" jdbcType="VARCHAR" />
+    <result column="receive_time" property="receiveTime" jdbcType="TIMESTAMP" />
+    <result column="resp_time" property="respTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <!-- mysql 分页 -->
+  <sql id="pagination_tail">
+	  limit #{page.pageOffset} , #{page.rows}
+  </sql>
+  <!-- mysql 查询总数 -->
+  <sql id="count_Tail">
+		select count(1) from
+  </sql>
+
+  <sql id="Base_Column_List" >
+    id, task_code, req_code, wb_code, method, current_position_code, robot_code, user_defined1, 
+    user_defined2, user_defined3, user_defined4, user_defined5, receive_time, resp_time
+  </sql>
+  <sql id="where_fragement">
+    where 1=1
+    <if test="entity!=null">
+      <if test="entity.id != null  and entity.id !=''">
+        <![CDATA[ and wcs_agv_report_log_.id  LIKE CONCAT('%',#{entity.id},'%')]]>
+      </if>
+      <if test="entity.taskCode != null  and entity.taskCode !=''">
+        <![CDATA[ and wcs_agv_report_log_.task_code  LIKE CONCAT('%',#{entity.taskCode},'%')]]>
+      </if>
+      <if test="entity.reqCode != null  and entity.reqCode !=''">
+        <![CDATA[ and wcs_agv_report_log_.req_code  LIKE CONCAT('%',#{entity.reqCode},'%')]]>
+      </if>
+      <if test="entity.wbCode != null  and entity.wbCode !=''">
+        <![CDATA[ and wcs_agv_report_log_.wb_code  LIKE CONCAT('%',#{entity.wbCode},'%')]]>
+      </if>
+      <if test="entity.method != null  and entity.method !=''">
+        <![CDATA[ and wcs_agv_report_log_.method  LIKE CONCAT('%',#{entity.method},'%')]]>
+      </if>
+      <if test="entity.currentPositionCode != null  and entity.currentPositionCode !=''">
+        <![CDATA[ and wcs_agv_report_log_.current_position_code  LIKE CONCAT('%',#{entity.currentPositionCode},'%')]]>
+      </if>
+      <if test="entity.robotCode != null  and entity.robotCode !=''">
+        <![CDATA[ and wcs_agv_report_log_.robot_code  LIKE CONCAT('%',#{entity.robotCode},'%')]]>
+      </if>
+      <if test="entity.userDefined1 != null  and entity.userDefined1 !=''">
+        <![CDATA[ and wcs_agv_report_log_.user_defined1  LIKE CONCAT('%',#{entity.userDefined1},'%')]]>
+      </if>
+      <if test="entity.userDefined2 != null  and entity.userDefined2 !=''">
+        <![CDATA[ and wcs_agv_report_log_.user_defined2  LIKE CONCAT('%',#{entity.userDefined2},'%')]]>
+      </if>
+      <if test="entity.userDefined3 != null  and entity.userDefined3 !=''">
+        <![CDATA[ and wcs_agv_report_log_.user_defined3  LIKE CONCAT('%',#{entity.userDefined3},'%')]]>
+      </if>
+      <if test="entity.userDefined4 != null  and entity.userDefined4 !=''">
+        <![CDATA[ and wcs_agv_report_log_.user_defined4  LIKE CONCAT('%',#{entity.userDefined4},'%')]]>
+      </if>
+      <if test="entity.userDefined5 != null  and entity.userDefined5 !=''">
+        <![CDATA[ and wcs_agv_report_log_.user_defined5  LIKE CONCAT('%',#{entity.userDefined5},'%')]]>
+      </if>
+      <if test="entity.receiveTime != null  and entity.receiveTime !=''">
+        <![CDATA[ and wcs_agv_report_log_.receive_time  LIKE CONCAT('%',#{entity.receiveTime},'%')]]>
+      </if>
+      <if test="entity.respTime != null  and entity.respTime !=''">
+        <![CDATA[ and wcs_agv_report_log_.resp_time  LIKE CONCAT('%',#{entity.respTime},'%')]]>
+      </if>
+    </if>
+  </sql>
+  <!-- 分页查询 -->
+  <select id="queryList" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    FROM
+    wcs_agv_report_log wcs_agv_report_log_
+    <include refid="where_fragement" />
+    <if test="entity.orderBy != null">
+      order by ${entity.orderBy}
+    </if>
+    <if test="page!=null">
+      <include refid="pagination_tail" />
+    </if>
+  </select>
+
+  <select id="queryCount" resultType="long">
+    <include refid="count_Tail" />
+    wcs_agv_report_log wcs_agv_report_log_
+    <include refid="where_fragement" />
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from wcs_agv_report_log
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from wcs_agv_report_log
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.penghaisoft.wcs.log.model.entity.WcsAgvReportLog" >
+    insert into wcs_agv_report_log (id, task_code, req_code, 
+      wb_code, method, current_position_code, 
+      robot_code, user_defined1, user_defined2, 
+      user_defined3, user_defined4, user_defined5, 
+      receive_time, resp_time)
+    values (#{id,jdbcType=INTEGER}, #{taskCode,jdbcType=INTEGER}, #{reqCode,jdbcType=VARCHAR}, 
+      #{wbCode,jdbcType=VARCHAR}, #{method,jdbcType=VARCHAR}, #{currentPositionCode,jdbcType=VARCHAR}, 
+      #{robotCode,jdbcType=VARCHAR}, #{userDefined1,jdbcType=VARCHAR}, #{userDefined2,jdbcType=VARCHAR}, 
+      #{userDefined3,jdbcType=VARCHAR}, #{userDefined4,jdbcType=VARCHAR}, #{userDefined5,jdbcType=VARCHAR}, 
+      #{receiveTime,jdbcType=TIMESTAMP}, #{respTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.penghaisoft.wcs.log.model.entity.WcsAgvReportLog" >
+    insert into wcs_agv_report_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="taskCode != null" >
+        task_code,
+      </if>
+      <if test="reqCode != null" >
+        req_code,
+      </if>
+      <if test="wbCode != null" >
+        wb_code,
+      </if>
+      <if test="method != null" >
+        method,
+      </if>
+      <if test="currentPositionCode != null" >
+        current_position_code,
+      </if>
+      <if test="robotCode != null" >
+        robot_code,
+      </if>
+      <if test="userDefined1 != null" >
+        user_defined1,
+      </if>
+      <if test="userDefined2 != null" >
+        user_defined2,
+      </if>
+      <if test="userDefined3 != null" >
+        user_defined3,
+      </if>
+      <if test="userDefined4 != null" >
+        user_defined4,
+      </if>
+      <if test="userDefined5 != null" >
+        user_defined5,
+      </if>
+      <if test="receiveTime != null" >
+        receive_time,
+      </if>
+      <if test="respTime != null" >
+        resp_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="taskCode != null" >
+        #{taskCode,jdbcType=INTEGER},
+      </if>
+      <if test="reqCode != null" >
+        #{reqCode,jdbcType=VARCHAR},
+      </if>
+      <if test="wbCode != null" >
+        #{wbCode,jdbcType=VARCHAR},
+      </if>
+      <if test="method != null" >
+        #{method,jdbcType=VARCHAR},
+      </if>
+      <if test="currentPositionCode != null" >
+        #{currentPositionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="robotCode != null" >
+        #{robotCode,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined1 != null" >
+        #{userDefined1,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined2 != null" >
+        #{userDefined2,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined3 != null" >
+        #{userDefined3,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined4 != null" >
+        #{userDefined4,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined5 != null" >
+        #{userDefined5,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveTime != null" >
+        #{receiveTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="respTime != null" >
+        #{respTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.penghaisoft.wcs.log.model.entity.WcsAgvReportLog" >
+    update wcs_agv_report_log
+    <set >
+      <if test="taskCode != null" >
+        task_code = #{taskCode,jdbcType=INTEGER},
+      </if>
+      <if test="reqCode != null" >
+        req_code = #{reqCode,jdbcType=VARCHAR},
+      </if>
+      <if test="wbCode != null" >
+        wb_code = #{wbCode,jdbcType=VARCHAR},
+      </if>
+      <if test="method != null" >
+        method = #{method,jdbcType=VARCHAR},
+      </if>
+      <if test="currentPositionCode != null" >
+        current_position_code = #{currentPositionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="robotCode != null" >
+        robot_code = #{robotCode,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined1 != null" >
+        user_defined1 = #{userDefined1,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined2 != null" >
+        user_defined2 = #{userDefined2,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined3 != null" >
+        user_defined3 = #{userDefined3,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined4 != null" >
+        user_defined4 = #{userDefined4,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined5 != null" >
+        user_defined5 = #{userDefined5,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveTime != null" >
+        receive_time = #{receiveTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="respTime != null" >
+        resp_time = #{respTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.penghaisoft.wcs.log.model.entity.WcsAgvReportLog" >
+    update wcs_agv_report_log
+    set task_code = #{taskCode,jdbcType=INTEGER},
+      req_code = #{reqCode,jdbcType=VARCHAR},
+      wb_code = #{wbCode,jdbcType=VARCHAR},
+      method = #{method,jdbcType=VARCHAR},
+      current_position_code = #{currentPositionCode,jdbcType=VARCHAR},
+      robot_code = #{robotCode,jdbcType=VARCHAR},
+      user_defined1 = #{userDefined1,jdbcType=VARCHAR},
+      user_defined2 = #{userDefined2,jdbcType=VARCHAR},
+      user_defined3 = #{userDefined3,jdbcType=VARCHAR},
+      user_defined4 = #{userDefined4,jdbcType=VARCHAR},
+      user_defined5 = #{userDefined5,jdbcType=VARCHAR},
+      receive_time = #{receiveTime,jdbcType=TIMESTAMP},
+      resp_time = #{respTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

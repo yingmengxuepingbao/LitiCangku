@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.penghaisoft.wcs.log.model.dao.WcsFourwaycarReportLogMapper" >
+  <resultMap id="BaseResultMap" type="com.penghaisoft.wcs.log.model.entity.WcsFourwaycarReportLog" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="report_type" property="reportType" jdbcType="VARCHAR" />
+    <result column="task_id" property="taskId" jdbcType="INTEGER" />
+    <result column="in_param" property="inParam" jdbcType="VARCHAR" />
+    <result column="return_status" property="returnStatus" jdbcType="CHAR" />
+    <result column="return_info" property="returnInfo" jdbcType="VARCHAR" />
+    <result column="user_defined1" property="userDefined1" jdbcType="VARCHAR" />
+    <result column="user_defined2" property="userDefined2" jdbcType="VARCHAR" />
+    <result column="user_defined3" property="userDefined3" jdbcType="VARCHAR" />
+    <result column="user_defined4" property="userDefined4" jdbcType="VARCHAR" />
+    <result column="user_defined5" property="userDefined5" jdbcType="VARCHAR" />
+    <result column="receive_time" property="receiveTime" jdbcType="TIMESTAMP" />
+    <result column="resp_time" property="respTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <!-- mysql 分页 -->
+  <sql id="pagination_tail">
+    top ((#{page.pageOffset} +1)* #{page.rows})
+  </sql>
+  <!-- mysql 查询总数 -->
+  <sql id="count_Tail">
+		select count(1) from
+  </sql>
+
+
+  <sql id="Base_Column_List" >
+    id, report_type, task_id, in_param, return_status, return_info, user_defined1, user_defined2, 
+    user_defined3, user_defined4, user_defined5, receive_time, resp_time
+  </sql>
+
+  <sql id="where_fragement">
+    where 1=1
+    <if test="entity!=null">
+      <if test="entity.id != null  and entity.id !=''">
+        <![CDATA[ and wcs_fourwaycar_report_log_.id  LIKE CONCAT('%',#{entity.id},'%')]]>
+      </if>
+      <if test="entity.reportType != null  and entity.reportType !=''">
+        <![CDATA[ and wcs_fourwaycar_report_log_.report_type  LIKE CONCAT('%',#{entity.reportType},'%')]]>
+      </if>
+      <if test="entity.taskId != null  and entity.taskId !=''">
+        <![CDATA[ and wcs_fourwaycar_report_log_.task_id  LIKE CONCAT('%',#{entity.taskId},'%')]]>
+      </if>
+      <if test="entity.inParam != null  and entity.inParam !=''">
+        <![CDATA[ and wcs_fourwaycar_report_log_.in_param  LIKE CONCAT('%',#{entity.inParam},'%')]]>
+      </if>
+      <if test="entity.returnStatus != null  and entity.returnStatus !=''">
+        <![CDATA[ and wcs_fourwaycar_report_log_.return_status  LIKE CONCAT('%',#{entity.returnStatus},'%')]]>
+      </if>
+      <if test="entity.returnInfo != null  and entity.returnInfo !=''">
+        <![CDATA[ and wcs_fourwaycar_report_log_.return_info  LIKE CONCAT('%',#{entity.returnInfo},'%')]]>
+      </if>
+      <if test="entity.userDefined1 != null  and entity.userDefined1 !=''">
+        <![CDATA[ and wcs_fourwaycar_report_log_.user_defined1  LIKE CONCAT('%',#{entity.userDefined1},'%')]]>
+      </if>
+      <if test="entity.userDefined2 != null  and entity.userDefined2 !=''">
+        <![CDATA[ and wcs_fourwaycar_report_log_.user_defined2  LIKE CONCAT('%',#{entity.userDefined2},'%')]]>
+      </if>
+      <if test="entity.userDefined3 != null  and entity.userDefined3 !=''">
+        <![CDATA[ and wcs_fourwaycar_report_log_.user_defined3  LIKE CONCAT('%',#{entity.userDefined3},'%')]]>
+      </if>
+      <if test="entity.userDefined4 != null  and entity.userDefined4 !=''">
+        <![CDATA[ and wcs_fourwaycar_report_log_.user_defined4  LIKE CONCAT('%',#{entity.userDefined4},'%')]]>
+      </if>
+      <if test="entity.userDefined5 != null  and entity.userDefined5 !=''">
+        <![CDATA[ and wcs_fourwaycar_report_log_.user_defined5  LIKE CONCAT('%',#{entity.userDefined5},'%')]]>
+      </if>
+      <if test="entity.receiveTime != null">
+        <![CDATA[ and wcs_fourwaycar_report_log_.receive_time = #{entity.receiveTime}]]>
+      </if>
+      <if test="entity.receiveTimeMin != null">
+        <![CDATA[ and wcs_fourwaycar_report_log_.receive_time >= #{entity.receiveTimeMin}]]>
+      </if>
+      <if test="entity.receiveTimeMax != null">
+        <![CDATA[ and wcs_fourwaycar_report_log_.receive_time <= #{entity.receiveTimeMax}]]>
+      </if>
+      <if test="entity.respTime != null  and entity.respTime !=''">
+        <![CDATA[ and wcs_fourwaycar_report_log_.resp_time  LIKE CONCAT('%',#{entity.respTime},'%')]]>
+      </if>
+    </if>
+  </sql>
+
+  <!-- 分页查询 -->
+  <select id="queryList" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    FROM
+    wcs_fourwaycar_report_log wcs_fourwaycar_report_log_
+    <include refid="where_fragement" />
+    <if test="entity.orderBy != null">
+      order by ${entity.orderBy}
+    </if>
+    <if test="page!=null">
+      <include refid="pagination_tail" />
+    </if>
+  </select>
+
+  <select id="queryCount" resultType="long">
+    <include refid="count_Tail" />
+    wcs_fourwaycar_report_log wcs_fourwaycar_report_log_
+    <include refid="where_fragement" />
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from wcs_fourwaycar_report_log
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from wcs_fourwaycar_report_log
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.penghaisoft.wcs.log.model.entity.WcsFourwaycarReportLog" >
+    insert into wcs_fourwaycar_report_log (id, report_type, task_id, 
+      in_param, return_status, return_info, 
+      user_defined1, user_defined2, user_defined3, 
+      user_defined4, user_defined5, receive_time, 
+      resp_time)
+    values (#{id,jdbcType=INTEGER}, #{reportType,jdbcType=VARCHAR}, #{taskId,jdbcType=INTEGER}, 
+      #{inParam,jdbcType=VARCHAR}, #{returnStatus,jdbcType=CHAR}, #{returnInfo,jdbcType=VARCHAR}, 
+      #{userDefined1,jdbcType=VARCHAR}, #{userDefined2,jdbcType=VARCHAR}, #{userDefined3,jdbcType=VARCHAR}, 
+      #{userDefined4,jdbcType=VARCHAR}, #{userDefined5,jdbcType=VARCHAR}, #{receiveTime,jdbcType=TIMESTAMP}, 
+      #{respTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.penghaisoft.wcs.log.model.entity.WcsFourwaycarReportLog" >
+    insert into wcs_fourwaycar_report_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="reportType != null" >
+        report_type,
+      </if>
+      <if test="taskId != null" >
+        task_id,
+      </if>
+      <if test="inParam != null" >
+        in_param,
+      </if>
+      <if test="returnStatus != null" >
+        return_status,
+      </if>
+      <if test="returnInfo != null" >
+        return_info,
+      </if>
+      <if test="userDefined1 != null" >
+        user_defined1,
+      </if>
+      <if test="userDefined2 != null" >
+        user_defined2,
+      </if>
+      <if test="userDefined3 != null" >
+        user_defined3,
+      </if>
+      <if test="userDefined4 != null" >
+        user_defined4,
+      </if>
+      <if test="userDefined5 != null" >
+        user_defined5,
+      </if>
+      <if test="receiveTime != null" >
+        receive_time,
+      </if>
+      <if test="respTime != null" >
+        resp_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="reportType != null" >
+        #{reportType,jdbcType=VARCHAR},
+      </if>
+      <if test="taskId != null" >
+        #{taskId,jdbcType=INTEGER},
+      </if>
+      <if test="inParam != null" >
+        #{inParam,jdbcType=VARCHAR},
+      </if>
+      <if test="returnStatus != null" >
+        #{returnStatus,jdbcType=CHAR},
+      </if>
+      <if test="returnInfo != null" >
+        #{returnInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined1 != null" >
+        #{userDefined1,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined2 != null" >
+        #{userDefined2,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined3 != null" >
+        #{userDefined3,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined4 != null" >
+        #{userDefined4,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined5 != null" >
+        #{userDefined5,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveTime != null" >
+        #{receiveTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="respTime != null" >
+        #{respTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.penghaisoft.wcs.log.model.entity.WcsFourwaycarReportLog" >
+    update wcs_fourwaycar_report_log
+    <set >
+      <if test="reportType != null" >
+        report_type = #{reportType,jdbcType=VARCHAR},
+      </if>
+      <if test="taskId != null" >
+        task_id = #{taskId,jdbcType=INTEGER},
+      </if>
+      <if test="inParam != null" >
+        in_param = #{inParam,jdbcType=VARCHAR},
+      </if>
+      <if test="returnStatus != null" >
+        return_status = #{returnStatus,jdbcType=CHAR},
+      </if>
+      <if test="returnInfo != null" >
+        return_info = #{returnInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined1 != null" >
+        user_defined1 = #{userDefined1,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined2 != null" >
+        user_defined2 = #{userDefined2,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined3 != null" >
+        user_defined3 = #{userDefined3,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined4 != null" >
+        user_defined4 = #{userDefined4,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined5 != null" >
+        user_defined5 = #{userDefined5,jdbcType=VARCHAR},
+      </if>
+      <if test="receiveTime != null" >
+        receive_time = #{receiveTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="respTime != null" >
+        resp_time = #{respTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.penghaisoft.wcs.log.model.entity.WcsFourwaycarReportLog" >
+    update wcs_fourwaycar_report_log
+    set report_type = #{reportType,jdbcType=VARCHAR},
+      task_id = #{taskId,jdbcType=INTEGER},
+      in_param = #{inParam,jdbcType=VARCHAR},
+      return_status = #{returnStatus,jdbcType=CHAR},
+      return_info = #{returnInfo,jdbcType=VARCHAR},
+      user_defined1 = #{userDefined1,jdbcType=VARCHAR},
+      user_defined2 = #{userDefined2,jdbcType=VARCHAR},
+      user_defined3 = #{userDefined3,jdbcType=VARCHAR},
+      user_defined4 = #{userDefined4,jdbcType=VARCHAR},
+      user_defined5 = #{userDefined5,jdbcType=VARCHAR},
+      receive_time = #{receiveTime,jdbcType=TIMESTAMP},
+      resp_time = #{respTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

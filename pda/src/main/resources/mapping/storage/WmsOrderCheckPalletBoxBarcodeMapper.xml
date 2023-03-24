@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.penghaisoft.pda.storage.dao.WmsOrderCheckPalletBoxBarcodeMapper" >
+  <resultMap id="BaseResultMap" type="com.penghaisoft.pda.storage.model.WmsOrderCheckPalletBoxBarcode" >
+    <id column="check_pallet_box_barcode_id" property="checkPalletBoxBarcodeId" jdbcType="INTEGER" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="diff_flag" property="diffFlag" jdbcType="CHAR" />
+    <result column="pallet_code" property="palletCode" jdbcType="VARCHAR" />
+    <result column="box_barcode" property="boxBarcode" jdbcType="VARCHAR" />
+    <result column="real_box_barcode" property="realBoxBarcode" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="user_defined1" property="userDefined1" jdbcType="VARCHAR" />
+    <result column="user_defined2" property="userDefined2" jdbcType="VARCHAR" />
+    <result column="user_defined3" property="userDefined3" jdbcType="VARCHAR" />
+    <result column="user_defined4" property="userDefined4" jdbcType="VARCHAR" />
+    <result column="user_defined5" property="userDefined5" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="last_modified_by" property="lastModifiedBy" jdbcType="VARCHAR" />
+    <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+    <result column="active_flag" property="activeFlag" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    check_pallet_box_barcode_id, order_no, diff_flag, pallet_code, box_barcode, real_box_barcode, 
+    remark, user_defined1, user_defined2, user_defined3, user_defined4, user_defined5, 
+    create_by, gmt_create, last_modified_by, gmt_modified, active_flag
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from wms_order_check_pallet_box_barcode
+    where check_pallet_box_barcode_id = #{checkPalletBoxBarcodeId,jdbcType=INTEGER}
+  </select>
+
+  <select id="queryByAny" resultMap="BaseResultMap" parameterType="com.penghaisoft.pda.storage.model.WmsOrderCheckPalletBoxBarcode" >
+    select
+    <include refid="Base_Column_List" />
+    from wms_order_check_pallet_box_barcode
+    where 1=1
+    <if test="orderNo != null" >
+      and order_no = #{orderNo,jdbcType=VARCHAR}
+    </if>
+    <if test="diffFlag != null" >
+      and diff_flag = #{diffFlag,jdbcType=CHAR}
+    </if>
+    <if test="palletCode != null" >
+      and pallet_code = #{palletCode,jdbcType=VARCHAR}
+    </if>
+    <if test="boxBarcode != null" >
+     and box_barcode = #{boxBarcode,jdbcType=VARCHAR}
+    </if>
+    <if test="realBoxBarcode != null" >
+      and real_box_barcode = #{realBoxBarcode,jdbcType=VARCHAR}
+    </if>
+    <if test="remark != null" >
+      and remark = #{remark,jdbcType=VARCHAR}
+    </if>
+    <if test="userDefined1 != null" >
+      and user_defined1 = #{userDefined1,jdbcType=VARCHAR}
+    </if>
+    <if test="userDefined2 != null" >
+      and user_defined2 = #{userDefined2,jdbcType=VARCHAR}
+    </if>
+    <if test="userDefined3 != null" >
+      and user_defined3 = #{userDefined3,jdbcType=VARCHAR}
+    </if>
+    <if test="userDefined4 != null" >
+      and user_defined4 = #{userDefined4,jdbcType=VARCHAR}
+    </if>
+    <if test="userDefined5 != null" >
+      and user_defined5 = #{userDefined5,jdbcType=VARCHAR}
+    </if>
+    <if test="createBy != null" >
+      and create_by = #{createBy,jdbcType=VARCHAR}
+    </if>
+    <if test="gmtCreate != null" >
+      and gmt_create = #{gmtCreate,jdbcType=TIMESTAMP}
+    </if>
+    <if test="lastModifiedBy != null" >
+      and last_modified_by = #{lastModifiedBy,jdbcType=VARCHAR}
+    </if>
+    <if test="gmtModified != null" >
+      and gmt_modified = #{gmtModified,jdbcType=TIMESTAMP}
+    </if>
+    <if test="activeFlag != null" >
+      and active_flag = #{activeFlag,jdbcType=CHAR}
+    </if>
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from wms_order_check_pallet_box_barcode
+    where check_pallet_box_barcode_id = #{checkPalletBoxBarcodeId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.penghaisoft.pda.storage.model.WmsOrderCheckPalletBoxBarcode" >
+    insert into wms_order_check_pallet_box_barcode (check_pallet_box_barcode_id, order_no, 
+      diff_flag, pallet_code, box_barcode, 
+      real_box_barcode, remark, user_defined1, 
+      user_defined2, user_defined3, user_defined4, 
+      user_defined5, create_by, gmt_create, 
+      last_modified_by, gmt_modified, active_flag
+      )
+    values (#{checkPalletBoxBarcodeId,jdbcType=INTEGER}, #{orderNo,jdbcType=VARCHAR}, 
+      #{diffFlag,jdbcType=CHAR}, #{palletCode,jdbcType=VARCHAR}, #{boxBarcode,jdbcType=VARCHAR}, 
+      #{realBoxBarcode,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{userDefined1,jdbcType=VARCHAR}, 
+      #{userDefined2,jdbcType=VARCHAR}, #{userDefined3,jdbcType=VARCHAR}, #{userDefined4,jdbcType=VARCHAR}, 
+      #{userDefined5,jdbcType=VARCHAR}, #{createBy,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=TIMESTAMP}, 
+      #{lastModifiedBy,jdbcType=VARCHAR}, #{gmtModified,jdbcType=TIMESTAMP}, #{activeFlag,jdbcType=CHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.penghaisoft.pda.storage.model.WmsOrderCheckPalletBoxBarcode" >
+    insert into wms_order_check_pallet_box_barcode
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="checkPalletBoxBarcodeId != null" >
+        check_pallet_box_barcode_id,
+      </if>
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="diffFlag != null" >
+        diff_flag,
+      </if>
+      <if test="palletCode != null" >
+        pallet_code,
+      </if>
+      <if test="boxBarcode != null" >
+        box_barcode,
+      </if>
+      <if test="realBoxBarcode != null" >
+        real_box_barcode,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="userDefined1 != null" >
+        user_defined1,
+      </if>
+      <if test="userDefined2 != null" >
+        user_defined2,
+      </if>
+      <if test="userDefined3 != null" >
+        user_defined3,
+      </if>
+      <if test="userDefined4 != null" >
+        user_defined4,
+      </if>
+      <if test="userDefined5 != null" >
+        user_defined5,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create,
+      </if>
+      <if test="lastModifiedBy != null" >
+        last_modified_by,
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified,
+      </if>
+      <if test="activeFlag != null" >
+        active_flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="checkPalletBoxBarcodeId != null" >
+        #{checkPalletBoxBarcodeId,jdbcType=INTEGER},
+      </if>
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="diffFlag != null" >
+        #{diffFlag,jdbcType=CHAR},
+      </if>
+      <if test="palletCode != null" >
+        #{palletCode,jdbcType=VARCHAR},
+      </if>
+      <if test="boxBarcode != null" >
+        #{boxBarcode,jdbcType=VARCHAR},
+      </if>
+      <if test="realBoxBarcode != null" >
+        #{realBoxBarcode,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined1 != null" >
+        #{userDefined1,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined2 != null" >
+        #{userDefined2,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined3 != null" >
+        #{userDefined3,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined4 != null" >
+        #{userDefined4,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined5 != null" >
+        #{userDefined5,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifiedBy != null" >
+        #{lastModifiedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtModified != null" >
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activeFlag != null" >
+        #{activeFlag,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.penghaisoft.pda.storage.model.WmsOrderCheckPalletBoxBarcode" >
+    update wms_order_check_pallet_box_barcode
+    <set >
+      <if test="orderNo != null" >
+        order_no = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="diffFlag != null" >
+        diff_flag = #{diffFlag,jdbcType=CHAR},
+      </if>
+      <if test="palletCode != null" >
+        pallet_code = #{palletCode,jdbcType=VARCHAR},
+      </if>
+      <if test="boxBarcode != null" >
+        box_barcode = #{boxBarcode,jdbcType=VARCHAR},
+      </if>
+      <if test="realBoxBarcode != null" >
+        real_box_barcode = #{realBoxBarcode,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined1 != null" >
+        user_defined1 = #{userDefined1,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined2 != null" >
+        user_defined2 = #{userDefined2,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined3 != null" >
+        user_defined3 = #{userDefined3,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined4 != null" >
+        user_defined4 = #{userDefined4,jdbcType=VARCHAR},
+      </if>
+      <if test="userDefined5 != null" >
+        user_defined5 = #{userDefined5,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastModifiedBy != null" >
+        last_modified_by = #{lastModifiedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+      <if test="activeFlag != null" >
+        active_flag = #{activeFlag,jdbcType=CHAR},
+      </if>
+    </set>
+    where check_pallet_box_barcode_id = #{checkPalletBoxBarcodeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.penghaisoft.pda.storage.model.WmsOrderCheckPalletBoxBarcode" >
+    update wms_order_check_pallet_box_barcode
+    set order_no = #{orderNo,jdbcType=VARCHAR},
+      diff_flag = #{diffFlag,jdbcType=CHAR},
+      pallet_code = #{palletCode,jdbcType=VARCHAR},
+      box_barcode = #{boxBarcode,jdbcType=VARCHAR},
+      real_box_barcode = #{realBoxBarcode,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      user_defined1 = #{userDefined1,jdbcType=VARCHAR},
+      user_defined2 = #{userDefined2,jdbcType=VARCHAR},
+      user_defined3 = #{userDefined3,jdbcType=VARCHAR},
+      user_defined4 = #{userDefined4,jdbcType=VARCHAR},
+      user_defined5 = #{userDefined5,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=VARCHAR},
+      gmt_create = #{gmtCreate,jdbcType=TIMESTAMP},
+      last_modified_by = #{lastModifiedBy,jdbcType=VARCHAR},
+      gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+      active_flag = #{activeFlag,jdbcType=CHAR}
+    where check_pallet_box_barcode_id = #{checkPalletBoxBarcodeId,jdbcType=INTEGER}
+  </update>
+</mapper>

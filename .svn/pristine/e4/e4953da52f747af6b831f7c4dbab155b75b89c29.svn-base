@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>任务执行明细</title>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<link rel="stylesheet" href="../../css/bootstrap.css" type="text/css">
+	<link rel="stylesheet" href="../../css/zdialog.css">
+	<link rel="stylesheet" href="../../css/font-awesome.min.css">
+	<link rel="stylesheet" href="../../css/zTreeStyleOutLook.css" />
+	<link rel="stylesheet" href="../../css/layout.css" />
+	<link rel="stylesheet" href="../../css/jedate.css" />
+	<link rel="stylesheet" href="../../css/chosen.css">
+	<link rel="stylesheet" href="../../css/fileUpload.css">
+	<link rel="stylesheet" href="../../js/chosen-1.8.7/chosen.min.css" type="text/css" />
+	<link rel="stylesheet" href="css/device.css" />
+
+	<style type="text/css">
+		.chzn-container-single .chzn-single {
+			height: 33px;
+			line-height: 26px;
+			padding: 3px 0 3px 8px;
+		}
+		.chzn-container-single .chzn-single div b {
+			background-position: 2px 6px;
+		}
+		.chzn-container .chzn-drop {
+			background: #fff;
+			border : 1px solid #aaa;
+			border-top : 1px solid #aaa;
+		}
+		.chzn-container-active .chzn-single-with-drop div b {
+			background-position: -16px 5px;
+		}
+		.chzn-drop{width: 348px !important;}
+		.chzn-search input{width: 338px !important; border-radius: 4px; padding: 5px}
+		#treeSearchContainerUL a .button,
+		#treePopContainerUL a .button{
+			display: none;
+		}
+		.row {
+			width: 50px;
+			display: block;
+			line-height: 45px;
+			text-align: left;
+		}
+		/*input[type="checkbox"] {*/
+		/*	display: none;*/
+		/*}*/
+		/*input[type="checkbox"] + label {*/
+		/*	display: inline-block;*/
+		/*	width: 40px;*/
+		/*	height: 20px;*/
+		/*	position: relative;*/
+		/*	 -webkit-transition: 0.3s;*/
+		/*	transition: 0.3s;*/
+		/*	margin: 0px 20px;*/
+		/*	box-sizing: border-box;*/
+		/*}*/
+		/*input[type="checkbox"] + label:after {*/
+		/*	content: '';*/
+		/*	display: block;*/
+		/*	position: absolute;*/
+		/*	left: 0px;*/
+		/*	top: 0px;*/
+		/*	width: 20px;*/
+		/*	height: 20px;*/
+		/*	 -webkit-transition: 0.3s;*/
+		/*	transition: 0.3s;*/
+		/*	cursor: pointer;*/
+		/*}*/
+		/*#isCollected:checked + label.green {*/
+		/*	background: #1DBBF4;*/
+		/*}*/
+		/*#isCollected:checked + label.green:after {*/
+		/*	background: #fff;*/
+		/*	border:1px solid #1DBBF4;*/
+		/*}*/
+		/*#isCollected:checked + label:after {*/
+		/*	left: calc(100% - 20px);*/
+		/*}*/
+		/*#isCollected + label {*/
+		/*	background: #ddd;*/
+		/*	border-radius: 20px;*/
+		/*	box-shadow: 1px 1px 3px #aaa;*/
+		/*}*/
+		/*#isCollected + label:after {*/
+		/*	background: #fff;*/
+		/*	border-radius: 50%;*/
+		/*	box-shadow: 1px 1px 3px #aaa;*/
+		/*}*/
+		.form-treel{position: relative}
+		.devicePopTree{
+			display: none;
+			position: absolute;
+			top: 37px;
+			left: 103px;
+			width: 281px;
+			max-height: 332px;
+			overflow: auto;
+			background: #fff;
+			padding: 0px;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+		}
+		.form-treel .popDepartSpan{
+			display: block;
+			position: absolute;
+			left: 119px;
+			top: 7px;
+		}
+		.table-log{
+			max-width:370px;
+		}
+		.table-log tr td:nth-child(3){
+			text-align: right;
+		}
+		.table-log tr td{
+			border: none;
+			padding:10px 0;
+		}
+		.table-log .more-log{
+			display:block;
+			padding: 5px 10px;
+			color: #1BB9F2;
+			border:1px solid #1DBBF4;
+			border-radius: 4px;
+			text-align: center;
+			margin: -1px 10px;
+		}
+		.table-log .more-log:hover{
+			cursor: pointer;
+			font-weight: 600;
+		}
+		.record .pop-body{
+			overflow: hidden;height: 284px;}
+		.record .table tr td{border-top: none;padding: 10px 0}
+		.record .pop-body .form-horizontal{overflow-y: auto;height: 280px;overflow-x: hidden;}
+		.record .table tr td:nth-child(1){
+			border-left:1px solid #ECF0F1;
+			padding-left: 20px;
+
+		}
+		.record .table tr td{position: relative;}
+		.record .table tr td .font-i {
+			width: 8px;
+			height: 8px;
+			position: absolute;
+			margin: auto;
+			top: 0;
+			bottom: 0;
+			border-radius: 50%;
+			left: -5px;
+			background: #1DBBF4;
+		}
+		.tab-pane input, .tab-pane textarea {
+			width: 250px;
+		}
+		.tab-bottom-bd{
+			overflow: hidden;
+			border-bottom: 1px solid #ECF0F1;
+			margin-bottom: 20px
+		}
+
+		a{text-decoration: none !important;}
+		.ipt-equip-s{
+			margin:0px 15px 10px 15px;
+			border-bottom: 1px solid #ECF0F1;
+		}
+		.absolute{
+			position: absolute;
+			top:50px;
+			right: 15px;
+			left: 15px;
+			bottom: 15px;
+			background: #fff
+		}
+		.breadcrumb{top:-40px;
+			position: relative;
+			height: 0;
+			left: -15px
+		}
+		.wrap{padding-top: 0}
+		.absolute-bottom-btn{
+			position: fixed;
+			width: 100%;
+			bottom: 79px;
+			border-bottom: 1px solid #ECF0F1;
+			right: 15px;
+		}
+		.absolute-bottom-btn .rt-bt-btn{
+			bottom:-50px
+		}
+		.ipt-equip-s input{
+			width: 260px;
+		}
+		.tab-pane .form-control{
+			width: 250px;
+		}
+
+	</style>
+</head>
+<body>
+<div class="absolute">
+	<div class="wrap">
+		<ol class="breadcrumb">
+			<li><a href="#" class="link">任务管理</a></li>
+			<li><a href="wcsTaskExecutionList.html" class="link">任务执行</a></li>
+			<li class="active">任务执行详情</li>
+		</ol>
+		<div class="">
+			<!-- Nav tabs -->
+			<ul class="nav nav-tabs" role="tablist" id="myTabs">
+				<li role="presentation" class="active"><a href="#unusedList" aria-controls="unusedList" role="tab" data-toggle="tab">任务执行详情</a></li>
+			</ul>
+			<!-- Tab panes -->
+			<div class="tab-content">
+				<div role="tabpanel" class="tab-pane active" id="unusedList">
+					<div class="form-inline add-btn">
+						<button id="changeTaskStatus" type="button" class="btn btn-default btn-add lt">更新任务状态</button>
+					</div>
+					<table class="table-hover table" id="deviceUnusedList">
+						<thead>
+						<tr>
+							<th style="width: 50px">
+								<div class="checkbox-custom checkbox-default">
+									<input type="checkbox" id="check-all">
+									<label></label>
+								</div>
+							</th>
+							<th>任务ID</th>
+							<th>任务编号</th>
+							<th>任务类型</th>
+							<th>动作(四向车)</th>
+							<th>货位(四向车)</th>
+							<th>路径(AGV)</th>
+							<th>结束时间</th>
+							<th>AGV任务状态</th>
+							<th>四向车任务状态</th>
+							<th>创建时间</th>
+							<th style="width: 60px"></th>
+						</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="absolute-bottom-btn">
+		<div class="rt-bt-btn">
+			<button type="button" class="btn btn-default return">返回</button>
+		</div>
+	</div>
+</div>
+<div class="modal" id="formModel" tabindex="-1" role="dialog" data-backdrop="false" aria-labelledby="myModalLabel">
+	<div class="modal-dialog" role="document" style="width: 500px;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel"></h4>
+			</div>
+			<div class="modal-body">
+				<form class="form-horizontal" id="formInfo">
+					<div class="form-group">
+						<input type="hidden" id="type">
+						<input type="hidden" id="taskId">
+					</div>
+					<div class="form-group">
+						<label class="control-label col-sm-3"><i class="fa fa-asterisk"></i>任务类型:</label>
+						<div class="col-sm-5">
+							<input id="taskForm" type="text"  class="form-control" placeholder="请输入任务类型"/>
+						</div>
+					</div>
+					<div class="form-group" id="goodsCodeHidden">
+						<label class="control-label col-sm-3"><i class="fa fa-asterisk"></i>任务状态:</label>
+						<div class="col-sm-5">
+							<select id="taskStatus" class="form-control" placeholder=" 请选择任务状态" >
+								<option value="">请选择任务状态</option>
+								<option value="1">1-创建</option>
+								<option value="2">2-AGV下发/四向车申请任务</option>
+								<option value="3">3-AGV到达缓冲区/四向车下发任务</option>
+								<option value="4">4-AGV等待/四向车执行任务</option>
+								<option value="5">5-AGV继续入库/四向车取货完成</option>
+								<option value="6">6-完成</option>
+							</select>
+						</div>
+					</div>
+
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+				<button type="button" id="saveButton" class="btn" data-dismiss="modal">保存</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<script type="text/javascript" src="../../js/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="../../js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../js/ajaxfileupload.js"></script>
+<script type="text/javascript" src="../../js/fileUpload.js"></script>
+<script type="text/javascript" src="../../js/zdialog.js"></script>
+<script type="text/javascript" src="../../js/jquery.jedate.js"></script>
+<script type="text/javascript" src="../../js/chosen.jquery.js"></script>
+<script type="text/javascript" src="../../js/common.js"></script>
+<script type="text/javascript" src="../../js/jquery.ztree.all.min.js"></script>
+<script type="text/javascript" src="../../js/chosen-1.8.7/chosen.jquery.min.js"></script>
+<script type="text/javascript" src="js/addTaskExecution.js"></script>
+
+	<script type="text/javascript">
+        $('#myTabs li a').click(function (e) {
+            e.preventDefault()
+            $(this).tab('show')
+        });
+
+        var config = {
+            '.chosen-select': {},
+            '.chosen-select-deselect': {allow_single_deselect: true},
+            '.chosen-select-no-single': {disable_search_threshold: 10},
+            '.chosen-select-no-results': {no_results_text: 'Oops, nothing found!'},
+            '.chosen-select-width': {width: "95%"}
+        };
+
+        for (var selector in config) {
+            $(selector).chosen(config[selector]);
+        }
+	</script>
+</body>
+</html>

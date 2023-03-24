@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../../css/bootstrap.min.css" />
+</head>
+<body  style="overflow-x:hidden;">
+<div class="jumbotron" style="height: 1080px">
+<!--    <div class="row">
+        <div class="col-lg-2">
+            <button class="btn-info" onclick="changeGif('in')">入库线动图</button>
+        </div>
+        <div class="col-lg-2">
+            <button class="btn-default" onclick="changeGif('in-move')">入库线+堆垛机动图</button>
+        </div>
+        <div class="col-lg-2">
+            <button class="btn-default" onclick="changeGif('in-out')">入库线+出库线动图</button>
+        </div>
+        <div class="col-lg-2">
+            <button class="btn-default" onclick="changeGif('in-out-move')">入库线+出库线+堆垛机动图</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-2">
+            <button class="btn-default" onclick="changeGif('out')">出库线动图</button>
+        </div>
+        <div class="col-lg-2">
+            <button class="btn-default" onclick="changeGif('out-move')">出库线+堆垛机动图</button>
+        </div>
+        <div class="col-lg-2">
+            <button class="btn-default" onclick="changeGif('move')">堆垛机动图</button>
+        </div>
+    </div>-->
+    <div class="row">
+        <div class="col-lg-1">
+        </div>
+        <div class="col-lg-8">
+            <img id="dynamic-gif" src="" class="img-responsive"/>
+        </div>
+        <div class="col-lg-3">
+            <!--<div class="well well-lg">您好，我在大的 Well 中！</div>-->
+            <div class="panel panel-primary">
+                <div class="panel-heading">堆垛机</div>
+                <div class="panel-body">
+                    <p class="text-primary" id="stacker-action">
+                        入库中
+                    </p>
+                </div>
+                <ul class="list-group">
+                    <li class="list-group-item" id="stacker-show-1"></li>
+                    <li class="list-group-item" id="stacker-show-2"></li>
+                    <li class="list-group-item" id="stacker-show-3"></li>
+                    <li class="list-group-item" id="stacker-show-4"></li>
+                   <!-- <li class="list-group-item" id="stacker-show-5"></li>-->
+                </ul>
+            </div>
+            <div class="panel panel-success">
+                <div class="panel-heading">线体</div>
+                <div class="panel-body">
+                    <p class="text-primary" id="conveyor-action">
+                        入库中
+                    </p>
+                </div>
+                <ul class="list-group" id="conveyor-info-list">
+                    <!--<li class="list-group-item">托盘号：AA0001</li>
+                    <li class="list-group-item">任务号：aaa</li>-->
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="table-responsive">
+                <table class="table">
+                    <caption><span class="label label-primary">告警信息</span></caption>
+                    <thead>
+                    <tr>
+                        <th>设备</th>
+                        <th>时间</th>
+                        <th>等级</th>
+                        <th>信息</th>
+                    </tr>
+                    </thead>
+                    <tbody id="warning-content">
+ <!--                   <tr class="warning">
+                        <td>Tanmay</td>
+                        <td>Bangalore</td>
+                        <td>Tanmay</td>
+                        <td>Bangalore</td>
+                    </tr>
+                    <tr class="danger">
+                        <td>Tanmay</td>
+                        <td>Bangalore</td>
+                        <td>Tanmay</td>
+                        <td>Bangalore</td>
+                    </tr>-->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="../../js/jquery.min.js" ></script>
+<script type="text/javascript" src="../../js/bootstrap.min.js" ></script>
+<script type="text/javascript" src="../../js/common.js"></script>
+</body>
+<script>
+    var url="";
+    $(function () {
+        getGifNgx();
+        var uptime = 6*1000;
+        var timeControl = setInterval(function () {
+            getGifNgx();
+        }, uptime);
+
+    });
+
+    function getGifNgx(){
+        //获取gif的ngx根路径
+        $.ajax({
+            type	:"get",
+            url		: $.mpbGetHeaderPath()+"/view/ngxpath",
+            headers:{'token':localStorage.getItem('token')},
+            data    : {},
+            success	: function (data) {
+                console.log(data);
+                if("0"==data.code){
+                    url = data.data;
+                    refreshDeviceData();
+                    refreshErrorData();
+                }
+            },
+            error	: function (err) {
+                console.error(err);
+            }
+        });
+    }
+    //刷新设备数据
+    function refreshDeviceData(){
+        $.ajax({
+            type	:"get",
+            url		: $.mpbGetHeaderPath()+"/view/deviceInfo",
+            headers:{'token':localStorage.getItem('token')},
+            data    : {},
+            success	: function (result) {
+                console.log(result);
+                let gifName = "";
+                let data = result.data;
+                let stackerMove = data.stackerViewDtos.length>0;
+                let conveyorMove = data.conveyorViewDtos.length>0;
+                if (!stackerMove&&!conveyorMove){
+                    $('#stacker-action').text("空闲");
+                    $('#conveyor-action').text("空闲");
+                    document.getElementById("dynamic-gif").src = url + "pause.png";
+                    return;
+                }
+                if (stackerMove){
+                    let stackerData = data.stackerViewDtos[0];
+                    let stackerTaskType = stackerData.stackerTaskType;
+                    if (stackerTaskType=='1'){
+                        $('#stacker-action').text("入库");
+                    }else if (stackerTaskType=='2'){
+                        $('#stacker-action').text("出库");
+                    }else if (stackerTaskType=='3'){
+                        $('#stacker-action').text("移库");
+                    }else{
+                        $('#stacker-action').text("");
+                    }
+                    $("#stacker-show-1").text("总任务id: "+stackerData.taskId);
+                    $("#stacker-show-2").text("任务编号: "+stackerData.taskNo);
+                    $("#stacker-show-3").text("托盘号: "+stackerData.palletCode);
+                    $("#stacker-show-4").text("库位: "+stackerData.locationId);
+                }
+                let haveInTask = false;
+                let haveOutTask = false;
+                let html = "";
+                if (conveyorMove){
+                    $("#conveyor-action").text("运动中");
+                    for (let i = 0; i < data.conveyorViewDtos.length; i++) {
+                        let conveyor = data.conveyorViewDtos[i];
+                        let taskType = conveyor.taskType;
+                        html = html + "<li class='list-group-item'>";
+                        if (taskType=='1'){
+                            haveInTask = true;
+                            html = html + conveyor.palletCode + "入库中";
+                        }else if(taskType=='2'){
+                            haveOutTask = true;
+                            html = html + conveyor.palletCode + "出库中";
+                        }else{
+
+                        }
+                        html = html +"</li>";
+                    }
+                    $("#conveyor-info-list").html(html);
+
+                }
+                if (haveInTask&&!haveOutTask&&!stackerMove){
+                    changeGif("in");
+                    return;
+                }
+                if (haveInTask&&!haveOutTask&&stackerMove){
+                    changeGif("in-move");
+                    return;
+                }
+                if (haveInTask&&haveOutTask&&!stackerMove){
+                    changeGif("in-out");
+                    return;
+                }
+                if (haveInTask&&haveOutTask&&stackerMove){
+                    changeGif("in-out-move");
+                    return;
+                }
+                if (!haveInTask&&!haveOutTask&&stackerMove){
+                    changeGif("move");
+                    return;
+                }
+                if (!haveInTask&&haveOutTask&&!stackerMove){
+                    changeGif("out");
+                    return;
+                }
+                if (!haveInTask&&haveOutTask&&stackerMove){
+                    changeGif("out-move");
+                    return;
+                }
+            },
+            error	: function (err) {
+                console.error(err);
+            }
+        });
+    }
+    function changeGif(name) {
+
+        document.getElementById("dynamic-gif").src = url + name+".gif";
+    }
+
+    function refreshErrorData(){
+        $.ajax({
+            type	:"get",
+            url		: $.mpbGetHeaderPath()+"/view/errorlog",
+            headers:{'token':localStorage.getItem('token')},
+            data    : {},
+            success	: function (data) {
+                console.log(data);
+                if("0"==data.code){
+                    $("#warning-content").empty();
+                    let errorList = data.data;
+                    if (errorList.length>0){
+                        for (let i = 0; i < errorList.length; i++) {
+                            let errorLog = errorList[i];
+                            fillWarningContent(errorLog.deviceId,errorLog.gmtCreate,i,errorLog.faultSource);
+                        }
+                    }else{
+                        $("#warning-content").empty();
+                    }
+                }
+            },
+            error	: function (err) {
+                console.error(err);
+            }
+        });
+    }
+    //填充报警信息
+    function fillWarningContent(device,time,level,info) {
+        let trClass = "active";
+        //1普通2严重3致命
+        if (level==2){
+            trClass = "warning";
+        }else if(level==3){
+            trClass = "danger";
+        }
+        let html="<tr class='"+trClass+"'>"+
+                    "<td>"+ device +"</td>"+
+                    "<td>"+ time +"</td>"+
+                    "<td>"+ level +"</td>"+
+                    "<td>"+ info +"</td>"
+                +"</tr>";
+        $("#warning-content").append(html);
+    }
+
+</script>
+</html>

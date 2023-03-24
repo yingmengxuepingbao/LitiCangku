@@ -1,0 +1,57 @@
+jobs:
+  pool: 5
+
+notice:
+  other-sys-addr:
+    add-user: http://10.1.1.237:9090/wcs/expose/inner/addUser
+    pallet-out: http://10.1.1.237:9090/wcs/expose/pallet/out
+    pallet-move: http://10.1.1.237:9090/wcs/expose/pallet/move
+
+
+spring:
+
+  redis:
+#    host: 10.1.1.236
+    host: localhost
+    port: 35001
+    password: admin@redis
+    database: 0
+    timeout: 30000ms
+    lettuce:
+      pool:
+        max-active: 10
+        min-idle: 3
+        max-idle: 10
+
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+      #      url: jdbc:mysql://47.105.177.120:35000/nh_wms?characterEncoding=utf8&serverTimezone=GMT%2B8
+      url: jdbc:sqlserver://localhost:1433;DatabaseName=nh_wms
+      username: sa
+      password: B@ojia56127
+      max-active: 100
+      initial-size: 10
+      max-wait: 60000
+      validation-query: select 1
+      test-on-borrow: true
+      test-on-return: true
+
+#多数据源
+#datasource-config:
+#  master:
+#    url: jdbc:mysql://10.1.1.236:3306/nh_wms?characterEncoding=utf8&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull
+#    username: admin
+#    password: Admin@2020
+#  slave:
+#    url: jdbc:mysql://10.1.1.236:3306/nh_wms?characterEncoding=utf8&serverTimezone=Asia/Shanghai&zeroDateTimeBehavior=convertToNull
+#    username: admin
+#    password: Admin@2020
+
+logging:
+  config: classpath:logback-spring.xml
+  path: /tmp
+  level:
+    root: info
+    web: info

@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.penghaisoft.framework.usermanagement.model.dao.UserMapper">
+
+    <resultMap id="BaseResultMap" type="com.penghaisoft.framework.usermanagement.model.entity.User">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="account" property="account" jdbcType="VARCHAR"/>
+        <result column="nickname" property="nickname" jdbcType="VARCHAR"/>
+        <result column="phone" property="phone" jdbcType="VARCHAR"/>
+        <result column="email" property="email" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="office_phone" property="officePhone"/>
+        <result column="entry_date" property="entryDate"/>
+        <result column="description" property="description"/>
+        <collection property="departmentIds" ofType="string" select="selectDepartmentListByUserId" column="id"/>
+        <collection property="roleIds" ofType="string" select="selectRoleListByUserId" column="id"/>
+        <collection property="departmentList" ofType="com.penghaisoft.framework.basics.model.entity.Department">
+            <id column="departmentId" property="departmentId"></id>
+            <result column="name" property="departmentName"></result>
+            <result column="code" property="departmentCode"></result>
+        </collection>
+        <collection property="roleList" ofType="com.penghaisoft.framework.permissionmanagement.model.entity.Role">
+            <id column="roleId" property="id"></id>
+            <result column="roleName" property="name"></result>
+            <result column="roleDesciption" property="description"></result>
+        </collection>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    id, account, nickname, phone, email, status, office_phone, entry_date, description
+  </sql>
+
+    <sql id="With_Password_Column_List">
+    id, account, password, nickname, phone, email, status, office_phone, entry_date, description
+  </sql>
+
+    <sql id="Select_Conditions">
+        1=1
+        <if test="id != null and id != 0">
+            and id = #{id,jdbcType=INTEGER}
+        </if>
+        <if test="account != null and account != ''">
+            and account = #{account,jdbcType=VARCHAR}
+        </if>
+        <if test="password != null and password != ''">
+            and password = #{password,jdbcType=VARCHAR}
+        </if>
+        <if test="nickname != null and nickname != ''">
+            and nickname = #{nickname,jdbcType=VARCHAR}
+        </if>
+        <if test="phone != null and phone != ''">
+            and phone = #{phone,jdbcType=VARCHAR}
+        </if>
+        <if test="email != null and email != ''">
+            and email = #{email,jdbcType=VARCHAR}
+        </if>
+        <if test="status == 0 or status == 1">
+            and status = #{status,jdbcType=TINYINT}
+        </if>
+        <if test="entryDate != null">
+            and entry_date = #{entryDate}
+        </if>
+        <if test="description != null and description != ''">
+            and description = #{description}
+        </if>
+    </sql>
+
+    <sql id="Update_Conditions">
+        <if test="account != null and account != ''">
+            account = #{account,jdbcType=VARCHAR},
+        </if>
+        <if test="password != null and password != ''">
+            password = #{password,jdbcType=VARCHAR},
+        </if>
+        <if test="nickname != null and nickname != ''">
+            nickname = #{nickname,jdbcType=VARCHAR},
+        </if>
+        <if test="phone != null and phone != ''">
+            phone = #{phone,jdbcType=VARCHAR},
+        </if>
+        <if test="status == 0 or status == 1">
+            status = #{status,jdbcType=TINYINT},
+        </if>
+        <if test="entryDate != null">
+            entry_date = #{entryDate},
+        </if>
+        <if test="description != null and description != ''">
+            description = #{description},
+        </if>
+    </sql>
+
+    <sql id="selectLimit">
+        <if test="startNumber != -1 and numberOnePage != 0">
+            LIMIT
+            #{startNumber},#{numberOnePage}
+        </if>
+    </sql>
+
+    <select id="selectUser" resultMap="BaseResultMap"
+            parameterType="com.penghaisoft.framework.usermanagement.model.entity.User">
+        select
+        top 1
+        <include refid="With_Password_Column_List"/>
+        from
+        <![CDATA[   [user]   ]]>
+        where
+        <include refid="Select_Conditions"/>
+    </select>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        select
+        u.id id, account, nickname, phone, email, status, office_phone, u.entry_date, u.description
+        ,d.name name
+        ,d.code code
+        ,d.id   departmentId
+        ,r.id   roleId
+        ,r.name roleName
+        ,r.description roleDesciption
+         from <![CDATA[   [user]   ]]> u
+         left  join user_department ud on u.id = ud.user_id
+         left join department d on d.id = ud.department_id
+         left join user_role ur on u.id = ur.user_id
+         left join role  r on r.id = ur.role_id
+         where u.id = #{id}
+    </select>
+
+    <select id="selectUsers" resultMap="BaseResultMap"
+            parameterType="com.penghaisoft.framework.usermanagement.model.entity.UserSelectCondition">
+        select
+        u.id id, account, nickname, phone, email, status, office_phone, entry_date, u.description
+        ,d.name name
+        ,d.code code
+        ,d.id departmentId
+        ,r.id roleId
+        ,r.name roleName
+        ,r.description roleDesciption
+        from <![CDATA[   [user]   ]]> u
+        left join user_department ud on u.id = ud.user_id
+        left join department d on d.id = ud.department_id
+        left join user_role ur on u.id = ur.user_id
+        left join role r on r.id = ur.role_id
+        WHERE 1=1
+        <if test=" account != '' and account != null ">
+            AND u.account LIKE #{account}
+        </if>
+        <if test=" nickname != '' and nickname != null ">
+            AND u.nickname LIKE #{nickname}
+        </if>
+        <if test="phone != '' and phone != null ">
+            AND u.phone = #{phone}
+        </if>
+        <if test="status != null ">
+            AND u.status = #{status}
+        </if>
+        <if test="departmentId != '' and departmentId != null ">
+            AND d.id = #{departmentId}
+        </if>
+        <if test=" roleId != '' and roleId != null ">
+            AND r.id = #{roleId}
+        </if>
+    </select>
+
+    <select id="selectUserTotalCount" resultType="java.lang.Integer"
+            parameterType="com.penghaisoft.framework.usermanagement.model.entity.UserSelectCondition">
+        select
+        count(distinct u.id)
+        from <![CDATA[   [user]   ]]>  u
+        left join user_department ud on u.id = ud.user_id
+        left join department d on d.id = ud.department_id
+        left join user_role ur on u.id = ur.user_id
+        left join role r on r.id = ur.role_id
+        WHERE 1=1
+        <if test=" account != '' and account != null ">
+            AND u.account LIKE #{account}
+        </if>
+        <if test=" nickname != '' and nickname != null ">
+            AND u.nickname LIKE #{nickname}
+        </if>
+        <if test=" phone != '' and phone != null ">
+            AND u.phone = #{phone}
+        </if>
+        <if test="status != null ">
+            AND u.status = #{status}
+        </if>
+        <if test=" departmentId != 0 and departmentId != null ">
+            AND d.id = #{departmentId}
+        </if>
+        <if test=" roleId != 0 and roleId != null ">
+            AND r.id = #{roleId}
+        </if>
+
+    </select>
+
+    <update id="updateUser" parameterType="com.penghaisoft.framework.usermanagement.model.entity.User">
+        update user
+        set
+        <include refid="Update_Conditions"/>
+        office_phone = #{officePhone},
+        email = #{email},
+        account = #{account}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <insert id="insertUser" parameterType="com.penghaisoft.framework.usermanagement.model.entity.User"
+            useGeneratedKeys="true" keyProperty="id">
+    insert into <![CDATA[   [user]   ]]>  (account, password, nickname, phone, email, status, office_phone, entry_date, description)
+    values (#{account}, #{password}, #{nickname},
+    	    #{phone},#{email},#{status}, #{officePhone}, #{entryDate}, #{description})
+  </insert>
+
+    <delete id="deleteUser">
+    delete from user
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+    <!-- 插入用户对应部门 -->
+    <insert id="insertDepartmentsForUser" parameterType="com.penghaisoft.framework.usermanagement.model.entity.User">
+        insert into user_department (user_id, department_id) values
+        <foreach collection="departmentIds" item="item" index="index" separator=",">
+            (
+            #{id}, #{item}
+            )
+        </foreach>
+    </insert>
+    <!-- 插入用户对应角色 -->
+    <insert id="insertRolesForUser" parameterType="com.penghaisoft.framework.usermanagement.model.entity.User">
+        insert into user_role (user_id, role_id) values
+        <foreach collection="roleIds" item="item" index="index" separator=",">
+            (
+            #{id}, #{item}
+            )
+        </foreach>
+    </insert>
+    <!-- 删除用户对应部门 -->
+    <delete id="deleteDepartmentsByUserId" parameterType="int">
+	    delete from user_department
+	    where user_id = #{userId}
+	</delete>
+
+    <!-- 删除用户对应角色 -->
+    <delete id="deleteRolesByUserId" parameterType="int">
+	    delete from user_role
+	    where user_id = #{userId}
+	</delete>
+
+    <!-- 人员部门子查询 -->
+    <select id="selectDepartmentListByUserId" resultType="string" parameterType="int">
+		SELECT
+			department_id
+		FROM
+			user_department
+		WHERE
+			user_id = #{id}
+	</select>
+    <!-- 人员角色子询 -->
+    <select id="selectRoleListByUserId" resultType="string" parameterType="int">
+		SELECT
+			role_id
+		FROM
+			user_role
+		WHERE
+			user_id = #{id}
+	</select>
+
+
+</mapper>
