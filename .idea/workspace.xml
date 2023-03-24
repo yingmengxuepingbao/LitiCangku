@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d3f3ca7c-0862-405d-aaeb-9be7f19437c0" name="Default Changelist" comment="">
+    <list default="true" id="d3f3ca7c-0862-405d-aaeb-9be7f19437c0" name="Default Changelist" comment="解决批量出库，除第一条任务外，未呼叫agv问题 已解决。">
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/wms/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/wms/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/wms/src/main/java/com/penghaisoft/wms/basicmanagement/contrller/WmsGoodsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/wms/src/main/java/com/penghaisoft/wms/basicmanagement/contrller/WmsGoodsController.java" afterDir="false" />
@@ -473,7 +473,7 @@
       <workItem from="1678754486701" duration="78000" />
       <workItem from="1678783406634" duration="2568000" />
       <workItem from="1678838471821" duration="248000" />
-      <workItem from="1679627202964" duration="7828000" />
+      <workItem from="1679627202964" duration="8672000" />
     </task>
     <task id="LOCAL-00001" summary="修改相关pom配置">
       <created>1660525224221</created>
